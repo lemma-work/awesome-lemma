@@ -1,0 +1,18 @@
+{
+  // The person marked one of Mail's needs_you items done outside Mail (Today's
+  // Done): a promise they did is done in Mail too. Started by
+  // mail-needs-you-done, as the item's owner.
+  "name": "mail-needs-you-on-done",
+  "description": "A mail promise item the person marked done in another app: mark the promise done in Mail too.",
+  "max_concurrent_runs": 4,
+  "start": { "type": "DATASTORE_EVENT", "config": { "table_name": "needs_you", "operations": ["UPDATE"] } },
+  "nodes": [
+    { "id": "settle", "type": "FUNCTION", "label": "Settle it in Mail",
+      "config": { "function_name": "mail_needs_you",
+        "input_mapping": { "settle_item_id": { "type": "expression", "value": "start.metadata.record_id" } } } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [
+    { "id": "e1", "source": "settle", "target": "end" }
+  ]
+}

@@ -1,0 +1,187 @@
+{
+  "name": "Mail",
+  "line": "sales",
+  "position": 1,
+  "job": "Your mail sorted, with the reply already written",
+  "intro": "Mail sorts your Gmail or Outlook into categories you describe in your own words, and drafts the replies you owe in your voice. Nothing goes out until you press Send.",
+  "does": [
+    "Sorts every conversation by what it needs from you: a reply, a wait, or nothing.",
+    "Drafts the replies you owe in your voice, learned from what you have sent.",
+    "Keeps every promise made either way, with the sentence it was made in."
+  ],
+  "jobs": [
+    "SALES",
+    "FOUNDER",
+    "SUPPORT",
+    "OPERATIONS"
+  ],
+  "accounts": [
+    {
+      "any": [
+        "Gmail",
+        "Outlook"
+      ],
+      "why": "Each person connects their own mailbox. Mail sends a reply only when you press Send."
+    }
+  ],
+  "setup": [
+    "Connect Gmail or Outlook, or look around with a sample mailbox.",
+    "It reads about the last month of your mail.",
+    "It proposes categories, your voice, a few rules and your VIPs. Keep, rename or drop any of them.",
+    "Choose which categories get replies drafted without asking.",
+    "Everything is sorted, and the inbox opens on what it found."
+  ],
+  "today": [
+    {
+      "verb": "answer",
+      "line": "Replies people are waiting on, each with a draft ready"
+    },
+    {
+      "verb": "do",
+      "line": "Promises you made, with the sentence you made them in"
+    },
+    {
+      "verb": "waiting",
+      "line": "Promises owed to you, with a nudge drafted when one is due"
+    },
+    {
+      "verb": "decide",
+      "line": "Whether a promise was kept, when it isn't sure"
+    }
+  ],
+  "pictures": [
+    {
+      "shot": "inbox",
+      "caption": "What needs a reply, most with a draft ready"
+    },
+    {
+      "shot": "inbox-reader",
+      "caption": "One conversation: the promise in it, and your reply"
+    }
+  ],
+  "hero": {
+    "eyebrow": "Mail",
+    "headline": "Your inbox, sorted the way you’d sort it",
+    "sub": "Mail reads each conversation once, files it where you’d put it, and drafts the reply in your voice. You read, then send.",
+    "visual": "triage"
+  },
+  "headings": {
+    "how": "Sorted on the first day.",
+    "better": "What builds on it.",
+    "trust": "Your mail, your call.",
+    "faq": "Questions people ask first."
+  },
+  "steps": [
+    {
+      "title": "Connect Gmail or Outlook.",
+      "body": "Each person connects their own mailbox. Or try it first on a sample one.",
+      "visual": "connect"
+    },
+    {
+      "title": "Keep the categories it suggests.",
+      "body": "It reads your last month and names the kinds of mail you get, in your words. Keep, rename or add.",
+      "visual": "categories"
+    },
+    {
+      "title": "Open an inbox already sorted.",
+      "body": "Everything is in its place, with replies drafted in the categories you picked.",
+      "visual": "drafts-waiting"
+    }
+  ],
+  "moments": [
+    {
+      "label": "Your categories",
+      "title": "Categories in your own words.",
+      "body": "Each category is one sentence you write, like “venture firms and angels, about our round”. Every new conversation is read once and filed where it fits.",
+      "note": "Each tab is one of yours",
+      "visual": "sorted"
+    },
+    {
+      "label": "Your voice",
+      "title": "Replies drafted in your voice.",
+      "body": "It learns your greeting, length and sign-off from the mail you’ve sent. The reply is written before you open the conversation, with a note on why it says what it says.",
+      "note": "Drafted before you open it",
+      "visual": "drafted"
+    },
+    {
+      "label": "Promises",
+      "title": "Promises, both ways.",
+      "body": "“I’ll send the deck by Friday.” It keeps what you promised and what you’re owed, each with the sentence it was made in and when it’s due.",
+      "note": "The exact sentence",
+      "visual": "promises"
+    },
+    {
+      "label": "Not sure",
+      "title": "When it isn’t sure, it asks.",
+      "body": "Anything it can’t place waits under Not sure. Put it where it belongs, and the sort learns from the move.",
+      "note": "One move, and it learns",
+      "visual": "unsure"
+    },
+    {
+      "label": "Team voice",
+      "title": "Your voice, or the team’s.",
+      "body": "Choose which categories get replies drafted. Where you write for the team, drafts can take the brand voice from Brand kit and keep your sign-off.",
+      "note": "One switch per category",
+      "visual": "team-voice"
+    }
+  ],
+  "betterWith": [
+    {
+      "plugin": "Today",
+      "line": "What needs you, across everything"
+    },
+    {
+      "plugin": "People map",
+      "line": "Everyone you deal with, from your mail"
+    },
+    {
+      "plugin": "Deal tracker",
+      "line": "Deals that move when the mail does"
+    },
+    {
+      "plugin": "Tasks",
+      "line": "Promises you made, turned into tasks"
+    }
+  ],
+  "trust": [
+    {
+      "title": "Yours alone, even in a team.",
+      "body": "Each person’s conversations, drafts and promises are theirs. Nobody else on the team can open them."
+    },
+    {
+      "title": "Read once.",
+      "body": "Each conversation is read one time, and the plugins built on Mail use that reading instead of reading your mail again."
+    },
+    {
+      "title": "Nothing sends without you.",
+      "body": "A draft waits until you press Send, and you have ten seconds to take it back."
+    }
+  ],
+  "faq": [
+    {
+      "q": "Which mail does it work with?",
+      "a": "Gmail and Outlook. Each person connects their own mailbox."
+    },
+    {
+      "q": "Does it ever send anything on its own?",
+      "a": "No. Every reply waits for you to press Send, or to pick a time for it to go."
+    },
+    {
+      "q": "What does my team see?",
+      "a": "None of your mail. With People map added, they see who on the team knows someone and when you last spoke, never what was said, and you can turn that off."
+    },
+    {
+      "q": "What if it files something wrong?",
+      "a": "Move it. Your last twenty moves are the examples every later read learns from."
+    },
+    {
+      "q": "How far back does it read?",
+      "a": "About the last month when you set it up, then everything new. For older mail, ask your Lemma: it searches Gmail or Outlook directly."
+    },
+    {
+      "q": "Can I try it before connecting my mail?",
+      "a": "Yes. Try it live on this page, or set it up on a sample mailbox of made-up mail."
+    }
+  ],
+  "closing": "Open your inbox to replies already written."
+}

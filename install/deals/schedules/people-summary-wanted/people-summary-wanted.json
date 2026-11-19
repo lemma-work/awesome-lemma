@@ -1,0 +1,15 @@
+{
+  // One schedule for everyone: people_person is per person, so each firing
+  // runs as the owner of the row that changed. `to` fires only on the write
+  // that MADE it wanted. `bulk_writes: each` so a bulk write still fires.
+  "name": "people-summary-wanted",
+  "schedule_type": "DATASTORE",
+  "config": {
+    "table_name": "people_person",
+    "operations": ["UPDATE"],
+    "when": { "summary_state": { "to": "wanted" } },
+    "bulk_writes": "each"
+  },
+  "workflow_name": "people-where-things-stand",
+  "is_active": true
+}

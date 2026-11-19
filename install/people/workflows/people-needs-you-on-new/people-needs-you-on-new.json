@@ -1,0 +1,17 @@
+{
+  // One schedule per workflow (the server allows one per workflow, person and Lemma): this one is people-needs-you-new's.
+  // Someone's `quiet` changed (People map's refresh, hourly or on opening
+  // People): write everyone gone quiet to needs_you as drifting, and resolve
+  // whoever is not. Started by people-needs-you-quiet and people-needs-you-new,
+  // as the row's owner.
+  "name": "people-needs-you-on-new",
+  "description": "Keep the person's drifting items on needs_you in step with who People map counts as gone quiet.",
+  "max_concurrent_runs": 2,
+  "start": { "type": "DATASTORE_EVENT", "config": { "table_name": "people_person", "operations": ["INSERT", "UPDATE"] } },
+  "nodes": [
+    { "id": "write", "type": "FUNCTION", "label": "Who has gone quiet",
+      "config": { "function_name": "people_needs_you", "input_mapping": {} } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [ { "id": "e1", "source": "write", "target": "end" } ]
+}

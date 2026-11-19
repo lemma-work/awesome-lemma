@@ -1,0 +1,32 @@
+{
+  // The weekly review, on the day the team picked: the team's TIME schedule
+  // (made by the Deals app as whoever picked the day) or "Write it now" in
+  // the app. Everything is counted first with no model (deals_review); the
+  // writer turns those counts into one summary, and adds no figure of its own.
+  "name": "deals-weekly-review",
+  "description": "Count the week's pipeline (what moved, what went quiet, the pipeline by stage) and write one summary from those counts.",
+  "run_title": ["count.message"],
+  "start": { "type": "SCHEDULED", "config": { "schedule_type": "CRON" } },
+  "nodes": [
+    { "id": "count", "type": "FUNCTION", "label": "Count the week",
+      "config": { "function_name": "deals_review", "input_mapping": { "mode": { "type": "literal", "value": "week" } } } },
+    { "id": "any", "type": "DECISION", "label": "Any deals?",
+      "config": { "rules": [ { "condition": "count.write == `true`", "next_node_id": "write" } ] } },
+    { "id": "write", "type": "AGENT", "label": "Write the summary",
+      "config": { "agent_name": "deals-review-writer", "input_mapping": {
+        "counts": { "type": "expression", "value": "count.counts" } } } },
+    { "id": "save", "type": "FUNCTION", "label": "Keep it",
+      "config": { "function_name": "deals_review", "input_mapping": {
+        "mode": { "type": "literal", "value": "save" },
+        "review_id": { "type": "expression", "value": "count.review_id" },
+        "result": { "type": "expression", "value": "write" } } } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [
+    { "id": "e1", "source": "count", "target": "any" },
+    { "id": "e2", "source": "any", "target": "end" },
+    { "id": "e3", "source": "any", "target": "write" },
+    { "id": "e4", "source": "write", "target": "save" },
+    { "id": "e5", "source": "save", "target": "end" }
+  ]
+}

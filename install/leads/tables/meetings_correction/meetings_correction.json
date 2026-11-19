@@ -1,0 +1,19 @@
+{
+  // The person settled or changed how a meeting was sorted: its kind, or
+  // whether it gets a brief. The newest twenty go with every read as worked
+  // examples, so the next read learns from it.
+  "name": "meetings_correction",
+  "primary_key_column": "id",
+  "enable_rls": true,
+  "visibility": "POD",
+  "columns": [
+    { "name": "meeting_id", "type": "UUID" },
+    { "name": "from_kind", "type": "TEXT", "max_length": 32 },
+    { "name": "to_kind", "type": "TEXT", "max_length": 32 },
+    { "name": "from_brief", "type": "BOOLEAN" },
+    { "name": "to_brief", "type": "BOOLEAN" },
+    // What the read saw, kept short: examples are capped at 32 KiB in all.
+    { "name": "evidence", "type": "TEXT", "max_length": 1600 }
+  ],
+  "config": {}
+}

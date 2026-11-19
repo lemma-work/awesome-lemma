@@ -1,0 +1,14 @@
+{
+  // Every row the sample made, and for whom, so a person's clear removes
+  // only what their load made.
+  "name": "decks_sample_row",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "table_name", "type": "TEXT", "required": true, "max_length": 64 },
+    { "name": "row_id", "type": "TEXT", "required": true, "max_length": 64 },
+    { "name": "member", "type": "TEXT", "max_length": 64 }
+  ],
+  "config": {}
+}

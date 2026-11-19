@@ -1,0 +1,11 @@
+{
+ "totals": {
+  "channels": 0,
+  "mentions": 0,
+  "waiting": 0,
+  "contacts": 0
+ },
+ "contacts": [],
+ "mentions": [],
+ "waiting": []
+}

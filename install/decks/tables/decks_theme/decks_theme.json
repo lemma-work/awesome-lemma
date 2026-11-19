@@ -1,0 +1,17 @@
+{
+  // The looks a deck can take when the Lemma has no brand (or a person picks
+  // one anyway). Written once by decks_setup with fixed ids; a team can add
+  // its own. tokens: { "surface", "raised", "ink", "muted", "accent",
+  // "accent_ink", "heading_font", "body_font", "radius", "dark" }.
+  "name": "decks_theme",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "name", "type": "TEXT", "required": true, "max_length": 80 },
+    { "name": "description", "type": "TEXT", "max_length": 300 },
+    { "name": "tokens", "type": "JSON", "required": true },
+    { "name": "position", "type": "INTEGER", "default": 0 }
+  ],
+  "config": {}
+}

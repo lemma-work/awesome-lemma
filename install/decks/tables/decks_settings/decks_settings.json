@@ -1,0 +1,22 @@
+{
+  // One person's Deck maker: where their set-up is, and the look their new
+  // decks take. Each person's own (RLS).
+  //
+  // look_source brand: new decks take the Lemma's brand, read from the
+  // shared `brand` table (Brand kit's) each time, never copied here.
+  "name": "decks_settings",
+  "primary_key_column": "id",
+  "enable_rls": true,
+  "visibility": "POD",
+  "columns": [
+    { "name": "display_name", "type": "TEXT", "max_length": 200 },
+    { "name": "setup_run_id", "type": "TEXT", "max_length": 64 },
+    { "name": "setup_step", "type": "ENUM", "required": true, "default": "start",
+      "options": ["start", "look", "first", "done"] },
+    { "name": "look_source", "type": "ENUM", "required": true, "default": "theme", "options": ["brand", "theme"] },
+    { "name": "theme_id", "type": "TEXT", "max_length": 64 },
+    { "name": "card_count", "type": "INTEGER", "default": 8 },
+    { "name": "density", "type": "ENUM", "default": "balanced", "options": ["concise", "balanced", "detailed"] }
+  ],
+  "config": {}
+}

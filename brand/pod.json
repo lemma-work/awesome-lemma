@@ -1,0 +1,13 @@
+{
+  "format_version": 4,
+  "name": "Brand kit",
+  "description": "Everything you make looks and sounds like you. Paste your website and it learns your colours, type, logos and voice, with the evidence it found; then every graphic, deck and draft this Lemma makes follows them.",
+  "variables": {
+    "brand_slug": {
+      "type": "app_slug",
+      "source_value": "lemma-brand",
+      "default": "lemma-brand",
+      "description": "Public URL slug for the Brand app (unique platform-wide; a suffix is added on collision)"
+    }
+  }
+}

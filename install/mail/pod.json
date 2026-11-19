@@ -1,0 +1,13 @@
+{
+  "format_version": 4,
+  "name": "Mail",
+  "description": "Your mail sorted the way you'd sort it, with the reply drafted, and read once for everything else in the Lemma. Gmail or Outlook. Nothing sends without you.",
+  "variables": {
+    "inbox_slug": {
+      "type": "app_slug",
+      "source_value": "mail-inbox",
+      "default": "mail-inbox",
+      "description": "Public URL slug for the Inbox app (unique platform-wide; a suffix is added on collision)"
+    }
+  }
+}

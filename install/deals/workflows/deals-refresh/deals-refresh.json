@@ -1,0 +1,16 @@
+{
+  // Once a day, as each person (their own TIME schedule, made by the Deals
+  // app when their set-up is done): what Deal tracker needs of them, for
+  // Today. A next step comes due and a deal goes quiet with no new words, so
+  // this is counted on a clock as well as after each read.
+  "name": "deals-refresh",
+  "description": "Write what Deal tracker needs of this person (proposals to decide, next steps due, deals gone quiet) and resolve what no longer does.",
+  "run_title": ["needs.message"],
+  "start": { "type": "SCHEDULED", "config": { "schedule_type": "CRON" } },
+  "nodes": [
+    { "id": "needs", "type": "FUNCTION", "label": "What needs you",
+      "config": { "function_name": "deals_needs_you", "input_mapping": {} } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [ { "id": "e1", "source": "needs", "target": "end" } ]
+}

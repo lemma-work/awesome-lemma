@@ -1,0 +1,11 @@
+{
+  // People map's one row per person (people_person, per person) got a kind:
+  // its read sorted someone, or the person settled them. Runs as the row's
+  // owner. bulk_writes each: people_sort writes in bulk.
+  "name": "leads-person-sorted",
+  "schedule_type": "DATASTORE",
+  "config": { "table_name": "people_person", "operations": ["UPDATE"],
+              "when": { "kind": { "changed": true } }, "bulk_writes": "each" },
+  "workflow_name": "leads-consider",
+  "is_active": true
+}

@@ -1,0 +1,35 @@
+{
+  // One row per person: which kinds of people to look up, how many look-ups
+  // a day, and where their set-up got to. Per person (RLS). Who fits is the
+  // team's (leads_profile); the fit_* columns here are where a first version
+  // kept it per person, read once to fill the team's when it is empty.
+  "name": "leads_settings",
+  "primary_key_column": "id",
+  "enable_rls": true,
+  "visibility": "POD",
+  "columns": [
+    { "name": "display_name", "type": "TEXT", "max_length": 200 },
+    { "name": "timezone", "type": "TEXT", "max_length": 64, "default": "UTC" },
+    // "B2B software teams of 20-200 in Europe": what a good fit is to them.
+    { "name": "fit_sentence", "type": "TEXT", "max_length": 400 },
+    // A few companies that fit well, as typed: ["Lumen Labs", "brightwave-health.example"].
+    { "name": "fit_examples", "type": "JSON" },
+    // A fingerprint of the sentence and examples: a fit scored against an
+    // older one is scored again.
+    { "name": "fit_version", "type": "TEXT", "max_length": 64 },
+    // People map relationship kinds to look up: customer, investor and
+    // partner by default; candidate and vendor may be added; colleague and
+    // other never.
+    { "name": "kinds", "type": "JSON" },
+    // Look-ups a day, at most. Anyone past it waits for tomorrow, best first.
+    { "name": "daily_limit", "type": "INTEGER", "default": 10 },
+    // start -> fit -> kinds -> reading -> review -> done.
+    { "name": "setup_step", "type": "ENUM", "required": true, "default": "start",
+      "options": ["start", "fit", "kinds", "reading", "review", "done"] },
+    { "name": "setup_run_id", "type": "TEXT", "max_length": 64 },
+    { "name": "setup_done_at", "type": "DATETIME" },
+    // Schedules made for this person: name -> id.
+    { "name": "schedules", "type": "JSON" }
+  ],
+  "config": {}
+}

@@ -1,0 +1,60 @@
+{
+  "name": "brand_job_start",
+  "description": "The brand-job workflow's first step: takes a wanted job (read a brand, make a design, change one) and writes the brief for the Lemma's assistant, with the playbook to follow.",
+  "type": "API",
+  "visibility": "POD",
+  "code": {
+    "$file": "code.py"
+  },
+  "permissions": {
+    "grants": [
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "brand",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "brand_job",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read",
+          "datastore.record.write"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "brand_design",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "brand_correction",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read"
+        ]
+      },
+      {
+        "resource_type": "folder",
+        "resource_name": "/brand",
+        "permission_ids": [
+          "folder.read"
+        ]
+      },
+      {
+        "resource_type": "function",
+        "resource_name": "brand_setup",
+        "permission_ids": [
+          "function.execute"
+        ]
+      }
+    ]
+  }
+}

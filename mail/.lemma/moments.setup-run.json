@@ -1,0 +1,199 @@
+{
+ "//": "Mail's set-up waiting on its categories form, for the page's set-up picture (.lemma/moments.json). The proposals are the ones the real set-up made from the sample mailbox (bench/run_setup.py, 18 Nov 2026); nothing else from that run is kept.",
+ "id": "setup-sample",
+ "status": "WAITING",
+ "active_wait": {
+  "node_id": "categories",
+  "wait_type": "FORM",
+  "payload": {
+   "input_schema": {
+    "properties": {
+     "categories": {
+      "default": [
+       {
+        "key": "vip",
+        "why": "",
+        "keep": true,
+        "name": "VIP",
+        "found": false,
+        "sentence": "People I have marked VIP: the few who matter most to me."
+       },
+       {
+        "key": "people",
+        "why": "",
+        "keep": true,
+        "name": "People",
+        "found": false,
+        "sentence": "Real people writing to me who do not fit a more specific category."
+       },
+       {
+        "key": "updates",
+        "why": "",
+        "keep": true,
+        "name": "Updates",
+        "found": false,
+        "sentence": "Receipts, notifications, alerts, calendar and account mail from services."
+       },
+       {
+        "key": "newsletters",
+        "why": "",
+        "keep": true,
+        "name": "Newsletters",
+        "found": false,
+        "sentence": "Newsletters, digests and product marketing I signed up for."
+       },
+       {
+        "key": "cold",
+        "why": "",
+        "keep": true,
+        "name": "Cold",
+        "found": false,
+        "sentence": "Strangers selling something, recruiters, and pitches asking for my time."
+       },
+       {
+        "key": "investors",
+        "why": "5 conversations across northgate-vc.example, quill-partners.example and harborlane.example, all about the seed round, term sheets and intros.",
+        "keep": true,
+        "name": "Investors",
+        "found": true,
+        "sentence": "Mail from venture firms and angels about our fundraise, our updates to them, and introductions to new investors."
+       },
+       {
+        "key": "customers",
+        "why": "Ferro Logistics, Velo Cycles, Brightwave Health and Orchard Dental all wrote with a support issue, a renewal or an onboarding request.",
+        "keep": true,
+        "name": "Customers",
+        "found": true,
+        "sentence": "Mail from the teams that pay us, about bugs they report, renewals, onboarding and how they use the product."
+       },
+       {
+        "key": "hiring",
+        "why": "4 conversations: a shortlist from talentbridge.example, a candidate follow up from mailbox.example, and the Lumen hiring lead intro via Rafael Costa.",
+        "keep": true,
+        "name": "Hiring",
+        "found": true,
+        "sentence": "Mail about our own hiring: candidates we are interviewing, interview scheduling, and recruiters working on our open roles."
+       },
+       {
+        "key": "suppliers",
+        "why": "Parkside Offices on the move and keys, Studio Tan on the brand refresh quote, Lind Accounting on the Q3 VAT return.",
+        "keep": true,
+        "name": "Suppliers",
+        "found": true,
+        "sentence": "Mail from the people we buy from, our office, our designer and our accountant, about keys, quotes, returns and paperwork."
+       }
+      ]
+     },
+     "voice": {
+      "default": "## Greeting\n\"Hi\" plus the person's first name and a comma: \"Hi Lena,\", \"Hi Grace,\", \"Hi Tomás,\". Accents kept as written. For a group of investors they used \"Hi all,\". Never \"Dear\", never \"Hello\", no surname and no title.\n\n## Length and shape\nTwo to four sentences in total. One or two short paragraphs with a blank line between them. One idea per mail: a fix, a question, a quote request, a notice. When there is a real update they use a labelled shape, \"Wins: 31 paying teams (up from 24)... Asks: intros to ops leads\", and still keep it to a few lines.\n\n## Tone\nDirect and warm, brisk rather than formal. The point is in the first sentence and the ask or the promise is in the last. No hedging and no apology padding. They say no by narrowing the scope instead: \"around 6k for both. Does that work for a first phase?\" Contractions throughout: \"we're\", \"I'll\", \"We'd\".\n\n## Sign-off\n\"Cheers\" on its own line. No name, no title, no contact block. It is the same in every sample.\n\n## Habits\n- Questions are short and concrete: \"Would a 30-minute call next week work?\", \"Could you try it and tell me if it works on your side?\"\n- \"Heads up that\" for a notice the reader may not like, as in the renewal mail.\n- \"Quick recap:\" and \"Quick October update.\" to open a summary.\n- \"Would love your eyes on the tiers\" instead of \"please review\".\n- Numbers stay plain and compact: \"6k\", \"1.5M\", \"31 paying teams\", \"40 seats\".\n- Thanks is one clause, then straight to business: \"Thanks for the clear report, we can reproduce it.\"\n- No exclamation marks, no emoji, no bold, no bullet lists in short replies, no \"Best\" or \"Regards\".\n\n## By audience\nCustomers: thanks first, then what happens next and by when, \"We'll have a fix out by Wednesday\". Investors: numbers and asks, no small talk, and \"No need to reply\" when it is a report. Colleagues, suppliers and candidates: one ask per mail inside the same Hi and Cheers frame."
+     },
+     "rules": {
+      "default": [
+       {
+        "why": "Six of the ten bulk senders are automated notices with one conversation each.",
+        "keep": true,
+        "text": "Receipts, payouts and service notifications from payflow.example, cloudinn.example, codehost.example, deskshop.example, accounts.example and calendar.example are Updates and never need a reply.",
+        "scope": "sorting"
+       },
+       {
+        "why": "Four senders are subscribed content and event promotion, none of it addressed to them personally.",
+        "keep": true,
+        "text": "Events, digests and product marketing from devconf.example, foundersweekly.example, saasletter.example and iconkit.example are Newsletters and can be read later.",
+        "scope": "sorting"
+       },
+       {
+        "why": "Every investor mail leads with a figure and closes with a single request, including \"No need to reply\" on the monthly update.",
+        "keep": true,
+        "text": "In replies to investors, give the numbers they asked for (paying teams, churn, raise size) and end with one concrete ask.",
+        "scope": "writing"
+       }
+      ]
+     },
+     "vips": {
+      "default": [
+       {
+        "keep": true,
+        "name": "Mira Okafor",
+        "email": "mira@northgate-vc.example",
+        "reason": "Lead investor on the seed round, two conversations and the recap after each call."
+       },
+       {
+        "keep": true,
+        "name": "Eleanor Park",
+        "email": "eleanor@parkhill.example",
+        "reason": "Board member: sends the board meeting prep and receives the agenda draft."
+       },
+       {
+        "keep": true,
+        "name": "Hannah Volkov",
+        "email": "hannah@volkov-advisory.example",
+        "reason": "Advisor they write to most, reviewing the pricing page draft and sending revisions."
+       },
+       {
+        "keep": true,
+        "name": "Aisha Bello",
+        "email": "aisha@quill-partners.example",
+        "reason": "Investor in the middle of the term sheet conversation."
+       },
+       {
+        "keep": true,
+        "name": "Daniel Kowalski",
+        "email": "daniel@brightwave-health.example",
+        "reason": "Largest named account, renewing 40 seats this month."
+       }
+      ]
+     }
+    }
+   }
+  }
+ },
+ "step_history": [
+  {
+   "node_id": "connect",
+   "status": "COMPLETED"
+  },
+  {
+   "node_id": "hold",
+   "status": "COMPLETED"
+  },
+  {
+   "node_id": "read",
+   "status": "COMPLETED"
+  },
+  {
+   "node_id": "read_pass",
+   "status": "COMPLETED"
+  },
+  {
+   "node_id": "people",
+   "status": "COMPLETED"
+  },
+  {
+   "node_id": "report",
+   "status": "COMPLETED"
+  },
+  {
+   "node_id": "propose",
+   "status": "COMPLETED"
+  },
+  {
+   "node_id": "proposals",
+   "status": "COMPLETED"
+  },
+  {
+   "node_id": "categories",
+   "status": "WAITING"
+  }
+ ],
+ "execution_context": {
+  "proposals": {
+   "traits": [
+    "Opens with \"Hi\" and a first name, never \"Dear\"",
+    "Two to four sentences, one ask, then \"Cheers\" with no name after it",
+    "Leads with thanks or the answer, then the specific next step and a date",
+    "Uses \"Heads up that\" for notices and \"Quick recap:\" before numbers",
+    "Plain compact figures, no exclamation marks and no emoji"
+   ]
+  }
+ }
+}

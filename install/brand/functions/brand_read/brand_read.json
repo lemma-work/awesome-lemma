@@ -1,0 +1,31 @@
+{
+  "name": "brand_read",
+  "description": "Read the team's brand from its website (url) or from a logo and brand guide uploaded to a folder (folder). The first brand is the default; reading again (brand_id, or the default) changes it for the whole team, so confirm first. Runs in the background: the Lemma's assistant reads it and a person checks it in the Brand app.",
+  "type": "API",
+  "visibility": "POD",
+  "code": {
+    "$file": "code.py"
+  },
+  "permissions": {
+    "grants": [
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "brand",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read",
+          "datastore.record.write"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "brand_job",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read",
+          "datastore.record.write"
+        ]
+      }
+    ]
+  }
+}

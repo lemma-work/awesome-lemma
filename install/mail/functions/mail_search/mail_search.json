@@ -1,0 +1,50 @@
+{
+  "name": "mail_search",
+  "description": "Find mail for the person: what Mail has read, and through Gmail's or Outlook's own search, mail older than or outside the first read (about 30 days). Plain words, optionally from_handle and after/before (YYYY-MM-DD). Each hit says where it was found, whether Mail holds the conversation (conversation_id) and a link to open it in Gmail or Outlook. Reads only.",
+  "type": "API",
+  "visibility": "POD",
+  "code": {
+    "$file": "code.py"
+  },
+  "permissions": {
+    "grants": [
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "conversation",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "mail_mailbox",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read"
+        ]
+      },
+      {
+        "resource_type": "folder",
+        "resource_name": "/mail-sample",
+        "permission_ids": [
+          "folder.read"
+        ]
+      },
+      {
+        "resource_type": "connector",
+        "resource_name": "gmail",
+        "permission_ids": [
+          "connector.use"
+        ]
+      },
+      {
+        "resource_type": "connector",
+        "resource_name": "outlook",
+        "permission_ids": [
+          "connector.use"
+        ]
+      }
+    ]
+  }
+}

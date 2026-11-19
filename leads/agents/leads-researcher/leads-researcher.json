@@ -1,0 +1,42 @@
+{
+  // Looks one lead up on the web: the person at work and their company, every
+  // fact with the page it came from. WEB_SEARCH is its only tool; it returns
+  // JSON and leads_save keeps it. It is given only the person's name, the
+  // title their own mail shows and their email domain, and what the whole
+  // team may see about the company: never a word of anyone's mail.
+  //
+  // No LinkedIn connector: Lemma's `linkedin` connector cannot look anyone
+  // up (no search; another member is read only by an id LinkedIn issues to
+  // the app). Public LinkedIn pages a search turns up are read like any page.
+  "name": "leads-researcher",
+  "description": "Looks one person and their company up on the web: their role, what the company does, its size, funding and recent news, each fact with the page it came from. Returns JSON; writes nothing itself.",
+  "visibility": "POD",
+  "toolsets": ["WEB_SEARCH"],
+  "instruction": { "$file": "instruction.md" },
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "person_found": { "type": "boolean", "description": "True only when a page you read confirms this person at this company." },
+      "company_found": { "type": "boolean", "description": "True only when a page you read confirms this company at this domain." },
+      "facts": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "about": { "type": "string", "enum": ["person", "company"] },
+            "key": { "type": "string", "enum": ["role", "location", "profile", "background", "what_they_do", "size", "head_office", "founded", "funding", "customers", "news"] },
+            "value": { "type": "string", "description": "Short, only what the page says. For profile, the profile page's URL." },
+            "url": { "type": "string", "description": "The page that states it, exactly as read." },
+            "source": { "type": "string", "description": "The site's name." },
+            "date": { "type": "string", "description": "For news: when it happened, YYYY-MM or YYYY-MM-DD." }
+          },
+          "required": ["about", "key", "value", "url"]
+        }
+      },
+      "not_found": { "type": "array", "items": { "type": "string" }, "description": "Keys looked for and not confirmed." },
+      "summary": { "type": "string", "description": "One line on who they are at work, from the facts; empty when not found." }
+    },
+    "required": ["person_found", "company_found", "facts", "not_found", "summary"]
+  },
+  "permissions": { "grants": [] }
+}

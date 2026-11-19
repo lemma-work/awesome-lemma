@@ -1,0 +1,19 @@
+{
+  // One schedule for everyone: conversation is per person, so each firing
+  // runs as the person whose conversation it is. It fires when Mail's sort
+  // writes `sorted_at`, once per new words: by then the new message is in the
+  // conversation's document and Mail has said whether it is people or a
+  // broadcast. (A new `message` row arrives before either.) Any source that
+  // writes the shared conversation the same way is heard the same way.
+  // `bulk_writes: each`: the sort writes conversations in bulk.
+  "name": "deals-heard-conversation",
+  "schedule_type": "DATASTORE",
+  "config": {
+    "table_name": "conversation",
+    "operations": ["UPDATE"],
+    "when": { "sorted_at": { "changed": true } },
+    "bulk_writes": "each"
+  },
+  "workflow_name": "deals-listen-conversation",
+  "is_active": true
+}

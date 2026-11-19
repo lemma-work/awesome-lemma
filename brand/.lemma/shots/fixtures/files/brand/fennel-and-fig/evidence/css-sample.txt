@@ -1,0 +1,19 @@
+/* Brand kit's sample: a made-up bakery's stylesheet, as a read would keep it. */
+
+/* Custom properties that resolve to a colour (the site's own names) */
+--ff-cream: #fbf7f0;  /* used 41x */
+--ff-espresso: #2b2118;  /* used 37x */
+--ff-terracotta: #b84a26;  /* used 12x */
+--ff-flour: #f3eadb;  /* used 9x */
+--ff-crust: #e4d8c4;  /* used 8x */
+--ff-rye: #6f6152;  /* used 14x */
+--ff-fig: #6b3a5b;  /* used 3x */
+--ff-sage: #3f7d4e;  /* used 2x */
+--ff-brick: #b3261e;  /* used 2x */
+
+/* Font stacks, most used first */
+font-family: "Source Sans 3", system-ui, sans-serif;  /* 22x */
+font-family: Fraunces, Georgia, serif;  /* 9x */
+
+/* Corner radii */
+border-radius: 14px;  /* 11x */

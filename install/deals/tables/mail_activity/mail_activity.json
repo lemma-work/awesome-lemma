@@ -1,0 +1,19 @@
+{
+  // What Mail did on its own, one line each: "Sorted 42 conversations",
+  // "Drafted a reply to Mira". Something you cannot audit is something you stop
+  // trusting the first time it surprises you.
+  "name": "mail_activity",
+  "primary_key_column": "id",
+  "enable_rls": true,
+  "visibility": "POD",
+  "columns": [
+    { "name": "kind", "type": "ENUM", "required": true,
+      "options": ["sync", "sort", "draft", "send", "follow_up", "snooze", "archive",
+                  "category", "rule", "correction", "promise", "setup", "error"] },
+    { "name": "text", "type": "TEXT", "required": true, "max_length": 400 },
+    { "name": "conversation_id", "type": "UUID" },
+    { "name": "ref_id", "type": "UUID" },
+    { "name": "count", "type": "INTEGER" }
+  ],
+  "config": {}
+}

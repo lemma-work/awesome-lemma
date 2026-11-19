@@ -1,0 +1,29 @@
+{
+  "name": "Tasks",
+  "line": "sales",
+  "position": 5,
+  "job": "Everything you have to do, done by you or an agent",
+  "intro": "Tasks starts as your own private list and grows into the team's projects. Hand any task to your Lemma: it works in a conversation of its own and asks you before anything leaves.",
+  "does": [
+    "A keyboard-first list and a board that drags, private until you share a task.",
+    "Marks the tasks an agent could do with what your Lemma already has.",
+    "Turns promises you made in mail and meetings into tasks, keeping the sentence."
+  ],
+  "jobs": ["PROJECT_MANAGEMENT", "OPERATIONS", "ENGINEERING", "FOUNDER"],
+  "accounts": [],
+  "setup": [
+    "Just you, or your team too, with a first project. Or look around with a sample list.",
+    "With Mail or Meetings there, choose what happens to promises you made: tasks made for you, asked each time, or never.",
+    "Choose who can take tasks: your Lemma, and any other agents in it."
+  ],
+  "today": [
+    { "verb": "do", "line": "Tasks of yours due today or late" },
+    { "verb": "decide", "line": "An agent's question, or something it wants you to approve" },
+    { "verb": "waiting", "line": "Tasks someone else, or an agent, is doing for you" }
+  ],
+  "pictures": [
+    { "shot": "tasks", "caption": "Your own list, private until you share it" },
+    { "shot": "tasks-board", "caption": "The same tasks as a board that drags" },
+    { "shot": "tasks-agent", "caption": "An agent on a task, asking before it acts" }
+  ]
+}

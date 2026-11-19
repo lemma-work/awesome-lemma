@@ -1,0 +1,46 @@
+{
+  // What Lead research found about a company, beyond People map's look-up:
+  // its size, funding and recent news, each with its link and when it was
+  // found, and how well it fits the team. Same id as the shared `company` row. Team-wide (no RLS), like the
+  // company: two members who deal with Acme share one, and nothing anyone
+  // wrote lives here, only what public pages say.
+  "name": "leads_company",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "looked_up_at", "type": "DATETIME" },
+    // A page confirmed this company at its domain.
+    { "name": "found", "type": "BOOLEAN" },
+    // [{key, label, value, url, source, found_at}]: what they do, size,
+    // head office, founded, funding.
+    { "name": "facts", "type": "JSON" },
+    // [{value (headline), date, url, source, found_at}], newest first, from
+    // the last twelve months.
+    { "name": "news", "type": "JSON" },
+    { "name": "not_found", "type": "JSON" },
+    { "name": "sample", "type": "BOOLEAN", "default": false },
+
+    // --- how well it fits the team (leads_profile), 1 to 5 ----------------------
+    // One Decisions call against the team's sentence and examples; the
+    // companies people corrected go into the question. Team-wide like the
+    // company: one score for everyone.
+    { "name": "fit", "type": "INTEGER" },
+    // An answer under 0.5 is not sure: it shows, marked, and never goes on the day.
+    { "name": "fit_sure", "type": "BOOLEAN" },
+    { "name": "fit_confidence", "type": "FLOAT" },
+    // What matched and what missed, said from the closed answers.
+    { "name": "fit_why", "type": "TEXT", "max_length": 300 },
+    // {score, matches, misses: {value, confidence}} as answered.
+    { "name": "fit_answers", "type": "JSON" },
+    // decision, or a person's correction (kept until someone changes it).
+    { "name": "fit_by", "type": "ENUM", "options": ["decision", "person"] },
+    { "name": "fit_by_name", "type": "TEXT", "max_length": 200 },
+    { "name": "fit_at", "type": "DATETIME" },
+    // leads_profile.fit_version it was scored against.
+    { "name": "fit_version", "type": "TEXT", "max_length": 64 },
+    // What the question saw.
+    { "name": "fit_evidence", "type": "TEXT", "max_length": 6000 }
+  ],
+  "config": {}
+}

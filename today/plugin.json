@@ -1,0 +1,6 @@
+{
+  // Today carries no other plugin. It reads the shared needs_you list, which
+  // every plugin in the Lemma writes (Mail, Meetings, People map, Tasks...),
+  // and the platform's own Needs you. Alone it shows what will appear.
+  "name": "today"
+}

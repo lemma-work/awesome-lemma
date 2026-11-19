@@ -1,0 +1,49 @@
+{
+  // A change a conversation or a meeting proposes to a deal, never applied on
+  // its own: a new deal, or a deal's stage, amount, close date or next step,
+  // or that it was lost. Each carries the sentence it came from, who said it,
+  // and how sure the read was. Per person (RLS): it came from their own mail
+  // or meetings, so it is theirs until they keep it, and keeping it writes
+  // the team's deal (without the sentence).
+  "name": "deals_change",
+  "primary_key_column": "id",
+  "enable_rls": true,
+  "visibility": "POD",
+  "columns": [
+    { "name": "kind", "type": "ENUM", "required": true,
+      "options": ["new_deal", "stage", "amount", "close_date", "next_step", "lost"] },
+    // The deal it changes; for a new deal, the deal keeping it made.
+    { "name": "deal_id", "type": "UUID" },
+    { "name": "deal_name", "type": "TEXT", "max_length": 200 },
+    { "name": "company_id", "type": "UUID" },
+    { "name": "company_name", "type": "TEXT", "max_length": 200 },
+    { "name": "company_domain", "type": "TEXT", "max_length": 253 },
+    // The other side: [{handle, name}].
+    { "name": "people", "type": "JSON" },
+    // The proposed fields ({stage}, {amount, currency}, {close_date},
+    // {next_step}, {lost_reason}; a new deal: {name, stage, amount, currency,
+    // close_date, next_step}), and what the deal had.
+    { "name": "value", "type": "JSON" },
+    { "name": "previous", "type": "JSON" },
+    // The sentence, word for word, and who said it.
+    { "name": "quote", "type": "TEXT", "required": true, "max_length": 600 },
+    { "name": "speaker", "type": "TEXT", "max_length": 200 },
+    { "name": "said_at", "type": "DATETIME" },
+    // Where: mail, meeting, ... and the row (conversation or meeting) and the
+    // read that found it.
+    { "name": "source", "type": "TEXT", "required": true, "max_length": 32 },
+    { "name": "source_row", "type": "UUID" },
+    { "name": "source_label", "type": "TEXT", "max_length": 300 },
+    { "name": "read_id", "type": "UUID" },
+    // How sure the read was that it changes a deal (0-1).
+    { "name": "confidence", "type": "FLOAT" },
+    // proposed -> kept or dismissed; expired when a newer one replaced it.
+    { "name": "state", "type": "ENUM", "required": true, "default": "proposed",
+      "options": ["proposed", "kept", "dismissed", "expired"] },
+    { "name": "decided_at", "type": "DATETIME" },
+    // What the person kept when they changed it first.
+    { "name": "kept_value", "type": "JSON" },
+    { "name": "sample", "type": "BOOLEAN", "default": false }
+  ],
+  "config": {}
+}

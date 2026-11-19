@@ -1,0 +1,28 @@
+{
+  // One row per person: where their own set-up is, and whether Deal tracker
+  // reads their conversations and meeting notes for deal changes. Per person
+  // (RLS). Nothing is read for anyone before their set-up is done.
+  "name": "deals_member",
+  "primary_key_column": "id",
+  "enable_rls": true,
+  "visibility": "POD",
+  "columns": [
+    { "name": "display_name", "type": "TEXT", "max_length": 200 },
+    { "name": "timezone", "type": "TEXT", "required": true, "default": "UTC", "max_length": 64 },
+    // start -> stages -> currency -> existing -> finding -> review -> day -> done
+    { "name": "setup_step", "type": "ENUM", "required": true, "default": "start",
+      "options": ["start", "stages", "currency", "existing", "finding", "review", "day", "done"] },
+    { "name": "setup_run_id", "type": "TEXT", "max_length": 64 },
+    { "name": "setup_done_at", "type": "DATETIME" },
+    // Read new conversations and meeting notes for deal changes.
+    { "name": "listening", "type": "BOOLEAN", "required": true, "default": true },
+    // What set-up found, for its screens.
+    { "name": "setup_summary", "type": "JSON" },
+    // Their own daily schedule (deals-refresh: what needs them, for Today),
+    // made by the app as them when set-up is done.
+    { "name": "refresh_schedule_id", "type": "TEXT", "max_length": 64 },
+    // When what needs them was last written.
+    { "name": "needs_at", "type": "DATETIME" }
+  ],
+  "config": {}
+}

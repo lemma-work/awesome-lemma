@@ -1,0 +1,305 @@
+{
+ "status": "COMPLETED",
+ "output_data": {
+  "review_id": null,
+  "write": false,
+  "counts": {
+   "window": {
+    "from": "2026-11-12",
+    "to": "2026-11-18",
+    "days": 7
+   },
+   "currency": "EUR",
+   "moved": [
+    {
+     "id": "371c3a4b-3f61-451c-bd0c-5110f686057a",
+     "name": "Annual renewal, 32 to 40 seats",
+     "company": "Brightwave Health",
+     "stage": "Negotiating",
+     "amount": 11520.0,
+     "currency": "EUR",
+     "changes": [
+      {
+       "field": "created",
+       "from": null,
+       "to": {
+        "name": "Annual renewal, 32 to 40 seats",
+        "stage": "Proposal",
+        "amount": null
+       },
+       "by": "Sam Rivera",
+       "how": "proposal",
+       "with": "Daniel Kowalski",
+       "at": "2026-11-17T09:07:00+00:00"
+      },
+      {
+       "field": "stage",
+       "from": "Proposal",
+       "to": "Negotiating",
+       "by": "Sam Rivera",
+       "how": "proposal",
+       "with": "Daniel Kowalski",
+       "at": "2026-11-18T12:52:00+00:00"
+      },
+      {
+       "field": "close_date",
+       "from": null,
+       "to": "2026-11-28",
+       "by": "Sam Rivera",
+       "how": "proposal",
+       "with": "Daniel Kowalski",
+       "at": "2026-11-18T12:52:00+00:00"
+      },
+      {
+       "field": "next_step",
+       "from": "Send revised quote with 15% off for a two-year term",
+       "to": "Send the order form so they can sign by 28 November",
+       "by": "Sam Rivera",
+       "how": "proposal",
+       "with": "Daniel Kowalski",
+       "at": "2026-11-18T12:52:00+00:00"
+      },
+      {
+       "field": "amount",
+       "from": null,
+       "to": 11520.0,
+       "by": "Sam Rivera",
+       "how": "proposal",
+       "with": "Daniel Kowalski",
+       "at": "2026-11-18T12:52:00+00:00"
+      }
+     ]
+    },
+    {
+     "id": "7ffe252a-d4c6-4140-8af7-ec140b21d40a",
+     "name": "Shipments dashboard, 25 seats",
+     "company": "Ferro Logistics",
+     "stage": "Lost",
+     "amount": 7500.0,
+     "currency": "EUR",
+     "changes": [
+      {
+       "field": "created",
+       "from": null,
+       "to": {
+        "name": "Shipments dashboard, 25 seats",
+        "stage": "Talking",
+        "amount": 7500.0
+       },
+       "by": "Sam Rivera",
+       "how": "spreadsheet",
+       "with": null,
+       "at": "2026-11-18T12:49:25.529652+00:00"
+      },
+      {
+       "field": "lost",
+       "from": "Talking",
+       "to": "Lost",
+       "by": "Sam Rivera",
+       "how": "proposal",
+       "with": "Lena Fischer",
+       "at": "2026-11-18T12:52:00+00:00"
+      },
+      {
+       "field": "lost_reason",
+       "from": null,
+       "to": "Chose another vendor; it is bundled with their fleet software",
+       "by": "Sam Rivera",
+       "how": "proposal",
+       "with": "Lena Fischer",
+       "at": "2026-11-18T12:52:00+00:00"
+      }
+     ]
+    },
+    {
+     "id": "ac708b16-07b8-408c-be55-3d5995c9fb70",
+     "name": "Pilot for two depots",
+     "company": "Kestrel Freight",
+     "stage": "Lead",
+     "amount": 12000.0,
+     "currency": "EUR",
+     "changes": [
+      {
+       "field": "created",
+       "from": null,
+       "to": {
+        "name": "Pilot for two depots",
+        "stage": "Lead",
+        "amount": 12000.0
+       },
+       "by": "Sam Rivera",
+       "how": "spreadsheet",
+       "with": null,
+       "at": "2026-11-18T12:49:25.529652+00:00"
+      }
+     ]
+    },
+    {
+     "id": "e62d972a-f196-4c5c-80e4-6fd37f80a2d3",
+     "name": "Front desk add-on",
+     "company": "Orchard Dental",
+     "stage": "Lost",
+     "amount": 1200.0,
+     "currency": "EUR",
+     "changes": [
+      {
+       "field": "created",
+       "from": null,
+       "to": {
+        "name": "Front desk add-on",
+        "stage": "Lost",
+        "amount": 1200.0
+       },
+       "by": "Sam Rivera",
+       "how": "spreadsheet",
+       "with": null,
+       "at": "2026-11-18T12:49:25.529652+00:00"
+      }
+     ]
+    },
+    {
+     "id": "80c8655e-e140-439c-b24b-4df60e37e92a",
+     "name": "Practice software for the front desk",
+     "company": "Orchard Dental",
+     "stage": "Won",
+     "amount": null,
+     "currency": "EUR",
+     "changes": [
+      {
+       "field": "created",
+       "from": null,
+       "to": {
+        "name": "Practice software for the front desk",
+        "stage": "Won",
+        "amount": null
+       },
+       "by": "Sam Rivera",
+       "how": "proposal",
+       "with": "Sana Iqbal",
+       "at": "2026-11-16T13:00:00+00:00"
+      }
+     ]
+    },
+    {
+     "id": "89dd1fa0-bd25-5b2b-80ea-67df9909ffdc",
+     "name": "Two more properties and Lisbon",
+     "company": "Harborview Hotels",
+     "stage": "Negotiating",
+     "amount": 24000.0,
+     "currency": "EUR",
+     "changes": [
+      {
+       "field": "amount",
+       "from": 22000,
+       "to": 24000,
+       "by": "Sam Rivera",
+       "how": "proposal",
+       "with": "Sofia Marin",
+       "at": "2026-11-14T07:55:42.745191+00:00"
+      },
+      {
+       "field": "close_date",
+       "from": null,
+       "to": "2026-11-20",
+       "by": "Sam Rivera",
+       "how": "proposal",
+       "with": "Sofia Marin",
+       "at": "2026-11-15T05:55:42.745191+00:00"
+      },
+      {
+       "field": "stage",
+       "from": "Proposal",
+       "to": "Negotiating",
+       "by": "Sam Rivera",
+       "how": "proposal",
+       "with": "Sofia Marin",
+       "at": "2026-11-15T06:55:42.745191+00:00"
+      }
+     ]
+    }
+   ],
+   "quiet": [
+    {
+     "id": "242c9994-4e78-5255-ba7e-287be60f4b25",
+     "name": "Rollout to all three sites",
+     "company": "Lumen Labs",
+     "stage": "Talking",
+     "amount": 18000.0,
+     "currency": "EUR",
+     "warmth": "cold",
+     "people": [
+      "Ana Ruiz"
+     ],
+     "last_contact_at": "2026-09-30T14:25:00+00:00",
+     "last_contact_by": null,
+     "days": 48
+    }
+   ],
+   "stages": [
+    {
+     "stage": "Lead",
+     "deals": 1,
+     "amount": 12000.0,
+     "amount_text": "EUR 12k",
+     "other_currency": 0
+    },
+    {
+     "stage": "Talking",
+     "deals": 1,
+     "amount": 18000.0,
+     "amount_text": "EUR 18k",
+     "other_currency": 0
+    },
+    {
+     "stage": "Proposal",
+     "deals": 0,
+     "amount": 0,
+     "amount_text": "EUR 0",
+     "other_currency": 0
+    },
+    {
+     "stage": "Negotiating",
+     "deals": 2,
+     "amount": 35520.0,
+     "amount_text": "EUR 36k",
+     "other_currency": 0
+    }
+   ],
+   "closing_soon": [
+    {
+     "id": "89dd1fa0-bd25-5b2b-80ea-67df9909ffdc",
+     "name": "Two more properties and Lisbon",
+     "company": "Harborview Hotels",
+     "stage": "Negotiating",
+     "amount": 24000.0,
+     "currency": "EUR",
+     "close_date": "2026-11-20"
+    },
+    {
+     "id": "371c3a4b-3f61-451c-bd0c-5110f686057a",
+     "name": "Annual renewal, 32 to 40 seats",
+     "company": "Brightwave Health",
+     "stage": "Negotiating",
+     "amount": 11520.0,
+     "currency": "EUR",
+     "close_date": "2026-11-28"
+    }
+   ],
+   "totals": {
+    "open": 4,
+    "open_amount": 65520.0,
+    "open_amount_text": "EUR 66k",
+    "open_other_currency": 0,
+    "new": 5,
+    "stage_moves": 2,
+    "won": 1,
+    "won_amount": 0,
+    "won_amount_text": "EUR 0",
+    "lost": 2,
+    "quiet": 1,
+    "moved": 6
+   }
+  },
+  "message": "6 moved, 1 quiet, 4 open worth EUR 66k"
+ }
+}

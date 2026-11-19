@@ -1,0 +1,10 @@
+{
+  // Someone became a person you deal with without a new kind: the person
+  // added them back, or added them by address with a kind already known.
+  "name": "leads-person-added",
+  "schedule_type": "DATASTORE",
+  "config": { "table_name": "people_person", "operations": ["INSERT", "UPDATE"],
+              "when": { "deal_with": { "to": true } }, "bulk_writes": "each" },
+  "workflow_name": "leads-consider-on-added",
+  "is_active": true
+}

@@ -1,0 +1,68 @@
+{
+  // Every piece of work on a deck, started by the `decks-job-wanted` schedule
+  // when a person's decks_job row becomes `wanted`. decks_job is theirs, so
+  // the run is theirs: their agents' writing, their needs_you items.
+  //
+  //   outline  plan → decks-outliner → save the outline → finish
+  //   cards    plan → each card: decks-writer → save it → finish
+  //   edit     plan (the Decisions call: which cards?) → each chosen card:
+  //            decks-writer → save it → finish. Removing cards, changing the
+  //            look, and an unsure answer (state ask) are settled in the plan
+  //            and go straight to finish.
+  //
+  // The LOOP (its body starts at child_node_id, `write`, and `save` edges back
+  // to it; its one outgoing edge is where it goes when every card is done)
+  // writes one card at a time and saves each as it lands, so the app
+  // shows the deck filling in. DECISION's default is its first-listed edge
+  // (to finish): anything the plan did not hand on ends cleanly.
+  "name": "decks-work",
+  "description": "Do what a person asked for on a deck: write its outline, write its cards one by one, or make an edit on only the cards it touches.",
+  "run_title": ["plan.message"],
+  "start": { "type": "DATASTORE_EVENT", "config": { "table_name": "decks_job", "operations": ["INSERT", "UPDATE"] } },
+  "nodes": [
+    { "id": "plan", "type": "FUNCTION", "label": "Read the request",
+      "config": { "function_name": "decks_plan", "input_mapping": {
+        "job_id": { "type": "expression", "value": "start.metadata.record_id" } } } },
+    { "id": "route", "type": "DECISION", "label": "Outline, cards, or nothing to write",
+      "config": { "rules": [
+        { "condition": "plan.kind == 'outline' && plan.go", "next_node_id": "outline" },
+        { "condition": "length(plan.cards) > `0`", "next_node_id": "each" }
+      ] } },
+    { "id": "outline", "type": "AGENT", "label": "Write the outline",
+      "config": { "agent_name": "decks-outliner", "input_mapping": {
+        "brief": { "type": "expression", "value": "plan.brief" } } } },
+    { "id": "save_outline", "type": "FUNCTION", "label": "Keep the outline",
+      "config": { "function_name": "decks_save_outline", "input_mapping": {
+        "job_id": { "type": "expression", "value": "start.metadata.record_id" },
+        "outline": { "type": "expression", "value": "outline" } } } },
+    { "id": "each", "type": "LOOP", "label": "Each card",
+      "config": { "items_path": "plan.cards", "item_var_name": "card", "child_node_id": "write" } },
+    { "id": "write", "type": "AGENT", "label": "Write the card",
+      "config": { "agent_name": "decks-writer", "input_mapping": {
+        "brief": { "type": "expression", "value": "loop.card.brief" } } } },
+    { "id": "save", "type": "FUNCTION", "label": "Keep the card",
+      "config": { "function_name": "decks_save_card", "input_mapping": {
+        "job_id": { "type": "expression", "value": "start.metadata.record_id" },
+        "card_id": { "type": "expression", "value": "loop.card.card_id" },
+        "card": { "type": "expression", "value": "write" } } } },
+    { "id": "finish", "type": "FUNCTION", "label": "Close the job",
+      "config": { "function_name": "decks_finish", "input_mapping": {
+        "job_id": { "type": "expression", "value": "start.metadata.record_id" } } } },
+    { "id": "needs_you", "type": "FUNCTION", "label": "What needs you now",
+      "config": { "function_name": "decks_needs_you", "input_mapping": {} } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [
+    { "id": "e1", "source": "plan", "target": "route" },
+    { "id": "e2", "source": "route", "target": "finish", "label": "nothing to write (the default: listed first)" },
+    { "id": "e3", "source": "route", "target": "outline", "label": "the outline" },
+    { "id": "e4", "source": "route", "target": "each", "label": "cards to write" },
+    { "id": "e5", "source": "outline", "target": "save_outline" },
+    { "id": "e6", "source": "save_outline", "target": "finish" },
+    { "id": "e8", "source": "write", "target": "save" },
+    { "id": "e9", "source": "save", "target": "each" },
+    { "id": "e10", "source": "each", "target": "finish", "label": "every card done" },
+    { "id": "e11", "source": "finish", "target": "needs_you" },
+    { "id": "e12", "source": "needs_you", "target": "end" }
+  ]
+}

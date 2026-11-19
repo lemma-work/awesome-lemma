@@ -1,0 +1,10 @@
+{
+  // A lead's fit changed (scored, corrected, or sure now): its fit_why says
+  // so whenever the score or how sure it is changes.
+  "name": "leads-needs-you-fit",
+  "schedule_type": "DATASTORE",
+  "config": { "table_name": "leads_person", "operations": ["UPDATE"],
+              "when": { "fit_why": { "changed": true } }, "bulk_writes": "each" },
+  "workflow_name": "leads-needs-you",
+  "is_active": true
+}

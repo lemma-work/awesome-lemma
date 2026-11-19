@@ -1,0 +1,45 @@
+{
+  // A company or organisation the owner's team deals with. One row per
+  // company, found by any of its email domains (`company_domain`), so
+  // acme.com and acme.co.uk are one company. Made from the addresses of
+  // people the team deals with, never typed into a form; a person can rename
+  // it, look it up, or move a domain in or out.
+  //
+  // Team-wide (no RLS): two members who both deal with Acme share one row, and
+  // Deal tracker hangs deals on it. Nothing anyone said to anyone there lives
+  // here; that stays in each person's own conversations.
+  //
+  // Shared definition (plugins/_contract), first written by People map.
+  // Carried unchanged by every plugin that uses it; _contract/lint.py fails
+  // on any difference. Nothing here belongs to one source: a plugin's own
+  // working state about a company (People map's look-up and notes) lives in
+  // its own table, whose row id is this company's id.
+  //
+  // A company made from a domain has the id uuid5(COMPANY_NS, "company:" +
+  // domain), COMPANY_NS = c6fc6ea2-4356-443e-8065-e1d71b8f6359, so two
+  // members' jobs meeting the same new domain at once make one row.
+  "name": "company",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "name", "type": "TEXT", "required": true, "max_length": 200 },
+    // The main domain, for its website and its mark. Also one of its
+    // company_domain rows.
+    { "name": "domain", "type": "TEXT", "max_length": 253 },
+    // Where the name came from. A name still guessed from the domain
+    // ("Northgate Vc") may be replaced by one looked up; one a person typed
+    // or looked up stays.
+    { "name": "name_from", "type": "ENUM", "required": true, "default": "domain",
+      "options": ["domain", "looked_up", "person"] },
+    // What they do, one line, when known.
+    { "name": "description", "type": "TEXT", "max_length": 400 },
+    { "name": "industry", "type": "TEXT", "max_length": 120 },
+    // A headcount band, e.g. 11-50, only when a source says so.
+    { "name": "size", "type": "TEXT", "max_length": 60 },
+    // Head office: city and country.
+    { "name": "location", "type": "TEXT", "max_length": 160 },
+    { "name": "website", "type": "TEXT", "max_length": 300 }
+  ],
+  "config": {}
+}

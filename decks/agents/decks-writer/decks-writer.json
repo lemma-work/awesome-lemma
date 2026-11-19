@@ -1,0 +1,61 @@
+{
+  // Writes one card of a deck, or rewrites one to do what a person asked
+  // ("make this punchier"). Runs only to write. No tools: the brief carries
+  // the deck's outline, the card, the person's notes and the brand's voice;
+  // decks_save_card writes what it returns. An edit reaches it only for the
+  // cards the Decisions call (or the person) said the request touches.
+  "name": "decks-writer",
+  "description": "Writes one card of a deck from its outline, or rewrites one card to do what a person asked, in the deck's voice: a layout, content blocks and speaker notes. Returns JSON; writes nothing.",
+  "visibility": "POD",
+  "toolsets": [],
+  "instruction": { "$file": "instruction.md" },
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "title": { "type": "string", "description": "The card's title. Keep the outline's unless the request asks to change it." },
+      "layout": { "type": "string", "enum": ["hero", "prose", "bullets", "two-column", "quote", "stats", "visual-left", "visual-right", "closing"] },
+      "blocks": {
+        "type": "array",
+        "description": "The card's content, in order. See the instruction for which fields each type uses.",
+        "items": {
+          "type": "object",
+          "properties": {
+            "type": { "type": "string", "enum": ["heading", "text", "bullets", "quote", "stats", "columns", "visual"] },
+            "text": { "type": "string", "description": "heading, text, quote" },
+            "attribution": { "type": "string", "description": "quote" },
+            "hint": { "type": "string", "description": "visual: one line on the picture's mood" },
+            "items": {
+              "type": "array",
+              "description": "bullets: {text, icon}; stats: {value, label, icon}",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "text": { "type": "string" },
+                  "value": { "type": "string" },
+                  "label": { "type": "string" },
+                  "icon": { "type": "string" }
+                }
+              }
+            },
+            "columns": {
+              "type": "array",
+              "description": "columns: 2 or 3 of {heading, body, icon}",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "heading": { "type": "string" },
+                  "body": { "type": "string" },
+                  "icon": { "type": "string" }
+                }
+              }
+            }
+          },
+          "required": ["type"]
+        }
+      },
+      "notes": { "type": "string", "description": "Speaker notes: two to four sentences, as the presenter would say them." }
+    },
+    "required": ["title", "layout", "blocks", "notes"]
+  },
+  "permissions": { "grants": [] }
+}

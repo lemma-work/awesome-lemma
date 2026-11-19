@@ -1,0 +1,67 @@
+{
+  "//": "The catalog's plugins that are not built yet, in build order, line by line. The built ones say their own line and position in <plugin>/listing.json. Read by _build/site_catalog.py.",
+  "lines": [
+    { "id": "sales", "name": "People and sales" },
+    { "id": "support", "name": "Support" },
+    { "id": "founder", "name": "Founders" },
+    { "id": "dev", "name": "Engineering" },
+    { "id": "product", "name": "Product" },
+    { "id": "marketing", "name": "Marketing" },
+    { "id": "teams", "name": "Teams" }
+  ],
+  "planned": [
+    { "name": "Proposals", "line": "sales", "position": 11, "one": "A proposal or quote made from the deal's own notes, in your brand", "buildsOn": ["deal-tracker", "brand-kit", "deck-maker"] },
+    { "name": "Outreach", "line": "sales", "position": 12, "one": "Messages to a list you choose, written for each person and sent when you approve", "buildsOn": ["mail", "people-map", "lead-research"] },
+    { "name": "Partners", "line": "sales", "position": 13, "one": "Partners and resellers, what each one owes you and the deals they bring", "buildsOn": ["people-map", "deal-tracker"] },
+
+    { "name": "Know-how", "line": "support", "position": 14, "one": "Your procedures, written once, answering questions and walking people through each step", "buildsOn": [] , "merges": ["Playbooks", "People helpdesk"] },
+    { "name": "Support inbox", "line": "support", "position": 15, "one": "Every customer question in one queue, answered from what you know, day and night", "buildsOn": ["mail", "people-map", "know-how"] , "merges": ["Front desk", "Support report"] },
+    { "name": "Help center", "line": "support", "position": 16, "one": "A public help center written from the answers you already gave", "buildsOn": ["support-inbox", "know-how"] },
+    { "name": "Customer onboarding", "line": "support", "position": 17, "one": "Each new customer taken from signed to their first win", "buildsOn": ["deal-tracker", "tasks"] },
+    { "name": "Numbers", "line": "support", "position": 18, "one": "The numbers that matter every week, each one opening to the rows behind it", "buildsOn": [] , "merges": ["Weekly numbers", "Company dashboard", "Product numbers"] },
+    { "name": "Customer health", "line": "support", "position": 19, "one": "Which accounts are at risk, and the renewal conversation to have", "buildsOn": ["support-inbox", "people-map", "deal-tracker", "numbers"] , "merges": ["Renewals"] },
+    { "name": "Escalations", "line": "support", "position": 20, "one": "A ticket becomes a bug with the steps to reproduce, and the customer hears when it is fixed", "buildsOn": ["support-inbox", "tasks"] },
+
+    { "name": "Fundraising", "line": "founder", "position": 21, "one": "Your raise, run like a pipeline from first intro to close", "buildsOn": ["people-map", "deal-tracker"] },
+    { "name": "Investor updates", "line": "founder", "position": 22, "one": "A monthly update drafted from your numbers, wins and asks, sent when you approve", "buildsOn": ["numbers", "mail", "people-map"] },
+    { "name": "Goals", "line": "founder", "position": 23, "one": "Quarterly goals, each with an owner and the number it should move", "buildsOn": ["numbers", "tasks"] },
+    { "name": "Chat", "line": "founder", "position": 24, "one": "Slack, Teams and WhatsApp conversations read and sorted the way Mail reads your mail", "buildsOn": [] },
+    { "name": "Decision log", "line": "founder", "position": 25, "one": "Every decision, who made it and why, from wherever it was said", "buildsOn": ["meetings", "mail", "chat"] },
+    { "name": "Due diligence", "line": "founder", "position": 26, "one": "Files for investors behind one link, with who opened what", "buildsOn": ["fundraising"] },
+
+    { "name": "PR review", "line": "dev", "position": 27, "one": "Every pull request read against your team's own rules before anyone reviews it", "buildsOn": [] },
+    { "name": "Triage", "line": "dev", "position": 28, "one": "Bugs, alerts and security warnings sorted by how far they reach, each with an owner", "buildsOn": ["tasks"] , "merges": ["Issues", "Vulnerability tracker"] },
+    { "name": "Coding agent", "line": "dev", "position": 29, "one": "An issue turned into a pull request by an agent, and questions about your code answered", "buildsOn": ["triage", "pr-review"] , "merges": ["Codebase questions"] },
+    { "name": "Release notes", "line": "dev", "position": 30, "one": "Notes written from what merged, and word to everyone who asked for it", "buildsOn": ["pr-review", "triage"] , "merges": ["Releases"] },
+    { "name": "Dependency updates", "line": "dev", "position": 31, "one": "Dependency updates batched, checked and opened as one pull request", "buildsOn": ["pr-review"] },
+    { "name": "Incidents", "line": "dev", "position": 32, "one": "An incident's timeline gathered as it happens, and the write-up drafted after", "buildsOn": ["triage", "chat"] },
+    { "name": "Sprints", "line": "dev", "position": 33, "one": "Sprints with real capacity, carry-over and an honest summary", "buildsOn": ["tasks"] },
+
+    { "name": "User feedback", "line": "product", "position": 34, "one": "What people say about your product and your rivals, filed under the feature it is about", "buildsOn": ["people-map"] , "merges": ["Mentions"] },
+    { "name": "Roadmap", "line": "product", "position": 35, "one": "Features ranked by who asked, with the spec drafted from what they said", "buildsOn": ["user-feedback", "deal-tracker"] , "merges": ["Specs"] },
+    { "name": "Competitor watch", "line": "product", "position": 36, "one": "What your rivals ship and charge, and what people say about them", "buildsOn": ["user-feedback"] },
+    { "name": "Forms", "line": "product", "position": 37, "one": "A public form whose answers land as rows and start the work", "buildsOn": [] },
+    { "name": "User interviews", "line": "product", "position": 38, "one": "The right users found and booked, and each call turned into findings", "buildsOn": ["user-feedback", "booking-page", "meetings"] },
+    { "name": "Early access", "line": "product", "position": 39, "one": "Everyone in your beta, what they tried and what they said", "buildsOn": ["user-feedback", "forms"] },
+
+    { "name": "Content calendar", "line": "marketing", "position": 40, "one": "From a passing idea to a post in your voice, with every step approved", "buildsOn": ["brand-kit"] },
+    { "name": "LinkedIn", "line": "marketing", "position": 41, "one": "Posts drafted from the work you did, in each person's own voice", "buildsOn": ["brand-kit", "content-calendar"] },
+    { "name": "Community", "line": "marketing", "position": 42, "one": "Replies drafted for the places your users talk", "buildsOn": ["user-feedback"] },
+    { "name": "Newsletter", "line": "marketing", "position": 43, "one": "A newsletter from what you shipped and published, sent after you approve", "buildsOn": ["brand-kit", "content-calendar", "release-notes"] },
+    { "name": "SEO", "line": "marketing", "position": 44, "one": "Articles aimed at what people search for, checked against what already ranks", "buildsOn": ["content-calendar", "brand-kit"] },
+    { "name": "Campaigns", "line": "marketing", "position": 45, "one": "A campaign's audience, pieces, dates, spend and results in one place", "buildsOn": ["people-map", "content-calendar"] , "merges": ["Ads report"] },
+    { "name": "Launch", "line": "marketing", "position": 46, "one": "A launch planned day by day, with an owner for every piece", "buildsOn": ["tasks", "content-calendar"] },
+
+    { "name": "Status", "line": "teams", "position": 47, "one": "Where each project stands, asked of each person and written up once", "buildsOn": ["tasks", "chat"] , "merges": ["Standups", "Status reports", "Risks"] },
+    { "name": "Client projects", "line": "teams", "position": 48, "one": "A project your client can follow: what is done, what is next, what you need from them", "buildsOn": ["tasks"] },
+    { "name": "Team directory", "line": "teams", "position": 49, "one": "Who's who, who they report to, and what they know", "buildsOn": [] },
+    { "name": "Approvals", "line": "teams", "position": 50, "one": "Every request sent to the right yes, with the context attached", "buildsOn": ["team-directory"] },
+    { "name": "Time off", "line": "teams", "position": 51, "one": "Leave asked for and approved, and who is out this week", "buildsOn": ["approvals", "team-directory"] },
+    { "name": "Joiners and leavers", "line": "teams", "position": 52, "one": "A first week planned for each new person, and everything handed back when someone leaves", "buildsOn": ["team-directory", "tasks"] , "merges": ["Employee onboarding", "Offboarding", "Accounts and access"] },
+    { "name": "Hiring", "line": "teams", "position": 53, "one": "Every candidate from first mail to offer, with interviews planned and scored", "buildsOn": ["mail", "meetings", "people-map"] , "merges": ["Interview kit"] },
+    { "name": "One-on-ones", "line": "teams", "position": 54, "one": "One-on-one notes and goals, kept between a manager and their person", "buildsOn": ["meetings", "goals"] },
+    { "name": "Vendors", "line": "teams", "position": 55, "one": "Every vendor, contract and renewal, and the subscriptions nobody uses", "buildsOn": ["mail"] , "merges": ["Spend"] },
+    { "name": "Invoices", "line": "teams", "position": 56, "one": "Who owes you what, with reminders drafted in your voice", "buildsOn": ["mail", "people-map"] },
+    { "name": "Orders", "line": "teams", "position": 57, "one": "Orders, stock and suppliers in one view, with late ones chased", "buildsOn": ["mail", "chat"] , "merges": ["Supplier follow-ups"] }
+  ]
+}

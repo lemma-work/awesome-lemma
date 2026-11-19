@@ -1,0 +1,16 @@
+{
+  // One schedule for everyone: meetings_work is per person, so each firing
+  // runs as the owner of the row that changed. `to` fires only on the write
+  // that MADE it wanted. `bulk_writes: each`: the due pass writes in bulk, and
+  // a bulk write skips a datastore trigger unless the schedule asks for each row.
+  "name": "meetings-brief-wanted",
+  "schedule_type": "DATASTORE",
+  "config": {
+    "table_name": "meetings_work",
+    "operations": ["INSERT", "UPDATE"],
+    "when": { "brief_state": { "to": "wanted" } },
+    "bulk_writes": "each"
+  },
+  "workflow_name": "meetings-brief",
+  "is_active": true
+}

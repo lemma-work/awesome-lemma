@@ -1,0 +1,58 @@
+{
+  // A visitor's booking request, and what became of it. The page adds the row
+  // through the Lemma's web widget once the visitor has confirmed their email
+  // with a code: the table is open to confirmed contacts, for page_id,
+  // starts_at, name, email, about, zone and ref only. Contact-owned, so the
+  // platform stamps the visitor's contact on their row, they can ask the chat
+  // about their own bookings (the contact_columns), and forgetting a contact
+  // forgets their requests.
+  //
+  // Each person's own trigger (made when they turn their page on, filtered to
+  // their page_id, taking rows from outside) runs booking-confirm as that
+  // person, which checks the time against their live calendars and either
+  // creates the event (a Meetings meeting with its brief) or declines.
+  "name": "booking_request",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "contact_owned": true,
+  "contact_columns": ["starts_at", "ends_at", "state", "reason", "join_url"],
+  "columns": [
+    // --- what the visitor sends
+    // The page's id, as text: a UUID column can't be offered to people outside.
+    { "name": "page_id", "type": "TEXT", "required": true, "max_length": 64, "description": "The page" },
+    { "name": "starts_at", "type": "DATETIME", "required": true, "description": "The time you picked" },
+    { "name": "name", "type": "TEXT", "required": true, "max_length": 120, "description": "Your name" },
+    { "name": "email", "type": "TEXT", "required": true, "max_length": 320, "description": "Your email" },
+    { "name": "about", "type": "TEXT", "required": true, "max_length": 1500, "description": "What would you like to talk about?" },
+    // The visitor's time zone, for the invite and any email back.
+    { "name": "zone", "type": "TEXT", "max_length": 64, "description": "Your time zone" },
+    // A token the page made, to find what became of this request in
+    // booking_outcome (the page cannot read this table).
+    { "name": "ref", "type": "TEXT", "max_length": 64, "description": "Reference" },
+    // --- what became of it
+    { "name": "state", "type": "ENUM", "required": true, "default": "requested",
+      "options": ["requested", "confirmed", "declined"] },
+    // Why it was declined, in words the visitor is sent.
+    { "name": "reason", "type": "TEXT", "max_length": 500 },
+    { "name": "ends_at", "type": "DATETIME" },
+    // The Meetings meeting it became, and the calendar event behind it.
+    { "name": "meeting_id", "type": "UUID" },
+    { "name": "event_id", "type": "TEXT", "max_length": 400 },
+    { "name": "join_url", "type": "TEXT", "max_length": 800 },
+    // The Decisions read: is it a genuine request, and what kind of meeting
+    // (Meetings' kinds). Each answer {value, confidence}; under 0.5 is not sure.
+    { "name": "genuine", "type": "BOOLEAN" },
+    { "name": "kind", "type": "ENUM",
+      "options": ["customer", "investor", "candidate", "partner", "internal", "other"] },
+    { "name": "unsure", "type": "BOOLEAN", "default": false },
+    { "name": "answers", "type": "JSON" },
+    // The email that told the visitor it was declined: {to, subject, body,
+    // sent, why}. Never sent for a sample or an unconfirmed address.
+    { "name": "told", "type": "JSON" },
+    { "name": "handled_at", "type": "DATETIME" },
+    // Made by booking_sample_data; nothing is sent and no real calendar is touched.
+    { "name": "sample", "type": "BOOLEAN", "default": false }
+  ],
+  "config": {}
+}

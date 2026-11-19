@@ -1,0 +1,13 @@
+{
+  "format_version": 4,
+  "name": "Deck maker",
+  "description": "A deck from one sentence, in your brand, edited by asking, and exported to PowerPoint. Write the sentence, approve the outline, watch the cards arrive, then ask for changes: only the cards a request is about change.",
+  "variables": {
+    "decks_slug": {
+      "type": "app_slug",
+      "source_value": "lemma-decks",
+      "default": "lemma-decks",
+      "description": "Public URL slug for the Decks app (unique platform-wide; a suffix is added on collision)"
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  // Push for outlook (sent). The event's payload is ignored on purpose: a read
+  // since the watermark picks up this message AND anything a dropped event
+  // missed, so a lost webhook costs latency, never mail. One workflow per
+  // trigger because an EVENT start binds exactly one; turning Mail on makes
+  // the per-account schedule.
+  "name": "mail-on-outlook-sent",
+  "description": "Outlook mail you sent: read it within a minute or two and sort it, instead of waiting for the catch-up.",
+  "start": { "type": "EVENT", "config": { "connector_trigger_id": "outlook:composio:outlook_sent_message_trigger", "connector_id": "outlook" } },
+  "nodes": [
+    { "id": "read", "type": "FUNCTION", "label": "Read new mail",
+      "config": { "function_name": "mail_sync", "input_mapping": {
+        "mode": { "type": "literal", "value": "incremental" },
+        "budget_seconds": { "type": "literal", "value": 40 },
+        "provider": { "type": "literal", "value": "outlook" } } } },
+    { "id": "sort", "type": "FUNCTION", "label": "Sort it",
+      "config": { "function_name": "mail_sort", "input_mapping": {
+        "max_conversations": { "type": "literal", "value": 30 } } } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [
+    { "id": "e1", "source": "read", "target": "sort" },
+    { "id": "e2", "source": "sort", "target": "end" }
+  ]
+}

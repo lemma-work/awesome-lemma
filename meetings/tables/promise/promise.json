@@ -1,0 +1,32 @@
+{
+  // A promise made in a conversation, either way: what the owner said they
+  // would do (i_owe), and what someone said they would do for the owner
+  // (owed_to_me), with the sentence that made it. From any source.
+  //
+  // Shared definition (plugins/_contract), first written by Mail. Carried
+  // unchanged by every plugin that uses it; _contract/lint.py fails on any
+  // difference.
+  "name": "promise",
+  "primary_key_column": "id",
+  "enable_rls": true,
+  "visibility": "POD",
+  "columns": [
+    { "name": "conversation_id", "type": "UUID",
+      "foreign_key": { "references": "conversation.id" } },
+    // Where it was said: mail, slack, teams, whatsapp, meeting, ...
+    { "name": "source", "type": "TEXT", "required": true, "max_length": 32 },
+    // The provider's id for what it was said in (a message, a meeting), when known.
+    { "name": "source_id", "type": "TEXT", "max_length": 400 },
+    { "name": "person_handle", "type": "TEXT", "max_length": 320 },
+    { "name": "person_name", "type": "TEXT", "max_length": 200 },
+    { "name": "direction", "type": "ENUM", "required": true, "options": ["i_owe", "owed_to_me"] },
+    // What was promised, in a short plain line.
+    { "name": "text", "type": "TEXT", "required": true, "max_length": 400 },
+    // The sentence that made it, word for word.
+    { "name": "quote", "type": "TEXT", "max_length": 600 },
+    { "name": "due_at", "type": "DATETIME" },
+    { "name": "state", "type": "ENUM", "required": true, "default": "open",
+      "options": ["open", "done", "dropped"] }
+  ],
+  "config": {}
+}

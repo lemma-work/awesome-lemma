@@ -1,0 +1,29 @@
+{
+  // One way to reach a person: an email address, a phone number, a Slack or
+  // Teams user. A person has as many as the places they talk; a plugin that
+  // meets a handle looks it up here, and adds it (to an existing person when
+  // it can tell, say a Slack profile's email) instead of making a second person.
+  //
+  // A separate table rather than a list on the person: a lookup by handle is a
+  // plain join, two plugins adding handles at once never overwrite each other,
+  // and merging two people is moving rows.
+  //
+  // Shared definition (plugins/_contract). Carried unchanged by every plugin
+  // that uses it; _contract/lint.py fails on any difference.
+  "name": "person_handle",
+  "primary_key_column": "id",
+  "enable_rls": true,
+  "visibility": "POD",
+  "columns": [
+    { "name": "person_id", "type": "UUID", "required": true,
+      "foreign_key": { "references": "person.id" } },
+    // What the handle is: email, phone, slack, teams, whatsapp, ...
+    { "name": "kind", "type": "TEXT", "required": true, "max_length": 32 },
+    // Normalised: an email lowercased, a phone in E.164, a chat user as
+    // "<workspace>:<user id>".
+    { "name": "handle", "type": "TEXT", "required": true, "max_length": 320 },
+    // How they appear there ("Mira Okafor", "@mira").
+    { "name": "display_name", "type": "TEXT", "max_length": 200 }
+  ],
+  "config": {}
+}

@@ -1,0 +1,8 @@
+{
+  "name": "meetings-needs-you-done",
+  "schedule_type": "DATASTORE",
+  "config": { "table_name": "needs_you", "operations": ["UPDATE"],
+              "when": { "source_plugin": "meetings", "source_table": "promise", "closed_by": "person", "state": { "to": "done" } } },
+  "workflow_name": "meetings-needs-you-done",
+  "is_active": true
+}

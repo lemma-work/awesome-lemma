@@ -1,0 +1,6 @@
+{
+  "name": "today",
+  "description": "Your day in one place: who is waiting on you, the promises you made, what you're owed, today's meetings and what changed, with the reply or nudge already drafted.",
+  "public_slug": "${today_slug}",
+  "visibility": "POD"
+}

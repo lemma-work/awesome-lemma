@@ -1,0 +1,17 @@
+{
+  "anchor": "2026-11-18",
+  "zone": [
+    "Asia/Kolkata",
+    "Asia/Calcutta"
+  ],
+  "apps": [
+    {
+      "name": "meetings",
+      "label": "Meetings",
+      "start": "/"
+    }
+  ],
+  "notes": {
+    "meetings-sweep": "In the demo the calendar isn't read again. In a Lemma it reads yours every 15 minutes, sorts new meetings and writes the briefs that are due."
+  }
+}

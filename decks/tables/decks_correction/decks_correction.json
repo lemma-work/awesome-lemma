@@ -1,0 +1,20 @@
+{
+  // A person's correction of "which cards does this request touch?": the
+  // request and the deck as the Decisions call saw it (`evidence`), what it
+  // answered, and what the person said instead. The newest twenty go with
+  // every later call as examples. The team's: a correction teaches the
+  // Lemma, not one person.
+  "name": "decks_correction",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "evidence", "type": "TEXT", "required": true, "max_length": 6000 },
+    // { "cards": ["c3", "c5"], "action": "rewrite" }
+    { "name": "from_answer", "type": "JSON" },
+    { "name": "to_answer", "type": "JSON", "required": true },
+    { "name": "job_id", "type": "UUID" },
+    { "name": "deck_id", "type": "UUID" }
+  ],
+  "config": {}
+}

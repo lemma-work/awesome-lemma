@@ -1,0 +1,35 @@
+{
+  // Started by `meetings-brief-wanted` when a meeting's brief_state becomes
+  // wanted (it is due, or the person asked). meetings_work is per person, so
+  // the run is the meeting's owner.
+  "name": "meetings-brief",
+  "description": "Write the brief for one meeting with people from outside.",
+  "max_concurrent_runs": 4,
+  "start": { "type": "DATASTORE_EVENT", "config": { "table_name": "meetings_work", "operations": ["INSERT", "UPDATE"] } },
+  "nodes": [
+    { "id": "context", "type": "FUNCTION", "label": "Gather what is known",
+      "config": { "function_name": "meetings_brief_context",
+        "input_mapping": { "meeting_id": { "type": "expression", "value": "start.metadata.record_id" } } } },
+    { "id": "write", "type": "AGENT", "label": "Write the brief",
+      "config": { "agent_name": "meetings-brief-writer",
+        "input_mapping": {
+          "meeting": { "type": "expression", "value": "context.meeting" },
+          "me": { "type": "expression", "value": "context.me" },
+          "attendees": { "type": "expression", "value": "context.attendees" } } } },
+    { "id": "save", "type": "FUNCTION", "label": "Keep it",
+      "config": { "function_name": "meetings_save_brief",
+        "input_mapping": {
+          "meeting_id": { "type": "expression", "value": "start.metadata.record_id" },
+          "brief": { "type": "expression", "value": "write" },
+          "built_from": { "type": "expression", "value": "context.built_from" } } } },
+    { "id": "needs", "type": "FUNCTION", "label": "What needs you on the calendar",
+      "config": { "function_name": "meetings_needs_you", "input_mapping": {} } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [
+    { "id": "e1", "source": "context", "target": "write" },
+    { "id": "e2", "source": "write", "target": "save" },
+    { "id": "e3", "source": "save", "target": "needs" },
+    { "id": "e3n", "source": "needs", "target": "end" }
+  ]
+}

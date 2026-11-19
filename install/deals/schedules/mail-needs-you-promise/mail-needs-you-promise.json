@@ -1,0 +1,9 @@
+{
+  // A promise read from mail was written (found, kept, closed).
+  "name": "mail-needs-you-promise",
+  "schedule_type": "DATASTORE",
+  "config": { "table_name": "promise", "operations": ["INSERT", "UPDATE"],
+              "when": { "source": "mail" }, "bulk_writes": "each" },
+  "workflow_name": "mail-needs-you-on-promise",
+  "is_active": true
+}

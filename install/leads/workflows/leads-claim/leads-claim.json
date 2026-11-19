@@ -1,0 +1,15 @@
+{
+  // Someone joined the queue: give the queue today's places, best first, up
+  // to the daily limit. One run at a time (the rest wait their turn), so two
+  // places are never handed out at once and the limit holds exactly.
+  "name": "leads-claim",
+  "description": "Give queued people a place in today's look-ups, best first, up to the daily limit.",
+  "max_concurrent_runs": 1,
+  "start": { "type": "DATASTORE_EVENT", "config": { "table_name": "leads_person", "operations": ["INSERT", "UPDATE"] } },
+  "nodes": [
+    { "id": "claim", "type": "FUNCTION", "label": "Today's places",
+      "config": { "function_name": "leads_claim", "input_mapping": {} } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [ { "id": "e1", "source": "claim", "target": "end" } ]
+}

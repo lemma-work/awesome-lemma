@@ -1,0 +1,21 @@
+{
+  // The owner corrected an answer: this person was worth looking up after all
+  // (or not), or this company fits 2, not 4. With the evidence the question
+  // saw, so the newest twenty of each go with every call as worked examples.
+  // Per person (RLS).
+  "name": "leads_correction",
+  "primary_key_column": "id",
+  "enable_rls": true,
+  "visibility": "POD",
+  "columns": [
+    { "name": "field", "type": "ENUM", "required": true, "options": ["worth", "fit"] },
+    // The person (worth) or the company (fit) it was about. Not a foreign key:
+    // samples come and go.
+    { "name": "subject_id", "type": "UUID", "required": true },
+    { "name": "from_value", "type": "TEXT", "max_length": 32 },
+    { "name": "to_value", "type": "TEXT", "required": true, "max_length": 32 },
+    { "name": "evidence", "type": "TEXT", "max_length": 6000 },
+    { "name": "sample", "type": "BOOLEAN", "default": false }
+  ],
+  "config": {}
+}

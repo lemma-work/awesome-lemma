@@ -1,0 +1,65 @@
+{
+  // Judges a batch of threads in one call and returns a decision per thread.
+  // No tools and no grants on purpose: triage_packets hands it everything, and
+  // apply_triage does every write. That makes triage fast, cheap, and the same
+  // packet always reads the same way.
+  "name": "triage",
+  "description": "Sorts a batch of mail threads into your splits, decides what each needs from you, times follow-ups, and asks for drafts. Returns decisions; writes nothing itself.",
+  "visibility": "POD",
+  "toolsets": [],
+  "instruction": { "$file": "instruction.md" },
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "results": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "thread_id": { "type": "string" },
+            "split": { "type": "string", "description": "One active split key." },
+            "state": { "type": "string", "enum": ["needs_reply", "waiting", "fyi", "done"] },
+            "priority": { "type": "integer", "minimum": 0, "maximum": 3 },
+            "summary": { "type": "string", "description": "What this is, under 90 characters." },
+            "ask": { "type": "string", "description": "What they want from you, under 90 characters. Empty unless needs_reply." },
+            "reason": { "type": "string", "description": "Why this split and state, under 120 characters. Name the rule if one decided it." },
+            "follow_up_at": { "type": ["string", "null"], "description": "ISO 8601 with offset. Only for waiting." },
+            "draft": { "type": "boolean" },
+            "draft_kind": { "type": "string", "enum": ["reply", "schedule"] },
+            "commitments": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "direction": { "type": "string", "enum": ["i_owe", "owed_to_me"] },
+                  "text": { "type": "string" },
+                  "quote": { "type": "string" },
+                  "due_at": { "type": ["string", "null"] },
+                  "person_email": { "type": "string" }
+                },
+                "required": ["direction", "text"]
+              }
+            },
+            "closed_promise_ids": { "type": "array", "items": { "type": "string" } },
+            "memory": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "person_email": { "type": "string" },
+                  "fact": { "type": "string" }
+                },
+                "required": ["fact"]
+              }
+            },
+            "vip_suggestion": { "type": ["string", "null"], "description": "Why this sender matters, if they look like a VIP you have not marked." },
+            "rules_applied": { "type": "array", "items": { "type": "string" } }
+          },
+          "required": ["thread_id", "split", "state", "priority", "summary", "reason", "draft"]
+        }
+      }
+    },
+    "required": ["results"]
+  },
+  "permissions": { "grants": [] }
+}

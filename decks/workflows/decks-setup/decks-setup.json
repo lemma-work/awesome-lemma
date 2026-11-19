@@ -1,0 +1,73 @@
+{
+  // A person's set-up, one run each, started by the Decks app on their first
+  // open. The app is the screen for its two forms; each waits for that person.
+  //
+  //   themes  the built-in themes, written once (decks_make, themes_only)
+  //   look    the Lemma's brand (when Brand kit is here; read from the shared
+  //           `brand` table whenever a deck is made) or a theme
+  //   first   make your first deck from a sentence, or look around with the
+  //           sample
+  //   memory  Deck maker's block in /memory/AGENTS.md (decks_memory)
+  "name": "decks-setup",
+  "description": "Set up one person's decks: the look new decks take (the Lemma's brand, or a theme), then a first deck from a sentence or the sample.",
+  "start": { "type": "MANUAL" },
+  "nodes": [
+    { "id": "themes", "type": "FUNCTION", "label": "The themes",
+      "config": { "function_name": "decks_make", "input_mapping": {
+        "themes_only": { "type": "literal", "value": true } } } },
+    { "id": "look", "type": "FORM", "label": "Your decks' look",
+      "config": { "input_schema": {
+        "type": "object",
+        "properties": {
+          "source": { "type": "string", "enum": ["brand", "theme"], "title": "The brand, or a theme", "default": "theme" },
+          "theme_id": { "type": "string", "title": "Theme" }
+        },
+        "required": ["source"]
+      } } },
+    { "id": "look_save", "type": "FUNCTION", "label": "Keep the look",
+      "config": { "function_name": "decks_setup_look", "input_mapping": {
+        "source": { "type": "expression", "value": "look.source" },
+        "theme_id": { "type": "expression", "value": "look.theme_id", "optional": true } } } },
+    { "id": "first", "type": "FORM", "label": "Your first deck",
+      "config": { "input_schema": {
+        "type": "object",
+        "properties": {
+          "prompt": { "type": "string", "title": "What's the deck for?" },
+          "sample": { "type": "boolean", "title": "Look around with a sample instead", "default": false }
+        }
+      } } },
+    { "id": "route", "type": "DECISION", "label": "A sentence, the sample, or neither",
+      "config": { "rules": [
+        { "condition": "first.sample == `true`", "next_node_id": "sample" },
+        { "condition": "first.prompt", "next_node_id": "make" }
+      ] } },
+    { "id": "sample", "type": "FUNCTION", "label": "Load the sample",
+      "config": { "function_name": "decks_sample_data", "input_mapping": {
+        "mode": { "type": "literal", "value": "load" } } } },
+    { "id": "make", "type": "FUNCTION", "label": "Make the first deck",
+      "config": { "function_name": "decks_make", "input_mapping": {
+        "prompt": { "type": "expression", "value": "first.prompt" },
+        "source": { "type": "literal", "value": "app" } } } },
+    { "id": "done", "type": "FUNCTION", "label": "Set up",
+      "config": { "function_name": "decks_setup_done", "input_mapping": {} } },
+    { "id": "memory", "type": "FUNCTION", "label": "Tell this Lemma's agents",
+      "config": { "function_name": "decks_memory", "input_mapping": {} } },
+    { "id": "needs_you", "type": "FUNCTION", "label": "What needs you now",
+      "config": { "function_name": "decks_needs_you", "input_mapping": {} } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [
+    { "id": "e1", "source": "themes", "target": "look" },
+    { "id": "e2", "source": "look", "target": "look_save" },
+    { "id": "e3", "source": "look_save", "target": "first" },
+    { "id": "e4", "source": "first", "target": "route" },
+    { "id": "e5", "source": "route", "target": "done", "label": "neither (the default: listed first)" },
+    { "id": "e6", "source": "route", "target": "sample", "label": "the sample" },
+    { "id": "e7", "source": "route", "target": "make", "label": "a sentence" },
+    { "id": "e8", "source": "sample", "target": "done" },
+    { "id": "e9", "source": "make", "target": "done" },
+    { "id": "e10", "source": "done", "target": "memory" },
+    { "id": "e11", "source": "memory", "target": "needs_you" },
+    { "id": "e12", "source": "needs_you", "target": "end" }
+  ]
+}

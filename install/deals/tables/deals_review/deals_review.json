@@ -1,0 +1,24 @@
+{
+  // The weekly review, one row per week (id from the week's first day). The
+  // counts are counted, never asked: what moved, what went quiet (People
+  // map's warmth on the deal's people), the pipeline by stage. On the team's
+  // day the writer adds one summary from those counts. Team-wide.
+  "name": "deals_review",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    // The seven days it covers, in the team's zone: [week_start, week_end].
+    { "name": "week_start", "type": "DATE", "required": true },
+    { "name": "week_end", "type": "DATE", "required": true },
+    // {moved: [...], quiet: [...], stages: [...], totals: {...}}
+    { "name": "counts", "type": "JSON" },
+    { "name": "counted_at", "type": "DATETIME" },
+    // Three to five sentences from the counts, written on the review day.
+    { "name": "summary", "type": "TEXT", "max_length": 2000 },
+    { "name": "summary_at", "type": "DATETIME" },
+    { "name": "summary_state", "type": "ENUM", "required": true, "default": "none",
+      "options": ["none", "writing", "ready", "failed"] }
+  ],
+  "config": {}
+}

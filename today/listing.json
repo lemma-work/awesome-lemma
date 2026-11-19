@@ -1,0 +1,23 @@
+{
+  "name": "Today",
+  "line": "sales",
+  "position": 3,
+  "job": "Everything that needs you today, on one page",
+  "intro": "Today gathers what every plugin in your Lemma says needs you: replies owed, choices, meetings, promises and people going quiet. Each comes with the reply, nudge or brief already prepared.",
+  "does": [
+    "Leads with the few things that matter most right now.",
+    "Groups the rest by what you do: answer, decide, attend, do, or wait.",
+    "Done and Not now settle the item in the plugin it came from."
+  ],
+  "jobs": ["FOUNDER", "SALES", "OPERATIONS", "PROJECT_MANAGEMENT"],
+  "accounts": [],
+  "setup": [
+    "Pick the time you want your day each morning.",
+    "That is all: it fills in as you add other plugins."
+  ],
+  "today": [],
+  "pictures": [
+    { "shot": "today", "caption": "Next up, then the day by what you do" },
+    { "shot": "today-sections", "caption": "Promises with their sentence, and who went quiet" }
+  ]
+}

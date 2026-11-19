@@ -1,0 +1,9 @@
+{
+  // Deal tracker carries People map, which carries Mail and Meetings, so one
+  // install into an empty Lemma brings all four: deals move from what was
+  // said in the conversations and meeting notes the bases read. Read by
+  // _build/assemble.py, which merges each carried plugin from its own folder
+  // into install/deals/, the bundle that is installed.
+  "name": "deals",
+  "carries": ["people"]
+}

@@ -1,0 +1,15 @@
+{
+  "anchor": "2026-11-18T12:57:00Z",
+  "zone": [
+    "Asia/Kolkata",
+    "Asia/Calcutta"
+  ],
+  "apps": [
+    {
+      "name": "deals",
+      "label": "Deals",
+      "start": "/"
+    }
+  ],
+  "notes": {}
+}

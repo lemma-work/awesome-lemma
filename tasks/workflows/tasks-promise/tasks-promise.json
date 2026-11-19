@@ -1,0 +1,17 @@
+{
+  // Started by the `tasks-promise-made` schedule when Mail or Meetings writes
+  // a promise the owner made. The run is the promise's owner (promise is per
+  // person). Does nothing until that person has set Tasks up with promises
+  // on (auto or ask).
+  "name": "tasks-promise",
+  "description": "A promise you made: is it work to do, or just a reply? Work becomes a task or a suggestion, as you chose.",
+  "max_concurrent_runs": 4,
+  "start": { "type": "DATASTORE_EVENT", "config": { "table_name": "promise", "operations": ["INSERT"] } },
+  "nodes": [
+    { "id": "ask", "type": "FUNCTION", "label": "Work, or a reply?",
+      "config": { "function_name": "tasks_from_promise", "input_mapping": {
+        "promise_id": { "type": "expression", "value": "start.metadata.record_id" } } } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [ { "id": "e1", "source": "ask", "target": "end" } ]
+}

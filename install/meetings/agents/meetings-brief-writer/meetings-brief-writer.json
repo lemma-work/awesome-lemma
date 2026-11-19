@@ -1,0 +1,22 @@
+{
+  // Writes the one-page brief for one meeting from what the Lemma already
+  // knows about the people on it (the owner's mail, when Mail is here, and
+  // earlier meetings), searching the web only for people nothing here knows.
+  // WEB_SEARCH is its only tool; it returns JSON and meetings_save_brief
+  // writes it.
+  "name": "meetings-brief-writer",
+  "description": "Writes a one-page brief before a meeting with people from outside: who they are, where things stand, open promises, what they will want, what to get out of it. Returns JSON; writes nothing itself.",
+  "visibility": "POD",
+  "toolsets": ["WEB_SEARCH"],
+  "instruction": { "$file": "instruction.md" },
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "headline": { "type": "string", "description": "One line, under 90 characters: the single thing to know going in." },
+      "brief": { "type": "string", "description": "Markdown, under 250 words." },
+      "searched": { "type": "array", "items": { "type": "string" }, "description": "The names of the people you looked up on the web, if any." }
+    },
+    "required": ["headline", "brief", "searched"]
+  },
+  "permissions": { "grants": [] }
+}

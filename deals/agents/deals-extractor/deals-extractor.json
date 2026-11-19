@@ -1,0 +1,42 @@
+{
+  // Pulls out what changed about a deal, and the exact sentence that says so,
+  // from conversations and meeting notes the Decisions read already said
+  // change a deal. Runs only on that yes. No tools: everything arrives in the
+  // input, so it cannot wander. Returns JSON; deals_propose keeps a change
+  // only when its sentence is in the text word for word, and only as a
+  // proposal a person keeps or dismisses.
+  "name": "deals-extractor",
+  "description": "From conversations and meeting notes already read as changing a deal, pulls out the new deal or the stage, amount, close date, next step or loss, each with the exact sentence it came from. Returns JSON; writes nothing.",
+  "visibility": "POD",
+  "toolsets": [],
+  "instruction": { "$file": "instruction.md" },
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "changes": {
+        "type": "array",
+        "description": "Every change found, each from one item. Empty when nothing is stated clearly enough.",
+        "items": {
+          "type": "object",
+          "properties": {
+            "ref": { "type": "string", "description": "The `ref` of the item it came from." },
+            "kind": { "type": "string", "enum": ["new_deal", "stage", "amount", "close_date", "next_step", "lost"] },
+            "deal_id": { "type": ["string", "null"], "description": "For a change to an open deal: its id from the item's open_deals. Null for a new deal." },
+            "name": { "type": ["string", "null"], "description": "new_deal only: what is being bought, in a few words (\"Annual plan, 40 seats\"), never just the company's name." },
+            "stage": { "type": ["string", "null"], "description": "new_deal and stage: one of the team's stage names, exactly as given." },
+            "amount": { "type": ["number", "null"], "description": "new_deal and amount: the total in figures, only when said or computable from what was said (40 seats at 30 a month for a year is 14400). Null otherwise." },
+            "currency": { "type": ["string", "null"], "description": "ISO 4217 code of the amount when said (EUR, USD); null to use the team's." },
+            "close_date": { "type": ["string", "null"], "description": "new_deal and close_date: YYYY-MM-DD, when a day is said or clearly implied (\"by the end of the month\" is that month's last day)." },
+            "next_step": { "type": ["string", "null"], "description": "new_deal and next_step: the one next thing, under 80 characters, starting with a verb (\"Send the revised quote for two years\")." },
+            "lost_reason": { "type": ["string", "null"], "description": "lost only: why, under 80 characters, when said." },
+            "quote": { "type": "string", "description": "The one sentence that shows it, copied word for word from the item's text, without the speaker's name." },
+            "speaker": { "type": ["string", "null"], "description": "Who said it, as the text names them." }
+          },
+          "required": ["ref", "kind", "quote"]
+        }
+      }
+    },
+    "required": ["changes"]
+  },
+  "permissions": { "grants": [] }
+}

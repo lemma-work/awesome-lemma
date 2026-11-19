@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+# Every function's description and grants, in one place. Regenerates
+# functions/<name>/<name>.json; never edit those by hand (bin/fnjson.py, as Mail's).
+#   table   read        table:rw  + write rows        table:rwd  + delete rows
+#   workflow:<name>     start, submit and read its runs
+set -euo pipefail
+cd "$(dirname "$0")/.."
+f() { uv run --no-project python bin/fnjson.py "$@"; }
+both="personal_task:rw task:rw tasks_personal_activity:rw tasks_activity:rw"
+f tasks_on_task "A task was added, or handed to an agent. Asks the Decisions API once whether an agent could do it with what this Lemma has (a suggestion, never an assignment), and hands a task given to an agent over: the Lemma's own assistant through the tasks-agent workflow, a named agent in a conversation of its own, with the task as the brief. catch_up asks every open task not yet asked." $both project tasks_run:rw tasks_decision:rw tasks_correction tasks_settings promise workflow:tasks-agent
+f tasks_needs_you "What in Tasks needs the person, written to the shared needs_you list (Today reads it): do (their tasks due today or late), decide (an agent waiting on them: a question or an approval), waiting (a team task they own that someone else has, or an agent working for them). Runs as the person; resolves what no longer applies." personal_task task project tasks_run tasks_personal_activity tasks_activity tasks_settings needs_you:rw
+f tasks_report "For an agent working a task: report on the task. kind progress (a note), question (ask the person, then stop), approval (before sending or changing anything outside the Lemma: what, to whom, the full text; then stop), result (the finished work; finishes the task). files: paths of files made, under /tasks/<task id>/." $both tasks_run:rw promise:rw workflow:tasks-agent function:tasks_needs_you
+f tasks_turn_end "After the Lemma's assistant ends its first turn on a task: keeps the conversation on the task, and if it stopped without a question, an approval or a result, tells the person." $both tasks_run:rw workflow:tasks-agent
+f tasks_from_promise "A promise the owner made: is this work to do, or just a reply? One Decisions call each. Work becomes a personal task (keeping the sentence) or a suggestion, as the person chose at set-up. catch_up asks every open promise not yet asked, from the last 30 days." promise conversation personal_task:rw tasks_personal_activity:rw tasks_decision:rw tasks_correction tasks_settings
+f tasks_add "Add a task to the person's list in Tasks. Private to them unless a team project is named. title is required; notes, due_on (YYYY-MM-DD), priority (low, medium, high, urgent), project (a team project's name), labels, and assign_to: me, lemma (this Lemma's own assistant does it), or a named agent." $both project tasks_settings
+f tasks_move "Share a personal task with the team (optionally into a project), or take a team task you own back to your own list. Moves its sub-tasks and its timeline, keeping every id." personal_task:rwd task:rwd tasks_personal_activity:rwd tasks_activity:rwd project tasks_run:rw tasks_settings
+f tasks_delete "Delete tasks, with their sub-tasks and timelines. not_a_task on a task made from a promise teaches Tasks the promise was just a reply." personal_task:rwd task:rwd tasks_personal_activity:rwd tasks_activity:rwd tasks_run:rwd tasks_decision:rw tasks_correction:rw
+f tasks_setup_scope "Set-up, step 1: just you, or your team too; with the team, the first team project." tasks_settings:rw project:rw
+f tasks_setup_done "Set-up, last step: keeps what the person chose (promises, agents) and what this Lemma has, and opens Tasks." tasks_settings:rw
+f tasks_sample_data "load: a made-up personal list, one team project and a task an agent could do on its own (a one-page guide to turning on single sign-on). clear: removes only what the sample made." personal_task:rwd task:rwd tasks_personal_activity:rwd tasks_activity:rwd project:rwd tasks_run:rwd tasks_decision:rwd tasks_correction:rwd tasks_sample_row:rwd tasks_settings needs_you:rwd
+f tasks_memory "Tells this Lemma's agents that Tasks is installed: Tasks' own block in /memory/AGENTS.md and its guide at /memory/plugins/tasks.md, leaving the team's notes alone. Set-up runs it; safe to run again. remove takes both out." /memory:read,write

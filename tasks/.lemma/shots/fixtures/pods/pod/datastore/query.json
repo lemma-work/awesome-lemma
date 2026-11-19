@@ -1,0 +1,928 @@
+[
+ {
+  "match": "from tasks_activity where task_id = '17a2ceb2-eafb-4af4-8a68-9f6a4654ecab'",
+  "response": {
+   "items": [
+    {
+     "id": "b1cf0d50-2635-4381-b5b6-1396b88cb7d8",
+     "created_at": "2026-11-18T11:14:42.909072+00:00",
+     "updated_at": "2026-11-18T11:14:42.909072+00:00",
+     "task_id": "17a2ceb2-eafb-4af4-8a68-9f6a4654ecab",
+     "kind": "created",
+     "actor_kind": "person",
+     "actor_user_id": "user-sample",
+     "actor_name": "You",
+     "body": null,
+     "detail": null,
+     "state": null,
+     "decided_by": null,
+     "decided_at": null
+    },
+    {
+     "id": "4ad6ce48-48ac-4435-a4eb-89d56504b369",
+     "created_at": "2026-11-18T11:14:47.652366+00:00",
+     "updated_at": "2026-11-18T11:14:47.652366+00:00",
+     "task_id": "17a2ceb2-eafb-4af4-8a68-9f6a4654ecab",
+     "kind": "started",
+     "actor_kind": "agent",
+     "actor_user_id": null,
+     "actor_name": "pod_default",
+     "body": null,
+     "detail": {
+      "by": "You",
+      "conversation_id": "cfa272a1-f250-5271-85b7-5bc6229f8d1d"
+     },
+     "state": null,
+     "decided_by": null,
+     "decided_at": null
+    },
+    {
+     "id": "2f2df121-fcbe-4af2-abaf-206249e5db27",
+     "created_at": "2026-11-18T11:16:53.927799+00:00",
+     "updated_at": "2026-11-18T11:19:38.821237+00:00",
+     "task_id": "17a2ceb2-eafb-4af4-8a68-9f6a4654ecab",
+     "kind": "question",
+     "actor_kind": "agent",
+     "actor_user_id": null,
+     "actor_name": "pod_default",
+     "body": "I have the email written and ready to send \u2014 short, plain words, Entra ID only, eight steps, from you. Two things are missing before it can go:\n\n1. **Who it goes to.** There is no address for Brightwave's IT admin anywhere in this Lemma \u2014 no mail, no contact, no note. Daniel Kowalski is recorded as their lead, but he isn't the admin and I won't guess an address.\n2. **Our three SAML values.** The email has to tell their admin what to paste into *Basic SAML Configuration*: our Entity ID, ACS (reply) URL and sign-on URL. None of those are recorded here either.\n\nSo: what is their IT admin's email address, and what are those three URLs? With both I'll send you the full text for approval and then send it as you.\n\nDraft: `/tasks/17a2ceb2-eafb-4af4-8a68-9f6a4654ecab/sso-entra-email.md`",
+     "detail": {
+      "files": [
+       "/tasks/17a2ceb2-eafb-4af4-8a68-9f6a4654ecab/sso-entra-email.md"
+      ]
+     },
+     "state": "answered",
+     "decided_by": "You",
+     "decided_at": "2026-11-18T11:19:38.635000+00:00"
+    },
+    {
+     "id": "0b66df95-33c7-4760-a479-29361851c4c1",
+     "created_at": "2026-11-18T11:16:54.553278+00:00",
+     "updated_at": "2026-11-18T11:16:54.553278+00:00",
+     "task_id": "17a2ceb2-eafb-4af4-8a68-9f6a4654ecab",
+     "kind": "status",
+     "actor_kind": "agent",
+     "actor_user_id": null,
+     "actor_name": "pod_default",
+     "body": null,
+     "detail": {
+      "to": "waiting",
+      "from": "in_progress"
+     },
+     "state": null,
+     "decided_by": null,
+     "decided_at": null
+    },
+    {
+     "id": "13a4fbaf-f59e-46a8-877c-6e1e13fdbe88",
+     "created_at": "2026-11-18T11:19:38.606984+00:00",
+     "updated_at": "2026-11-18T11:19:38.606984+00:00",
+     "task_id": "17a2ceb2-eafb-4af4-8a68-9f6a4654ecab",
+     "kind": "comment",
+     "actor_kind": "person",
+     "actor_user_id": "user-sample",
+     "actor_name": "You",
+     "body": "Their admin is it-admin@brightwave-health.example. Use placeholders for the three SAML values; they'll find them in our settings. Don't send it from here: finish with the final email on the task and I'll send it myself.",
+     "detail": null,
+     "state": null,
+     "decided_by": null,
+     "decided_at": null
+    },
+    {
+     "id": "de2e9b39-9fd6-4fb4-a662-1612b98353be",
+     "created_at": "2026-11-18T11:20:02.685552+00:00",
+     "updated_at": "2026-11-18T11:20:02.685552+00:00",
+     "task_id": "17a2ceb2-eafb-4af4-8a68-9f6a4654ecab",
+     "kind": "result",
+     "actor_kind": "agent",
+     "actor_user_id": null,
+     "actor_name": "pod_default",
+     "body": "The email is finished and addressed to `it-admin@brightwave-health.example`, ready for you to send. Nothing was sent from here. Full text below, also saved at `/tasks/17a2ceb2-eafb-4af4-8a68-9f6a4654ecab/sso-entra-email.md`.\n\n---\n\n**To:** it-admin@brightwave-health.example  \n**Subject:** Turning on SSO for Brightwave with Microsoft Entra ID\n\nHi there,\n\nSam from Lemma. You would like single sign-on on before our renewal call on 2 December, so here is the whole job in plain words \u2014 about 15 minutes in the Entra admin centre.\n\n1. Go to **entra.microsoft.com** and sign in as Global Administrator, Cloud Application Administrator or Application Administrator.\n2. **Entra ID \u2192 Enterprise applications \u2192 All applications \u2192 New application \u2192 Create your own application.** Name it \"Lemma\", choose *Integrate any other application you do not find in the gallery (Non-gallery)*, then **Create**.\n3. In the new app: **Single sign-on \u2192 SAML**.\n4. **Basic SAML Configuration \u2192 Edit** and paste the three values from our SSO settings \u2014 the **Identifier (Entity ID)**, the **Reply URL (Assertion Consumer Service URL)** and the **Sign on URL** \u2014 then **Save**.\n5. **SAML Certificates** \u2192 download **Certificate (Base64)**.\n6. Send me that certificate together with the **Login URL** and **Microsoft Entra Identifier** shown in the *Set up Lemma* panel. I will load them on our side and confirm they work.\n7. **Users and groups \u2192 Add user/group** \u2192 add a small test group: yourself and one normal user.\n8. **Single sign-on \u2192 Test**, signing in as that normal user.\n\nThen give me a shout and I will check the sign-in from our side before you switch it on for everyone. Two things worth doing first: keep one admin account on password + MFA so you can always get back in, and do not enforce SSO for all 40 seats until the test passes.\n\nIf anything snags, just reply \u2014 nine times out of ten it is a mismatch between someone's sign-in address here and the one we hold for them.\n\nBest,  \nSam\n\n---\n\nOne line of assumption: step 4 tells their admin to take the three values from our SSO settings rather than my inventing them. Steps are the current Microsoft Entra SAML flow (Microsoft Learn, *Enable SAML single sign-on for an enterprise application*).",
+     "detail": {
+      "files": [
+       "/tasks/17a2ceb2-eafb-4af4-8a68-9f6a4654ecab/sso-entra-email.md"
+      ]
+     },
+     "state": null,
+     "decided_by": null,
+     "decided_at": null
+    },
+    {
+     "id": "632e3c41-3088-4de1-9c50-af1e5ac58571",
+     "created_at": "2026-11-18T11:20:05.440797+00:00",
+     "updated_at": "2026-11-18T11:20:05.440797+00:00",
+     "task_id": "17a2ceb2-eafb-4af4-8a68-9f6a4654ecab",
+     "kind": "status",
+     "actor_kind": "agent",
+     "actor_user_id": null,
+     "actor_name": "pod_default",
+     "body": null,
+     "detail": {
+      "to": "done",
+      "from": "in_progress"
+     },
+     "state": null,
+     "decided_by": null,
+     "decided_at": null
+    }
+   ],
+   "total": 7
+  }
+ },
+ {
+  "match": "from tasks_personal_activity where task_id = '3d05d536-fd30-576e-9b85-9d8ac92e81c3'",
+  "response": {
+   "items": [
+    {
+     "id": "76a06d88-1162-49a6-9713-e04a93e61a68",
+     "created_at": "2026-11-18T11:11:38.576601+00:00",
+     "updated_at": "2026-11-18T11:11:38.576601+00:00",
+     "user_id": "user-sample",
+     "task_id": "3d05d536-fd30-576e-9b85-9d8ac92e81c3",
+     "kind": "assign",
+     "actor_kind": "person",
+     "actor_user_id": "user-sample",
+     "actor_name": "You",
+     "body": null,
+     "detail": {
+      "to": "pod_default",
+      "kind": "agent"
+     },
+     "state": null,
+     "decided_by": null,
+     "decided_at": null
+    },
+    {
+     "id": "4aa6a3be-fe77-4ca0-8748-de3bae098031",
+     "created_at": "2026-11-18T11:11:44.618704+00:00",
+     "updated_at": "2026-11-18T11:11:44.618704+00:00",
+     "user_id": "user-sample",
+     "task_id": "3d05d536-fd30-576e-9b85-9d8ac92e81c3",
+     "kind": "started",
+     "actor_kind": "agent",
+     "actor_user_id": null,
+     "actor_name": "pod_default",
+     "body": null,
+     "detail": {
+      "by": "You",
+      "conversation_id": "abe5289d-81f4-5cf2-8132-6959a0efaa17"
+     },
+     "state": null,
+     "decided_by": null,
+     "decided_at": null
+    },
+    {
+     "id": "c2a8daa1-e781-49c8-8211-93e2b44fab62",
+     "created_at": "2026-11-18T11:14:00.902103+00:00",
+     "updated_at": "2026-11-18T11:14:00.902103+00:00",
+     "user_id": "user-sample",
+     "task_id": "3d05d536-fd30-576e-9b85-9d8ac92e81c3",
+     "kind": "result",
+     "actor_kind": "agent",
+     "actor_user_id": null,
+     "actor_name": "pod_default",
+     "body": "Done \u2014 one page, plain words, from the three providers' public docs.\n\n**Assumption (one line):** the brief didn't name our app or its SSO protocol, so the guide is written app-agnostically for SAML 2.0 (\"your app\", with ACS URL / Entity ID as the values to copy from its SSO settings page) and notes what changes if it's OIDC-only.\n\n**What's in it**\n- *Before you start* \u2014 the admin role each provider needs (Okta super/app admin; Google Workspace **super administrator** only; Entra Cloud Application Administrator / Application Administrator / app owner), matching emails, the app's SAML values, a test group.\n- *Okta* \u2014 Create App Integration \u2192 SAML 2.0 \u2192 ACS URL + Entity ID \u2192 NameID `user.email` \u2192 internal app \u2192 assign group \u2192 metadata URL + signing certificate back into the app.\n- *Google Workspace* \u2014 Add custom SAML app \u2192 IdP metadata out \u2192 ACS URL + Entity ID in \u2192 NameID EMAIL \u2192 attribute mapping \u2192 User access On (test OU first, then everyone; up to 24h to propagate).\n- *Microsoft Entra ID* \u2014 Enterprise apps \u2192 Single sign-on \u2192 SAML \u2192 Basic SAML Configuration (Identifier, Reply URL, Sign on URL) \u2192 Certificate (Base64) + Login URL + Entra Identifier back into the app \u2192 assign group \u2192 Test. Includes the single-tenant/gallery caveat.\n- *After you turn it on* \u2014 8-point checklist: both IdP- and SP-initiated flows, right account (NameID match), attributes, a non-admin and the mobile app, break-glass admin, certificate expiry reminder, sign-out/single logout, and the exact rollback per provider.\n- *When it doesn't work* \u2014 signature, \"user not assigned\", sign-in loop, admin bypass, clock drift.\n\n**Files**\n- `/tasks/3d05d536-fd30-576e-9b85-9d8ac92e81c3/sso-setup-guide.pdf` \u2014 the one-pager as customers should get it (A4, single page, verified 1 page)\n- `/tasks/3d05d536-fd30-576e-9b85-9d8ac92e81c3/sso-setup-guide.html` \u2014 the source layout if wording changes\n- `/tasks/3d05d536-fd30-576e-9b85-9d8ac92e81c3/sso-setup-guide.md` \u2014 same guide as markdown\n\n---\n\n# Turning on single sign-on\n\nA one-page guide for the admin who rolls SSO out to their team. It covers SAML 2.0, which Okta, Google Workspace and Microsoft Entra ID all support. If your app only supports OIDC instead, everything before the provider-specific steps still applies; the fields you copy are just named differently.\n\n## Before you start\n\n- **An admin who can create apps in your identity provider.** Okta: super admin, or an admin with app-management rights. Google Workspace: a **super administrator** \u2014 nobody else can create a custom SAML app. Microsoft Entra ID: Cloud Application Administrator, Application Administrator, or owner of the app registration.\n- **Users' sign-in emails must match the addresses your app knows them by.** SSO matches people on that address, so a mismatch quietly creates a second, empty account.\n- **Your app's SAML values**, from its SSO settings page: **ACS URL** (where the identity provider posts the sign-in response), **Entity ID / Audience** (the app's unique name), and usually a metadata URL or XML file. Keep that tab open while you configure.\n- **A test group with one or two real users** \u2014 not just you. Admins often keep a password fallback that hides breakage.\n- **Don't enforce SSO for everyone in the same sitting** you first configure it.\n\n## Okta\n\n1. Admin Console \u2192 **Applications \u2192 Applications \u2192 Create App Integration**.\n2. Sign-in method **SAML 2.0** \u2192 **Next**.\n3. Name the app \u2192 **Next**.\n4. Paste the **ACS URL** (Single sign-on URL) and **Entity ID** (Audience URI); tick *Use this for Recipient URL and Destination URL*. Set **Name ID format** to `EmailAddress` and Name ID to `user.email`, unless your app says otherwise \u2192 **Next**.\n5. Choose *I'm an Okta customer adding an internal app* \u2192 **Finish**.\n6. **Assignments** tab \u2192 assign the test group.\n7. **Sign On** tab \u2192 copy the **Metadata URL** (or download the metadata XML) and the **SAML signing certificate** into the app's SSO settings.\n\n## Google Workspace\n\n1. Admin console \u2192 **Apps \u2192 Web and mobile apps \u2192 Add app \u2192 Add custom SAML app**.\n2. Name it \u2192 **Continue**.\n3. **Google Identity Provider details**: download the **IdP metadata**, or copy the **SSO URL** and **Entity ID** and download the **Certificate**. Enter these in your app.\n4. **Service provider details**: paste the app's **ACS URL** and **Entity ID** (and Start URL if offered). Leave **Signed response** off unless the app requires it. Name ID format `EMAIL`, Name ID = primary email \u2192 **Continue**.\n5. **Attribute mapping**: Primary email \u2192 the app's email attribute (often `email` or `mail`), First name \u2192 `firstName`, Last name \u2192 `lastName` \u2192 **Finish**.\n6. Open the app \u2192 **User access** \u2192 **On** for the test organisational unit first, then **On for everyone** \u2192 **Save**. Changes can take up to 24 hours, usually far less.\n\n## Microsoft Entra ID\n\n1. **entra.microsoft.com** \u2192 **Entra ID \u2192 Enterprise apps \u2192 All applications** \u2192 your app (from the gallery, or **New application \u2192 Create your own application**). SAML SSO can only be configured on single-tenant or gallery apps \u2014 multi-tenant app registrations show it greyed out.\n2. **Single sign-on \u2192 SAML**.\n3. **Basic SAML Configuration \u2192 Edit**: **Identifier (Entity ID)** = your app's Entity ID, **Reply URL (Assertion Consumer Service URL)** = your app's ACS URL, **Sign on URL** = your app's sign-in page \u2192 **Save**.\n4. **SAML Certificates** \u2192 download **Certificate (Base64)**; in **Set up <app>**, copy **Login URL** and **Microsoft Entra Identifier**. Enter all three in your app.\n5. **Users and groups \u2192 Add user/group** \u2192 assign the test group.\n6. **Single sign-on \u2192 Test** with an assigned user.\n\n## After you turn it on \u2014 check these\n\n- **Both directions work.** IdP-initiated: launch the app from the Okta / Google / Entra dashboard. SP-initiated: start at your app's sign-in page, get redirected, and land signed in. Repeat in a private window with no existing session.\n- **It's the right account.** The test user sees their own data, not an empty workspace. If it's empty, the NameID / email doesn't match.\n- **Attributes are right** \u2014 name and email arrive correctly, no duplicate users.\n- **A non-admin can get in**, on desktop and in the mobile app.\n- **You still have a way in.** Keep one break-glass admin with password + MFA before you enforce SSO for everyone.\n- **Certificate expiry.** Note the end date and set a reminder 60 days ahead: an expired certificate locks everyone out at once.\n- **Sign-out behaves as you expect.** SAML single logout is optional and often unsupported; people may stay signed in to the app after leaving the identity provider.\n- **You know the rollback.** Google: User access \u2192 Off. Okta: unassign the group. Entra: set the SSO mode to Disabled. Switch it off \u2014 don't delete the app \u2014 if the pilot goes wrong.\n\n## When it doesn't work\n\n| What you see | What it usually is |\n| --- | --- |\n| Invalid signature / invalid SAML response | Wrong certificate, or the app wants the whole response signed while only the assertion is (tick **Signed response** in Google, **Sign SAML response** in Okta). |\n| \"User not assigned\" | The person isn't in the group assigned to the app. |\n| Sign-in loop, or a second blank account | NameID / email mismatch. |\n| Works for you, not for others | You have an admin bypass. Test with a normal user. |\n| \"Assertion expired\" | Server clock drift \u2014 check NTP on the app's side. |\n\n---\n\nSources: Google Workspace Help, *Set up your own custom SAML app* (support.google.com/a/answer/6087519); Okta Help, *Create SAML app integrations* (help.okta.com); Microsoft Learn, *Enable SAML single sign-on for an enterprise application* (learn.microsoft.com/entra/identity/enterprise-apps/add-application-portal-setup-sso).\n\n\n---\n\nSources used: Google Workspace Help \"Set up your own custom SAML app\" (support.google.com/a/answer/6087519); Okta Help \"Create SAML app integrations\" (help.okta.com); Microsoft Learn \"Enable SAML single sign-on for an enterprise application\" (learn.microsoft.com/entra/identity/enterprise-apps/add-application-portal-setup-sso). Note: Okta's admin console now offers a new experience \u2014 the classic wizard referenced in the doc is still what the steps above follow; if the customer's org shows the newer wizard, the fields are the same.",
+     "detail": {
+      "files": [
+       "/tasks/3d05d536-fd30-576e-9b85-9d8ac92e81c3/sso-setup-guide.pdf",
+       "/tasks/3d05d536-fd30-576e-9b85-9d8ac92e81c3/sso-setup-guide.html",
+       "/tasks/3d05d536-fd30-576e-9b85-9d8ac92e81c3/sso-setup-guide.md"
+      ]
+     },
+     "state": null,
+     "decided_by": null,
+     "decided_at": null
+    },
+    {
+     "id": "99318a70-b747-4399-b17e-b486ccb3dbea",
+     "created_at": "2026-11-18T11:14:02.210877+00:00",
+     "updated_at": "2026-11-18T11:14:02.210877+00:00",
+     "user_id": "user-sample",
+     "task_id": "3d05d536-fd30-576e-9b85-9d8ac92e81c3",
+     "kind": "status",
+     "actor_kind": "agent",
+     "actor_user_id": null,
+     "actor_name": "pod_default",
+     "body": null,
+     "detail": {
+      "to": "done",
+      "from": "in_progress"
+     },
+     "state": null,
+     "decided_by": null,
+     "decided_at": null
+    }
+   ],
+   "total": 4
+  }
+ },
+ {
+  "match": "select * from tasks_settings order by created_at limit 1",
+  "response": {
+   "items": [
+    {
+     "id": "4d6d4f93-8434-49a3-bdd1-cce20e6a524a",
+     "created_at": "2026-11-18T11:10:38.196379+00:00",
+     "updated_at": "2026-11-18T11:19:31.512803+00:00",
+     "user_id": "user-sample",
+     "display_name": "You",
+     "timezone": null,
+     "scope": "team",
+     "promises": "never",
+     "agents": [
+      "pod_default"
+     ],
+     "capabilities": {
+      "agents": [],
+      "plugins": [],
+      "accounts": [
+       "slack",
+       "telegram",
+       "gmail",
+       "discord",
+       "openapi",
+       "mcp",
+       "resend",
+       "google_calendar",
+       "outlook",
+       "github",
+       "reddit"
+      ],
+      "has_promises": false
+     },
+     "setup_step": "done",
+     "setup_run_id": "8657d80d-7faf-5bc2-be4d-46384f777af5",
+     "setup_done_at": "2026-11-18T11:11:12.191720+00:00",
+     "schedule_id": "88734911-8f3b-53d3-b1b1-985930a2c5fc"
+    }
+   ],
+   "total": 1
+  }
+ },
+ {
+  "match": "select * from personal_task order by created_at desc limit 2",
+  "response": {
+   "items": [
+    {
+     "id": "fb3b9b8a-2a11-5679-9a3a-2f430976d1f0",
+     "created_at": "2026-11-18T11:10:53.871161+00:00",
+     "updated_at": "2026-11-18T11:10:53.871161+00:00",
+     "user_id": "user-sample",
+     "number": 1,
+     "title": "Send Hannah v2 of the pricing page",
+     "description": "She asked for the annual toggle and an enterprise row. Her notes on v1 are in the thread.",
+     "status": "todo",
+     "priority": "high",
+     "due_on": "2026-11-19",
+     "project_id": null,
+     "parent_id": null,
+     "labels": [
+      "website"
+     ],
+     "assignee_kind": "person",
+     "assignee_user_id": "user-sample",
+     "assignee_name": "You",
+     "assignee_agent": null,
+     "owner_user_id": "user-sample",
+     "owner_name": "You",
+     "source": "tasks",
+     "source_id": null,
+     "source_url": null,
+     "quote": null,
+     "done_at": null
+    },
+    {
+     "id": "58e6fcfa-5c43-51e4-a745-a28e760ca35c",
+     "created_at": "2026-11-18T11:10:53.871161+00:00",
+     "updated_at": "2026-11-18T11:10:53.871161+00:00",
+     "user_id": "user-sample",
+     "number": 2,
+     "title": "Fix the seat count on Tidal Foods' invoice INV-2207",
+     "description": "Marcus says they were billed for 25 seats; the contract says 20. Re-issue it and say sorry.",
+     "status": "todo",
+     "priority": "urgent",
+     "due_on": "2026-11-18",
+     "project_id": null,
+     "parent_id": null,
+     "labels": [
+      "billing"
+     ],
+     "assignee_kind": "person",
+     "assignee_user_id": "user-sample",
+     "assignee_name": "You",
+     "assignee_agent": null,
+     "owner_user_id": "user-sample",
+     "owner_name": "You",
+     "source": "tasks",
+     "source_id": null,
+     "source_url": null,
+     "quote": null,
+     "done_at": null
+    },
+    {
+     "id": "aacdd666-2682-5248-90a8-331cf4a34945",
+     "created_at": "2026-11-18T11:10:53.871161+00:00",
+     "updated_at": "2026-11-18T11:10:53.871161+00:00",
+     "user_id": "user-sample",
+     "number": 4,
+     "title": "Book the onboarding call with Orchard Dental",
+     "description": "Sana asked for next week, mornings only.",
+     "status": "todo",
+     "priority": "medium",
+     "due_on": "2026-11-21",
+     "project_id": null,
+     "parent_id": null,
+     "labels": [],
+     "assignee_kind": "person",
+     "assignee_user_id": "user-sample",
+     "assignee_name": "You",
+     "assignee_agent": null,
+     "owner_user_id": "user-sample",
+     "owner_name": "You",
+     "source": "tasks",
+     "source_id": null,
+     "source_url": null,
+     "quote": null,
+     "done_at": null
+    },
+    {
+     "id": "2bb6a9bc-dd2e-5268-9a93-291c6da0d014",
+     "created_at": "2026-11-18T11:10:53.871161+00:00",
+     "updated_at": "2026-11-18T11:10:53.871161+00:00",
+     "user_id": "user-sample",
+     "number": 5,
+     "title": "Prepare the board meeting pack",
+     "description": "Deck, the numbers and the hiring update, to Eleanor two days before.",
+     "status": "in_progress",
+     "priority": "high",
+     "due_on": "2026-11-25",
+     "project_id": null,
+     "parent_id": null,
+     "labels": [
+      "board"
+     ],
+     "assignee_kind": "person",
+     "assignee_user_id": "user-sample",
+     "assignee_name": "You",
+     "assignee_agent": null,
+     "owner_user_id": "user-sample",
+     "owner_name": "You",
+     "source": "tasks",
+     "source_id": null,
+     "source_url": null,
+     "quote": null,
+     "done_at": null
+    },
+    {
+     "id": "20514cda-e882-5a7f-bbd4-bb484fa1b096",
+     "created_at": "2026-11-18T11:10:53.871161+00:00",
+     "updated_at": "2026-11-18T11:10:53.871161+00:00",
+     "user_id": "user-sample",
+     "number": 6,
+     "title": "Compare three error-monitoring tools for the backend",
+     "description": "Pricing for about 2M events a month, how each handles Python and TypeScript, and what moving off our current one would take.",
+     "status": "todo",
+     "priority": "low",
+     "due_on": null,
+     "project_id": null,
+     "parent_id": null,
+     "labels": [
+      "engineering"
+     ],
+     "assignee_kind": "person",
+     "assignee_user_id": "user-sample",
+     "assignee_name": "You",
+     "assignee_agent": null,
+     "owner_user_id": "user-sample",
+     "owner_name": "You",
+     "source": "tasks",
+     "source_id": null,
+     "source_url": null,
+     "quote": null,
+     "done_at": null
+    },
+    {
+     "id": "33b7836a-1f14-5b5a-a5e8-190e854377b4",
+     "created_at": "2026-11-18T11:10:53.871161+00:00",
+     "updated_at": "2026-11-18T11:10:53.871161+00:00",
+     "user_id": "user-sample",
+     "number": 7,
+     "title": "Reply to Jonas about guesting on Build Notes",
+     "description": null,
+     "status": "todo",
+     "priority": "low",
+     "due_on": null,
+     "project_id": null,
+     "parent_id": null,
+     "labels": [],
+     "assignee_kind": "person",
+     "assignee_user_id": "user-sample",
+     "assignee_name": "You",
+     "assignee_agent": null,
+     "owner_user_id": "user-sample",
+     "owner_name": "You",
+     "source": "tasks",
+     "source_id": null,
+     "source_url": null,
+     "quote": null,
+     "done_at": null
+    },
+    {
+     "id": "72055ae3-62c8-57a1-a576-3ffdf20e7951",
+     "created_at": "2026-11-18T11:10:53.871161+00:00",
+     "updated_at": "2026-11-18T11:10:53.871161+00:00",
+     "user_id": "user-sample",
+     "number": 8,
+     "title": "Renew the office insurance",
+     "description": null,
+     "status": "done",
+     "priority": "medium",
+     "due_on": "2026-11-16",
+     "project_id": null,
+     "parent_id": null,
+     "labels": [
+      "admin"
+     ],
+     "assignee_kind": "person",
+     "assignee_user_id": "user-sample",
+     "assignee_name": "You",
+     "assignee_agent": null,
+     "owner_user_id": "user-sample",
+     "owner_name": "You",
+     "source": "tasks",
+     "source_id": null,
+     "source_url": null,
+     "quote": null,
+     "done_at": "2026-11-18T11:10:52.663940+00:00"
+    },
+    {
+     "id": "fdd4f55d-77e9-542b-83c6-035836bc2029",
+     "created_at": "2026-11-18T11:10:53.871161+00:00",
+     "updated_at": "2026-11-18T11:10:53.871161+00:00",
+     "user_id": "user-sample",
+     "number": 9,
+     "title": "Pull the October numbers",
+     "description": null,
+     "status": "done",
+     "priority": "none",
+     "due_on": null,
+     "project_id": null,
+     "parent_id": "2bb6a9bc-dd2e-5268-9a93-291c6da0d014",
+     "labels": [],
+     "assignee_kind": "person",
+     "assignee_user_id": "user-sample",
+     "assignee_name": "You",
+     "assignee_agent": null,
+     "owner_user_id": "user-sample",
+     "owner_name": "You",
+     "source": "tasks",
+     "source_id": null,
+     "source_url": null,
+     "quote": null,
+     "done_at": "2026-11-18T11:10:52.663940+00:00"
+    },
+    {
+     "id": "a42ee2e8-d3f5-5fa7-9b44-171a611a362c",
+     "created_at": "2026-11-18T11:10:53.871161+00:00",
+     "updated_at": "2026-11-18T11:10:53.871161+00:00",
+     "user_id": "user-sample",
+     "number": 10,
+     "title": "Write the hiring update",
+     "description": null,
+     "status": "todo",
+     "priority": "none",
+     "due_on": null,
+     "project_id": null,
+     "parent_id": "2bb6a9bc-dd2e-5268-9a93-291c6da0d014",
+     "labels": [],
+     "assignee_kind": "person",
+     "assignee_user_id": "user-sample",
+     "assignee_name": "You",
+     "assignee_agent": null,
+     "owner_user_id": "user-sample",
+     "owner_name": "You",
+     "source": "tasks",
+     "source_id": null,
+     "source_url": null,
+     "quote": null,
+     "done_at": null
+    },
+    {
+     "id": "605fee75-6bab-58c5-b1d8-1045429c9ece",
+     "created_at": "2026-11-18T11:10:53.871161+00:00",
+     "updated_at": "2026-11-18T11:10:53.871161+00:00",
+     "user_id": "user-sample",
+     "number": 11,
+     "title": "Ask Eleanor which topics she wants first",
+     "description": null,
+     "status": "todo",
+     "priority": "none",
+     "due_on": null,
+     "project_id": null,
+     "parent_id": "2bb6a9bc-dd2e-5268-9a93-291c6da0d014",
+     "labels": [],
+     "assignee_kind": "person",
+     "assignee_user_id": "user-sample",
+     "assignee_name": "You",
+     "assignee_agent": null,
+     "owner_user_id": "user-sample",
+     "owner_name": "You",
+     "source": "tasks",
+     "source_id": null,
+     "source_url": null,
+     "quote": null,
+     "done_at": null
+    },
+    {
+     "id": "3d05d536-fd30-576e-9b85-9d8ac92e81c3",
+     "created_at": "2026-11-18T11:10:53.871161+00:00",
+     "updated_at": "2026-11-18T11:14:01.199334+00:00",
+     "user_id": "user-sample",
+     "number": 3,
+     "title": "Draft a one-page guide to turning on single sign-on",
+     "description": "Customers keep asking how to turn on SSO before they roll out to their teams. One page they can follow: what they need first (an admin in their identity provider), the steps for Okta, Google Workspace and Microsoft Entra ID, and what to check afterwards. From the providers' public docs, in plain words.",
+     "status": "done",
+     "priority": "medium",
+     "due_on": "2026-11-22",
+     "project_id": null,
+     "parent_id": null,
+     "labels": [
+      "docs"
+     ],
+     "assignee_kind": "agent",
+     "assignee_user_id": null,
+     "assignee_name": null,
+     "assignee_agent": "pod_default",
+     "owner_user_id": "user-sample",
+     "owner_name": "You",
+     "source": "tasks",
+     "source_id": null,
+     "source_url": null,
+     "quote": null,
+     "done_at": "2026-11-18T11:14:00.392119+00:00"
+    }
+   ],
+   "total": 11
+  }
+ },
+ {
+  "match": "select * from task order by created_at desc limit 2000",
+  "response": {
+   "items": [
+    {
+     "id": "17a2ceb2-eafb-4af4-8a68-9f6a4654ecab",
+     "created_at": "2026-11-18T11:14:42.533020+00:00",
+     "updated_at": "2026-11-18T11:20:03.792877+00:00",
+     "number": 6,
+     "title": "Email Brightwave's IT admin how to turn on SSO with Microsoft Entra ID",
+     "description": "They want SSO on before the renewal call. Send their IT admin the steps for Microsoft Entra ID, short and in plain words, from me.",
+     "status": "done",
+     "priority": "high",
+     "due_on": null,
+     "project_id": "75087cd6-c239-579c-a30f-65eff94b2365",
+     "parent_id": null,
+     "labels": [],
+     "assignee_kind": "agent",
+     "assignee_user_id": null,
+     "assignee_name": null,
+     "assignee_agent": "pod_default",
+     "owner_user_id": "user-sample",
+     "owner_name": "You",
+     "source": "tasks",
+     "source_id": null,
+     "source_url": null,
+     "quote": null,
+     "done_at": "2026-11-18T11:20:01.153850+00:00"
+    },
+    {
+     "id": "0fa9774c-add1-53dc-a93d-25828f27a179",
+     "created_at": "2026-11-18T11:10:54.945876+00:00",
+     "updated_at": "2026-11-18T11:10:54.945876+00:00",
+     "number": 1,
+     "title": "Send Brightwave the 40-seat renewal quote",
+     "description": "Annual, 40 seats, same price per seat as last year.",
+     "status": "in_progress",
+     "priority": "high",
+     "due_on": "2026-11-20",
+     "project_id": "75087cd6-c239-579c-a30f-65eff94b2365",
+     "parent_id": null,
+     "labels": [
+      "sales"
+     ],
+     "assignee_kind": "person",
+     "assignee_user_id": "user-sample",
+     "assignee_name": "You",
+     "assignee_agent": null,
+     "owner_user_id": "user-sample",
+     "owner_name": "You",
+     "source": "tasks",
+     "source_id": null,
+     "source_url": null,
+     "quote": null,
+     "done_at": null
+    },
+    {
+     "id": "ac5e6aa2-f907-592f-a16e-64f000f84502",
+     "created_at": "2026-11-18T11:10:54.945876+00:00",
+     "updated_at": "2026-11-18T11:10:54.945876+00:00",
+     "number": 2,
+     "title": "Check Brightwave's SSO set-up before the renewal call",
+     "description": "They use Microsoft Entra ID. Make sure their admin knows the steps.",
+     "status": "todo",
+     "priority": "medium",
+     "due_on": "2026-11-23",
+     "project_id": "75087cd6-c239-579c-a30f-65eff94b2365",
+     "parent_id": null,
+     "labels": [
+      "security"
+     ],
+     "assignee_kind": "none",
+     "assignee_user_id": null,
+     "assignee_name": null,
+     "assignee_agent": null,
+     "owner_user_id": "user-sample",
+     "owner_name": "You",
+     "source": "tasks",
+     "source_id": null,
+     "source_url": null,
+     "quote": null,
+     "done_at": null
+    },
+    {
+     "id": "3271dc98-17b4-5dc8-9323-fe1f3e51ba07",
+     "created_at": "2026-11-18T11:10:54.945876+00:00",
+     "updated_at": "2026-11-18T11:10:54.945876+00:00",
+     "number": 3,
+     "title": "Confirm the renewal date with Daniel",
+     "description": null,
+     "status": "waiting",
+     "priority": "medium",
+     "due_on": "2026-11-21",
+     "project_id": "75087cd6-c239-579c-a30f-65eff94b2365",
+     "parent_id": null,
+     "labels": [
+      "sales"
+     ],
+     "assignee_kind": "person",
+     "assignee_user_id": "user-sample",
+     "assignee_name": "You",
+     "assignee_agent": null,
+     "owner_user_id": "user-sample",
+     "owner_name": "You",
+     "source": "tasks",
+     "source_id": null,
+     "source_url": null,
+     "quote": null,
+     "done_at": null
+    },
+    {
+     "id": "dc47598c-e097-5224-81ac-3882a603d827",
+     "created_at": "2026-11-18T11:10:54.945876+00:00",
+     "updated_at": "2026-11-18T11:10:54.945876+00:00",
+     "number": 4,
+     "title": "Summarise Brightwave's support tickets from this quarter",
+     "description": "What they asked about most, and anything still open.",
+     "status": "todo",
+     "priority": "low",
+     "due_on": "2026-11-24",
+     "project_id": "75087cd6-c239-579c-a30f-65eff94b2365",
+     "parent_id": null,
+     "labels": [],
+     "assignee_kind": "none",
+     "assignee_user_id": null,
+     "assignee_name": null,
+     "assignee_agent": null,
+     "owner_user_id": "user-sample",
+     "owner_name": "You",
+     "source": "tasks",
+     "source_id": null,
+     "source_url": null,
+     "quote": null,
+     "done_at": null
+    },
+    {
+     "id": "61f19c4e-967a-5027-8c06-c7dd4aeb298a",
+     "created_at": "2026-11-18T11:10:54.945876+00:00",
+     "updated_at": "2026-11-18T11:10:54.945876+00:00",
+     "number": 5,
+     "title": "Agree the discount for a two-year term",
+     "description": null,
+     "status": "todo",
+     "priority": "high",
+     "due_on": "2026-11-22",
+     "project_id": "75087cd6-c239-579c-a30f-65eff94b2365",
+     "parent_id": null,
+     "labels": [
+      "sales"
+     ],
+     "assignee_kind": "none",
+     "assignee_user_id": null,
+     "assignee_name": null,
+     "assignee_agent": null,
+     "owner_user_id": "user-sample",
+     "owner_name": "You",
+     "source": "tasks",
+     "source_id": null,
+     "source_url": null,
+     "quote": null,
+     "done_at": null
+    }
+   ],
+   "total": 6
+  }
+ },
+ {
+  "match": "select * from project order by created_at",
+  "response": {
+   "items": [
+    {
+     "id": "75087cd6-c239-579c-a30f-65eff94b2365",
+     "created_at": "2026-11-18T11:10:53.524796+00:00",
+     "updated_at": "2026-11-18T11:10:53.524796+00:00",
+     "name": "Brightwave renewal",
+     "description": "Brightwave Health renews for 40 seats this month. Daniel Kowalski is their lead; the quote, the date and their SSO set-up have to be settled before the call.",
+     "state": "active",
+     "lead_user_id": "user-sample",
+     "lead_name": "You",
+     "target_on": "2026-12-02",
+     "source": "tasks",
+     "source_id": null,
+     "source_url": null
+    }
+   ],
+   "total": 1
+  }
+ },
+ {
+  "match": "select * from tasks_run",
+  "response": {
+   "items": [
+    {
+     "id": "3d05d536-fd30-576e-9b85-9d8ac92e81c3",
+     "created_at": "2026-11-18T11:11:42.877588+00:00",
+     "updated_at": "2026-11-18T11:14:10.763848+00:00",
+     "user_id": "user-sample",
+     "scope": "personal",
+     "agent": "pod_default",
+     "conversation_id": "abe5289d-81f4-5cf2-8132-6959a0efaa17",
+     "workflow_run_id": "6d059e95-32f4-53b1-a8f3-8b079ce7719c",
+     "state": "done",
+     "started_at": "2026-11-18T11:11:42.660173+00:00",
+     "last_report_at": "2026-11-18T11:14:00.392119+00:00",
+     "turns": 1,
+     "error": null
+    },
+    {
+     "id": "17a2ceb2-eafb-4af4-8a68-9f6a4654ecab",
+     "created_at": "2026-11-18T11:14:46.354573+00:00",
+     "updated_at": "2026-11-18T11:20:18.136374+00:00",
+     "user_id": "user-sample",
+     "scope": "team",
+     "agent": "pod_default",
+     "conversation_id": "cfa272a1-f250-5271-85b7-5bc6229f8d1d",
+     "workflow_run_id": "879c6732-a42e-5947-ac50-1ae31f17ae03",
+     "state": "done",
+     "started_at": "2026-11-18T11:14:46.166242+00:00",
+     "last_report_at": "2026-11-18T11:20:01.153850+00:00",
+     "turns": 1,
+     "error": null
+    }
+   ],
+   "total": 2
+  }
+ },
+ {
+  "match": "select id, kind, answer, confidence, reason, state, task_id ",
+  "response": {
+   "items": [
+    {
+     "id": "ac5e6aa2-f907-592f-a16e-64f000f84502",
+     "kind": "agent",
+     "answer": "unsure",
+     "confidence": 0.46,
+     "reason": "Not sure an agent could do this (46% sure)",
+     "state": "quiet",
+     "task_id": "ac5e6aa2-f907-592f-a16e-64f000f84502"
+    },
+    {
+     "id": "61f19c4e-967a-5027-8c06-c7dd4aeb298a",
+     "kind": "agent",
+     "answer": "needs_person",
+     "confidence": 0.54,
+     "reason": "This needs you: your own call (54% sure)",
+     "state": "quiet",
+     "task_id": "61f19c4e-967a-5027-8c06-c7dd4aeb298a"
+    },
+    {
+     "id": "58e6fcfa-5c43-51e4-a745-a28e760ca35c",
+     "kind": "agent",
+     "answer": "no",
+     "confidence": 0.55,
+     "reason": "An agent couldn't do this here: it needs an account this Lemma doesn't have (55% sure)",
+     "state": "quiet",
+     "task_id": "58e6fcfa-5c43-51e4-a745-a28e760ca35c"
+    },
+    {
+     "id": "0fa9774c-add1-53dc-a93d-25828f27a179",
+     "kind": "agent",
+     "answer": "no",
+     "confidence": 0.53,
+     "reason": "An agent couldn't do this here: it needs something only you know (53% sure)",
+     "state": "quiet",
+     "task_id": "0fa9774c-add1-53dc-a93d-25828f27a179"
+    },
+    {
+     "id": "2bb6a9bc-dd2e-5268-9a93-291c6da0d014",
+     "kind": "agent",
+     "answer": "unsure",
+     "confidence": 0.42,
+     "reason": "Not sure an agent could do this (42% sure)",
+     "state": "quiet",
+     "task_id": "2bb6a9bc-dd2e-5268-9a93-291c6da0d014"
+    },
+    {
+     "id": "fb3b9b8a-2a11-5679-9a3a-2f430976d1f0",
+     "kind": "agent",
+     "answer": "yes",
+     "confidence": 0.59,
+     "reason": "An agent could do this with writing, this Lemma's records, its files (59% sure)",
+     "state": "open",
+     "task_id": "fb3b9b8a-2a11-5679-9a3a-2f430976d1f0"
+    },
+    {
+     "id": "dc47598c-e097-5224-81ac-3882a603d827",
+     "kind": "agent",
+     "answer": "no",
+     "confidence": 0.65,
+     "reason": "An agent couldn't do this here: it needs an account this Lemma doesn't have (65% sure)",
+     "state": "quiet",
+     "task_id": "dc47598c-e097-5224-81ac-3882a603d827"
+    },
+    {
+     "id": "20514cda-e882-5a7f-bbd4-bb484fa1b096",
+     "kind": "agent",
+     "answer": "yes",
+     "confidence": 0.75,
+     "reason": "An agent could do this with web search, writing, a browser (75% sure)",
+     "state": "open",
+     "task_id": "20514cda-e882-5a7f-bbd4-bb484fa1b096"
+    },
+    {
+     "id": "aacdd666-2682-5248-90a8-331cf4a34945",
+     "kind": "agent",
+     "answer": "unsure",
+     "confidence": 0.4,
+     "reason": "Not sure an agent could do this (40% sure)",
+     "state": "quiet",
+     "task_id": "aacdd666-2682-5248-90a8-331cf4a34945"
+    },
+    {
+     "id": "3271dc98-17b4-5dc8-9323-fe1f3e51ba07",
+     "kind": "agent",
+     "answer": "unsure",
+     "confidence": 0.38,
+     "reason": "Not sure an agent could do this (38% sure)",
+     "state": "quiet",
+     "task_id": "3271dc98-17b4-5dc8-9323-fe1f3e51ba07"
+    },
+    {
+     "id": "33b7836a-1f14-5b5a-a5e8-190e854377b4",
+     "kind": "agent",
+     "answer": "yes",
+     "confidence": 0.71,
+     "reason": "An agent could do this with writing, this Lemma's records, its files (71% sure)",
+     "state": "open",
+     "task_id": "33b7836a-1f14-5b5a-a5e8-190e854377b4"
+    },
+    {
+     "id": "3d05d536-fd30-576e-9b85-9d8ac92e81c3",
+     "kind": "agent",
+     "answer": "yes",
+     "confidence": 0.99,
+     "reason": "An agent could do this with web search, writing, its files (99% sure)",
+     "state": "accepted",
+     "task_id": "3d05d536-fd30-576e-9b85-9d8ac92e81c3"
+    }
+   ],
+   "total": 12
+  }
+ },
+ {
+  "match": "select count(*) as n from tasks_sample_row",
+  "response": {
+   "items": [
+    {
+     "n": 0
+    }
+   ],
+   "total": 1
+  }
+ },
+ {
+  "match": "from promise p left join conversation c",
+  "response": {
+   "items": [],
+   "total": 0
+  }
+ }
+]

@@ -1,0 +1,15 @@
+{
+  // A lead's fit or the person's call on it changed: bring their "worth a
+  // look" items on needs_you up to date, as the lead's owner. One run at a
+  // time; each recomputes all of the person's items.
+  "name": "leads-needs-you",
+  "description": "Keep the person's 'worth a look' items on needs_you in step with their leads.",
+  "max_concurrent_runs": 1,
+  "start": { "type": "DATASTORE_EVENT", "config": { "table_name": "leads_person", "operations": ["INSERT", "UPDATE"] } },
+  "nodes": [
+    { "id": "write", "type": "FUNCTION", "label": "Worth a look",
+      "config": { "function_name": "leads_needs_you", "input_mapping": {} } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [ { "id": "e1", "source": "write", "target": "end" } ]
+}

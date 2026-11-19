@@ -1,0 +1,22 @@
+{
+  // The safety net under push, and the rest of a first read. Each person gets
+  // their own schedule when they turn Mail on (a schedule runs as whoever made
+  // it, so their mail is read with their own account).
+  "name": "mail-catch-up",
+  "description": "Every 15 minutes: read anything new in every mailbox, keep a first read going, then sort what arrived.",
+  "start": { "type": "SCHEDULED", "config": { "schedule_type": "CRON" } },
+  "nodes": [
+    { "id": "read", "type": "FUNCTION", "label": "Read new mail",
+      "config": { "function_name": "mail_sync", "input_mapping": {
+        "mode": { "type": "literal", "value": "auto" },
+        "budget_seconds": { "type": "literal", "value": 50 } } } },
+    { "id": "sort", "type": "FUNCTION", "label": "Sort it",
+      "config": { "function_name": "mail_sort", "input_mapping": {
+        "max_conversations": { "type": "literal", "value": 60 } } } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [
+    { "id": "e1", "source": "read", "target": "sort" },
+    { "id": "e2", "source": "sort", "target": "end" }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  // One row per person: their answers to Tasks' set-up and where it is.
+  "name": "tasks_settings",
+  "primary_key_column": "id",
+  "enable_rls": true,
+  "visibility": "POD",
+  "columns": [
+    { "name": "display_name", "type": "TEXT", "max_length": 200 },
+    // IANA zone, for "due today".
+    { "name": "timezone", "type": "TEXT", "max_length": 64, "default": "UTC" },
+    // 1. Just you, or your team too.
+    { "name": "scope", "type": "ENUM", "required": true, "default": "me", "options": ["me", "team"] },
+    // 2. Promises you made (only with Mail or Meetings): make them tasks
+    //    automatically, ask each time, or never.
+    { "name": "promises", "type": "ENUM", "required": true, "default": "never", "options": ["auto", "ask", "never"] },
+    // 3. Which agents can take tasks: names; pod_default is the Lemma's own.
+    { "name": "agents", "type": "JSON" },
+    // What this Lemma has, as set-up found it: connectors, plugins, agents.
+    // The evidence for "could an agent do this?".
+    { "name": "capabilities", "type": "JSON" },
+    { "name": "setup_step", "type": "ENUM", "required": true, "default": "start", "options": ["start", "done"] },
+    { "name": "setup_run_id", "type": "TEXT", "max_length": 64 },
+    { "name": "setup_done_at", "type": "DATETIME" },
+    // The person's own daily schedule on tasks-needs-you (made by the app as
+    // them), so what is due today reaches Today's list each morning.
+    { "name": "schedule_id", "type": "TEXT", "max_length": 64 }
+  ],
+  "config": {}
+}

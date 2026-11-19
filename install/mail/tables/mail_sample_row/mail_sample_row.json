@@ -1,0 +1,15 @@
+{
+  // What Mail's sample made in the shared tables, one row per row it created,
+  // marked at load. Clearing the sample removes only these (and only when
+  // nothing else in the Lemma refers to them), never by an address's domain:
+  // another plugin's sample (Meetings') shares the same made-up people.
+  "name": "mail_sample_row",
+  "primary_key_column": "id",
+  "enable_rls": true,
+  "visibility": "POD",
+  "columns": [
+    { "name": "table_name", "type": "TEXT", "required": true, "max_length": 64 },
+    { "name": "row_id", "type": "UUID", "required": true }
+  ],
+  "config": {}
+}

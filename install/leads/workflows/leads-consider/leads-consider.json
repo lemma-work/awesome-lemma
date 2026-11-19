@@ -1,0 +1,17 @@
+{
+  // People map sorted someone (people_sort, or the person settling them):
+  // ask "worth looking up?" once, as the row's owner. Started by
+  // leads-person-sorted. Before the person's own set-up is done it does
+  // nothing; their set-up reads everyone at once.
+  "name": "leads-consider",
+  "description": "Ask once whether a person People map just counted as someone you deal with is worth looking up.",
+  "max_concurrent_runs": 3,
+  "start": { "type": "DATASTORE_EVENT", "config": { "table_name": "people_person", "operations": ["INSERT", "UPDATE"] } },
+  "nodes": [
+    { "id": "consider", "type": "FUNCTION", "label": "Worth looking up?",
+      "config": { "function_name": "leads_consider", "input_mapping": {
+        "person_id": { "type": "expression", "value": "start.metadata.record_id" } } } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [ { "id": "e1", "source": "consider", "target": "end" } ]
+}

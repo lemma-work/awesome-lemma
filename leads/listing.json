@@ -1,0 +1,26 @@
+{
+  "name": "Lead research",
+  "line": "sales",
+  "position": 8,
+  "job": "Know who someone is before you reply",
+  "intro": "Lead research looks up new people and companies the first time they matter: their role, what the company does, its size and news, and how well it fits you. Every fact has its link.",
+  "does": [
+    "Decides who is worth looking up, and skips receipts, colleagues and friends.",
+    "Keeps a fact only when a page confirms it. Not found is an answer too.",
+    "Scores each company against one sentence about who fits your team."
+  ],
+  "jobs": ["SALES", "MARKETING", "FOUNDER"],
+  "accounts": [],
+  "setup": [
+    "Say who fits your team in one sentence, with a few example companies.",
+    "Choose which kinds of people to look up, and how many a day.",
+    "Check who it would look up, then let it start."
+  ],
+  "today": [
+    { "verb": "decide", "line": "Leads worth a look: a good fit who wrote or is meeting you" }
+  ],
+  "pictures": [
+    { "shot": "leads", "caption": "Leads worth a look, ranked by how well they fit" },
+    { "shot": "lead", "caption": "One lead: their role, the company, every source" }
+  ]
+}

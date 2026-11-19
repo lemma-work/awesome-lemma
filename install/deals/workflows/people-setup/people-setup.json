@@ -1,0 +1,89 @@
+{
+  // A person's set-up, one run each, started by the People app on their first
+  // open (and by anyone who joins later), after Mail's and Meetings' own. The
+  // app is the screen for its three forms; each waits for that person.
+  //
+  //   prepare     what to offer: Mail's categories, domains from their address
+  //   categories  which categories count as people they deal with
+  //   domains     their own domains, so colleagues aren't contacts
+  //   find        count everyone in those conversations and outside meetings
+  //   sort        one Decisions call per new person: someone or noise, and what
+  //               they are; a pass at a time
+  //   share       companies and the team's view, from what was read
+  //   review      the people it found: add anyone missing, remove anyone who
+  //               shouldn't be there (each is a correction the app makes)
+  //   done        count it, open the list
+  //   memory      People map's block in /memory/AGENTS.md, so the Lemma's
+  //               agents know (people_memory)
+  "name": "people-setup",
+  "description": "Set up one person's People map: which conversations count as people, their own domains, then read everyone once and let them add or remove anyone.",
+  "start": { "type": "MANUAL" },
+  "nodes": [
+    { "id": "prepare", "type": "FUNCTION", "label": "See what Mail and Meetings know",
+      "config": { "function_name": "people_setup_prepare", "input_mapping": {} } },
+    { "id": "categories", "type": "FORM", "label": "Which conversations are with people you deal with",
+      "config": { "input_schema": {
+        "type": "object",
+        "properties": {
+          "categories": {
+            "type": "array", "title": "Count these categories", "uniqueItems": true,
+            "items": { "type": "string" },
+            "default": { "type": "expression", "value": "prepare.categories_on" } }
+        },
+        "required": ["categories"]
+      } } },
+    { "id": "domains", "type": "FORM", "label": "Your own domains",
+      "config": { "input_schema": {
+        "type": "object",
+        "properties": {
+          "own_domains": {
+            "type": "array", "title": "Your company's email domains", "uniqueItems": true,
+            "items": { "type": "string" },
+            "default": { "type": "expression", "value": "prepare.own_domains" } }
+        },
+        "required": ["own_domains"]
+      } } },
+    { "id": "apply", "type": "FUNCTION", "label": "Keep your answers",
+      "config": { "function_name": "people_setup_apply", "input_mapping": {
+        "categories": { "type": "expression", "value": "categories.categories" },
+        "own_domains": { "type": "expression", "value": "domains.own_domains" } } } },
+    { "id": "find", "type": "FUNCTION", "label": "Find everyone",
+      "config": { "function_name": "people_refresh", "input_mapping": {} } },
+    { "id": "sort", "type": "LOOP", "label": "Read each new person, a pass at a time",
+      "config": { "items_path": "find.passes", "item_var_name": "pass", "child_node_id": "sort_pass" } },
+    { "id": "sort_pass", "type": "FUNCTION", "label": "Read sixty",
+      "config": { "function_name": "people_sort", "input_mapping": {
+        "max_people": { "type": "literal", "value": 60 },
+        "run_pass": { "type": "expression", "value": "loop.pass" } } } },
+    { "id": "share", "type": "FUNCTION", "label": "Companies and the team's view",
+      "config": { "function_name": "people_refresh", "input_mapping": {} } },
+    { "id": "review", "type": "FORM", "label": "The people it found",
+      "config": { "input_schema": {
+        "type": "object",
+        "properties": {
+          "looked": { "type": "boolean", "title": "These look right", "default": true }
+        }
+      } } },
+    { "id": "done", "type": "FUNCTION", "label": "Open your people",
+      "config": { "function_name": "people_setup_done", "input_mapping": {} } },
+    // Last, so nothing waits on it: People map's block in /memory/AGENTS.md
+    // and its guide (_contract README, "Memory block").
+    { "id": "memory", "type": "FUNCTION", "label": "Tell this Lemma's agents about People map",
+      "config": { "function_name": "people_memory", "input_mapping": {
+        "remove": { "type": "literal", "value": false } } } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [
+    { "id": "e1", "source": "prepare", "target": "categories" },
+    { "id": "e2", "source": "categories", "target": "domains" },
+    { "id": "e3", "source": "domains", "target": "apply" },
+    { "id": "e4", "source": "apply", "target": "find" },
+    { "id": "e5", "source": "find", "target": "sort" },
+    { "id": "e6", "source": "sort_pass", "target": "sort" },
+    { "id": "e7", "source": "sort", "target": "share" },
+    { "id": "e8", "source": "share", "target": "review" },
+    { "id": "e9", "source": "review", "target": "done" },
+    { "id": "e10", "source": "done", "target": "memory" },
+    { "id": "e11", "source": "memory", "target": "end" }
+  ]
+}

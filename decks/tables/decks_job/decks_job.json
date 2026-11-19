@@ -1,0 +1,62 @@
+{
+  // One piece of work a person asked for on a deck: its outline, its cards,
+  // or an edit ("make the pricing card punchier"). Each person's own (RLS),
+  // so the `decks-work` run a job starts runs as them: the needs_you items it
+  // writes are theirs, and nothing they could not do is done.
+  //
+  // Runs take no input, so a job is asked for by its `state`: a row written,
+  // or set back, to `wanted` starts `decks-work` (schedule
+  // `decks-job-wanted`), which reads the row.
+  //
+  // An edit asks the Decisions API which cards it touches (`cards`, with
+  // `confidence`) and what it asks for (`action`). Under 0.5 it stops at
+  // `ask` and the person picks; their pick is `chosen`, and a pick that
+  // differs from the answer is kept as a correction (decks_correction).
+  // `before` holds what the edit changed, so Undo puts it back.
+  "name": "decks_job",
+  "primary_key_column": "id",
+  "enable_rls": true,
+  "visibility": "POD",
+  "columns": [
+    { "name": "deck_id", "type": "UUID", "required": true, "foreign_key": { "references": "decks_deck.id" } },
+    //   outline  write the outline from the sentence
+    //   cards    write every card not yet written
+    //   edit     do what `request` asks, on the cards it touches
+    { "name": "kind", "type": "ENUM", "required": true, "options": ["outline", "cards", "edit"] },
+    //   wanted   asked for; starts the work
+    //   working  being done
+    //   ask      an edit the Decisions call was unsure about: the person picks the cards
+    //   done     finished
+    //   failed   could not be done; `error` says why
+    //   undone   an edit put back
+    { "name": "state", "type": "ENUM", "required": true, "default": "wanted",
+      "options": ["wanted", "working", "ask", "done", "failed", "undone"] },
+    { "name": "request", "type": "TEXT", "max_length": 2000 },
+    // What the edit asks for: rewrite the cards, add a card after them,
+    // remove them, change the look only; none when it is not about this deck.
+    { "name": "action", "type": "ENUM", "options": ["rewrite", "add", "remove", "look", "none"] },
+    // Card ids the Decisions call chose, in deck order; and the person's own
+    // pick, when they made one.
+    { "name": "cards", "type": "JSON" },
+    { "name": "chosen", "type": "JSON" },
+    { "name": "confidence", "type": "FLOAT" },
+    // The deck as the Decisions call saw it (cards as c1, c2…), kept so a
+    // correction can teach with exactly what it was shown.
+    { "name": "evidence", "type": "TEXT", "max_length": 6000 },
+    { "name": "reason", "type": "TEXT", "max_length": 400 },
+    // The theme an edit of the look picked (a decks_theme id, or "brand").
+    { "name": "theme", "type": "TEXT", "max_length": 64 },
+    // What it changed, as it was: { "cards": [<card rows>], "added": [ids], "look": {...} }.
+    { "name": "before", "type": "JSON" },
+    // One line on what was done, for the person.
+    { "name": "summary", "type": "TEXT", "max_length": 600 },
+    { "name": "error", "type": "TEXT", "max_length": 2000 },
+    { "name": "decide_seconds", "type": "FLOAT" },
+    { "name": "started_at", "type": "DATETIME" },
+    { "name": "finished_at", "type": "DATETIME" },
+    // When the person opened the deck after this job finished (a written
+    // deck's "it's ready" leaves Today then).
+    { "name": "opened_at", "type": "DATETIME" }
+  ],
+  "config": {}
+}

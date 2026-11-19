@@ -1,0 +1,41 @@
+{
+  // Something of the brand's that was collected: a logo, an icon, a photo, an
+  // illustration. What it is comes from one Decisions call ("What is this
+  // asset?"), or from the person, whose fixes are the examples for the next
+  // call. Team-wide, like the brand.
+  "name": "brand_asset",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "brand_id", "type": "UUID", "required": true, "foreign_key": { "references": "brand.id" } },
+    // What it is; empty until asked.
+    { "name": "kind", "type": "ENUM", "options": ["logo", "icon", "photo", "illustration", "other"] },
+    // Whether it is the brand's own, not a customer's logo, a payment or
+    // app-store badge, or a stock avatar.
+    { "name": "own", "type": "BOOLEAN" },
+    // For a logo: primary, inverse (for dark grounds), mono, mark (the symbol alone).
+    { "name": "variant", "type": "ENUM", "options": ["primary", "inverse", "mono", "mark", "other"] },
+    { "name": "label", "type": "TEXT", "max_length": 200 },
+    { "name": "file_path", "type": "FILE_PATH" },
+    // Where it came from (an address on the site, or an uploaded file).
+    { "name": "source_url", "type": "TEXT", "max_length": 1000 },
+    // Where it was found and what was around it: the evidence for the call.
+    { "name": "found", "type": "TEXT", "max_length": 1000 },
+    { "name": "format", "type": "TEXT", "max_length": 16 },
+    { "name": "width", "type": "INTEGER" },
+    { "name": "height", "type": "INTEGER" },
+    // lemma (the call), person (a fix), sample.
+    { "name": "sorted_by", "type": "ENUM", "options": ["lemma", "person", "sample"] },
+    { "name": "confidence", "type": "FLOAT" },
+    // The reason line shown beside it ("A logo, 92% sure").
+    { "name": "reason", "type": "TEXT", "max_length": 300 },
+    //   kept    in the kit
+    //   unsure  the call was under 0.5: a person says what it is
+    //   hidden  not the brand's own, or put away by a person
+    { "name": "state", "type": "ENUM", "required": true, "default": "kept", "options": ["kept", "unsure", "hidden"] },
+    // What the call saw, kept so a fix becomes an example.
+    { "name": "evidence", "type": "TEXT", "max_length": 1600 }
+  ],
+  "config": {}
+}

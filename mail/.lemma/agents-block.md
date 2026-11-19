@@ -1,0 +1,1 @@
+- Mail is installed: each person's own mail, sorted, with replies drafted in their voice. Search with `mail_search`; more: `/memory/plugins/mail.md`.

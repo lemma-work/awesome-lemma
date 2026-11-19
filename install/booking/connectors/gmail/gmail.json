@@ -1,0 +1,6 @@
+{
+  "connector": "gmail",
+  "mode": "PER_MEMBER",
+  "required": false,
+  "purpose": "When your calendar is Google's, emails a person whose booking could not be taken why, with your page's link. Sends nothing else and reads nothing."
+}

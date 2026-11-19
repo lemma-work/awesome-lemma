@@ -1,0 +1,545 @@
+[
+ {
+  "match": "select * from brand where state <> 'archived' order by is_de",
+  "response": {
+   "items": [
+    {
+     "id": "0cc34eef-de88-49a6-aa29-7e5d7f1cfa12",
+     "created_at": "2026-11-18T12:51:21.575904+00:00",
+     "updated_at": "2026-11-18T12:53:02.669918+00:00",
+     "name": "Fennel & Fig",
+     "is_default": true,
+     "state": "check",
+     "source": "website",
+     "source_id": "sample",
+     "site_url": "https://fennelandfig.example",
+     "colors": [
+      {
+       "for": "Body text and headlines",
+       "from": "--ff-espresso in site.css",
+       "name": "Espresso",
+       "role": "ink",
+       "value": "#2b2118"
+      },
+      {
+       "for": "The page; most of every piece",
+       "from": "--ff-cream in site.css",
+       "name": "Cream",
+       "role": "surface",
+       "value": "#fbf7f0"
+      },
+      {
+       "for": "Cards and panels",
+       "from": "--ff-flour in site.css",
+       "name": "Flour",
+       "role": "surface_2",
+       "value": "#f3eadb"
+      },
+      {
+       "for": "Hairlines and borders",
+       "from": "--ff-crust in site.css",
+       "name": "Crust",
+       "role": "line",
+       "value": "#e4d8c4"
+      },
+      {
+       "for": "Secondary text",
+       "from": "--ff-rye in site.css",
+       "name": "Rye",
+       "role": "muted",
+       "value": "#6f6152"
+      },
+      {
+       "for": "One button, one word or one shape per piece",
+       "from": "--ff-terracotta in site.css",
+       "name": "Terracotta",
+       "role": "accent",
+       "value": "#b84a26"
+      },
+      {
+       "for": "Text on the accent",
+       "from": "Measured: the brand's surface reads best on the accent",
+       "name": "",
+       "role": "accent_ink",
+       "value": "#fbf7f0"
+      },
+      {
+       "for": "Success, on the shop's own screens",
+       "from": "--ff-sage in site.css",
+       "name": "Sage",
+       "role": "ok",
+       "value": "#3f7d4e"
+      },
+      {
+       "for": "Errors, on the shop's own screens",
+       "from": "--ff-brick in site.css",
+       "name": "Brick",
+       "role": "bad",
+       "value": "#b3261e"
+      },
+      {
+       "for": "A second accent, for seasonal pieces only",
+       "from": "--ff-fig in site.css",
+       "name": "Fig",
+       "role": "extra",
+       "value": "#6b3a5b"
+      }
+     ],
+     "fonts": {
+      "body": {
+       "note": "Everything else",
+       "stack": "\"Source Sans 3\", system-ui, sans-serif",
+       "family": "Source Sans 3",
+       "source": "google",
+       "weight": 400
+      },
+      "display": {
+       "note": "Headlines, set tight, never in capitals",
+       "stack": "Fraunces, Georgia, serif",
+       "family": "Fraunces",
+       "source": "google",
+       "weight": 500
+      }
+     },
+     "tokens": {
+      "--brand-ok": "#3f7d4e",
+      "--brand-bad": "#b3261e",
+      "--brand-fig": "#6b3a5b",
+      "--brand-ink": "#2b2118",
+      "--brand-line": "#e4d8c4",
+      "--brand-muted": "#6f6152",
+      "--brand-accent": "#b84a26",
+      "--brand-radius": "14px",
+      "--brand-surface": "#fbf7f0",
+      "--brand-font-body": "\"Source Sans 3\", system-ui, sans-serif",
+      "--brand-surface-2": "#f3eadb",
+      "--brand-accent-ink": "#fbf7f0",
+      "--brand-font-display": "Fraunces, Georgia, serif"
+     },
+     "theme_css_path": "/brand/fennel-and-fig/theme.css",
+     "logo_path": "/brand/fennel-and-fig/assets/logo.svg",
+     "logos": [
+      {
+       "on": "light",
+       "path": "/brand/fennel-and-fig/assets/logo.svg",
+       "variant": "primary",
+       "asset_id": "c372ea3a-cf7f-43ad-82b2-ae3611f33a1b"
+      },
+      {
+       "on": "dark",
+       "path": "/brand/fennel-and-fig/assets/logo-inverse.svg",
+       "variant": "inverse",
+       "asset_id": "48f63b5a-ac8c-4320-a224-75ac4428b5e5"
+      },
+      {
+       "on": "light",
+       "path": "/brand/fennel-and-fig/assets/mark.svg",
+       "variant": "mark",
+       "asset_id": "55387494-c826-443d-94a4-cf400a8d9c46"
+      }
+     ],
+     "guide_path": "/brand/fennel-and-fig/guide.md",
+     "voice": "Warm, plain and a little playful, like the baker behind the counter at seven in the morning. Short sentences, real ingredients, real times; no hype and no exclamation marks.",
+     "root_path": "/brand/fennel-and-fig",
+     "synced_at": "2026-11-18T12:52:00.420164+00:00",
+     "checked_at": null,
+     "checked_by": null
+    }
+   ],
+   "total": 1
+  }
+ },
+ {
+  "match": "select * from brand_asset order by created_at limit 500",
+  "response": {
+   "items": [
+    {
+     "id": "c372ea3a-cf7f-43ad-82b2-ae3611f33a1b",
+     "created_at": "2026-11-18T12:51:34.963893+00:00",
+     "updated_at": "2026-11-18T12:51:46.878376+00:00",
+     "brand_id": "0cc34eef-de88-49a6-aa29-7e5d7f1cfa12",
+     "kind": "logo",
+     "own": true,
+     "variant": "primary",
+     "label": "Fennel & Fig",
+     "file_path": "/brand/fennel-and-fig/assets/logo.svg",
+     "source_url": "/brand/fennel-and-fig/assets/logo.svg",
+     "found": "The site header, top left, linking to the home page; alt \"Fennel & Fig home\". The fig mark beside the name.",
+     "format": "svg",
+     "width": 400,
+     "height": 104,
+     "sorted_by": "lemma",
+     "confidence": 1.0,
+     "reason": "A logo (100% sure)",
+     "state": "kept",
+     "evidence": "Brand being read: Fennel & Fig\nFile: logo.svg (svg, 400\u00d7104)\nLabel: Fennel & Fig\nFound: The site header, top left, linking to the home page; alt \"Fennel & Fig home\". The fig mark beside the name.\nFrom: /brand/fennel-and-fig/assets/logo.svg"
+    },
+    {
+     "id": "48f63b5a-ac8c-4320-a224-75ac4428b5e5",
+     "created_at": "2026-11-18T12:51:36.064848+00:00",
+     "updated_at": "2026-11-18T12:51:47.975921+00:00",
+     "brand_id": "0cc34eef-de88-49a6-aa29-7e5d7f1cfa12",
+     "kind": "logo",
+     "own": true,
+     "variant": "inverse",
+     "label": "Fennel & Fig (light lettering)",
+     "file_path": "/brand/fennel-and-fig/assets/logo-inverse.svg",
+     "source_url": "/brand/fennel-and-fig/assets/logo-inverse.svg",
+     "found": "The footer, on the Espresso band; the same lockup with cream lettering.",
+     "format": "svg",
+     "width": 400,
+     "height": 104,
+     "sorted_by": "lemma",
+     "confidence": 1.0,
+     "reason": "A logo (100% sure)",
+     "state": "kept",
+     "evidence": "Brand being read: Fennel & Fig\nFile: logo-inverse.svg (svg, 400\u00d7104)\nLabel: Fennel & Fig (light lettering)\nFound: The footer, on the Espresso band; the same lockup with cream lettering.\nFrom: /brand/fennel-and-fig/assets/logo-inverse.svg"
+    },
+    {
+     "id": "55387494-c826-443d-94a4-cf400a8d9c46",
+     "created_at": "2026-11-18T12:51:37.131187+00:00",
+     "updated_at": "2026-11-18T12:51:48.923157+00:00",
+     "brand_id": "0cc34eef-de88-49a6-aa29-7e5d7f1cfa12",
+     "kind": "logo",
+     "own": true,
+     "variant": "mark",
+     "label": "Fig mark",
+     "file_path": "/brand/fennel-and-fig/assets/mark.svg",
+     "source_url": "/brand/fennel-and-fig/assets/mark.svg",
+     "found": "The favicon and the round sticker on the about page: the fig shape alone, no name.",
+     "format": "svg",
+     "width": 104,
+     "height": 104,
+     "sorted_by": "lemma",
+     "confidence": 1.0,
+     "reason": "A logo (100% sure)",
+     "state": "kept",
+     "evidence": "Brand being read: Fennel & Fig\nFile: mark.svg (svg, 104\u00d7104)\nLabel: Fig mark\nFound: The favicon and the round sticker on the about page: the fig shape alone, no name.\nFrom: /brand/fennel-and-fig/assets/mark.svg"
+    },
+    {
+     "id": "25c1e05d-7cae-466e-8699-2f1fe2d61584",
+     "created_at": "2026-11-18T12:51:38.320387+00:00",
+     "updated_at": "2026-11-18T12:51:41.321902+00:00",
+     "brand_id": "0cc34eef-de88-49a6-aa29-7e5d7f1cfa12",
+     "kind": "icon",
+     "own": true,
+     "variant": null,
+     "label": "Wheat",
+     "file_path": "/brand/fennel-and-fig/assets/wheat.svg",
+     "source_url": "/brand/fennel-and-fig/assets/wheat.svg",
+     "found": "Beside 'Sourdough' in the menu list, one of six small line pictograms (wheat, cup, croissant, clock, pin, bag).",
+     "format": "svg",
+     "width": 48,
+     "height": 48,
+     "sorted_by": "lemma",
+     "confidence": 1.0,
+     "reason": "An icon (100% sure)",
+     "state": "kept",
+     "evidence": "Brand being read: Fennel & Fig\nFile: wheat.svg (svg, 48\u00d748)\nLabel: Wheat\nFound: Beside 'Sourdough' in the menu list, one of six small line pictograms (wheat, cup, croissant, clock, pin, bag).\nFrom: /brand/fennel-and-fig/assets/wheat.svg"
+    },
+    {
+     "id": "d8cc57da-170e-4fed-b7bd-bc8bb171956d",
+     "created_at": "2026-11-18T12:51:39.001368+00:00",
+     "updated_at": "2026-11-18T12:51:41.321902+00:00",
+     "brand_id": "0cc34eef-de88-49a6-aa29-7e5d7f1cfa12",
+     "kind": "illustration",
+     "own": true,
+     "variant": null,
+     "label": "Loaf",
+     "file_path": "/brand/fennel-and-fig/assets/loaf.svg",
+     "source_url": "/brand/fennel-and-fig/assets/loaf.svg",
+     "found": "The home page hero, right of the headline: a drawn loaf in Terracotta on a Crust shadow.",
+     "format": "svg",
+     "width": 320,
+     "height": 200,
+     "sorted_by": "lemma",
+     "confidence": 1.0,
+     "reason": "An illustration (100% sure)",
+     "state": "kept",
+     "evidence": "Brand being read: Fennel & Fig\nFile: loaf.svg (svg, 320\u00d7200)\nLabel: Loaf\nFound: The home page hero, right of the headline: a drawn loaf in Terracotta on a Crust shadow.\nFrom: /brand/fennel-and-fig/assets/loaf.svg"
+    }
+   ],
+   "total": 5
+  }
+ },
+ {
+  "match": "select * from brand_evidence order by created_at limit 500",
+  "response": {
+   "items": [
+    {
+     "id": "1b74ea41-32b6-4f2f-ae7c-e8ba73b16152",
+     "created_at": "2026-11-18T12:52:00.214330+00:00",
+     "updated_at": "2026-11-18T12:52:00.214330+00:00",
+     "brand_id": "0cc34eef-de88-49a6-aa29-7e5d7f1cfa12",
+     "kind": "css",
+     "about": "colors",
+     "path": "/brand/fennel-and-fig/evidence/css-sample.txt",
+     "url": null,
+     "excerpt": "--ff-cream: #fbf7f0;  /* used 41x */\n--ff-espresso: #2b2118;  /* used 37x */\n--ff-terracotta: #b84a26;  /* used 12x */\n--ff-flour: #f3eadb;  /* used 9x */\n--ff-crust: #e4d8c4;  /* used 8x */\n--ff-rye: #6f6152;  /* used 14x */\n--ff-fig: #6b3a5b;  /* used 3x */\n--ff-sage: #3f7d4e;  /* used 2x */\n--ff-brick: #b3261e;  /* used 2x */\nfont-family: \"Source Sans 3\", system-ui, sans-serif;  /* 22x */\nfont-family: Fraunces, Georgia, serif;  /* 9x */\nborder-radius: 14px;  /* 11x */",
+     "note": "The made-up site's stylesheet: its own names for its colours",
+     "job_id": "04bf264c-3565-4ec6-8464-35bcbc7c2288"
+    },
+    {
+     "id": "f357c02c-ebab-4c3b-bf55-3bccf03f1223",
+     "created_at": "2026-11-18T12:52:00.214330+00:00",
+     "updated_at": "2026-11-18T12:52:00.214330+00:00",
+     "brand_id": "0cc34eef-de88-49a6-aa29-7e5d7f1cfa12",
+     "kind": "copy",
+     "about": "voice",
+     "path": null,
+     "url": null,
+     "excerpt": "Baked this morning, gone by noon.\nButter, flour, patience.\nCome early for the fig rolls.",
+     "note": "The made-up site's home page and menu",
+     "job_id": "04bf264c-3565-4ec6-8464-35bcbc7c2288"
+    }
+   ],
+   "total": 2
+  }
+ },
+ {
+  "match": "select * from brand_job order by created_at desc limit 100",
+  "response": {
+   "items": [
+    {
+     "id": "04bf264c-3565-4ec6-8464-35bcbc7c2288",
+     "created_at": "2026-11-18T12:51:22.877298+00:00",
+     "updated_at": "2026-11-18T12:52:03.693591+00:00",
+     "kind": "read",
+     "state": "done",
+     "brand_id": "0cc34eef-de88-49a6-aa29-7e5d7f1cfa12",
+     "design_id": null,
+     "source": "sample",
+     "source_ref": "Brand kit's sample",
+     "prompt": null,
+     "activity": "Read. Waiting for a person to check it.",
+     "error": null,
+     "brand_state_before": "new",
+     "requested_by": "user-sample",
+     "requested_name": "Sam",
+     "workflow_run_id": null,
+     "started_at": "2026-11-18T12:51:22.651167+00:00",
+     "finished_at": "2026-11-18T12:52:03.501443+00:00",
+     "note": null
+    }
+   ],
+   "total": 1
+  }
+ },
+ {
+  "match": "select * from brand_design order by updated_at desc limit 30",
+  "response": {
+   "items": [
+    {
+     "id": "ef78d278-44a6-43c0-8649-50f5cd94b359",
+     "created_at": "2026-11-18T12:52:05.854101+00:00",
+     "updated_at": "2026-11-18T13:25:49.073663+00:00",
+     "brand_id": "0cc34eef-de88-49a6-aa29-7e5d7f1cfa12",
+     "title": "Saturday market banner",
+     "kind": "banner",
+     "state": "approved",
+     "prompt": "A banner for the Saturday market stall: find us at the harbour market, 8 till 1.",
+     "version": 2,
+     "artifact_path": "/brand/fennel-and-fig/designs/saturday-market-banner-ef78d2/v2/index.html",
+     "preview_path": null,
+     "folder": "/brand/fennel-and-fig/designs/saturday-market-banner-ef78d2/",
+     "activity": null,
+     "requested_by": "user-sample",
+     "requested_name": "Sam",
+     "made_from": "sample",
+     "approved_at": "2026-11-18T12:52:36.016781+00:00",
+     "approved_by": "Sam"
+    },
+    {
+     "id": "4a0ed96b-1e0a-4008-bcb3-33891eb73da2",
+     "created_at": "2026-11-18T12:52:05.218571+00:00",
+     "updated_at": "2026-11-18T12:52:19.374863+00:00",
+     "brand_id": "0cc34eef-de88-49a6-aa29-7e5d7f1cfa12",
+     "title": "Autumn menu launch post",
+     "kind": "social_post",
+     "state": "review",
+     "prompt": "A post announcing the autumn menu: fig and walnut sourdough, pear frangipane, a spiced bun. From Saturday.",
+     "version": 1,
+     "artifact_path": "/brand/fennel-and-fig/designs/autumn-menu-launch-post-4a0ed9/v1/index.html",
+     "preview_path": null,
+     "folder": "/brand/fennel-and-fig/designs/autumn-menu-launch-post-4a0ed9/",
+     "activity": null,
+     "requested_by": "user-sample",
+     "requested_name": "Sam",
+     "made_from": "sample",
+     "approved_at": null,
+     "approved_by": null
+    }
+   ],
+   "total": 2
+  }
+ },
+ {
+  "match": "select id, design_id, version, artifact_path, preview_path, ",
+  "response": {
+   "items": [
+    {
+     "id": "e2436303-6744-4ecc-b1e8-53ce45d9abaa",
+     "design_id": "ef78d278-44a6-43c0-8649-50f5cd94b359",
+     "version": 2,
+     "artifact_path": "/brand/fennel-and-fig/designs/saturday-market-banner-ef78d2/v2/index.html",
+     "preview_path": null,
+     "prompt": "A banner for the Saturday market stall: find us at the harbour market, 8 till 1.",
+     "note": null,
+     "verdict": "follows",
+     "broke": "none",
+     "reason": "Follows the brand: its colours, faces and logo (90% sure).",
+     "confidence": 0.9,
+     "measured": {
+      "logo": {
+       "used": [
+        {
+         "file": "mark.svg",
+         "variant": "mark",
+         "brand_kind": "logo",
+         "brand_logo": true
+        }
+       ],
+       "drawn": []
+      },
+      "faces": [
+       {
+        "brand": true,
+        "family": "source sans 3"
+       },
+       {
+        "brand": true,
+        "family": "fraunces"
+       }
+      ],
+      "words": "Every Saturday, 8 till 1 Find us at the harbour market. Sourdough, buns, and the fig rolls, until they're gone.",
+      "colours": [],
+      "seconds": 0.61,
+      "uses_tokens": 9,
+      "low_contrast": []
+     },
+     "judged_by": "lemma",
+     "created_at": "2026-11-18T12:52:35.071294+00:00",
+     "updated_at": "2026-11-18T13:25:47.137244+00:00"
+    },
+    {
+     "id": "323e7233-9efc-43f0-9d80-4fd67d0dac74",
+     "design_id": "4a0ed96b-1e0a-4008-bcb3-33891eb73da2",
+     "version": 1,
+     "artifact_path": "/brand/fennel-and-fig/designs/autumn-menu-launch-post-4a0ed9/v1/index.html",
+     "preview_path": null,
+     "prompt": "A post announcing the autumn menu: fig and walnut sourdough, pear frangipane, a spiced bun. From Saturday.",
+     "note": null,
+     "verdict": "follows",
+     "broke": "none",
+     "reason": "Follows the brand: its colours, faces and logo (69% sure).",
+     "confidence": 0.69,
+     "measured": {
+      "logo": {
+       "used": [
+        {
+         "file": "logo.svg",
+         "variant": "primary",
+         "brand_kind": "logo",
+         "brand_logo": true
+        },
+        {
+         "file": "loaf.svg",
+         "variant": null,
+         "brand_kind": "illustration",
+         "brand_logo": false
+        }
+       ],
+       "drawn": []
+      },
+      "faces": [
+       {
+        "brand": true,
+        "family": "source sans 3"
+       },
+       {
+        "brand": true,
+        "family": "fraunces"
+       }
+      ],
+      "words": "The autumn menu, from Saturday Fig, walnut and a very good bun. Fig and walnut sourdough, pear frangipane, and a spiced bun worth getting up for. Baked this morning, gone by noon. Saturday from 7am",
+      "colours": [],
+      "seconds": 0.6,
+      "uses_tokens": 11,
+      "low_contrast": []
+     },
+     "judged_by": "lemma",
+     "created_at": "2026-11-18T12:52:19.054249+00:00",
+     "updated_at": "2026-11-18T12:52:19.054249+00:00"
+    },
+    {
+     "id": "7271fd16-0be6-4245-a1f6-9f007bbc80ad",
+     "design_id": "ef78d278-44a6-43c0-8649-50f5cd94b359",
+     "version": 1,
+     "artifact_path": "/brand/fennel-and-fig/designs/saturday-market-banner-ef78d2/v1/index.html",
+     "preview_path": null,
+     "prompt": "A banner for the Saturday market stall: find us at the harbour market, 8 till 1.",
+     "note": null,
+     "verdict": "breaks",
+     "broke": "colour",
+     "reason": "Uses #1e88e5, which isn't one of the brand's colours (nearest: extra #6b3a5b).",
+     "confidence": 0.98,
+     "measured": {
+      "logo": {
+       "used": [
+        {
+         "file": "mark.svg",
+         "variant": "mark",
+         "brand_kind": "logo",
+         "brand_logo": true
+        }
+       ],
+       "drawn": []
+      },
+      "faces": [
+       {
+        "brand": true,
+        "family": "source sans 3"
+       },
+       {
+        "brand": true,
+        "family": "fraunces"
+       }
+      ],
+      "words": "Find us at the harbour market. Every Saturday, 8 till 1. Sourdough, buns, and the fig rolls, until they're gone.",
+      "colours": [
+       {
+        "hex": "#1e88e5",
+        "alpha": 1.0,
+        "count": 1,
+        "value": "#1e88e5",
+        "nearest": "#6b3a5b",
+        "distance": 55.2,
+        "in_brand": false,
+        "nearest_role": "extra",
+        "translucent_neutral": false
+       }
+      ],
+      "seconds": 1.45,
+      "uses_tokens": 4,
+      "low_contrast": []
+     },
+     "judged_by": "lemma",
+     "created_at": "2026-11-18T12:52:18.410338+00:00",
+     "updated_at": "2026-11-18T13:25:06.326447+00:00"
+    }
+   ],
+   "total": 3
+  }
+ },
+ {
+  "match": "select count(*) as n from brand_sample_row",
+  "response": {
+   "items": [
+    {
+     "n": 0
+    }
+   ],
+   "total": 1
+  }
+ }
+]

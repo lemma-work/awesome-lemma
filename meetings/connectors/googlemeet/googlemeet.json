@@ -1,0 +1,6 @@
+{
+  "connector": "googlemeet",
+  "mode": "PER_MEMBER",
+  "required": false,
+  "purpose": "Reads the transcript Google Meet kept of a meeting you were on, so its decisions and promises are written up after. Only when you choose Meet transcripts."
+}

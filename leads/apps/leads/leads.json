@@ -1,0 +1,6 @@
+{
+  "name": "leads",
+  "description": "Who's new and worth your time: each new person and company looked up, with their role, what the company does, its size, recent news and how well it fits you, every fact with its source.",
+  "public_slug": "${leads_slug}",
+  "visibility": "POD"
+}

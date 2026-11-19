@@ -1,0 +1,49 @@
+
+before
+  Brightwave Health        5 0.79  decision Matches on what they do, who they sell to, size, where they are and stage
+  Corbel Studio            3 0.60  decision Matches on who they sell to and where they are; misses on what they do, size and stage
+  Ferro Logistics          2 0.74  decision Matches on who they sell to and where they are; misses on what they do, size and stage
+  Harborlane               3 0.49  decision Matches on where they are; misses on what they do and stage (not sure: 49%)
+  Kestrel Capital          2 0.53  decision Matches on where they are; misses on what they do and stage
+  Lumen Labs               5 0.56  decision Matches on what they do, who they sell to, size, where they are and stage
+  Northgate Vc             3 0.47  decision Matches on what they do, who they sell to and where they are; misses on stage (not sure: 47%)
+  Orchard Dental           2 0.59  decision Matches on where they are; misses on what they do, who they sell to, size and stage
+  Parkhill                 2 0.39  decision Matches on where they are; misses on what they do, size and stage (not sure: 39%)
+  Quill Partners           3 0.75  decision Matches on size, where they are and stage; misses on what they do
+  Talentbridge             3 0.58  decision Matches on size and where they are; misses on what they do
+  Velo Cycles              2 0.61  decision Matches on size, where they are and stage; misses on what they do and who they sell to
+  Volkov Advisory          2 0.53  decision Matches on who they sell to and where they are; misses on what they do, size and stage
+
+correct: Noted: fit 4 of 5, for the team.
+
+after
+  Brightwave Health        5 0.83  decision Matches on what they do, who they sell to, size, where they are and stage
+  Corbel Studio            4       person   Someone on the team said 4 of 5
+  Ferro Logistics          2 0.68  decision Matches on who they sell to and where they are; misses on what they do, size and stage
+  Harborlane               3 0.37  decision Matches on where they are; misses on what they do, size and stage (not sure: 37%)
+  Kestrel Capital          1 0.47  decision Matches on where they are; misses on what they do, size and stage (not sure: 47%)
+  Lumen Labs               5 0.80  decision Matches on what they do, who they sell to, size, where they are and stage
+  Northgate Vc             2 0.33  decision Matches on what they do, who they sell to, where they are and stage; misses on size (not sure: 33%)
+  Orchard Dental           2 0.61  decision Matches on where they are; misses on what they do, who they sell to, size and stage
+  Parkhill                 2 0.45  decision Matches on where they are; misses on what they do, size and stage (not sure: 45%)
+  Quill Partners           3 0.63  decision Matches on size, where they are and stage; misses on what they do
+  Talentbridge             3 0.45  decision Matches on size and where they are; misses on what they do (not sure: 45%)
+  Velo Cycles              2 0.63  decision Matches on size, where they are and stage; misses on what they do and who they sell to
+  Volkov Advisory          2 0.44  decision Matches on what they do, who they sell to and where they are; misses on size and stage (not sure: 44%)
+
+moved:
+  Brightwave Health        5 (0.79) -> 5 (0.83)
+  Corbel Studio            3 (0.60) -> 4 (0.00)
+  Ferro Logistics          2 (0.74) -> 2 (0.68)
+  Harborlane               3 (0.49) -> 3 (0.37)
+  Kestrel Capital          2 (0.53) -> 1 (0.47)
+  Lumen Labs               5 (0.56) -> 5 (0.80)
+  Northgate Vc             3 (0.47) -> 2 (0.33)
+  Orchard Dental           2 (0.59) -> 2 (0.61)
+  Parkhill                 2 (0.39) -> 2 (0.45)
+  Quill Partners           3 (0.75) -> 3 (0.63)
+  Talentbridge             3 (0.58) -> 3 (0.45)
+  Velo Cycles              2 (0.61) -> 2 (0.63)
+  Volkov Advisory          2 (0.53) -> 2 (0.44)
+
+152s

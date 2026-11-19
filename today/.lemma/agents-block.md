@@ -1,0 +1,1 @@
+- Today is installed: each person's day, from the shared `needs_you` list every plugin writes. More: `/memory/plugins/today.md`.

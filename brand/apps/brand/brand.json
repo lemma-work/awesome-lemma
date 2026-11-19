@@ -1,0 +1,6 @@
+{
+  "name": "brand",
+  "description": "The team's brand, with the evidence for each colour, face, logo and line of voice; and the designs made in it, each checked against the brand, versioned, with a way to ask for a new one.",
+  "public_slug": "${brand_slug}",
+  "visibility": "POD"
+}

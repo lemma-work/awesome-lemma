@@ -1,0 +1,34 @@
+{
+  "name": "Meetings",
+  "line": "sales",
+  "position": 2,
+  "job": "Briefed before every meeting, written up after",
+  "intro": "Meetings reads your Google Calendar or Outlook, writes a one-page brief before each meeting with people from outside, and afterwards keeps what was decided and promised, word for word.",
+  "does": [
+    "Sorts each outside meeting: customer, investor, candidate, partner or other.",
+    "Writes a brief the evening before or an hour before: who is coming, where things stand, what they will want.",
+    "Reads the transcript or your notes afterwards, and keeps each decision and promise with its sentence."
+  ],
+  "jobs": ["SALES", "FOUNDER", "PRODUCT", "HR"],
+  "accounts": [
+    { "any": ["Google Calendar", "Outlook"], "why": "Each person connects their own calendar. Meetings never adds, changes or answers an event." },
+    { "any": ["Google Meet"], "why": "Only if you want transcripts read after a call.", "optional": true }
+  ],
+  "setup": [
+    "Connect Google Calendar or Outlook, or look around with a sample calendar.",
+    "It reads the last month and the next two weeks, and sorts each meeting.",
+    "Choose which kinds of meeting get a brief.",
+    "Choose when the brief arrives: the evening before, or an hour before.",
+    "Choose what it reads afterwards: Google Meet transcripts, notes you write, or nothing."
+  ],
+  "today": [
+    { "verb": "attend", "line": "Today's and tomorrow's meetings, with the brief one tap away" },
+    { "verb": "do", "line": "Promises you made in a meeting" },
+    { "verb": "waiting", "line": "Promises made to you in a meeting" }
+  ],
+  "pictures": [
+    { "shot": "meetings-week", "caption": "Your week of outside meetings, briefs ready" },
+    { "shot": "meetings-brief", "caption": "A brief: who is coming and what they will want" },
+    { "shot": "meetings-after", "caption": "After: what was decided, and who promised what" }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  // Started by `people-summary-wanted` when a person's summary_state becomes
+  // wanted (the People app asks when a page opens and the summary is older
+  // than the last contact). people_person is per person, so the run is the
+  // row's owner and reads only their own mail and meetings.
+  "name": "people-where-things-stand",
+  "description": "Write where things stand with one person, each sentence citing the conversation or meeting it came from.",
+  "max_concurrent_runs": 4,
+  "start": { "type": "DATASTORE_EVENT", "config": { "table_name": "people_person", "operations": ["INSERT", "UPDATE"] } },
+  "nodes": [
+    { "id": "context", "type": "FUNCTION", "label": "Gather the conversations and meetings",
+      "config": { "function_name": "people_person_context",
+        "input_mapping": { "person_id": { "type": "expression", "value": "start.metadata.record_id" } } } },
+    { "id": "write", "type": "AGENT", "label": "Say where things stand",
+      "config": { "agent_name": "people-summary-writer",
+        "input_mapping": {
+          "person": { "type": "expression", "value": "context.person" },
+          "me": { "type": "expression", "value": "context.me" },
+          "now_local": { "type": "expression", "value": "context.now_local" },
+          "sources": { "type": "expression", "value": "context.sources" },
+          "open_promises": { "type": "expression", "value": "context.open_promises" },
+          "facts": { "type": "expression", "value": "context.facts" } } } },
+    { "id": "save", "type": "FUNCTION", "label": "Keep it",
+      "config": { "function_name": "people_save_summary",
+        "input_mapping": {
+          "person_id": { "type": "expression", "value": "start.metadata.record_id" },
+          "result": { "type": "expression", "value": "write" },
+          "sources": { "type": "expression", "value": "context.sources" } } } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [
+    { "id": "e1", "source": "context", "target": "write" },
+    { "id": "e2", "source": "write", "target": "save" },
+    { "id": "e3", "source": "save", "target": "end" }
+  ]
+}

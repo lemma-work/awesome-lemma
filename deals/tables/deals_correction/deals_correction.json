@@ -1,0 +1,26 @@
+{
+  // What a person said about a proposal: dismissed (it doesn't change a
+  // deal, or not this way), or kept after changing it. Per person (RLS). The
+  // newest twenty go with every read as examples, so the next read learns.
+  "name": "deals_correction",
+  "primary_key_column": "id",
+  "enable_rls": true,
+  "visibility": "POD",
+  "columns": [
+    { "name": "change_id", "type": "UUID" },
+    { "name": "read_id", "type": "UUID" },
+    // changes_deal: it isn't a deal change at all. kind: it is, but another
+    // kind. value: the right kind, the wrong value.
+    { "name": "question", "type": "ENUM", "required": true,
+      "options": ["changes_deal", "kind", "value"] },
+    // What the read said, and what the person said.
+    { "name": "from_value", "type": "JSON" },
+    { "name": "to_value", "type": "JSON" },
+    // The person's own words, when they gave any.
+    { "name": "note", "type": "TEXT", "max_length": 300 },
+    // What the read saw.
+    { "name": "evidence", "type": "TEXT", "max_length": 12000 },
+    { "name": "sample", "type": "BOOLEAN", "default": false }
+  ],
+  "config": {}
+}

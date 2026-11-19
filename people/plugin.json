@@ -1,0 +1,8 @@
+{
+  // People map carries Mail and Meetings inside its bundle, so one install
+  // into an empty Lemma brings both: it is derived from what they read.
+  // Read by _build/assemble.py, which merges each carried plugin from its own
+  // folder into install/people/, the bundle that is installed.
+  "name": "people",
+  "carries": ["mail", "meetings"]
+}

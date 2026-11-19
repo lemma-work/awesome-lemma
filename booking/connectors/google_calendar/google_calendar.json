@@ -1,0 +1,6 @@
+{
+  "connector": "google_calendar",
+  "mode": "PER_MEMBER",
+  "required": false,
+  "purpose": "Checks your Google Calendar's busy times so your page offers only free times, checks again before each booking, and adds the booked call to your calendar with a Google Meet link, inviting the person who booked."
+}

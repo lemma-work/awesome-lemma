@@ -1,0 +1,10 @@
+{
+  // Someone joined the queue (worth looking up, or asked for): hand out
+  // today's places. leads_person is per person, so this runs as its owner.
+  "name": "leads-queued",
+  "schedule_type": "DATASTORE",
+  "config": { "table_name": "leads_person", "operations": ["INSERT", "UPDATE"],
+              "when": { "state": { "to": "queued" } }, "bulk_writes": "each" },
+  "workflow_name": "leads-claim",
+  "is_active": true
+}

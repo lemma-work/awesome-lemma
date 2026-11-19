@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+# Every function's description and grants, in one place. Regenerates
+# functions/<name>/<name>.json; never edit those by hand.
+#   table        read          table:rw   + write rows       table:rwd  + delete rows
+#   /folder:verbs              connector:<id>
+set -euo pipefail
+cd "$(dirname "$0")/.."
+f() { uv run --no-project python bin/fnjson.py "$@"; }
+f meetings_connect "Set-up: hold the calendar the person connected (or the sample), with their settings and which kinds of meeting get a brief." meetings_settings:rw meetings_calendar:rw
+f meetings_calendar_read "Read Google Calendar, Outlook or the sample calendar: the last month and the next two weeks, into meetings, and everyone on them into the shared people (found by handle, as Mail does). Who is from outside comes from email domains, never a model. Idempotent." meetings_calendar:rw meetings_settings meeting:rw meetings_work:rw person:rw person_handle:rw /meetings-sample:read connector:google_calendar connector:outlook
+f meetings_sort "Sort meetings with people from outside: one Decisions call per meeting (or per repeating series) for what kind of meeting it is and whether it needs a brief. The person's corrections go with every call as examples; an answer it is not sure of waits for the person." meeting:rw meetings_work:rw meetings_settings meetings_calendar meetings_correction person person_handle conversation
+f meetings_setup_kinds "Set-up and settings: keep which kinds of meeting get a brief, and re-decide every meeting the person has not settled from the answers already read." meetings_settings:rw meeting:rw meetings_work:rw
+f meetings_setup_done "Set-up: keep when briefs are wanted and where notes come from after a meeting." meetings_settings:rw meetings_calendar
+f meetings_settle "The person settles or changes how a meeting was sorted (its kind, whether it gets a brief). Kept as a correction the next read learns from, and applied to the rest of a repeating series." meeting:rw meetings_work:rw meetings_correction:rw meetings_settings
+f meetings_due "The regular pass: ask for briefs that are due, and after a meeting find what was said (a Google Meet transcript, the person's notes, or the sample's) for the notes reader." meeting:rw meetings_work:rw meetings_settings meetings_calendar /meetings-sample:read,write connector:googlemeet
+f meetings_add_notes "Keep notes the person wrote after a meeting as the meeting's document and ask the notes reader to read them." meeting:rw meetings_work:rw meetings_calendar meetings_settings /meetings-sample:read,write
+f meetings_brief_context "Gather what the brief writer needs for one meeting: the people on it, what the person's mail and earlier meetings know about each, and open promises either way." meeting meetings_work:rw meetings_settings meetings_calendar meetings_decision person person_handle conversation message promise
+f meetings_save_brief "Store the brief writer's brief and headline beside the meeting." meeting:rw meetings_work:rw
+f meetings_notes_context "Gather a meeting's transcript or notes for the notes reader." meeting meetings_work:rw meetings_settings meetings_calendar /meetings-sample:read
+f meetings_save_notes "Store what the notes reader found: a few lines on what happened, decisions, and promises either way into the shared promises, each kept only if its sentence is in the text word for word." meeting:rw meetings_work:rw meetings_decision:rw promise:rw meetings_settings /meetings-sample:read
+f meetings_sample_data "Load or clear the made-up sample calendar (a month back and two weeks ahead of meetings at .example addresses, and one transcript), so Meetings can be seen working and tested without anyone's calendar. Clear removes every row and file it made, and the people only its meetings brought in." meetings_calendar:rwd meetings_settings:rwd meeting:rwd meetings_work:rwd meetings_correction:rwd meetings_decision:rwd promise:rwd person:rwd person_handle:rwd needs_you:rw conversation message /meetings-sample:read,write,delete
+f meetings_needs_you "Meetings' part of the person's day on the shared needs_you list: today's and tomorrow's meetings (attend) with their briefs, and promises from meetings either way (do, waiting); resolves what has ended or been kept. settle_item_id: a promise item the person marked done elsewhere closes the promise." meeting meetings_settings promise:rw needs_you:rw
+f meetings_memory "Tells this Lemma's agents that Meetings is installed: Meetings's own block in /memory/AGENTS.md and its guide at /memory/plugins/meetings.md, leaving the team's notes alone. Set-up runs it; safe to run again. remove takes them out." /memory:read,write

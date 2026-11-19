@@ -1,0 +1,18 @@
+clear: Cleared the sample: 0 sample leads removed, 15 put back as they were, 13 sample companies.
+needs_you: 0 worth a look: {'created': 0, 'updated': 0, 'kept_closed': 0, 'resolved': 0}
+person              41 ->    41 same
+person_handle       41 ->    41 same
+people_person       35 ->    35 same
+company             24 ->    24 same
+company_domain      24 ->    24 same
+people_company       5 ->     5 same
+conversation        36 ->    36 same
+message             52 ->    52 same
+meeting             25 ->    25 same
+leads_settings       1 ->     1 same
+leads: 27 -> 27; sample 15: 0 removed, 15 put back as before (['queued', 'ready']); every other lead unchanged: True
+company facts: 18 -> 5; sample 13 removed, real 5 kept: True
+fits: 18 -> 5; removed only sample companies' fits: True
+corrections: 5 -> 3; sample ones removed: True
+needs_you: 4 sample items open -> done: True
+OK

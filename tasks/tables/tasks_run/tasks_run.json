@@ -1,0 +1,32 @@
+{
+  // An agent working a task. Same id as the task (personal or team). The
+  // conversation is the spine: the hand-over opens it with the task as its
+  // brief, the agent reports on the task (tasks_report), and a reply on the
+  // task is sent into it. Private to whoever handed the task over: the
+  // conversation is theirs, and the agent runs as them.
+  "name": "tasks_run",
+  "primary_key_column": "id",
+  "enable_rls": true,
+  "visibility": "POD",
+  "columns": [
+    { "name": "scope", "type": "ENUM", "required": true, "options": ["personal", "team"] },
+    // pod_default (the Lemma's own assistant) or a named agent.
+    { "name": "agent", "type": "TEXT", "required": true, "max_length": 120 },
+    { "name": "conversation_id", "type": "TEXT", "max_length": 64 },
+    // The Lemma's assistant runs through the `tasks-agent` workflow: its run.
+    { "name": "workflow_run_id", "type": "TEXT", "max_length": 64 },
+    //   starting  handed over, the conversation is being opened
+    //   working   the agent is on it
+    //   waiting   it asked something, or wants an approval
+    //   done      it finished
+    //   stopped   a person took it back, or it ended without saying
+    //   failed    it could not start or broke down
+    { "name": "state", "type": "ENUM", "required": true, "default": "starting",
+      "options": ["starting", "working", "waiting", "done", "stopped", "failed"] },
+    { "name": "started_at", "type": "DATETIME" },
+    { "name": "last_report_at", "type": "DATETIME" },
+    { "name": "turns", "type": "INTEGER", "default": 0 },
+    { "name": "error", "type": "TEXT", "max_length": 2000 }
+  ],
+  "config": {}
+}

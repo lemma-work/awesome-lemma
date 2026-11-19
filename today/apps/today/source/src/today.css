@@ -1,0 +1,116 @@
+/* Today's layout. Colour, type and every control come from the kit (--c-*
+   roles, c-* classes); this file only places things. Nothing heavier than 500. */
+
+.t-body { max-width: 1240px; }
+.t-grid { display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 20px; align-items: start; }
+.t-side { position: sticky; top: calc(var(--header) + 16px); }
+/* One column: in the order of the day (answer, decide, meet, do, wait, keep in touch). */
+@media (max-width: 980px) {
+  .t-grid { display: flex; flex-direction: column; gap: 12px; }
+  .t-main, .t-side { display: contents; }
+  .t-grid #decide { order: 1; }
+  .t-grid #attend { order: 2; }
+  .t-grid #do { order: 3; }
+  .t-grid #answer { order: 4; }
+  .t-grid #waiting { order: 5; }
+  .t-grid #drifting { order: 6; }
+}
+
+.t-checked { margin: -10px 0 18px 48px; color: var(--c-faint); font-size: 12px; line-height: 1.5; }
+.t-checked svg { color: var(--c-faint); display: inline-block; vertical-align: -2px; margin-right: 6px; }
+.t-small { font-size: 12px; }
+.t-gap { margin-top: 10px; }
+.t-name { font-weight: 500; color: var(--c-text); white-space: nowrap; }
+.t-ago { font-size: 12px; font-variant-numeric: tabular-nums; }
+.t-headline { font-size: 14px; line-height: 1.5; margin: 6px 0 14px; }
+
+.c-draft.t-gap { display: block; width: 100%; text-align: left; font: inherit; color: inherit; cursor: pointer; }
+.c-draft__label .c-pill { margin-left: auto; }
+
+.t-reason { display: flex; gap: 6px; align-items: center; margin-top: 8px; color: var(--c-muted); font-size: 12.5px; }
+.t-reason svg { color: var(--c-faint); flex: none; }
+
+/* Today asking the person: a newer message may have kept a promise. */
+.t-asked { margin-top: 10px; padding: 10px 12px; border-radius: var(--c-radius); background: var(--c-subtle); box-shadow: inset 0 0 0 1px var(--c-border); }
+.t-asked p { display: flex; gap: 6px; align-items: center; color: var(--c-muted); font-size: 12.5px; }
+.t-asked p svg { color: var(--c-faint); flex: none; }
+.t-asked .c-item__acts { margin-top: 8px; }
+
+/* Meetings: a day planner, time on the left. */
+.t-meetings + .t-meetings { border-top: 1px solid var(--c-border); }
+.t-meetings__label { padding: 10px 14px 2px; font-size: 12px; color: var(--c-muted); font-weight: 500; }
+.t-meetings__empty { padding: 4px 14px 12px; }
+.t-meetings ul { list-style: none; margin: 0; padding: 0 0 4px; }
+.t-meetings li { display: grid; grid-template-columns: 48px minmax(0, 1fr); gap: 10px; padding: 9px 14px; }
+.t-meetings li + li { border-top: 1px solid var(--c-border); }
+.t-meetings li.t-past { opacity: 0.6; }
+.t-meetings__time { font-size: 12px; color: var(--c-muted); font-variant-numeric: tabular-nums; padding-top: 1px; }
+.t-meetings__main { min-width: 0; display: flex; flex-direction: column; align-items: flex-start; gap: 2px; }
+.t-meetings__title { border: 0; background: none; padding: 0; font: inherit; font-weight: 500; color: var(--c-text); text-align: left; cursor: pointer; max-width: 100%; }
+.t-meetings__title:hover { text-decoration: underline; text-underline-offset: 2px; }
+.t-meetings__main .c-ellipsis { max-width: 100%; }
+.t-meetings__headline { margin: 4px 0 6px; padding-left: 10px; border-left: 2px solid var(--c-border-strong); color: var(--c-muted); font-size: 12.5px; line-height: 1.5; }
+
+/* What changed on its own. */
+.t-changes { list-style: none; margin: 0; padding: 2px 0; }
+.t-changes li { display: grid; grid-template-columns: 22px minmax(0, 1fr) auto; gap: 8px; align-items: start; padding: 9px 14px; }
+.t-changes li + li { border-top: 1px solid var(--c-border); }
+.t-changes__icon { width: 22px; height: 22px; display: grid; place-items: center; border-radius: 50%; color: var(--c-muted); box-shadow: inset 0 0 0 1px var(--c-border-strong); }
+.t-changes__main { min-width: 0; font-size: 12.5px; line-height: 1.45; }
+
+/* Set-up. */
+.t-setup { max-width: 640px; }
+.t-steps { list-style: none; margin: 22px 0 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.t-step { display: grid; grid-template-columns: 28px minmax(0, 1fr) auto; gap: 12px; align-items: start; }
+.t-step__icon { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; color: var(--c-muted); box-shadow: inset 0 0 0 1px var(--c-border-strong); }
+.t-step__main { min-width: 0; }
+.t-step__main p { margin-top: 4px; font-size: 12.5px; line-height: 1.5; }
+.t-step__title { display: flex; align-items: center; gap: 8px; font-weight: 500; }
+.t-time { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
+.t-time .c-input { width: 132px; }
+
+.t-show-sm { display: none; }
+@media (max-width: 640px) {
+  .t-hide-sm { display: none; }
+  .t-show-sm { display: inline-flex; }
+  .t-checked { margin-left: 0; }
+  .t-step { grid-template-columns: 28px minmax(0, 1fr); }
+  .t-step > .c-btn { grid-column: 2; justify-self: start; }
+  .c-item__who { flex-wrap: wrap; }
+  .c-item__meta { margin-left: 0; }
+}
+
+/* Today's own furniture. */
+.t-question { margin-bottom: 18px; }
+.t-note { display: flex; gap: 8px; align-items: center; margin: 0 0 14px; color: var(--c-muted); font-size: 12.5px; }
+.t-note svg { color: var(--c-faint); flex: none; }
+.t-note--danger { color: var(--c-danger); }
+.t-icon { width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; color: var(--c-muted); box-shadow: inset 0 0 0 1px var(--c-border-strong); }
+.t-why { margin-top: 2px; }
+.t-clamp { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.t-meetings__acts { display: flex; gap: 4px; align-items: center; margin-top: 4px; }
+.c-item .c-evidence q { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+
+/* Next up: one line each, mixed. */
+#next { margin-bottom: 14px; }
+.t-next { list-style: none; margin: 0; padding: 0; }
+.t-next__row { display: grid; grid-template-columns: 96px minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 10px 14px; }
+.t-next__row + .t-next__row { border-top: 1px solid var(--c-border); }
+.t-next__kind { display: inline-flex; align-items: center; gap: 6px; color: var(--c-muted); font-size: 12px; white-space: nowrap; }
+.t-next__kind svg { color: var(--c-faint); }
+.t-next__main { min-width: 0; }
+.t-next__title { display: block; max-width: 100%; border: 0; background: none; padding: 0; font: inherit; color: var(--c-text); text-align: left; cursor: pointer; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.t-next__title:hover { text-decoration: underline; text-underline-offset: 2px; }
+.t-next__acts { display: flex; gap: 6px; align-items: center; justify-content: flex-end; }
+@media (max-width: 640px) {
+  .t-next__row { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+  .t-next__acts { justify-content: flex-start; flex-wrap: wrap; }
+  .t-next__title { white-space: normal; }
+}
+
+/* What a plugin prepared: one line, the text on press. */
+.t-prepared { margin-top: 8px; }
+.t-prepared__line { display: inline-flex; align-items: center; gap: 6px; border: 0; background: none; padding: 2px 0; font: inherit; font-size: 12.5px; color: var(--c-muted); cursor: pointer; }
+.t-prepared__line:hover span { text-decoration: underline; text-underline-offset: 2px; }
+.t-prepared__line svg { color: var(--c-faint); }
+.t-draft-full { -webkit-line-clamp: unset; display: block; }

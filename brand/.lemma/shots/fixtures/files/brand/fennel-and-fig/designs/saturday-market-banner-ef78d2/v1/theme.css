@@ -1,0 +1,17 @@
+@import url("https://fonts.googleapis.com/css2?family=Fraunces:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap");
+/* Fennel & Fig: the brand's tokens, written by Brand kit. Change the brand, not this file. */
+:root {
+  --brand-ink: #2b2118;
+  --brand-surface: #fbf7f0;
+  --brand-surface-2: #f3eadb;
+  --brand-line: #e4d8c4;
+  --brand-muted: #6f6152;
+  --brand-accent: #b84a26;
+  --brand-accent-ink: #fbf7f0;
+  --brand-ok: #3f7d4e;
+  --brand-bad: #b3261e;
+  --brand-fig: #6b3a5b;
+  --brand-font-display: Fraunces, Georgia, serif;
+  --brand-font-body: "Source Sans 3", system-ui, sans-serif;
+  --brand-radius: 14px;
+}

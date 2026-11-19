@@ -1,0 +1,53 @@
+{
+  // One row per person who turned on a booking page: which calendars to keep
+  // clear of, when they take calls, the video link, where declines are
+  // emailed from, and where their set-up got to. Per person.
+  "name": "booking_settings",
+  "primary_key_column": "id",
+  "enable_rls": true,
+  "visibility": "POD",
+  "columns": [
+    // Their row in booking_page.
+    { "name": "page_id", "type": "UUID" },
+    { "name": "display_name", "type": "TEXT", "max_length": 200 },
+    { "name": "timezone", "type": "TEXT", "max_length": 64, "default": "UTC" },
+    // Meetings' calendars (meetings_calendar ids) whose busy times block the
+    // page, and the one the event is created on.
+    { "name": "calendars", "type": "JSON" },
+    { "name": "event_calendar", "type": "TEXT", "max_length": 64 },
+    // Weekdays that take calls, Monday = 0.
+    { "name": "days", "type": "JSON" },
+    // First call can start at, last call must end by (HH:MM, their time).
+    { "name": "day_starts", "type": "TEXT", "max_length": 5, "default": "09:30" },
+    { "name": "day_ends", "type": "TEXT", "max_length": 5, "default": "17:30" },
+    { "name": "minutes", "type": "INTEGER", "default": 30 },
+    // Kept clear before and after anything already on the calendars.
+    { "name": "buffer_minutes", "type": "INTEGER", "default": 15 },
+    { "name": "notice_hours", "type": "INTEGER", "default": 12 },
+    { "name": "days_ahead", "type": "INTEGER", "default": 14 },
+    { "name": "max_per_day", "type": "INTEGER", "default": 3 },
+    { "name": "video", "type": "ENUM", "default": "none", "options": ["google_meet", "teams", "none"] },
+    // Declined bookings are emailed from here: the person's own mailbox
+    // through its connector, or nowhere (the page still says why).
+    { "name": "mail_connector", "type": "ENUM", "default": "none", "options": ["gmail", "outlook", "none"] },
+    { "name": "mail_account_id", "type": "TEXT", "max_length": 64 },
+    { "name": "mail_address", "type": "TEXT", "max_length": 320 },
+    // The page's full link, with the Lemma's widget key, as the app copies
+    // it: put in the email to someone whose booking was declined.
+    { "name": "page_url", "type": "TEXT", "max_length": 600 },
+    // What the set-up proposed from the calendar, with the reasons, for the
+    // set-up's screens.
+    { "name": "proposal", "type": "JSON" },
+    // start -> calendars -> hours -> page -> video -> done.
+    { "name": "setup_step", "type": "ENUM", "required": true, "default": "start",
+      "options": ["start", "calendars", "hours", "page", "video", "done"] },
+    { "name": "setup_run_id", "type": "TEXT", "max_length": 64 },
+    { "name": "setup_done_at", "type": "DATETIME" },
+    // Schedules made for this person when they turned the page on: name -> id.
+    { "name": "schedules", "type": "JSON" },
+    // Their new-booking trigger as read back after it was made:
+    // {id, include_outside_rows, when, checked_at}.
+    { "name": "trigger", "type": "JSON" }
+  ],
+  "config": {}
+}

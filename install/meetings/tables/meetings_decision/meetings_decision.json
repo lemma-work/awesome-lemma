@@ -1,0 +1,21 @@
+{
+  // Something decided in a meeting, read from its transcript or the owner's
+  // notes, with the sentence it came from word for word. Promises made in a
+  // meeting go to the shared `promise` table instead.
+  "name": "meetings_decision",
+  "primary_key_column": "id",
+  "enable_rls": true,
+  "visibility": "POD",
+  "columns": [
+    { "name": "meeting_id", "type": "UUID", "required": true,
+      "foreign_key": { "references": "meeting.id" } },
+    { "name": "text", "type": "TEXT", "required": true, "max_length": 400 },
+    { "name": "quote", "type": "TEXT", "required": true, "max_length": 600 },
+    // Who said it, when the text shows a speaker.
+    { "name": "by_name", "type": "TEXT", "max_length": 200 },
+    { "name": "by_handle", "type": "TEXT", "max_length": 320 },
+    // dismissed: the person said it was not a decision.
+    { "name": "state", "type": "ENUM", "required": true, "default": "kept", "options": ["kept", "dismissed"] }
+  ],
+  "config": {}
+}

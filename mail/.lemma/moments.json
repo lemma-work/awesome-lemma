@@ -1,0 +1,374 @@
+{
+  "//": "The pictures on Mail's page on the website, taken from its Try it demo by `node _kit/bin/moments.mjs mail` into .lemma/moments/. listing.json names them by `name`.",
+  "captures": [
+    {
+      "name": "triage",
+      "alt": "Mail's Needs reply list: a conversation opens on its drafted reply, Done is pressed, and the next one opens",
+      "loop": true,
+      "cursor": true,
+      "route": "/needs",
+      "viewport": [
+        1184,
+        700
+      ],
+      "clip": {
+        "x": 0,
+        "y": 34,
+        "width": 1184,
+        "height": 666
+      },
+      "crf": 25,
+      "poster": 3.6,
+      "steps": [
+        {
+          "wait": 900
+        },
+        {
+          "click": ".m-row__open",
+          "nth": 0
+        },
+        {
+          "wait": 1300
+        },
+        {
+          "scroll": ".m-readerscroll",
+          "to": ".m-compose",
+          "ms": 1200
+        },
+        {
+          "wait": 1900
+        },
+        {
+          "click": ".m-readerbar .c-btn",
+          "text": "Done"
+        },
+        {
+          "wait": 1800
+        }
+      ],
+      "phone": {
+        "viewport": [
+          390,
+          720
+        ],
+        "before": [
+          {
+            "click": ".m-found button[aria-label='Dismiss']"
+          },
+          {
+            "mouse": [
+              4,
+              4
+            ]
+          }
+        ],
+        "clip": {
+          "selector": ".m-main",
+          "from": ".m-listhead"
+        },
+        "crf": 24
+      },
+      "window": "Needs reply"
+    },
+    {
+      "name": "connect",
+      "alt": "Mail's first screen: pick Gmail or Outlook, then read the last month",
+      "route": "/",
+      "viewport": [
+        380,
+        900
+      ],
+      "patch": {
+        "rows": [
+          {
+            "match": "from mail_settings",
+            "set": {
+              "setup_step": "connect",
+              "setup_run_id": null
+            }
+          }
+        ]
+      },
+      "clip": {
+        "selector": ".c-setup",
+        "from": ".m-provider",
+        "to": ".c-setup__row",
+        "pad": 16
+      }
+    },
+    {
+      "name": "categories",
+      "alt": "Set-up's categories step: each category is one sentence, with the ones found in the mail marked",
+      "route": "/",
+      "viewport": [
+        380,
+        1100
+      ],
+      "patch": {
+        "rows": [
+          {
+            "match": "from mail_settings",
+            "set": {
+              "setup_step": "categories",
+              "setup_run_id": "setup-sample"
+            }
+          }
+        ],
+        "fixtures": {
+          "pods/pod/workflow-runs/setup-sample": "@.lemma/moments.setup-run.json"
+        }
+      },
+      "clip": {
+        "selector": ".m-cats",
+        "pad": 14,
+        "height": 420
+      },
+      "bleed": "bottom"
+    },
+    {
+      "name": "drafts-waiting",
+      "alt": "The Needs reply list, most conversations with a draft ready",
+      "route": "/needs",
+      "viewport": [
+        380,
+        900
+      ],
+      "before": [
+        {
+          "click": ".m-found button[aria-label='Dismiss']"
+        },
+        {
+          "mouse": [
+            4,
+            4
+          ]
+        }
+      ],
+      "clip": {
+        "selector": ".m-rows",
+        "to": ".m-rows .m-row:nth-child(4)"
+      }
+    },
+    {
+      "name": "sorted",
+      "alt": "Needs reply, filtered by category: Fundraising, then Customers, then VIP",
+      "loop": true,
+      "cursor": true,
+      "route": "/needs",
+      "viewport": [
+        861,
+        520
+      ],
+      "before": [
+        {
+          "click": ".m-found button[aria-label='Dismiss']"
+        },
+        {
+          "mouse": [
+            4,
+            4
+          ]
+        }
+      ],
+      "clip": {
+        "x": 232,
+        "y": 96,
+        "width": 629,
+        "height": 352
+      },
+      "poster": 1.6,
+      "steps": [
+        {
+          "wait": 700
+        },
+        {
+          "click": ".m-tabs button",
+          "text": "Fundraising"
+        },
+        {
+          "wait": 1300
+        },
+        {
+          "click": ".m-tabs button",
+          "text": "Customers"
+        },
+        {
+          "wait": 1300
+        },
+        {
+          "click": ".m-tabs button",
+          "text": "VIP"
+        },
+        {
+          "wait": 1300
+        },
+        {
+          "click": ".m-tabs button",
+          "text": "All"
+        },
+        {
+          "wait": 900
+        }
+      ],
+      "phone": {
+        "viewport": [
+          390,
+          560
+        ],
+        "clip": {
+          "selector": ".m-main",
+          "from": ".m-listhead"
+        }
+      },
+      "window": "Needs reply"
+    },
+    {
+      "name": "drafted",
+      "alt": "A reply drafted in your voice, with why it was written that way",
+      "route": "/needs",
+      "viewport": [
+        1180,
+        1500
+      ],
+      "steps": [
+        {
+          "click": ".m-row__open",
+          "nth": 1
+        },
+        {
+          "wait": 1200
+        },
+        {
+          "scroll": ".m-readerscroll",
+          "to": ".m-compose",
+          "ms": 10
+        },
+        {
+          "click": ".m-compose button",
+          "text": "Why?"
+        },
+        {
+          "mouse": [
+            4,
+            4
+          ]
+        },
+        {
+          "wait": 400
+        }
+      ],
+      "clip": {
+        "selector": ".m-compose",
+        "pad": 14
+      },
+      "phone": {
+        "viewport": [
+          390,
+          2400
+        ],
+        "clip": {
+          "selector": ".m-compose",
+          "pad": 10
+        }
+      },
+      "window": "A reply, drafted"
+    },
+    {
+      "name": "promises",
+      "alt": "Promises: what you promised and what you're owed, each with the sentence it was made in",
+      "route": "/promises",
+      "viewport": [
+        861,
+        900
+      ],
+      "clip": {
+        "selector": ".m-ledger",
+        "pad": 14,
+        "height": 400
+      },
+      "bleed": "bottom",
+      "phone": {
+        "viewport": [
+          390,
+          1000
+        ],
+        "clip": {
+          "selector": ".m-ledger",
+          "pad": 10,
+          "height": 470
+        }
+      },
+      "window": "Promises"
+    },
+    {
+      "name": "unsure",
+      "alt": "Not sure: a conversation it couldn't place is put where it belongs, and the sort learns from it",
+      "loop": true,
+      "cursor": true,
+      "route": "/unsure",
+      "viewport": [
+        390,
+        560
+      ],
+      "clip": {
+        "selector": ".m-main",
+        "from": ".m-listhead"
+      },
+      "poster": 2.4,
+      "steps": [
+        {
+          "wait": 700
+        },
+        {
+          "click": ".m-row__open",
+          "nth": 1
+        },
+        {
+          "wait": 1600
+        },
+        {
+          "click": ".m-why--unsure .m-chip",
+          "text": "Waiting on them"
+        },
+        {
+          "wait": 2400
+        }
+      ],
+      "window": "Not sure"
+    },
+    {
+      "name": "team-voice",
+      "alt": "Categories in settings: which ones get drafts, and which are written in the team's brand voice",
+      "route": "/settings",
+      "viewport": [
+        861,
+        900
+      ],
+      "steps": [
+        {
+          "click": "[aria-label=\"Write Customers in the team's brand voice\"]"
+        },
+        {
+          "mouse": [
+            4,
+            4
+          ]
+        },
+        {
+          "wait": 300
+        }
+      ],
+      "clip": {
+        "selector": ".m-cattable",
+        "to": ".m-cattable tbody tr:nth-child(4)"
+      },
+      "phone": {
+        "viewport": [
+          390,
+          900
+        ]
+      },
+      "window": "Categories and settings"
+    }
+  ]
+}

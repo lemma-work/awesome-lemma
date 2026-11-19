@@ -1,0 +1,9 @@
+{
+  // A lead took a place (or was asked for past the limit): look them up.
+  "name": "leads-wanted",
+  "schedule_type": "DATASTORE",
+  "config": { "table_name": "leads_person", "operations": ["INSERT", "UPDATE"],
+              "when": { "state": { "to": "wanted" } }, "bulk_writes": "each" },
+  "workflow_name": "leads-lookup",
+  "is_active": true
+}

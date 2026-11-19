@@ -1,0 +1,24 @@
+{
+  // The morning check, run as the person: at the time they gave Today (their
+  // own TIME schedule, made by the app), once right after they give it, and
+  // when they press Check again. It writes the day as the morning note would
+  // say it. Then Today's block in /memory/AGENTS.md (today_memory): Today has
+  // no set-up run, so its first check is its set-up; later ones read two
+  // files, write nothing, and put the block back if something took it out.
+  "name": "today-sweep",
+  "description": "Write the person's day in a few lines from what needs them.",
+  "run_title": ["sweep.message"],
+  "start": { "type": "SCHEDULED", "config": { "schedule_type": "CRON" } },
+  "nodes": [
+    { "id": "sweep", "type": "FUNCTION", "label": "The day in a few lines",
+      "config": { "function_name": "today_sweep", "input_mapping": {} } },
+    { "id": "memory", "type": "FUNCTION", "label": "Tell this Lemma's agents about Today",
+      "config": { "function_name": "today_memory", "input_mapping": {
+        "remove": { "type": "literal", "value": false } } } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [
+    { "id": "e1", "source": "sweep", "target": "memory" },
+    { "id": "e2", "source": "memory", "target": "end" }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  // One card (slide) of a deck. The outline writes title, outline and layout;
+  // the writer fills `blocks` and `notes`. A rewrite bumps `version` and
+  // names the edit that made it (`edit_id`, a decks_job), so the app can show
+  // what a request changed and undo it.
+  //
+  // blocks: [{ "type": "heading", "text" } | { "type": "text", "text" }
+  //   | { "type": "bullets", "items": [{ "text", "icon" }] }
+  //   | { "type": "quote", "text", "attribution" }
+  //   | { "type": "stats", "items": [{ "value", "label", "icon", "source" }] }
+  //   | { "type": "columns", "columns": [{ "heading", "body", "icon" }] }
+  //   | { "type": "visual", "hint" }]
+  //
+  // A stat's `source` is where a figure that stays current plugs in: null
+  // today. When a Numbers plugin exists it sets { "plugin": "numbers",
+  // "metric": <its id>, "as_of": <when read> } and refreshes `value`; nothing
+  // here reads or writes it yet (README, "Figures that stay current").
+  "name": "decks_card",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "deck_id", "type": "UUID", "required": true, "foreign_key": { "references": "decks_deck.id" } },
+    // Order in the deck, 1-based.
+    { "name": "position", "type": "INTEGER", "required": true },
+    { "name": "title", "type": "TEXT", "max_length": 300 },
+    // What the card covers, one or two lines, from the outline.
+    { "name": "outline", "type": "TEXT", "max_length": 1000 },
+    { "name": "layout", "type": "ENUM", "required": true, "default": "prose",
+      "options": ["hero", "prose", "bullets", "two-column", "quote", "stats", "visual-left", "visual-right", "closing"] },
+    { "name": "blocks", "type": "JSON" },
+    // Speaker notes.
+    { "name": "notes", "type": "TEXT", "max_length": 4000 },
+    //   outline  title and outline only
+    //   writing  waiting for the writer
+    //   ready    written
+    //   failed   the writer failed; the outline stands
+    { "name": "status", "type": "ENUM", "required": true, "default": "outline",
+      "options": ["outline", "writing", "ready", "failed"] },
+    { "name": "version", "type": "INTEGER", "default": 0 },
+    { "name": "edit_id", "type": "UUID" }
+  ],
+  "config": {}
+}

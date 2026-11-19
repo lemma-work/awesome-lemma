@@ -1,0 +1,9 @@
+{
+  // The person kept or passed a lead: it leaves their day.
+  "name": "leads-needs-you-review",
+  "schedule_type": "DATASTORE",
+  "config": { "table_name": "leads_person", "operations": ["UPDATE"],
+              "when": { "review": { "changed": true } }, "bulk_writes": "each" },
+  "workflow_name": "leads-needs-you-on-review",
+  "is_active": true
+}

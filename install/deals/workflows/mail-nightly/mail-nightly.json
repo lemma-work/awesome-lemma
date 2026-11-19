@@ -1,0 +1,12 @@
+{
+  // Cheap and deterministic; kept off the hourly path because it scans every message.
+  "name": "mail-nightly",
+  "description": "Nightly: recompute who you deal with from your mail.",
+  "start": { "type": "SCHEDULED", "config": { "schedule_type": "CRON" } },
+  "nodes": [
+    { "id": "people", "type": "FUNCTION", "label": "Refresh people",
+      "config": { "function_name": "mail_people", "input_mapping": {} } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [ { "id": "e1", "source": "people", "target": "end" } ]
+}

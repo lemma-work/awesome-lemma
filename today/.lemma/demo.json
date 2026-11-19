@@ -1,0 +1,14 @@
+{
+  "anchor": "2026-11-18",
+  "zone": [
+    "Asia/Kolkata",
+    "Asia/Calcutta"
+  ],
+  "apps": [
+    {
+      "name": "today",
+      "label": "Today",
+      "start": "/"
+    }
+  ]
+}

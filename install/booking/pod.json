@@ -1,0 +1,19 @@
+{
+  "format_version": 4,
+  "name": "Booking page",
+  "description": "A page where people book your time. It fits around your calendars, and each booking arrives with a brief on who's coming. Brings Meetings with it.",
+  "variables": {
+    "meetings_slug": {
+      "type": "app_slug",
+      "source_value": "meetings",
+      "default": "meetings",
+      "description": "Public URL slug for the Meetings app (unique platform-wide; a suffix is added on collision)"
+    },
+    "booking_slug": {
+      "type": "app_slug",
+      "source_value": "booking",
+      "default": "booking",
+      "description": "Public URL slug for the booking page app (unique platform-wide; a suffix is added on collision)"
+    }
+  }
+}

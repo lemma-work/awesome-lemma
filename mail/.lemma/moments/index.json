@@ -1,0 +1,99 @@
+{
+  "triage": {
+    "kind": "loop",
+    "width": 1184,
+    "height": 666,
+    "alt": "Mail's Needs reply list: a conversation opens on its drafted reply, Done is pressed, and the next one opens",
+    "bleed": null,
+    "phone": {
+      "width": 390,
+      "height": 560,
+      "bleed": null
+    },
+    "window": "Needs reply"
+  },
+  "connect": {
+    "kind": "still",
+    "width": 380,
+    "height": 161,
+    "alt": "Mail's first screen: pick Gmail or Outlook, then read the last month",
+    "bleed": null,
+    "window": null
+  },
+  "categories": {
+    "kind": "still",
+    "width": 380,
+    "height": 420,
+    "alt": "Set-up's categories step: each category is one sentence, with the ones found in the mail marked",
+    "bleed": "bottom",
+    "window": null
+  },
+  "drafts-waiting": {
+    "kind": "still",
+    "width": 380,
+    "height": 294,
+    "alt": "The Needs reply list, most conversations with a draft ready",
+    "bleed": null,
+    "window": null
+  },
+  "sorted": {
+    "kind": "loop",
+    "width": 629,
+    "height": 352,
+    "alt": "Needs reply, filtered by category: Fundraising, then Customers, then VIP",
+    "bleed": null,
+    "window": "Needs reply",
+    "phone": {
+      "width": 390,
+      "height": 400,
+      "bleed": null
+    }
+  },
+  "drafted": {
+    "kind": "still",
+    "width": 596,
+    "height": 510,
+    "alt": "A reply drafted in your voice, with why it was written that way",
+    "bleed": null,
+    "phone": {
+      "width": 382,
+      "height": 701,
+      "bleed": null
+    },
+    "window": "A reply, drafted"
+  },
+  "promises": {
+    "kind": "still",
+    "width": 617,
+    "height": 400,
+    "alt": "Promises: what you promised and what you're owed, each with the sentence it was made in",
+    "bleed": "bottom",
+    "window": "Promises",
+    "phone": {
+      "width": 382,
+      "height": 470,
+      "bleed": "bottom"
+    }
+  },
+  "unsure": {
+    "kind": "loop",
+    "width": 390,
+    "height": 400,
+    "alt": "Not sure: a conversation it couldn't place is put where it belongs, and the sort learns from it",
+    "bleed": null,
+    "window": "Not sure"
+  },
+  "team-voice": {
+    "kind": "still",
+    "width": 589,
+    "height": 498,
+    "alt": "Categories in settings: which ones get drafts, and which are written in the team's brand voice",
+    "bleed": null,
+    "window": "Categories and settings",
+    "phone": {
+      "width": 376,
+      "height": 464,
+      "bleed": null
+    }
+  }
+}

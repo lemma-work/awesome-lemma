@@ -1,0 +1,36 @@
+{
+  // Started by `meetings-notes-wanted` when a meeting's notes_state becomes
+  // wanted (a transcript arrived, or the person wrote notes). Reads them for
+  // decisions and promises, each with its sentence.
+  "name": "meetings-read-notes",
+  "description": "Read one meeting's transcript or notes for what was decided and promised.",
+  "max_concurrent_runs": 4,
+  "start": { "type": "DATASTORE_EVENT", "config": { "table_name": "meetings_work", "operations": ["INSERT", "UPDATE"] } },
+  "nodes": [
+    { "id": "context", "type": "FUNCTION", "label": "Read what was said",
+      "config": { "function_name": "meetings_notes_context",
+        "input_mapping": { "meeting_id": { "type": "expression", "value": "start.metadata.record_id" } } } },
+    { "id": "read", "type": "AGENT", "label": "Find decisions and promises",
+      "config": { "agent_name": "meetings-notes-reader",
+        "input_mapping": {
+          "meeting": { "type": "expression", "value": "context.meeting" },
+          "me": { "type": "expression", "value": "context.me" },
+          "people": { "type": "expression", "value": "context.people" },
+          "kind": { "type": "expression", "value": "context.kind" },
+          "text": { "type": "expression", "value": "context.text" } } } },
+    { "id": "save", "type": "FUNCTION", "label": "Keep what is in the text",
+      "config": { "function_name": "meetings_save_notes",
+        "input_mapping": {
+          "meeting_id": { "type": "expression", "value": "start.metadata.record_id" },
+          "found": { "type": "expression", "value": "read" } } } },
+    { "id": "needs", "type": "FUNCTION", "label": "What needs you on the calendar",
+      "config": { "function_name": "meetings_needs_you", "input_mapping": {} } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [
+    { "id": "e1", "source": "context", "target": "read" },
+    { "id": "e2", "source": "read", "target": "save" },
+    { "id": "e3", "source": "save", "target": "needs" },
+    { "id": "e3n", "source": "needs", "target": "end" }
+  ]
+}

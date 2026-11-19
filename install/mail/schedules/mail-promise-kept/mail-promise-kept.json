@@ -1,0 +1,10 @@
+{
+  // A new message in a mail conversation: was an open promise in it kept?
+  // `changed` fires only on a write that moved last_message_at, never on a sort.
+  "name": "mail-promise-kept",
+  "schedule_type": "DATASTORE",
+  "config": { "table_name": "conversation", "operations": ["UPDATE"],
+              "when": { "source": "mail", "last_message_at": { "changed": true } }, "bulk_writes": "each" },
+  "workflow_name": "mail-promise-kept",
+  "is_active": true
+}

@@ -1,0 +1,31 @@
+{
+  // A visitor's request on someone's page. Started by that person's own
+  // trigger (booking-request-<user>, made by the app when they turn their
+  // page on: INSERT on booking_request, filtered to their page_id, taking rows
+  // from outside), so the run is theirs: their calendars, their Meetings.
+  //
+  //   confirm  take it or decline it (booking_confirm); a booking becomes a
+  //            Meetings meeting whose brief Meetings writes at once
+  //   slots    the page's open times again, without the one just taken
+  //   needs    the person's needs_you items (the call; anything not sure)
+  "name": "booking-confirm",
+  "description": "A new booking on someone's page: check it, create the event with its video link and the Meetings meeting with its brief, or decline it and email why.",
+  "max_concurrent_runs": 4,
+  "start": { "type": "DATASTORE_EVENT", "config": { "table_name": "booking_request", "operations": ["INSERT"] } },
+  "nodes": [
+    { "id": "confirm", "type": "FUNCTION", "label": "Take it or decline it",
+      "config": { "function_name": "booking_confirm", "input_mapping": {
+        "record_id": { "type": "expression", "value": "start.metadata.record_id" },
+        "row_author": { "type": "expression", "value": "start.metadata.row_author", "optional": true } } } },
+    { "id": "slots", "type": "FUNCTION", "label": "Open times again",
+      "config": { "function_name": "booking_slots", "input_mapping": {} } },
+    { "id": "needs", "type": "FUNCTION", "label": "What needs you",
+      "config": { "function_name": "booking_needs_you", "input_mapping": {} } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [
+    { "id": "e1", "source": "confirm", "target": "slots" },
+    { "id": "e2", "source": "slots", "target": "needs" },
+    { "id": "e3", "source": "needs", "target": "end" }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  // The same handshake after a meeting, for the notes reader.
+  "name": "meetings-notes-wanted",
+  "schedule_type": "DATASTORE",
+  "config": {
+    "table_name": "meetings_work",
+    "operations": ["INSERT", "UPDATE"],
+    "when": { "notes_state": { "to": "wanted" } },
+    "bulk_writes": "each"
+  },
+  "workflow_name": "meetings-read-notes",
+  "is_active": true
+}

@@ -1,0 +1,1 @@
+- Tasks is installed: each person's private list and the team's projects. Add a task with `tasks_add`; how to use the rest: `/memory/plugins/tasks.md`.

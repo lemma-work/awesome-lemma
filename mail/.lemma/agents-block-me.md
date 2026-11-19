@@ -1,0 +1,1 @@
+- Your mail is in Mail. Anything written in your name follows your voice: `voice` in your `mail_settings` row. Mail never sends without you.

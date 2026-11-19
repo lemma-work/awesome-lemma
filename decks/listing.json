@@ -1,0 +1,28 @@
+{
+  "name": "Deck maker",
+  "line": "sales",
+  "position": 10,
+  "job": "A deck from one sentence, edited by asking",
+  "intro": "Write one sentence. Deck maker drafts an outline for you to approve, writes the cards one by one in your brand, changes only the cards you ask about, and exports to PowerPoint.",
+  "does": [
+    "Takes your brand from Brand kit, or one of four themes.",
+    "Changes only the cards a request is about, and every change can be undone.",
+    "Presents in the browser, prints to PDF, or exports a PowerPoint file."
+  ],
+  "jobs": ["SALES", "MARKETING", "FOUNDER"],
+  "accounts": [],
+  "setup": [
+    "Choose how your decks look: your brand, or one of four themes.",
+    "Write one sentence for your first deck, or look around with a sample."
+  ],
+  "today": [
+    { "verb": "decide", "line": "An outline waiting for your approval" },
+    { "verb": "decide", "line": "An edit where it was not sure which cards you meant" },
+    { "verb": "do", "line": "A deck that is ready and not yet opened" }
+  ],
+  "pictures": [
+    { "shot": "decks", "caption": "Your decks, and a new one from a sentence" },
+    { "shot": "decks-editor", "caption": "Ask for a change: only that card is rewritten" },
+    { "shot": "decks-present", "caption": "Present it straight from the browser" }
+  ]
+}

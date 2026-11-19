@@ -1,0 +1,22 @@
+{
+  // Another plugin (Today: the person's Draft a nudge) asked Mail for a nudge on
+  // one of Mail's items: Mail's own draft request, written by the writer in the
+  // person's voice. Started by mail-needs-you-nudge, as the item's owner.
+  "name": "mail-needs-you-on-nudge",
+  "description": "Draft the nudge someone asked for on one of Mail's needs_you items.",
+  "max_concurrent_runs": 4,
+  "start": { "type": "DATASTORE_EVENT", "config": { "table_name": "needs_you", "operations": ["UPDATE"] } },
+  "nodes": [
+    { "id": "nudge", "type": "FUNCTION", "label": "Draft the nudge",
+      "config": { "function_name": "mail_thread_action",
+        "input_mapping": {
+          "conversation_ids": { "type": "expression", "value": "[start.payload.conversation_id]" },
+          "action": { "type": "literal", "value": "draft" },
+          "kind": { "type": "literal", "value": "follow_up" },
+          "hint": { "type": "expression", "value": "start.payload.request_hint", "optional": true } } } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [
+    { "id": "e1", "source": "nudge", "target": "end" }
+  ]
+}

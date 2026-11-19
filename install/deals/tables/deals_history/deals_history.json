@@ -1,0 +1,29 @@
+{
+  // What happened to a deal, field by field: who changed what, when, and how
+  // (kept from a conversation or a meeting, by hand, pasted, the sample).
+  // Team-wide, so the team sees a deal's history; never the sentence or the
+  // subject, only who it was with.
+  "name": "deals_history",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "deal_id", "type": "UUID", "required": true },
+    // created, stage, amount, close_date, next_step, owner, lost, won,
+    // name, people, company.
+    { "name": "field", "type": "TEXT", "required": true, "max_length": 32 },
+    { "name": "from_value", "type": "JSON" },
+    { "name": "to_value", "type": "JSON" },
+    { "name": "by_user_id", "type": "USER" },
+    { "name": "by_name", "type": "TEXT", "max_length": 200 },
+    // proposal (kept), person (by hand), spreadsheet, sample.
+    { "name": "how", "type": "ENUM", "required": true, "default": "person",
+      "options": ["proposal", "person", "spreadsheet", "sample"] },
+    // For a kept proposal: mail, meeting, ... and with whom.
+    { "name": "source", "type": "TEXT", "max_length": 32 },
+    { "name": "with_name", "type": "TEXT", "max_length": 200 },
+    // When it happened (the sentence's time for a kept proposal).
+    { "name": "at", "type": "DATETIME", "required": true }
+  ],
+  "config": {}
+}

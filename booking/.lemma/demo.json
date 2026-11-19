@@ -1,0 +1,20 @@
+{
+  "anchor": "2026-11-18T13:15:00Z",
+  "zone": [
+    "Europe/London"
+  ],
+  "apps": [
+    {
+      "name": "booking",
+      "label": "Your bookings",
+      "start": "/"
+    },
+    {
+      "name": "page",
+      "source": "booking",
+      "label": "Your page",
+      "start": "/sam-rivera",
+      "query": "?k=pk_sample_demo"
+    }
+  ]
+}

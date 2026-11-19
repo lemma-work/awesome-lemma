@@ -1,0 +1,15 @@
+{
+  "anchor": "2026-11-18T11:21:00Z",
+  "zone": [
+    "Asia/Kolkata",
+    "Asia/Calcutta"
+  ],
+  "apps": [
+    {
+      "name": "tasks",
+      "label": "Tasks",
+      "start": "/"
+    }
+  ],
+  "notes": {}
+}

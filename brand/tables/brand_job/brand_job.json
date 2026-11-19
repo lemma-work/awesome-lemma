@@ -1,0 +1,35 @@
+{
+  // Work for the Lemma's own assistant: read the brand from a website or from
+  // uploaded files, make a design, or make a new version of one. A row added
+  // with state "wanted" starts the brand-job workflow (a workflow run takes no
+  // input, so the row is the input); its AGENT step is the assistant, as the
+  // person who asked. The app watches the row's `activity`.
+  "name": "brand_job",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "kind", "type": "ENUM", "required": true, "options": ["read", "make", "revise"] },
+    { "name": "state", "type": "ENUM", "required": true, "default": "wanted", "options": ["wanted", "working", "done", "failed"] },
+    { "name": "brand_id", "type": "UUID", "foreign_key": { "references": "brand.id" } },
+    { "name": "design_id", "type": "UUID", "foreign_key": { "references": "brand_design.id" } },
+    // For a read: website or files, and the address or the folder.
+    { "name": "source", "type": "TEXT", "max_length": 32 },
+    { "name": "source_ref", "type": "TEXT", "max_length": 1000 },
+    // For a design: what was asked for.
+    { "name": "prompt", "type": "TEXT", "max_length": 4000 },
+    // The live line people watch ("Reading the stylesheets").
+    { "name": "activity", "type": "TEXT", "max_length": 400 },
+    { "name": "error", "type": "TEXT", "max_length": 2000 },
+    // The assistant's last message: what it found, and what a person should check.
+    { "name": "note", "type": "TEXT", "max_length": 2000 },
+    // The brand's state before a read, put back if the read fails.
+    { "name": "brand_state_before", "type": "TEXT", "max_length": 16 },
+    { "name": "requested_by", "type": "USER" },
+    { "name": "requested_name", "type": "TEXT", "max_length": 200 },
+    { "name": "workflow_run_id", "type": "UUID" },
+    { "name": "started_at", "type": "DATETIME" },
+    { "name": "finished_at", "type": "DATETIME" }
+  ],
+  "config": {}
+}

@@ -1,0 +1,35 @@
+# Dependencies
+node_modules/
+
+# Local Lemma bindings: a server, an organization and a Lemma's ids.
+# bin/lemma reads them; they are never committed.
+.lemma.env
+.lemma.*.env
+.lemma.env.local
+.lemma.*.env.local
+
+# Local state: bench run output, scratch notes, caches
+local/
+.cache/
+_kit/.cache/
+*.log
+
+# Builds the server or a script makes again. install/<plugin>/ is committed:
+# it is the folder a Lemma installs from, and holds sources only.
+_build/out/
+*/apps/*/source/dist/
+*/apps/*/dist.zip
+*.zip
+*.tsbuildinfo
+.vite/
+__pycache__/
+*.pyc
+
+# OS and editor files
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*~
+.idea/
+.vscode/

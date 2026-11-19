@@ -1,0 +1,21 @@
+{
+  // The team's stages, in order. Team-wide. Proposed at set-up (Lead,
+  // Talking, Proposal, Negotiating, Won, Lost) and edited by the first person
+  // who sets Deal tracker up; anyone can change them later. A deal names its
+  // stage by `name`; renaming a stage renames it on every deal.
+  "name": "deals_stage",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "name", "type": "TEXT", "required": true, "max_length": 80 },
+    { "name": "position", "type": "INTEGER", "required": true, "default": 0 },
+    // open: still being worked. won and lost close a deal.
+    { "name": "kind", "type": "ENUM", "required": true, "default": "open",
+      "options": ["open", "won", "lost"] },
+    // What reaching it means, in one sentence. The reader and the extractor
+    // read it to tell when a conversation moves a deal here.
+    { "name": "meaning", "type": "TEXT", "max_length": 300 }
+  ],
+  "config": {}
+}

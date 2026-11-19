@@ -1,0 +1,14 @@
+{
+  // A note on a deal, for the team. Team-wide.
+  "name": "deals_note",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "deal_id", "type": "UUID", "required": true },
+    { "name": "body", "type": "TEXT", "required": true, "max_length": 4000 },
+    { "name": "by_user_id", "type": "USER" },
+    { "name": "by_name", "type": "TEXT", "max_length": 200 }
+  ],
+  "config": {}
+}

@@ -1,0 +1,19 @@
+{
+  // The person moved a conversation the sort had placed: a different category,
+  // or a different thing to do. The newest twenty are sent with every read as
+  // worked examples, so the sort learns from being corrected.
+  "name": "mail_correction",
+  "primary_key_column": "id",
+  "enable_rls": true,
+  "visibility": "POD",
+  "columns": [
+    { "name": "conversation_id", "type": "UUID" },
+    { "name": "from_category", "type": "TEXT", "max_length": 64 },
+    { "name": "to_category", "type": "TEXT", "max_length": 64 },
+    { "name": "from_state", "type": "TEXT", "max_length": 32 },
+    { "name": "to_state", "type": "TEXT", "max_length": 32 },
+    // What the read saw, kept short: examples are capped at 32 KiB in all.
+    { "name": "evidence", "type": "TEXT", "max_length": 1600 }
+  ],
+  "config": {}
+}

@@ -1,0 +1,6 @@
+{
+  "connector": "outlook",
+  "mode": "PER_MEMBER",
+  "required": false,
+  "purpose": "Meetings: Reads your Outlook calendar: the next two weeks for briefs, the last month for what was said. Never adds, changes or answers an event. Booking page: Checks your Outlook calendar's busy times so your page offers only free times, checks again before each booking, adds the booked call with a Teams link (work or school accounts), and emails a person whose booking could not be taken why."
+}

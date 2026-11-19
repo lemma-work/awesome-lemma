@@ -1,0 +1,6 @@
+{
+  "name": "inbox",
+  "description": "Your mail sorted into your own categories, what each conversation needs, the replies drafted in your voice, and the promises made either way. Gmail or Outlook. Nothing sends without you.",
+  "public_slug": "${inbox_slug}",
+  "visibility": "POD"
+}

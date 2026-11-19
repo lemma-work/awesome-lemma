@@ -1,0 +1,32 @@
+{
+  // One version of a design, and its brand check: "Does this design follow
+  // the brand?", asked before the design is shown, with the rule it broke.
+  "name": "brand_version",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "design_id", "type": "UUID", "required": true, "foreign_key": { "references": "brand_design.id" } },
+    { "name": "version", "type": "INTEGER", "required": true },
+    { "name": "artifact_path", "type": "FILE_PATH" },
+    { "name": "preview_path", "type": "FILE_PATH" },
+    // What this version was asked for, and what the maker said about it.
+    { "name": "prompt", "type": "TEXT", "max_length": 4000 },
+    { "name": "note", "type": "TEXT", "max_length": 1000 },
+    //   follows  on brand
+    //   breaks   broke a rule (broke)
+    //   unsure   the call was under 0.5; a person says
+    { "name": "verdict", "type": "ENUM", "options": ["follows", "breaks", "unsure"] },
+    { "name": "broke", "type": "ENUM", "options": ["none", "colour", "type", "logo", "contrast", "voice", "other"] },
+    // The sentence shown with it ("Uses #e11d48, which isn't one of the brand's colours").
+    { "name": "reason", "type": "TEXT", "max_length": 600 },
+    { "name": "confidence", "type": "FLOAT" },
+    // What was measured in the design: colours and their nearest brand
+    // colour, faces, the logo file, the words.
+    { "name": "measured", "type": "JSON" },
+    { "name": "judged_by", "type": "ENUM", "options": ["lemma", "person"] },
+    // What the call saw, kept so a fix becomes an example.
+    { "name": "evidence", "type": "TEXT", "max_length": 6000 }
+  ],
+  "config": {}
+}

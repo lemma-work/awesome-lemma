@@ -1,0 +1,43 @@
+{
+  // The Lemma's own assistant working a task. Started by tasks_on_task (the
+  // hand-over), which submits the brief form at once, so the run never waits
+  // on a person there: a function cannot open a conversation with the
+  // assistant itself (agent.execute on it is checked against the pod, which
+  // no workload can be granted), but an AGENT step runs it as the run's
+  // person. The step's conversation is the task's spine: the agent reports on
+  // the task with tasks_report, and a reply on the task is sent into it by the
+  // app (as the person). Only the first turn is watched here.
+  "name": "tasks-agent",
+  "description": "The Lemma's own assistant works one task, with the task as its brief, reporting on the task.",
+  "run_title": ["brief.task_id"],
+  "start": { "type": "MANUAL" },
+  "nodes": [
+    { "id": "brief", "type": "FORM", "label": "The task",
+      "config": { "input_schema": {
+        "type": "object",
+        "properties": {
+          "task_id": { "type": "string", "title": "Task" },
+          "scope": { "type": "string", "enum": ["personal", "team"], "title": "Whose" },
+          "brief": { "type": "string", "title": "Brief" }
+        },
+        "required": ["task_id", "brief"]
+      } } },
+    { "id": "work", "type": "AGENT", "label": "Work the task",
+      "config": { "agent_name": "pod_default",
+        "instructions": "You are working one task from Tasks, this Lemma's task list, for the person who handed it to you; the message is your brief. Report only on the task, with the function tasks_report and the task_id in the brief: progress for a short note; question for something only the person can answer, then stop; approval before you send or change anything outside this Lemma (say what, to whom, and the full text), then stop and do it only after a reply approves it; result for the finished work in full, which finishes the task. The person does not see your chat replies. End every turn with exactly one question, approval or result. Files you make go under /tasks/<task id>/; list them in the report's files (they show as links), not in its text.",
+        "input_mapping": { "brief": { "type": "expression", "value": "brief.brief" } } } },
+    { "id": "turn_end", "type": "FUNCTION", "label": "After the first turn",
+      "config": { "function_name": "tasks_turn_end", "input_mapping": {
+        "task_id": { "type": "expression", "value": "brief.task_id" },
+        "answer": { "type": "expression", "value": "work.answer", "optional": true } } } },
+    { "id": "needs_you", "type": "FUNCTION", "label": "What needs you now",
+      "config": { "function_name": "tasks_needs_you", "input_mapping": {} } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [
+    { "id": "e1", "source": "brief", "target": "work" },
+    { "id": "e2", "source": "work", "target": "turn_end" },
+    { "id": "e3", "source": "turn_end", "target": "needs_you" },
+    { "id": "e4", "source": "needs_you", "target": "end" }
+  ]
+}

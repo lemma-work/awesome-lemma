@@ -1,0 +1,45 @@
+{
+  // Reads one meeting's transcript or the owner's notes for what happened,
+  // what was decided and what was promised either way, each with the
+  // sentence it came from. No tools; it returns JSON and meetings_save_notes
+  // keeps only what it can find in the text word for word.
+  "name": "meetings-notes-reader",
+  "description": "Reads a meeting's transcript or notes for what was decided and what was promised either way, each with its sentence. Returns JSON; writes nothing itself.",
+  "visibility": "POD",
+  "toolsets": [],
+  "instruction": { "$file": "instruction.md" },
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "summary": { "type": "string", "description": "Two or three plain sentences: what the meeting was about and where it landed." },
+      "decisions": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "text": { "type": "string", "description": "What was decided, under 90 characters." },
+            "quote": { "type": "string", "description": "The one sentence it was decided in, copied word for word, without the speaker's name." },
+            "by": { "type": ["string", "null"], "description": "The speaker's name as the text gives it, or null." }
+          },
+          "required": ["text", "quote"]
+        }
+      },
+      "promises": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "direction": { "type": "string", "enum": ["i_owe", "owed_to_me"] },
+            "other_person": { "type": ["string", "null"], "description": "The email of the other side: who the owner promised, or who promised the owner." },
+            "text": { "type": "string", "description": "What was promised, under 90 characters, starting with a verb." },
+            "quote": { "type": "string", "description": "The one sentence that made it, copied word for word, without the speaker's name." },
+            "due": { "type": ["string", "null"], "description": "YYYY-MM-DD when a day is stated or clearly implied, else null." }
+          },
+          "required": ["direction", "text", "quote"]
+        }
+      }
+    },
+    "required": ["summary", "decisions", "promises"]
+  },
+  "permissions": { "grants": [] }
+}

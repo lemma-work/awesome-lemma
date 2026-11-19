@@ -1,0 +1,110 @@
+{
+  // A person's set-up, one run each, started by the Booking app the first time
+  // they open it, once Meetings is set up (Meetings reads the calendars). The
+  // app is the screen for its four forms; each waits for that person.
+  //
+  //   calendars  which of Meetings' calendars the page keeps clear of
+  //   propose    hours, call length, buffer, notice, how far ahead and a daily
+  //              limit, counted from how those calendars are used (no model)
+  //   hours      the person keeps or changes them
+  //   page       the page's address (its handle) and one line about them
+  //   video      Google Meet, Teams (Outlook) or none; which calendar the
+  //              event goes on; where a decline is emailed from
+  //   save       settings and the page; then its first open times
+  //
+  // The app then turns the page on: it opens booking_request to confirmed
+  // visitors, makes the Lemma's web widget if there is none, and makes this
+  // person's own trigger (taking rows from outside, checked after) and their
+  // 15-minute refresh.
+  "name": "booking-setup",
+  "description": "Set up one person's booking page: which calendars to keep clear of, when they take calls (proposed from how their calendar is used), the page's address and a line about them, and the video link.",
+  "start": { "type": "MANUAL" },
+  "nodes": [
+    { "id": "calendars", "type": "FORM", "label": "Which calendars to keep clear of",
+      "config": { "input_schema": {
+        "type": "object",
+        "properties": {
+          "calendar_ids": { "type": "array", "title": "Keep clear of", "uniqueItems": true, "items": { "type": "string" } }
+        },
+        "required": ["calendar_ids"]
+      } } },
+    { "id": "propose", "type": "FUNCTION", "label": "Read how your calendar is used",
+      "config": { "function_name": "booking_propose", "input_mapping": {
+        "calendar_ids": { "type": "expression", "value": "calendars.calendar_ids" } } } },
+    { "id": "hours", "type": "FORM", "label": "When you take calls",
+      "config": { "input_schema": {
+        "type": "object",
+        "properties": {
+          "days": { "type": "array", "title": "Days", "uniqueItems": true, "items": { "type": "integer", "minimum": 0, "maximum": 6 },
+            "default": { "type": "expression", "value": "propose.days" } },
+          "day_starts": { "type": "string", "title": "From", "default": { "type": "expression", "value": "propose.day_starts" } },
+          "day_ends": { "type": "string", "title": "Until", "default": { "type": "expression", "value": "propose.day_ends" } },
+          "minutes": { "type": "integer", "title": "Call length", "default": { "type": "expression", "value": "propose.minutes" } },
+          "buffer_minutes": { "type": "integer", "title": "Buffer", "default": { "type": "expression", "value": "propose.buffer_minutes" } },
+          "notice_hours": { "type": "integer", "title": "Notice", "default": { "type": "expression", "value": "propose.notice_hours" } },
+          "days_ahead": { "type": "integer", "title": "How far ahead", "default": { "type": "expression", "value": "propose.days_ahead" } },
+          "max_per_day": { "type": "integer", "title": "Daily limit", "default": { "type": "expression", "value": "propose.max_per_day" } }
+        },
+        "required": ["days", "day_starts", "day_ends", "minutes", "buffer_minutes", "notice_hours", "days_ahead", "max_per_day"]
+      } } },
+    { "id": "page", "type": "FORM", "label": "Your page",
+      "config": { "input_schema": {
+        "type": "object",
+        "properties": {
+          "handle": { "type": "string", "title": "Address", "default": { "type": "expression", "value": "propose.handle" } },
+          "name": { "type": "string", "title": "Name", "default": { "type": "expression", "value": "propose.name" } },
+          "about": { "type": "string", "title": "One line about you" },
+          "more": { "type": "string", "title": "What calls with you are for" }
+        },
+        "required": ["handle", "name"]
+      } } },
+    { "id": "video", "type": "FORM", "label": "The video link",
+      "config": { "input_schema": {
+        "type": "object",
+        "properties": {
+          "video": { "type": "string", "enum": ["google_meet", "teams", "none"], "title": "Video",
+            "default": { "type": "expression", "value": "propose.video" } },
+          "event_calendar": { "type": "string", "title": "Add bookings to",
+            "default": { "type": "expression", "value": "propose.event_calendar" } },
+          "mail_connector": { "type": "string", "enum": ["gmail", "outlook", "none"], "title": "Email a declined booking from" },
+          "mail_account_id": { "type": "string", "title": "Mail account" },
+          "mail_address": { "type": "string", "title": "Mail address" }
+        },
+        "required": ["video", "event_calendar"]
+      } } },
+    { "id": "save", "type": "FUNCTION", "label": "Keep your page",
+      "config": { "function_name": "booking_save", "input_mapping": {
+        "calendars": { "type": "expression", "value": "calendars.calendar_ids" },
+        "event_calendar": { "type": "expression", "value": "video.event_calendar" },
+        "days": { "type": "expression", "value": "hours.days" },
+        "day_starts": { "type": "expression", "value": "hours.day_starts" },
+        "day_ends": { "type": "expression", "value": "hours.day_ends" },
+        "minutes": { "type": "expression", "value": "hours.minutes" },
+        "buffer_minutes": { "type": "expression", "value": "hours.buffer_minutes" },
+        "notice_hours": { "type": "expression", "value": "hours.notice_hours" },
+        "days_ahead": { "type": "expression", "value": "hours.days_ahead" },
+        "max_per_day": { "type": "expression", "value": "hours.max_per_day" },
+        "handle": { "type": "expression", "value": "page.handle" },
+        "name": { "type": "expression", "value": "page.name" },
+        "about": { "type": "expression", "value": "page.about", "optional": true },
+        "more": { "type": "expression", "value": "page.more", "optional": true },
+        "video": { "type": "expression", "value": "video.video" },
+        "mail_connector": { "type": "expression", "value": "video.mail_connector", "optional": true },
+        "mail_account_id": { "type": "expression", "value": "video.mail_account_id", "optional": true },
+        "mail_address": { "type": "expression", "value": "video.mail_address", "optional": true },
+        "setup": { "type": "literal", "value": true } } } },
+    { "id": "slots", "type": "FUNCTION", "label": "Work out your open times",
+      "config": { "function_name": "booking_slots", "input_mapping": {
+        "force": { "type": "literal", "value": true } } } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [
+    { "id": "e1", "source": "calendars", "target": "propose" },
+    { "id": "e2", "source": "propose", "target": "hours" },
+    { "id": "e3", "source": "hours", "target": "page" },
+    { "id": "e4", "source": "page", "target": "video" },
+    { "id": "e5", "source": "video", "target": "save" },
+    { "id": "e6", "source": "save", "target": "slots" },
+    { "id": "e7", "source": "slots", "target": "end" }
+  ]
+}

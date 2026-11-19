@@ -1,0 +1,56 @@
+[
+ {
+  "key": "vip",
+  "name": "VIP",
+  "sentence": "People I have marked VIP: the few who matter most to me.",
+  "kind": "system"
+ },
+ {
+  "key": "people",
+  "name": "People",
+  "sentence": "Real people writing to me who do not fit a more specific category.",
+  "kind": "system"
+ },
+ {
+  "key": "fundraising",
+  "name": "Investors",
+  "sentence": "Mail with venture firms and angels about our seed round: term sheets, diligence, intros to investors and the monthly investor update.",
+  "kind": "custom"
+ },
+ {
+  "key": "customers",
+  "name": "Customers",
+  "sentence": "Mail from companies that use the product about bug reports, renewals, onboarding calls and invoice or seat count questions.",
+  "kind": "custom"
+ },
+ {
+  "key": "hiring",
+  "name": "Hiring",
+  "sentence": "Candidates applying or following up, and the recruiters and agencies I work with on our open roles.",
+  "kind": "custom"
+ },
+ {
+  "key": "finance",
+  "name": "Finance",
+  "sentence": "Our accountant, tax and VAT, and invoices or payments a customer or supplier questions.",
+  "kind": "custom"
+ },
+ {
+  "key": "updates",
+  "name": "Updates",
+  "sentence": "Receipts, notifications, alerts, calendar and account mail from services.",
+  "kind": "system"
+ },
+ {
+  "key": "newsletters",
+  "name": "Newsletters",
+  "sentence": "Newsletters, digests and product marketing I signed up for.",
+  "kind": "system"
+ },
+ {
+  "key": "cold",
+  "name": "Cold",
+  "sentence": "Strangers selling something, recruiters, and pitches asking for my time.",
+  "kind": "system"
+ }
+]

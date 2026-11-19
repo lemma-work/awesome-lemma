@@ -1,0 +1,36 @@
+{
+  // One row per person: which meetings get a brief and when, where the notes
+  // come from, and where their set-up got to.
+  "name": "meetings_settings",
+  "primary_key_column": "id",
+  "enable_rls": true,
+  "visibility": "POD",
+  "columns": [
+    { "name": "display_name", "type": "TEXT", "max_length": 200 },
+    { "name": "timezone", "type": "TEXT", "max_length": 64, "default": "UTC" },
+    // The person's own email domains: a meeting with only these is internal.
+    { "name": "my_domains", "type": "JSON" },
+    // Kinds of meeting that get a brief: customer, investor, candidate,
+    // partner, internal, other. Internal and other start off.
+    { "name": "kinds_on", "type": "JSON" },
+    // When a brief is written: the evening before (18:00 the day before, the
+    // person's time) or an hour before.
+    { "name": "brief_when", "type": "ENUM", "required": true, "default": "evening_before",
+      "options": ["evening_before", "hour_before"] },
+    // Where what was said comes from after a meeting: Google Meet's
+    // transcript, notes the person writes, or nothing.
+    { "name": "notes_from", "type": "ENUM", "required": true, "default": "notes",
+      "options": ["meet", "notes", "skip"] },
+    { "name": "meet_account_id", "type": "TEXT", "max_length": 64 },
+    // start -> connect -> reading -> kinds -> timing -> after -> done.
+    { "name": "setup_step", "type": "ENUM", "required": true, "default": "start",
+      "options": ["start", "connect", "reading", "kinds", "timing", "after", "done"] },
+    { "name": "setup_run_id", "type": "TEXT", "max_length": 64 },
+    { "name": "setup_done_at", "type": "DATETIME" },
+    // What the first read found, for the set-up's screens.
+    { "name": "setup_summary", "type": "JSON" },
+    // Schedules made for this person when they turned it on: name -> id.
+    { "name": "schedules", "type": "JSON" }
+  ],
+  "config": {}
+}

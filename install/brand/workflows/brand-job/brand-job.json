@@ -1,0 +1,40 @@
+{
+  // One brand job for the Lemma's own assistant: read the brand, make a
+  // design, or make the next version of one. Started by the
+  // `brand-job-wanted` schedule when a `brand_job` row is added wanted (a run
+  // takes no input, so the row is the input), as the person who asked.
+  //
+  // A function cannot start the assistant (agent.execute on it is checked
+  // against the pod, which no workload can be granted), but a workflow's AGENT
+  // step runs it as the run's person: that is the step below.
+  "name": "brand-job",
+  "description": "The Lemma's assistant does one Brand kit job: reads the team's brand from its website or files, or makes a design in it, checked against the brand.",
+  "run_title": ["start.metadata.record_id"],
+  "max_concurrent_runs": 3,
+  "start": { "type": "DATASTORE_EVENT", "config": { "table_name": "brand_job", "operations": ["INSERT"] } },
+  "nodes": [
+    { "id": "begin", "type": "FUNCTION", "label": "Take the job, write the brief",
+      "config": { "function_name": "brand_job_start", "input_mapping": {
+        "job_id": { "type": "expression", "value": "start.metadata.record_id" } } } },
+    { "id": "route", "type": "DECISION", "label": "Still wanted?",
+      "config": { "rules": [
+        { "condition": "begin.skip == `true`", "next_node_id": "end" }
+      ] } },
+    { "id": "work", "type": "AGENT", "label": "Do the job",
+      "config": { "agent_name": "pod_default",
+        "instructions": "You are doing one Brand kit job for this Lemma, unattended: nobody is in this conversation and nobody will answer, so never call ask_user or request_approval, and never delete files. The message is your brief, with the playbook to follow in full. Use the Brand kit functions it names, with the job_id it gives, and keep the job's activity line current. Never invent a colour, a face, a logo or a fact. Finish within ten minutes. End with two or three lines: what you did, and anything a person should check.",
+        "input_mapping": { "brief": { "type": "expression", "value": "begin.brief" } } } },
+    { "id": "finish", "type": "FUNCTION", "label": "Close the job",
+      "config": { "function_name": "brand_job_end", "input_mapping": {
+        "job_id": { "type": "expression", "value": "start.metadata.record_id" },
+        "answer": { "type": "expression", "value": "work.answer", "optional": true } } } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [
+    { "id": "e1", "source": "begin", "target": "route" },
+    { "id": "e2", "source": "route", "target": "work", "label": "wanted (the default: listed first)" },
+    { "id": "e3", "source": "route", "target": "end", "label": "not wanted any more" },
+    { "id": "e4", "source": "work", "target": "finish" },
+    { "id": "e5", "source": "finish", "target": "end" }
+  ]
+}

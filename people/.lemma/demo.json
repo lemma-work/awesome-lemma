@@ -1,0 +1,22 @@
+{
+  "anchor": "2026-11-18T09:48:00Z",
+  "zone": [
+    "Asia/Kolkata",
+    "Asia/Calcutta"
+  ],
+  "apps": [
+    {
+      "name": "people",
+      "label": "People",
+      "start": "/"
+    },
+    {
+      "name": "companies",
+      "label": "Companies",
+      "start": "/"
+    }
+  ],
+  "notes": {
+    "people-refresh": "In the demo nothing is counted again. In a Lemma, warmth, last contact and the next meeting are counted every hour, and anyone new is read once."
+  }
+}

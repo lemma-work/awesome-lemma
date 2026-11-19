@@ -1,0 +1,63 @@
+{
+  // One conversation, from any place a person works: an email thread, a
+  // Slack thread or DM, a Teams chat, a WhatsApp chat. And what was read from
+  // it: what the owner needs to do, how soon, which of their categories.
+  //
+  // Shared definition (plugins/_contract), first written by Mail. Carried
+  // unchanged by every plugin that uses it; _contract/lint.py fails on any
+  // difference. Nothing here belongs to one provider: a source's own working
+  // state (mailbox, labels, sync cursor) lives in that plugin's own table,
+  // whose row id is this conversation's id.
+  "name": "conversation",
+  "primary_key_column": "id",
+  "enable_rls": true,
+  "visibility": "POD",
+  "columns": [
+    // Where it happened: mail, slack, teams, whatsapp, ...
+    { "name": "source", "type": "TEXT", "required": true, "max_length": 32 },
+    // Which connected account it came through, as the source plugin names it
+    // (Mail: its mailbox row id).
+    { "name": "source_account", "type": "TEXT", "required": true, "max_length": 64 },
+    // The provider's own id for the conversation (a Gmail thread id, an
+    // Outlook conversation id, a Slack channel and thread).
+    { "name": "source_id", "type": "TEXT", "required": true, "max_length": 400 },
+    // Where it happened, the way a person would say it: an address, #channel.
+    { "name": "place", "type": "TEXT", "max_length": 200 },
+    { "name": "subject", "type": "TEXT", "max_length": 500 },
+    // Preview of the newest message.
+    { "name": "snippet", "type": "TEXT", "max_length": 400 },
+    // Every handle on it (person_handle.handle values).
+    { "name": "participants", "type": "JSON" },
+    // The person on the other side: the newest sender who is not the owner,
+    // or the first recipient when the owner wrote last.
+    { "name": "counterpart_handle", "type": "TEXT", "max_length": 320 },
+    { "name": "counterpart_name", "type": "TEXT", "max_length": 200 },
+    { "name": "last_message_at", "type": "DATETIME" },
+    { "name": "last_inbound_at", "type": "DATETIME" },
+    { "name": "last_outbound_at", "type": "DATETIME" },
+    { "name": "last_direction", "type": "ENUM", "options": ["inbound", "outbound"] },
+    { "name": "message_count", "type": "INTEGER", "default": 0 },
+    { "name": "has_attachments", "type": "BOOLEAN", "default": false },
+    // people: real people talking. broadcast: newsletters, notifications,
+    // bots, announcements; kept as headers only.
+    { "name": "kind", "type": "ENUM", "required": true, "default": "broadcast",
+      "options": ["people", "broadcast"] },
+    // The whole conversation as one markdown document, newest message last.
+    // Readable by the owner and anything running as them.
+    { "name": "document_path", "type": "FILE_PATH", "max_length": 500 },
+    // What the owner needs to do. new: not read yet. needs_reply: someone is
+    // waiting on them. waiting: they wrote last and expect an answer. fyi:
+    // worth reading, nothing to do. done: nothing to do or read.
+    { "name": "state", "type": "ENUM", "required": true, "default": "new",
+      "options": ["new", "needs_reply", "waiting", "fyi", "done"] },
+    // 0 whenever, 1 when they get to it, 2 this week, 3 today.
+    { "name": "priority", "type": "INTEGER", "default": 0 },
+    // The owner's own category key. Null until read, and null when the read
+    // could not tell which.
+    { "name": "category", "type": "TEXT", "max_length": 64 },
+    // What the other side wants from the owner, one line, when known.
+    { "name": "ask", "type": "TEXT", "max_length": 300 },
+    { "name": "sorted_at", "type": "DATETIME" }
+  ],
+  "config": {}
+}

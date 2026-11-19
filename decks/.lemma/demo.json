@@ -1,0 +1,9 @@
+{
+  "anchor": "2026-11-18T13:34:00Z",
+  "apps": [{ "name": "decks", "label": "Decks", "start": "/" }],
+  "notes": {
+    "decks_memory": "In the demo there's no assistant to tell. In a Lemma, this tells its agents how to start a deck when you ask in chat.",
+    "decks_sample_data": "In the demo the sample stays. In a Lemma this loads or clears it."
+  },
+  "fonts": ["Fraunces", "Source Serif 4", "Space Grotesk"]
+}

@@ -1,0 +1,93 @@
+/* The slides: fixed 16:9, drawn in the deck's look (--sl-*), every size in
+   container-query units so a slide is the same picture at any width. Ported
+   from the Decks desk app's studio.css (.ap-card). This is the deck's own
+   renderer: its colours and type are the deck's, not the app's. */
+
+.sl {
+  container-type: inline-size;
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  display: flex;
+  overflow: hidden;
+  background: var(--sl-surface);
+  color: var(--sl-ink);
+  font-family: var(--sl-body);
+  border-radius: var(--sl-radius);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--sl-ink) 10%, transparent), 0 1px 2px rgb(0 0 0 / 0.05);
+  -webkit-font-smoothing: antialiased;
+}
+.sl > * { flex: 1; min-width: 0; }
+.sl strong { color: var(--sl-accent); font-weight: 600; }
+
+.sl-body, .sl-hero {
+  padding: 5.2cqw 6.2cqw;
+  display: flex; flex-direction: column; gap: 2.1cqw; justify-content: center; min-height: 0;
+}
+.sl-hero { position: relative; }
+.sl-glow { position: absolute; inset: 0; pointer-events: none; }
+.sl-hero > *:not(.sl-glow) { position: relative; }
+.sl-logo { position: absolute !important; top: 4.4cqw; left: 6.2cqw; height: 3.4cqw; max-width: 22cqw; object-fit: contain; object-position: left center; }
+.sl-rule { position: absolute !important; left: 6.2cqw; bottom: 4.6cqw; width: 7cqw; height: 0.55cqw; border-radius: 1cqw; background: var(--sl-accent); }
+.sl[data-layout="hero"] .sl-title { font-size: 5.4cqw; max-width: 19ch; line-height: 1.08; }
+.sl[data-layout="hero"] .sl-text { font-size: 2.05cqw; color: var(--sl-muted); max-width: 48ch; }
+.sl[data-layout="closing"] .sl-heading { font-size: 4.6cqw; max-width: 20ch; line-height: 1.1; }
+.sl[data-layout="closing"] .sl-title { font-size: 4.6cqw; max-width: 20ch; }
+.sl[data-layout="closing"] .sl-text { font-size: 2cqw; color: var(--sl-muted); max-width: 52ch; }
+.sl-kicker { font-size: 1.45cqw; letter-spacing: 0.08em; text-transform: uppercase; color: var(--sl-accent); font-weight: 600; margin: 0; }
+
+.sl-title {
+  font-family: var(--sl-heading);
+  font-size: 3.15cqw; font-weight: var(--sl-heading-weight, 600); letter-spacing: -0.015em; line-height: 1.15; margin: 0;
+  text-wrap: balance;
+}
+
+.sl-split { display: grid; grid-template-columns: 1fr 0.86fr; min-height: 100%; }
+.sl[data-layout="visual-left"] .sl-split { grid-template-columns: 0.86fr 1fr; }
+.sl[data-layout="visual-left"] .sl-split-visual { order: -1; }
+.sl-split-content { padding: 4.8cqw 5cqw 4.8cqw 6.2cqw; display: flex; flex-direction: column; gap: 2cqw; justify-content: center; min-width: 0; }
+.sl[data-layout="visual-left"] .sl-split-content { padding: 4.8cqw 6.2cqw 4.8cqw 5cqw; }
+.sl-split-visual { display: flex; min-width: 0; }
+.sl-split-visual .sl-visual { flex: 1; border-radius: 0; min-height: 100%; max-height: none; }
+
+.sl-heading { font-family: var(--sl-heading); font-size: 2.4cqw; font-weight: var(--sl-heading-weight, 600); letter-spacing: -0.01em; line-height: 1.25; margin: 0; text-wrap: balance; }
+.sl-text { font-size: 1.85cqw; line-height: 1.55; margin: 0; max-width: 62ch; }
+.sl-faded { color: var(--sl-muted); }
+
+.sl-bullets { display: flex; flex-direction: column; gap: 1.35cqw; list-style: none; padding: 0; margin: 0; }
+.sl-bullets li { position: relative; padding-left: 2.7cqw; font-size: 1.85cqw; line-height: 1.45; }
+.sl-bullets li::before { content: ""; position: absolute; left: 0; top: 0.62em; width: 1.15cqw; height: 0.36cqw; border-radius: 0.2cqw; background: var(--sl-accent); }
+.sl-bullets[data-icons="true"] li { padding-left: 3.6cqw; }
+.sl-bullets[data-icons="true"] li::before { display: none; }
+.sl-bullet-icon { position: absolute; left: 0; top: 0.12em; color: var(--sl-accent); display: inline-flex; }
+.sl-bullet-icon svg { width: 2.3cqw; height: 2.3cqw; }
+
+.sl-quote { display: flex; flex-direction: column; gap: 1.6cqw; padding-left: 2.4cqw; border-left: 0.42cqw solid var(--sl-accent); margin: 0; }
+.sl-quote p { font-family: var(--sl-heading); font-size: 2.8cqw; line-height: 1.38; font-weight: 500; margin: 0; text-wrap: pretty; }
+.sl-quote cite { font-style: normal; font-size: 1.5cqw; color: var(--sl-muted); }
+
+.sl-stats { display: grid; gap: 1.8cqw; grid-template-columns: repeat(auto-fit, minmax(26%, 1fr)); }
+.sl-stat { display: flex; flex-direction: column; gap: 0.7cqw; padding: 2cqw; background: var(--sl-raised); border-radius: calc(var(--sl-radius) * 0.8); min-width: 0; }
+.sl-stat-icon { color: var(--sl-accent); display: inline-flex; }
+.sl-stat-icon svg { width: 2.5cqw; height: 2.5cqw; }
+.sl-stat-value { font-family: var(--sl-heading); font-size: 3.6cqw; font-weight: var(--sl-heading-weight, 600); letter-spacing: -0.02em; color: var(--sl-accent); line-height: 1.05; overflow-wrap: anywhere; }
+.sl-stat-label { font-size: 1.45cqw; line-height: 1.4; color: var(--sl-muted); }
+
+.sl-columns { display: grid; gap: 2.6cqw; grid-template-columns: repeat(auto-fit, minmax(26%, 1fr)); }
+.sl-column { min-width: 0; }
+.sl-column h4 { font-family: var(--sl-heading); font-weight: var(--sl-heading-weight, 600); font-size: 1.85cqw; margin: 0 0 1cqw; padding-bottom: 1cqw; border-bottom: 0.25cqw solid var(--sl-accent); display: flex; align-items: center; gap: 0.9cqw; }
+.sl-column-icon { color: var(--sl-accent); display: inline-flex; }
+.sl-column-icon svg { width: 2cqw; height: 2cqw; }
+.sl-column p { font-size: 1.55cqw; line-height: 1.55; margin: 0; }
+
+.sl-visual { min-height: 16cqw; border-radius: calc(var(--sl-radius) * 0.8); flex: 1; }
+.sl-body .sl-visual { max-height: 28cqw; }
+
+/* a card not written yet */
+.sl--pending .sl-title { color: color-mix(in srgb, var(--sl-ink) 70%, transparent); }
+.sl-lines { display: grid; gap: 1.4cqw; margin-top: 1cqw; }
+.sl-lines i { display: block; height: 1.3cqw; border-radius: 0.6cqw; background: color-mix(in srgb, var(--sl-ink) 7%, transparent); }
+.sl-lines i:nth-child(1) { width: 78%; } .sl-lines i:nth-child(2) { width: 64%; } .sl-lines i:nth-child(3) { width: 42%; }
+.sl--pending[aria-busy="true"] .sl-lines i { animation: sl-shimmer 1.4s ease-in-out infinite; background: linear-gradient(90deg, color-mix(in srgb, var(--sl-ink) 6%, transparent), color-mix(in srgb, var(--sl-ink) 12%, transparent), color-mix(in srgb, var(--sl-ink) 6%, transparent)); background-size: 200% 100%; }
+@keyframes sl-shimmer { to { background-position: -200% 0; } }
+@media (prefers-reduced-motion: reduce) { .sl--pending[aria-busy="true"] .sl-lines i { animation: none; } }

@@ -1,0 +1,32 @@
+{
+  "name": "Booking page",
+  "line": "sales",
+  "position": 7,
+  "job": "A page where people book your time",
+  "intro": "Booking page gives each person a link that offers only the times their calendars leave free. Every booking is checked again, lands on your calendar with a video link, and arrives with a brief.",
+  "does": [
+    "Proposes your hours, call length and buffer from how you use your calendar.",
+    "Shows visitors times in their own zone, and confirms their email first.",
+    "Turns spam away politely, and has Meetings brief you on every real booking."
+  ],
+  "jobs": ["SALES", "FOUNDER", "SUPPORT"],
+  "accounts": [
+    { "any": ["Google Calendar", "Outlook"], "why": "To check your busy times and add each booked call, with a Meet or Teams link." },
+    { "any": ["Gmail"], "why": "Only to tell someone why their booking could not be taken.", "optional": true }
+  ],
+  "setup": [
+    "Choose which calendars your page keeps clear of.",
+    "Check the hours it proposes: days, call length, buffer and notice.",
+    "Pick your page's address and write a line about you.",
+    "Choose the video link and where bookings go, then turn the page on."
+  ],
+  "today": [
+    { "verb": "attend", "line": "Booked calls, through Meetings" },
+    { "verb": "decide", "line": "A booking it was not sure was genuine" }
+  ],
+  "pictures": [
+    { "shot": "booking-page", "caption": "Your page: open times in the visitor's own zone" },
+    { "shot": "booking-time", "caption": "A visitor says who they are and what it's about" },
+    { "shot": "booking-confirmed", "caption": "Booked, and on its way to your calendar" }
+  ]
+}

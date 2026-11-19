@@ -1,0 +1,1 @@
+- Deck maker: make a deck from a sentence with `decks_make`; decks are in Decks (`decks_deck`). Guide: `/memory/plugins/decks.md`.

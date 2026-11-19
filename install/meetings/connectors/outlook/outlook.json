@@ -1,0 +1,6 @@
+{
+  "connector": "outlook",
+  "mode": "PER_MEMBER",
+  "required": false,
+  "purpose": "Reads your Outlook calendar: the next two weeks for briefs, the last month for what was said. Never adds, changes or answers an event."
+}

@@ -1,0 +1,22 @@
+{
+  // The person's daily pass, from their own schedule (made by the Leads app
+  // when their set-up finishes): stuck look-ups failed, today's places to the
+  // queue, the day's list brought up to date.
+  "name": "leads-daily",
+  "description": "Daily: give the queue today's look-ups, best first, and bring the day's list up to date.",
+  "start": { "type": "MANUAL" },
+  "nodes": [
+    { "id": "tidy", "type": "FUNCTION", "label": "Stuck look-ups",
+      "config": { "function_name": "leads_daily", "input_mapping": {} } },
+    { "id": "claim", "type": "FUNCTION", "label": "Today's places",
+      "config": { "function_name": "leads_claim", "input_mapping": {} } },
+    { "id": "needs", "type": "FUNCTION", "label": "Worth a look",
+      "config": { "function_name": "leads_needs_you", "input_mapping": {} } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [
+    { "id": "e1", "source": "tidy", "target": "claim" },
+    { "id": "e2", "source": "claim", "target": "needs" },
+    { "id": "e3", "source": "needs", "target": "end" }
+  ]
+}

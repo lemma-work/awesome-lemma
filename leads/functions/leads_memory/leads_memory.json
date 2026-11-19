@@ -1,0 +1,21 @@
+{
+  "name": "leads_memory",
+  "description": "Tell this Lemma's agents that Lead research is installed: its block in /memory/AGENTS.md and its guide at /memory/plugins/leads.md (how to ask for a look-up from chat, where lead facts live).",
+  "type": "API",
+  "visibility": "POD",
+  "code": {
+    "$file": "code.py"
+  },
+  "permissions": {
+    "grants": [
+      {
+        "resource_type": "folder",
+        "resource_name": "/memory",
+        "permission_ids": [
+          "folder.read",
+          "folder.write"
+        ]
+      }
+    ]
+  }
+}

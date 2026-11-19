@@ -1,0 +1,81 @@
+{
+  // A person's set-up, one run each, started by the Leads app on their first
+  // open once People map is set up for them. The app is the screen for its
+  // three forms; each waits for that person.
+  //
+  //   prepare   what to offer: People map's kinds with counts, their
+  //             customers' companies as examples of a good fit
+  //   fit       who fits them: one sentence and a few example companies
+  //   kinds     which kinds of people to look up, and how many a day
+  //   read      "worth looking up?" for everyone of those kinds, forty at a
+  //             time (Decisions); the ones worth it are proposed, not looked up
+  //   review    the people it would look up and the ones it skipped; each
+  //             change is a correction the next answer learns from
+  //   done      the proposed join the queue: today's look-ups go best first
+  //   memory    tell this Lemma's agents Lead research is here
+  "name": "leads-setup",
+  "description": "Set up one person's Lead research: who fits them, which kinds of people to look up and how many a day, then read everyone once and let them change who gets looked up.",
+  "start": { "type": "MANUAL" },
+  "nodes": [
+    { "id": "prepare", "type": "FUNCTION", "label": "See who People map knows",
+      "config": { "function_name": "leads_setup_prepare", "input_mapping": {} } },
+    { "id": "fit", "type": "FORM", "label": "Who fits you",
+      "config": { "input_schema": {
+        "type": "object",
+        "properties": {
+          "fit_sentence": { "type": "string", "title": "Who fits you, in one sentence",
+            "default": { "type": "expression", "value": "prepare.fit_sentence", "optional": true } },
+          "fit_examples": { "type": "array", "title": "A few companies that fit well", "items": { "type": "string" },
+            "default": { "type": "expression", "value": "prepare.fit_examples", "optional": true } }
+        },
+        "required": ["fit_sentence"]
+      } } },
+    { "id": "kinds", "type": "FORM", "label": "Who to look up",
+      "config": { "input_schema": {
+        "type": "object",
+        "properties": {
+          "kinds": { "type": "array", "title": "Look up these kinds of people", "uniqueItems": true, "items": { "type": "string" },
+            "default": { "type": "expression", "value": "prepare.kinds_on" } },
+          "daily_limit": { "type": "integer", "title": "Look-ups a day, at most",
+            "default": { "type": "expression", "value": "prepare.daily_limit" } }
+        },
+        "required": ["kinds", "daily_limit"]
+      } } },
+    { "id": "apply", "type": "FUNCTION", "label": "Keep your answers",
+      "config": { "function_name": "leads_setup_apply", "input_mapping": {
+        "fit_sentence": { "type": "expression", "value": "fit.fit_sentence" },
+        "fit_examples": { "type": "expression", "value": "fit.fit_examples", "optional": true },
+        "kinds": { "type": "expression", "value": "kinds.kinds" },
+        "daily_limit": { "type": "expression", "value": "kinds.daily_limit" } } } },
+    { "id": "read", "type": "LOOP", "label": "Worth looking up? Forty at a time",
+      "config": { "items_path": "apply.passes", "item_var_name": "pass", "child_node_id": "read_pass" } },
+    { "id": "read_pass", "type": "FUNCTION", "label": "Read forty",
+      "config": { "function_name": "leads_consider", "input_mapping": {
+        "setup": { "type": "literal", "value": true },
+        "max_people": { "type": "literal", "value": 40 },
+        "run_pass": { "type": "expression", "value": "loop.pass" } } } },
+    { "id": "review", "type": "FORM", "label": "Who it would look up",
+      "config": { "input_schema": {
+        "type": "object",
+        "properties": {
+          "looked": { "type": "boolean", "title": "Start looking up", "default": true }
+        }
+      } } },
+    { "id": "done", "type": "FUNCTION", "label": "Start looking up",
+      "config": { "function_name": "leads_setup_done", "input_mapping": {} } },
+    { "id": "memory", "type": "FUNCTION", "label": "Tell this Lemma's agents",
+      "config": { "function_name": "leads_memory", "input_mapping": {} } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [
+    { "id": "e1", "source": "prepare", "target": "fit" },
+    { "id": "e2", "source": "fit", "target": "kinds" },
+    { "id": "e3", "source": "kinds", "target": "apply" },
+    { "id": "e4", "source": "apply", "target": "read" },
+    { "id": "e5", "source": "read_pass", "target": "read" },
+    { "id": "e6", "source": "read", "target": "review" },
+    { "id": "e7", "source": "review", "target": "done" },
+    { "id": "e8", "source": "done", "target": "memory" },
+    { "id": "e9", "source": "memory", "target": "end" }
+  ]
+}

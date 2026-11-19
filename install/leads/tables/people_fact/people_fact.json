@@ -1,0 +1,24 @@
+{
+  // Something durable about a person, worth remembering next time: their role,
+  // where they are, how they like to meet. Kept by the summary writer from a
+  // conversation or meeting it cites, or typed by the owner. Per person (RLS).
+  "name": "people_fact",
+  "primary_key_column": "id",
+  "enable_rls": true,
+  "visibility": "POD",
+  "columns": [
+    // The shared person's id. Not a foreign key on purpose: Mail's sample
+    // clear deletes people it made, and a key here would block it. People
+    // map's refresh removes rows whose person is gone.
+    { "name": "person_id", "type": "UUID", "required": true },
+    { "name": "fact", "type": "TEXT", "required": true, "max_length": 300 },
+    // Where it came from: a conversation or a meeting (its id), or the owner.
+    { "name": "source_kind", "type": "ENUM", "required": true, "default": "person",
+      "options": ["conversation", "meeting", "person"] },
+    { "name": "source_id", "type": "TEXT", "max_length": 64 },
+    { "name": "source_label", "type": "TEXT", "max_length": 300 },
+    { "name": "state", "type": "ENUM", "required": true, "default": "active",
+      "options": ["active", "forgotten"] }
+  ],
+  "config": {}
+}

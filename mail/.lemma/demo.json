@@ -1,0 +1,17 @@
+{
+  "anchor": "2026-11-18T07:47:00Z",
+  "zone": [
+    "Asia/Calcutta",
+    "Asia/Kolkata"
+  ],
+  "apps": [
+    {
+      "name": "inbox",
+      "label": "Mail",
+      "start": "/needs"
+    }
+  ],
+  "notes": {
+    "mail-sort": "In the demo the sort doesn't run again. In a Lemma it reads your recent mail into your categories."
+  }
+}

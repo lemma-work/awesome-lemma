@@ -1,0 +1,6 @@
+{
+  "connector": "outlook",
+  "mode": "PER_MEMBER",
+  "required": false,
+  "purpose": "Reads your Outlook mail to sort it and draft the replies you owe, and sends a reply only when you press Send."
+}

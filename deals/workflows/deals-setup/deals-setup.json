@@ -1,0 +1,150 @@
+{
+  // A person's set-up, one run each, started by the Deals app on their first
+  // open once People map is set up for them (so does anyone who joins later).
+  // The app is the screen for its forms; each waits for that person.
+  //
+  //   prepare     what to propose: stages, a currency, whether the team's are set
+  //   stages      the team's stages (only the first person; later ones skip to existing)
+  //   currency    the team's currency
+  //   apply       keep both
+  //   existing    bring in deals: paste a spreadsheet, find them in the last 30
+  //               days of conversations and meeting notes, or both
+  //   sheet       add the pasted rows (nothing when nothing was pasted)
+  //   find        the last 30 days, a pass at a time: deals_read asks the two
+  //               Decisions questions; only on a yes the extractor pulls out the
+  //               change and its sentence; deals_propose keeps it as a proposal
+  //   review      the proposals: keep or dismiss each (the app calls deals_save)
+  //   day         the weekly review's day (only the first person)
+  //   done        start reading this person's new conversations and notes
+  //   needs       what needs them now (needs_you), for Today
+  //   memory      tell the Lemma's agents Deal tracker is here (/memory/AGENTS.md)
+  "name": "deals-setup",
+  "description": "Set up Deal tracker for one person: the team's stages and currency (the first person), bring in existing deals from a spreadsheet or from the last 30 days of conversations and meeting notes, and the weekly review's day.",
+  "start": { "type": "MANUAL" },
+  "nodes": [
+    { "id": "prepare", "type": "FUNCTION", "label": "Propose stages and a currency",
+      "config": { "function_name": "deals_setup_prepare", "input_mapping": {} } },
+    { "id": "team", "type": "DECISION", "label": "Stages already set?",
+      "config": { "rules": [ { "condition": "prepare.team_ready == `true`", "next_node_id": "existing" } ] } },
+    { "id": "stages", "type": "FORM", "label": "Your stages",
+      "config": { "input_schema": {
+        "type": "object",
+        "properties": {
+          "stages": {
+            "type": "array", "title": "Stages, in order",
+            "items": { "type": "object", "properties": {
+              "id": { "type": "string" },
+              "name": { "type": "string", "title": "Name" },
+              "kind": { "type": "string", "title": "Kind", "enum": ["open", "won", "lost"] },
+              "meaning": { "type": "string", "title": "What reaching it means" } },
+              "required": ["name", "kind"] },
+            "default": { "type": "expression", "value": "prepare.stages" } }
+        },
+        "required": ["stages"]
+      } } },
+    { "id": "currency", "type": "FORM", "label": "Your currency",
+      "config": { "input_schema": {
+        "type": "object",
+        "properties": {
+          "currency": { "type": "string", "title": "Currency", "minLength": 3, "maxLength": 3,
+            "default": { "type": "expression", "value": "prepare.currency" } }
+        },
+        "required": ["currency"]
+      } } },
+    { "id": "apply", "type": "FUNCTION", "label": "Keep the stages and currency",
+      "config": { "function_name": "deals_setup_apply", "input_mapping": {
+        "stages": { "type": "expression", "value": "stages.stages" },
+        "currency": { "type": "expression", "value": "currency.currency" } } } },
+    { "id": "existing", "type": "FORM", "label": "Deals you already have",
+      "config": { "input_schema": {
+        "type": "object",
+        "properties": {
+          "sheet": { "type": "string", "title": "Rows pasted from a spreadsheet, with the header row", "default": "" },
+          "find": { "type": "boolean", "title": "Find them in my last 30 days of conversations and meeting notes", "default": true }
+        }
+      } } },
+    { "id": "sheet", "type": "FUNCTION", "label": "Add the pasted deals",
+      "config": { "function_name": "deals_sheet", "input_mapping": {
+        "text": { "type": "expression", "value": "existing.sheet", "optional": true },
+        "mode": { "type": "literal", "value": "import" } } } },
+    { "id": "want_find", "type": "DECISION", "label": "Find them in conversations?",
+      "config": { "rules": [ { "condition": "existing.find == `true`", "next_node_id": "find" } ] } },
+    { "id": "find", "type": "FUNCTION", "label": "Count the last 30 days",
+      "config": { "function_name": "deals_find", "input_mapping": {} } },
+    { "id": "find_loop", "type": "LOOP", "label": "Read them, a pass at a time",
+      "config": { "items_path": "find.passes", "item_var_name": "pass", "child_node_id": "find_pass" } },
+    { "id": "find_pass", "type": "FUNCTION", "label": "Does it change a deal? What kind?",
+      "config": { "function_name": "deals_read", "input_mapping": {
+        "find_pass": { "type": "expression", "value": "loop.pass" } } } },
+    { "id": "found", "type": "DECISION", "label": "Any yes?",
+      "config": { "rules": [ { "condition": "find_pass.ask == `true`", "next_node_id": "extract" } ] } },
+    { "id": "extract", "type": "AGENT", "label": "Pull out each change and its sentence",
+      "config": { "agent_name": "deals-extractor", "input_mapping": {
+        "items": { "type": "expression", "value": "find_pass.items" },
+        "stages": { "type": "expression", "value": "find_pass.stages" },
+        "currency": { "type": "expression", "value": "find_pass.currency" },
+        "today": { "type": "expression", "value": "find_pass.today" },
+        "owner": { "type": "expression", "value": "find_pass.owner" },
+        "corrections": { "type": "expression", "value": "find_pass.corrections", "optional": true } } } },
+    { "id": "propose", "type": "FUNCTION", "label": "Keep them as proposals",
+      "config": { "function_name": "deals_propose", "input_mapping": {
+        "items": { "type": "expression", "value": "find_pass.items" },
+        "result": { "type": "expression", "value": "extract" },
+        "stages": { "type": "expression", "value": "find_pass.stages" },
+        "currency": { "type": "expression", "value": "find_pass.currency" } } } },
+    { "id": "review", "type": "FORM", "label": "What it found",
+      "config": { "input_schema": {
+        "type": "object",
+        "properties": { "looked": { "type": "boolean", "title": "Done for now", "default": true } }
+      } } },
+    { "id": "day_gate", "type": "DECISION", "label": "Review day already set?",
+      "config": { "rules": [ { "condition": "prepare.team_ready == `true`", "next_node_id": "done" } ] } },
+    { "id": "day", "type": "FORM", "label": "The weekly review",
+      "config": { "input_schema": {
+        "type": "object",
+        "properties": {
+          "review_day": { "type": "string", "title": "Day",
+            "enum": ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"],
+            "default": { "type": "expression", "value": "prepare.review_day" } },
+          "review_time": { "type": "string", "title": "Time",
+            "default": { "type": "expression", "value": "prepare.review_time" } }
+        },
+        "required": ["review_day"]
+      } } },
+    { "id": "done", "type": "FUNCTION", "label": "Start reading as things are said",
+      "config": { "function_name": "deals_setup_done", "input_mapping": {
+        "review_day": { "type": "expression", "value": "day.review_day", "optional": true },
+        "review_time": { "type": "expression", "value": "day.review_time", "optional": true } } } },
+    { "id": "needs", "type": "FUNCTION", "label": "What needs you",
+      "config": { "function_name": "deals_needs_you", "input_mapping": {} } },
+    { "id": "memory", "type": "FUNCTION", "label": "Tell this Lemma's agents",
+      "config": { "function_name": "deals_memory", "input_mapping": {} } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [
+    { "id": "e1", "source": "prepare", "target": "team" },
+    { "id": "e2", "source": "team", "target": "stages" },
+    { "id": "e3", "source": "team", "target": "existing" },
+    { "id": "e4", "source": "stages", "target": "currency" },
+    { "id": "e5", "source": "currency", "target": "apply" },
+    { "id": "e6", "source": "apply", "target": "existing" },
+    { "id": "e7", "source": "existing", "target": "sheet" },
+    { "id": "e8", "source": "sheet", "target": "want_find" },
+    { "id": "e9", "source": "want_find", "target": "day_gate" },
+    { "id": "e10", "source": "want_find", "target": "find" },
+    { "id": "e11", "source": "find", "target": "find_loop" },
+    { "id": "e12", "source": "find_pass", "target": "found" },
+    { "id": "e13", "source": "found", "target": "find_loop" },
+    { "id": "e14", "source": "found", "target": "extract" },
+    { "id": "e15", "source": "extract", "target": "propose" },
+    { "id": "e16", "source": "propose", "target": "find_loop" },
+    { "id": "e17", "source": "find_loop", "target": "review" },
+    { "id": "e18", "source": "review", "target": "day_gate" },
+    { "id": "e19", "source": "day_gate", "target": "day" },
+    { "id": "e20", "source": "day_gate", "target": "done" },
+    { "id": "e21", "source": "day", "target": "done" },
+    { "id": "e22", "source": "done", "target": "needs" },
+    { "id": "e23", "source": "needs", "target": "memory" },
+    { "id": "e24", "source": "memory", "target": "end" }
+  ]
+}

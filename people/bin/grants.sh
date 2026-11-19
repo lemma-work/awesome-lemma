@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+# Every function's description and grants, in one place. Regenerates
+# functions/<name>/<name>.json; never edit those by hand.
+#   table        read          table:rw   + write rows       table:rwd  + delete rows
+#   /folder:verbs              connector:<id>
+set -euo pipefail
+cd "$(dirname "$0")/.."
+f() { uv run --no-project python bin/fnjson.py "$@"; }
+f people_setup_prepare "Set-up: which of Mail's categories to offer (VIP, People and the person's own on; Newsletters, Updates and Cold never) and the person's own domains, proposed from their own addresses." mail_category mail_mailbox mail_settings meetings_calendar meetings_settings people_settings:rw
+f people_setup_apply "Set-up: keep the categories that count as people and the person's own domains." mail_category people_settings:rw
+f people_setup_done "Set-up: count what the first read found and open the list." people_person people_settings:rw
+f people_refresh "Who the person deals with and where they stand, counted from their own conversations and meetings with no model: last contact either way, usual gap, warmth, gone quiet, next meeting; the companies (team-wide, by domain); and their own rows of the team view. Writes only what changed. Removes its own rows for people or companies that no longer exist." people_settings:rw mail_mailbox mail_settings mail_category meetings_calendar message conversation meeting person:rw person_handle:rw people_person:rwd people_fact:rwd people_correction:rwd people_sample_contact:rwd people_company:rwd company:rwd company_domain:rwd people_link:rwd
+f people_sort "Read each new person once with one Decisions call: someone the person deals with or noise, and what they are to them (customer, investor, partner, candidate, vendor, colleague, other). The person's corrections go with every call as examples; an answer under 0.5 waits for them." people_person:rw people_settings people_correction people_sample_contact mail_mailbox mail_category person person_handle conversation message meeting
+f people_correct "The person says who someone is: someone they deal with after all or not, or what they are to them; or adds someone missing by address. Kept as a correction the next read learns from." people_person:rw people_correction:rw person:rw person_handle:rw people_link:rwd
+f people_person_context "Gather what the writer needs to say where things stand with one person: their newest conversations and meetings as numbered sources, open promises either way, remembered facts." people_person:rw people_settings people_fact person person_handle conversation message meeting promise
+f people_save_summary "Keep where things stand with one person, with the sources each sentence cites, and the facts worth remembering with theirs." people_person:rw people_fact:rw
+f people_company_context "Gather what the look-up needs about one company: its name, domains and who on the team knows whom there. Nothing anyone wrote." people_company:rw company company_domain people_link
+f people_save_company "Keep what the look-up found on a company: the write-up and its sources, and the facts where still empty." company:rw people_company:rw
+f people_company_edit "Rename a company, merge it into another (its domains, people and notes move), or move one of its domains out into a company of its own." company:rwd company_domain:rw people_company:rwd people_person:rw people_link:rw
+f people_sample_data "Load or clear what Mail's and Meetings' samples cannot show: four made-up people with months of earlier contact (three gone quiet) and a made-up colleague's side of the team view. Clear removes exactly what load made, then tidies People map's own rows for people or companies that no longer exist." people_link:rwd people_sample_contact:rwd person:rwd person_handle:rwd people_person:rwd people_fact:rwd people_correction:rwd people_company:rwd company:rwd company_domain:rwd needs_you:rw conversation promise meeting
+f people_needs_you "People map's part of the person's day on the shared needs_you list: everyone it counts as gone quiet (drifting), most overdue first; resolves whoever is not quiet any more." people_person person company needs_you:rw
+f people_memory "Tells this Lemma's agents that People map is installed: People map's own block in /memory/AGENTS.md and its guide at /memory/plugins/people.md, leaving the team's notes alone. Set-up runs it; safe to run again. remove takes them out." /memory:read,write

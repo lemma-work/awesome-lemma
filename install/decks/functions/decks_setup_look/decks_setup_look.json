@@ -1,0 +1,22 @@
+{
+  "name": "decks_setup_look",
+  "description": "Set-up, step 1: the look the person's new decks take (the Lemma's brand, or a theme).",
+  "type": "API",
+  "visibility": "POD",
+  "code": {
+    "$file": "code.py"
+  },
+  "permissions": {
+    "grants": [
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "decks_settings",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read",
+          "datastore.record.write"
+        ]
+      }
+    ]
+  }
+}

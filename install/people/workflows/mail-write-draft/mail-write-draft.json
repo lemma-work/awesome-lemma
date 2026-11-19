@@ -1,0 +1,40 @@
+{
+  // Started by `mail-draft-wanted` when a conversation's draft_state becomes
+  // wanted. mail_thread is per person, so the run is the conversation's owner:
+  // their voice, their rules.
+  "name": "mail-write-draft",
+  "description": "Write the draft a conversation asked for: gather the brief, let the writer draft it in the owner's voice, store it beside the conversation.",
+  "max_concurrent_runs": 4,
+  "start": { "type": "DATASTORE_EVENT", "config": { "table_name": "mail_thread", "operations": ["INSERT", "UPDATE"] } },
+  "nodes": [
+    { "id": "brief", "type": "FUNCTION", "label": "Gather the brief",
+      "config": { "function_name": "mail_writing_context",
+        "input_mapping": { "conversation_id": { "type": "expression", "value": "start.metadata.record_id" } } } },
+    { "id": "write", "type": "AGENT", "label": "Write",
+      "config": { "agent_name": "mail-writer",
+        "input_mapping": {
+          "kind": { "type": "expression", "value": "brief.kind" },
+          "hint": { "type": "expression", "value": "brief.hint", "optional": true },
+          "me": { "type": "expression", "value": "brief.me" },
+          "voice": { "type": "expression", "value": "brief.voice" },
+          "rules": { "type": "expression", "value": "brief.rules" },
+          "thread": { "type": "expression", "value": "brief.thread" },
+          "reply_to": { "type": "expression", "value": "brief.reply_to" },
+          "person": { "type": "expression", "value": "brief.person" },
+          "past_lines": { "type": "expression", "value": "brief.past_lines" },
+          "promises": { "type": "expression", "value": "brief.promises" },
+          "brand": { "type": "expression", "value": "brief.brand", "optional": true } } } },
+    { "id": "save", "type": "FUNCTION", "label": "Store the draft",
+      "config": { "function_name": "mail_save_draft",
+        "input_mapping": {
+          "conversation_id": { "type": "expression", "value": "start.metadata.record_id" },
+          "kind": { "type": "expression", "value": "brief.kind" },
+          "draft": { "type": "expression", "value": "write" } } } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [
+    { "id": "e1", "source": "brief", "target": "write" },
+    { "id": "e2", "source": "write", "target": "save" },
+    { "id": "e3", "source": "save", "target": "end" }
+  ]
+}

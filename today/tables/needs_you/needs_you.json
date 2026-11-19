@@ -1,0 +1,78 @@
+{
+  // One thing that needs one member, from any plugin: a reply someone is
+  // waiting on, a meeting to attend, a promise to keep, something owed to
+  // them, a person drifting away. Each plugin writes its own and clears them
+  // when they are resolved; Today shows them all, by what the person does.
+  //
+  // The member is the row's owner (RLS): a writer runs as that person (a
+  // trigger on their own row, their own schedule), so each person sees only
+  // their own. The id is made from (plugin, source table, source row, verb,
+  // member) with `needs_you_id` in _contract/snippets/needs-you.py, so writers
+  // upsert and never duplicate; `needs_you_write` there is the one write rule
+  // (a dismissed item stays dismissed until its source changes).
+  //
+  // Shared definition (plugins/_contract). Carried unchanged by every plugin
+  // that writes or reads it; _contract/lint.py fails on any difference.
+  "name": "needs_you",
+  "primary_key_column": "id",
+  "enable_rls": true,
+  "visibility": "POD",
+  "columns": [
+    // What the person does about it:
+    //   answer    someone is waiting on their reply
+    //   decide    a choice only they can make (an approval, "was this done?")
+    //   attend    a meeting or call
+    //   do        something they said they would do
+    //   waiting   something someone else owes them
+    //   drifting  a person going quiet who matters to them
+    { "name": "verb", "type": "ENUM", "required": true,
+      "options": ["answer", "decide", "attend", "do", "waiting", "drifting"] },
+    // One line, what it is ("Send Mira the data room").
+    { "name": "title", "type": "TEXT", "required": true, "max_length": 300 },
+    // One line, why it is here ("Mira asked on Monday; due Thursday").
+    { "name": "why", "type": "TEXT", "max_length": 300 },
+    // The sentence it came from, word for word, when there is one.
+    { "name": "quote", "type": "TEXT", "max_length": 600 },
+    // Who it is with, when it is with someone (a handle as in person_handle).
+    { "name": "person_name", "type": "TEXT", "max_length": 200 },
+    { "name": "person_handle", "type": "TEXT", "max_length": 320 },
+    // When it is due, or when it starts (attend); and when it ends (attend).
+    { "name": "due_at", "type": "DATETIME" },
+    { "name": "ends_at", "type": "DATETIME" },
+    // Since when it has needed them: the message they are waiting on, the
+    // last contact before someone went quiet.
+    { "name": "since_at", "type": "DATETIME" },
+    // Where it came from: the writing plugin, its table and row.
+    { "name": "source_plugin", "type": "TEXT", "required": true, "max_length": 32 },
+    { "name": "source_table", "type": "TEXT", "required": true, "max_length": 64 },
+    { "name": "source_id", "type": "TEXT", "required": true, "max_length": 400 },
+    // A fingerprint of the source as written (its state, its newest message,
+    // its date). An item the person dismissed or did comes back only when
+    // this changes.
+    { "name": "source_version", "type": "TEXT", "max_length": 200 },
+    // The conversation it belongs to, when it belongs to one: lets a plugin
+    // that can write in that conversation act on it (Mail drafts a nudge).
+    { "name": "conversation_id", "type": "UUID" },
+    // Where to open it: an app of this Lemma and a path inside it.
+    { "name": "app", "type": "TEXT", "max_length": 64 },
+    { "name": "path", "type": "TEXT", "max_length": 400 },
+    // open; done (the person did it, or the source resolved it); snoozed
+    // until snoozed_until; dismissed (not for them, until the source changes).
+    { "name": "state", "type": "ENUM", "required": true, "default": "open",
+      "options": ["open", "done", "snoozed", "dismissed"] },
+    { "name": "snoozed_until", "type": "DATETIME" },
+    // Who closed it: the person, or the source plugin when it was resolved.
+    { "name": "closed_by", "type": "ENUM", "options": ["person", "source"] },
+    // Order inside its verb, higher first, where time does not decide.
+    { "name": "weight", "type": "FLOAT", "default": 0 },
+    // What is already done for the person: "Reply drafted in your voice",
+    // "Brief ready"; and the text to preview (the draft, the headline).
+    { "name": "prepared", "type": "TEXT", "max_length": 120 },
+    { "name": "prepared_text", "type": "TEXT", "max_length": 2000 },
+    // Something one plugin asks of the item's source plugin, which watches
+    // for it: "nudge" (draft a follow-up in this conversation), with a hint.
+    { "name": "request", "type": "TEXT", "max_length": 32 },
+    { "name": "request_hint", "type": "TEXT", "max_length": 600 }
+  ],
+  "config": {}
+}

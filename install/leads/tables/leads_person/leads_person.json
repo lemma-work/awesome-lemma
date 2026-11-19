@@ -1,0 +1,78 @@
+{
+  // Lead research's own state about one person the owner deals with: same id
+  // as the shared `person` row (and People map's `people_person`). Per person
+  // (RLS): who the owner deals with is theirs alone.
+  //
+  //   skipped   "worth looking up?" said no (or the owner did)
+  //   unsure    the answer was under 0.5: waits for the owner
+  //   proposed  worth it, found during set-up: waits for the owner's review
+  //   queued    worth it, waiting for a place in today's look-ups
+  //   wanted    claimed one of today's look-ups; the look-up starts
+  //   looking   the look-up is running
+  //   ready     looked up (found, or "not found", which is an answer)
+  //   failed    the look-up broke; it can be asked again
+  "name": "leads_person",
+  "primary_key_column": "id",
+  "enable_rls": true,
+  "visibility": "POD",
+  "columns": [
+    { "name": "state", "type": "ENUM", "required": true, "default": "queued",
+      "options": ["skipped", "unsure", "proposed", "queued", "wanted", "looking", "ready", "failed"] },
+    // The shared company (team-wide) by their address's domain, when they
+    // write from a company; null for a personal address.
+    { "name": "company_id", "type": "UUID" },
+    // People map's relationship kind when this person was considered.
+    { "name": "kind", "type": "TEXT", "max_length": 32 },
+
+    // --- worth looking up? (Decisions), or the owner -------------------------
+    { "name": "worth", "type": "BOOLEAN" },
+    { "name": "worth_by", "type": "ENUM", "options": ["decision", "person", "rule"] },
+    { "name": "worth_confidence", "type": "FLOAT" },
+    { "name": "worth_reason", "type": "TEXT", "max_length": 300 },
+    // {worth: {value, confidence}, why: {value, confidence}} as answered.
+    { "name": "worth_answers", "type": "JSON" },
+    { "name": "worth_at", "type": "DATETIME" },
+    // What the question saw, kept so a correction can be an example.
+    { "name": "evidence", "type": "TEXT", "max_length": 6000 },
+
+    // --- the look-up -----------------------------------------------------------
+    // When it took one of the day's look-ups, and whether the owner asked past
+    // the limit on purpose.
+    { "name": "wanted_at", "type": "DATETIME" },
+    { "name": "forced", "type": "BOOLEAN", "default": false },
+    { "name": "looked_up_at", "type": "DATETIME" },
+    { "name": "lookup_seconds", "type": "FLOAT" },
+    { "name": "lookup_error", "type": "TEXT", "max_length": 600 },
+    // A page confirmed this person at this company.
+    { "name": "found", "type": "BOOLEAN" },
+    // The facts the look-up confirmed, each with its link and when it was
+    // found: [{key, label, value, url, source, found_at, date}]. Only what a
+    // source said; about the person at work, never their private life.
+    { "name": "facts", "type": "JSON" },
+    // What was looked for and not found: ["role", "location"].
+    { "name": "not_found", "type": "JSON" },
+    // Copied out of the facts for the list.
+    { "name": "role", "type": "TEXT", "max_length": 200 },
+    { "name": "location", "type": "TEXT", "max_length": 160 },
+    { "name": "profile_url", "type": "TEXT", "max_length": 500 },
+    // One line on who they are, from the facts.
+    { "name": "summary", "type": "TEXT", "max_length": 400 },
+
+    // --- fit: the company's (leads_company, team-wide), copied onto the -----
+    // --- owner's own leads by whoever's run scored it, so their day updates --
+    { "name": "fit", "type": "INTEGER" },
+    { "name": "fit_sure", "type": "BOOLEAN" },
+    { "name": "fit_why", "type": "TEXT", "max_length": 300 },
+
+    // --- the owner's call on the lead --------------------------------------
+    // new: not looked at yet; kept: worth their time; passed: not for them.
+    { "name": "review", "type": "ENUM", "required": true, "default": "new",
+      "options": ["new", "kept", "passed"] },
+    { "name": "reviewed_at", "type": "DATETIME" },
+    // Made by leads_sample_data; its clear removes exactly these, and puts
+    // back a lead the sample wrote over from what it was before.
+    { "name": "sample", "type": "BOOLEAN", "default": false },
+    { "name": "sample_prev", "type": "JSON" }
+  ],
+  "config": {}
+}

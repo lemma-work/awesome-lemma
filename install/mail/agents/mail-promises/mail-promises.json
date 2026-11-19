@@ -1,0 +1,32 @@
+{
+  // Writes down a promise the sort heard: who promised what, by when, with the
+  // sentence that made it. Runs only when the sort answered yes to "did you
+  // promise something?" or "did they promise you something?". No tools; it
+  // returns JSON and mail_save_promises writes it.
+  "name": "mail-promises",
+  "description": "Writes down the promises made in one conversation, either way, with the sentence and the date. Returns JSON; writes nothing itself.",
+  "visibility": "POD",
+  "toolsets": [],
+  "instruction": { "$file": "instruction.md" },
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "promises": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "direction": { "type": "string", "enum": ["i_owe", "owed_to_me"] },
+            "text": { "type": "string", "description": "What was promised, under 90 characters, starting with a verb." },
+            "quote": { "type": "string", "description": "The sentence that made it, word for word." },
+            "due_at": { "type": ["string", "null"], "description": "ISO 8601 with offset, or null." }
+          },
+          "required": ["direction", "text", "quote"]
+        }
+      },
+      "kept_ids": { "type": "array", "items": { "type": "string" }, "description": "Ids of open promises a newer message kept." }
+    },
+    "required": ["promises"]
+  },
+  "permissions": { "grants": [] }
+}

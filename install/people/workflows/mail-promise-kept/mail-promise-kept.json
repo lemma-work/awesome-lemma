@@ -1,0 +1,16 @@
+{
+  // Started by mail-promise-kept when a mail conversation's last_message_at
+  // changes: a new message landed. Most conversations have no open promise;
+  // the function returns at once for those, without a call.
+  "name": "mail-promise-kept",
+  "description": "A conversation got a new message: ask whether each open promise in it was kept, close the ones that were, and ask the person about the ones it is not sure of.",
+  "max_concurrent_runs": 4,
+  "start": { "type": "DATASTORE_EVENT", "config": { "table_name": "conversation", "operations": ["UPDATE"] } },
+  "nodes": [
+    { "id": "kept", "type": "FUNCTION", "label": "Was it kept?",
+      "config": { "function_name": "mail_promise_kept",
+        "input_mapping": { "conversation_id": { "type": "expression", "value": "start.metadata.record_id" } } } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [ { "id": "e1", "source": "kept", "target": "end" } ]
+}

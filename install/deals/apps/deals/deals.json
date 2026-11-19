@@ -1,0 +1,6 @@
+{
+  "name": "deals",
+  "description": "The team's deals as a board you can drag, each change read from a conversation or meeting waiting for a yes with the sentence it came from, a page per deal, and the weekly review.",
+  "public_slug": "${deals_slug}",
+  "visibility": "POD"
+}

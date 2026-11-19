@@ -1,0 +1,10 @@
+{
+  // A brand_job row added wanted (by brand_read, or the Brand app's New design
+  // and Ask for a change): the brand-job workflow, as the person who wrote it.
+  // `bulk_writes: each` so a bulk write still starts one run per row.
+  "name": "brand-job-wanted",
+  "schedule_type": "DATASTORE",
+  "config": { "table_name": "brand_job", "operations": ["INSERT"], "when": { "state": "wanted" }, "bulk_writes": "each" },
+  "workflow_name": "brand-job",
+  "is_active": true
+}

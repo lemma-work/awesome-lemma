@@ -1,0 +1,4 @@
+{
+  "description": "Material people add to a deck (notes, a brief, last quarter's numbers), one folder per deck (/decks/<deck id>/). The outline and the cards are written from it.",
+  "visibility": "POD"
+}

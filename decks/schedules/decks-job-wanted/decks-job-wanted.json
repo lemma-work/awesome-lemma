@@ -1,0 +1,16 @@
+{
+  // A person's decks_job row written, or set back, to `wanted`: do it. `to`
+  // fires only on the write that made it wanted, so the run's own updates
+  // (working, done) never start another. decks_job has RLS, so the run is the
+  // row's owner: whoever asked.
+  "name": "decks-job-wanted",
+  "schedule_type": "DATASTORE",
+  "config": {
+    "table_name": "decks_job",
+    "operations": ["INSERT", "UPDATE"],
+    "when": { "state": { "to": "wanted" } },
+    "bulk_writes": "each"
+  },
+  "workflow_name": "decks-work",
+  "is_active": true
+}

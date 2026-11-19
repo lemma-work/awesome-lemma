@@ -1,0 +1,19 @@
+{
+  // What became of a request, for the page that sent it: the page cannot read
+  // booking_request (it is not Public), so once the request is handled a row
+  // here says booked or declined under the token the page made. Public, so it
+  // holds nothing about anyone: no name, no email, a reason in general words.
+  // Rows older than two days are removed as new ones arrive.
+  "name": "booking_outcome",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "PUBLIC",
+  "columns": [
+    { "name": "ref", "type": "TEXT", "required": true, "max_length": 64 },
+    { "name": "page_id", "type": "UUID" },
+    { "name": "state", "type": "ENUM", "required": true, "options": ["confirmed", "declined"] },
+    { "name": "reason", "type": "TEXT", "max_length": 300 },
+    { "name": "starts_at", "type": "DATETIME" }
+  ],
+  "config": {}
+}

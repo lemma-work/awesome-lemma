@@ -1,0 +1,56 @@
+{
+  // Mail's own working state for one conversation. Its id IS the conversation's
+  // id: the shared `conversation` row says what the conversation is and what it
+  // needs, from any source; this row is how Mail handles a mail one (read,
+  // labels, snoozed, muted, a draft being written, how sure the read was).
+  // Plugins above Mail read the conversation, not this.
+  "name": "mail_thread",
+  "primary_key_column": "id",
+  "enable_rls": true,
+  "visibility": "POD",
+  "columns": [
+    { "name": "unread", "type": "BOOLEAN", "default": false },
+    // Still in the provider's inbox. Done here archives there too.
+    { "name": "in_inbox", "type": "BOOLEAN", "default": true },
+    // What Gmail or Outlook already decided (promotions, updates, focused,
+    // other). A hint for the sort, never the answer.
+    { "name": "provider_category", "type": "TEXT", "max_length": 64 },
+    // Gmail's or Outlook's own labels on the newest message.
+    { "name": "labels", "type": "JSON" },
+    // Outlook replies to a message, not a conversation, so sending needs this.
+    { "name": "latest_message_id", "type": "TEXT", "max_length": 400 },
+    // The conversation's document is written and current.
+    { "name": "document_filled", "type": "BOOLEAN", "default": false },
+    { "name": "snoozed_until", "type": "DATETIME" },
+    // Never comes back, even when someone replies.
+    { "name": "muted", "type": "BOOLEAN", "default": false },
+    // When a conversation the owner is waiting on should come back with a nudge.
+    { "name": "follow_up_at", "type": "DATETIME" },
+    { "name": "waiting_since", "type": "DATETIME" },
+    // Set while a sort pass holds it, so two passes never judge it twice.
+    { "name": "claimed_at", "type": "DATETIME" },
+    // The sort could not tell which category (or what to do): it shows under
+    // "Not sure" until the person puts it somewhere, which teaches the sort.
+    { "name": "unsure", "type": "BOOLEAN", "default": false },
+    // Who decided where it is: the Decisions read, the person, or the sync
+    // (a note to self, mail older than the window).
+    { "name": "sorted_by", "type": "ENUM", "options": ["decision", "person", "sync"] },
+    // The read's confidence per question, 0 to 1.
+    { "name": "confidence", "type": "JSON" },
+    // One line on why it is where it is, shown in the reader.
+    { "name": "reason", "type": "TEXT", "max_length": 300 },
+    // The drafting handshake: the sort (or the person) sets wanted, a datastore
+    // trigger starts the writer as the owner, the writer leaves it ready.
+    { "name": "draft_state", "type": "ENUM", "required": true, "default": "none",
+      "options": ["none", "wanted", "writing", "ready", "failed"] },
+    { "name": "draft_kind", "type": "ENUM", "options": ["reply", "follow_up", "schedule"] },
+    // What the person asked of this one draft: "say no, kindly".
+    { "name": "draft_hint", "type": "TEXT", "max_length": 600 },
+    // The same handshake for promises: the sort said someone promised
+    // something, an agent writes down what and by when.
+    { "name": "promise_state", "type": "ENUM", "required": true, "default": "none",
+      "options": ["none", "wanted", "reading", "done", "failed"] },
+    { "name": "promise_directions", "type": "JSON" }
+  ],
+  "config": {}
+}

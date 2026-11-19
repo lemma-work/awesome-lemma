@@ -1,0 +1,1 @@
+- Meetings is installed: each person's outside meetings, a brief before, notes after (`meetings_add_notes`). More: `/memory/plugins/meetings.md`.

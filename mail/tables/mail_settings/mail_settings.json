@@ -1,0 +1,33 @@
+{
+  // One row per person: how their mail is handled, their voice, and where
+  // their set-up got to. Per person, so "my settings" is the only row they see.
+  "name": "mail_settings",
+  "primary_key_column": "id",
+  "enable_rls": true,
+  "visibility": "POD",
+  "columns": [
+    { "name": "display_name", "type": "TEXT", "max_length": 200 },
+    { "name": "timezone", "type": "TEXT", "max_length": 64, "default": "UTC" },
+    // The person's own domains: mail between these is internal.
+    { "name": "my_domains", "type": "JSON" },
+    // start -> connect -> reading -> categories -> drafts -> sorting -> done.
+    { "name": "setup_step", "type": "ENUM", "required": true, "default": "start",
+      "options": ["start", "connect", "reading", "categories", "drafts", "sorting", "done"] },
+    // The set-up workflow run the app is the screen for.
+    { "name": "setup_run_id", "type": "TEXT", "max_length": 64 },
+    // How far back the first read goes.
+    { "name": "backfill_days", "type": "INTEGER", "default": 30 },
+    // How long to wait before a nudge when the conversation gives no date.
+    { "name": "follow_up_days", "type": "INTEGER", "default": 3 },
+    // How the person writes, learned from their own sent mail. Every draft
+    // follows it; they can edit it.
+    { "name": "voice", "type": "TEXT", "max_length": 8000 },
+    { "name": "voice_traits", "type": "JSON" },
+    // Schedules made for this person when they turned it on: name -> id.
+    { "name": "schedules", "type": "JSON" },
+    { "name": "turned_on_at", "type": "DATETIME" },
+    // What the first sort found, for the screen that opens on it.
+    { "name": "setup_summary", "type": "JSON" }
+  ],
+  "config": {}
+}

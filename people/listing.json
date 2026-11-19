@@ -1,0 +1,28 @@
+{
+  "name": "People map",
+  "line": "sales",
+  "position": 4,
+  "job": "Everyone you deal with, and where you stand",
+  "intro": "People map builds itself from your mail and meetings: who each person is, their company, how warm things are, what is owed both ways, and when you next meet.",
+  "does": [
+    "Tells the people you deal with apart from receipts, lists and cold pitches.",
+    "Counts how warm each contact is from how often you usually talk, and flags who has gone quiet.",
+    "Writes where things stand with anyone, each line pointing to where it came from."
+  ],
+  "jobs": ["SALES", "FOUNDER"],
+  "accounts": [],
+  "setup": [
+    "Set up Mail or Meetings first: People map reads what they read.",
+    "Choose which of your mail categories are people you deal with.",
+    "Confirm your company's own domains, so colleagues are not counted as contacts.",
+    "Review who it found: add, remove or settle anyone."
+  ],
+  "today": [
+    { "verb": "drifting", "line": "People who matter going quiet, most overdue first" }
+  ],
+  "pictures": [
+    { "shot": "people", "caption": "Everyone you deal with, how warm, what is owed" },
+    { "shot": "person", "caption": "Where things stand, each line with its source" },
+    { "shot": "company", "caption": "A company: its people and the team's last contact" }
+  ]
+}

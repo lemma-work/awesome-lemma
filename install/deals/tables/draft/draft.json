@@ -1,0 +1,45 @@
+{
+  // A message written for the owner that they have not sent, for any
+  // source. It leaves only when a person approves it; nothing sends a
+  // proposed draft. A plugin can propose one here (a nudge, a reply) and the
+  // source's own plugin shows it and delivers it when the person says so.
+  //
+  // Shared definition (plugins/_contract), first written by Mail. Carried
+  // unchanged by every plugin that uses it; _contract/lint.py fails on any
+  // difference.
+  "name": "draft",
+  "primary_key_column": "id",
+  "enable_rls": true,
+  "visibility": "POD",
+  "columns": [
+    // Empty for a brand-new message.
+    { "name": "conversation_id", "type": "UUID",
+      "foreign_key": { "references": "conversation.id" } },
+    // Where it would go out: mail, slack, ...; and through which account, as
+    // conversation.source_account.
+    { "name": "source", "type": "TEXT", "required": true, "max_length": 32 },
+    { "name": "source_account", "type": "TEXT", "required": true, "max_length": 64 },
+    { "name": "kind", "type": "ENUM", "required": true, "default": "reply",
+      "options": ["reply", "follow_up", "schedule", "new"] },
+    { "name": "to_handles", "type": "JSON" },
+    { "name": "cc_handles", "type": "JSON" },
+    { "name": "subject", "type": "TEXT", "max_length": 500 },
+    { "name": "body", "type": "TEXT", "required": true },
+    // What was first written, kept after the person edits body.
+    { "name": "original_body", "type": "TEXT" },
+    // proposed: waiting for the person. approved: they pressed send (send_at
+    // may hold it for an undo window or a later time). sending, sent, failed:
+    // delivery. discarded: they threw it away.
+    { "name": "state", "type": "ENUM", "required": true, "default": "proposed",
+      "options": ["proposed", "approved", "sending", "sent", "discarded", "failed"] },
+    // Shown beside the draft: what it was built from and what it assumed.
+    { "name": "rationale", "type": "TEXT", "max_length": 800 },
+    { "name": "built_from", "type": "JSON" },
+    { "name": "send_at", "type": "DATETIME" },
+    { "name": "sent_at", "type": "DATETIME" },
+    // The provider's id for the message once sent.
+    { "name": "source_message_id", "type": "TEXT", "max_length": 400 },
+    { "name": "error", "type": "TEXT", "max_length": 2000 }
+  ],
+  "config": {}
+}

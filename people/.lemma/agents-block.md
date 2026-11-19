@@ -1,0 +1,1 @@
+- People map is installed: who each person deals with, how warm, what's owed. Asking about someone: `/memory/plugins/people.md`.

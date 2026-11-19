@@ -1,0 +1,9 @@
+{
+  // A mail draft was written (drafted, sent, thrown away): what is prepared.
+  "name": "mail-needs-you-draft",
+  "schedule_type": "DATASTORE",
+  "config": { "table_name": "draft", "operations": ["INSERT", "UPDATE"],
+              "when": { "source": "mail" }, "bulk_writes": "each" },
+  "workflow_name": "mail-needs-you-on-draft",
+  "is_active": true
+}

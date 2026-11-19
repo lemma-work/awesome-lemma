@@ -1,0 +1,8 @@
+{
+  "anchor": "2026-11-18T13:26:00Z",
+  "apps": [{ "name": "brand", "label": "Brand", "start": "/" }],
+  "notes": {
+    "brand_sample_data": "In the demo the sample stays. In a Lemma this clears it."
+  },
+  "fonts": ["Fraunces", "Source Sans 3"]
+}

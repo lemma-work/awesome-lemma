@@ -1,0 +1,115 @@
+{
+  // A person's set-up, one run each, started by the Meetings app on their
+  // first open (and by anyone who joins later, for their own calendar). The
+  // app is the screen for its four forms; each waits for that person.
+  //
+  //   connect   Google Calendar, Outlook, or the sample calendar (the app connects)
+  //   read      the last month and the next two weeks
+  //   sort      every meeting with outside people, one Decisions call each
+  //   kinds     which kinds get a brief; the app shows which meetings would,
+  //             and the person settles the ones it was not sure of
+  //   timing    the evening before, or an hour before
+  //   after     Google Meet transcripts, their own notes, or nothing
+  //   due       the first briefs are written at once
+  //   memory    Meetings' block in /memory/AGENTS.md, so the Lemma's agents
+  //             know (meetings_memory)
+  "name": "meetings-setup",
+  "description": "Set up one person's meetings: connect a calendar, read the last month and the next two weeks, sort them, choose which kinds get a brief, when, and where notes come from after.",
+  "run_title": ["hold.email"],
+  "start": { "type": "MANUAL" },
+  "nodes": [
+    { "id": "connect", "type": "FORM", "label": "Connect your calendar",
+      "config": { "input_schema": {
+        "type": "object",
+        "properties": {
+          "provider": { "type": "string", "enum": ["google", "outlook", "sample"], "title": "Google Calendar, Outlook, or the sample calendar" },
+          "account_id": { "type": "string", "title": "Connected account" },
+          "email": { "type": "string", "title": "Address" },
+          "display_name": { "type": "string", "title": "Your name" },
+          "timezone": { "type": "string", "title": "Time zone" }
+        },
+        "required": ["provider"]
+      } } },
+    { "id": "hold", "type": "FUNCTION", "label": "Hold the calendar",
+      "config": { "function_name": "meetings_connect", "input_mapping": {
+        "provider": { "type": "expression", "value": "connect.provider" },
+        "account_id": { "type": "expression", "value": "connect.account_id", "optional": true },
+        "email": { "type": "expression", "value": "connect.email", "optional": true },
+        "display_name": { "type": "expression", "value": "connect.display_name", "optional": true },
+        "timezone": { "type": "expression", "value": "connect.timezone", "optional": true } } } },
+    { "id": "read", "type": "FUNCTION", "label": "Read the last month and the next two weeks",
+      "config": { "function_name": "meetings_calendar_read", "input_mapping": {
+        "calendar_id": { "type": "expression", "value": "hold.calendar_id" },
+        "past_days": { "type": "literal", "value": 30 },
+        "ahead_days": { "type": "literal", "value": 14 } } } },
+    { "id": "sort", "type": "LOOP", "label": "Sort them, a pass at a time",
+      "config": { "items_path": "hold.passes", "item_var_name": "pass", "child_node_id": "sort_pass" } },
+    { "id": "sort_pass", "type": "FUNCTION", "label": "Sort sixty",
+      "config": { "function_name": "meetings_sort", "input_mapping": {
+        "max_meetings": { "type": "literal", "value": 60 },
+        "run_pass": { "type": "expression", "value": "loop.pass" } } } },
+    { "id": "kinds", "type": "FORM", "label": "Which meetings get a brief",
+      "config": { "input_schema": {
+        "type": "object",
+        "properties": {
+          "kinds_on": {
+            "type": "array", "title": "Brief me before", "uniqueItems": true,
+            "items": { "type": "string", "enum": ["customer", "investor", "candidate", "partner", "internal", "other"] },
+            "default": { "type": "expression", "value": "hold.kinds_on" } }
+        },
+        "required": ["kinds_on"]
+      } } },
+    { "id": "kinds_apply", "type": "FUNCTION", "label": "Keep your switches",
+      "config": { "function_name": "meetings_setup_kinds", "input_mapping": {
+        "kinds_on": { "type": "expression", "value": "kinds.kinds_on" },
+        "setup": { "type": "literal", "value": true } } } },
+    { "id": "timing", "type": "FORM", "label": "When you want the brief",
+      "config": { "input_schema": {
+        "type": "object",
+        "properties": {
+          "brief_when": { "type": "string", "enum": ["evening_before", "hour_before"], "title": "Brief me", "default": "evening_before" }
+        },
+        "required": ["brief_when"]
+      } } },
+    { "id": "after", "type": "FORM", "label": "After meetings",
+      "config": { "input_schema": {
+        "type": "object",
+        "properties": {
+          "notes_from": { "type": "string", "enum": ["meet", "notes", "skip"], "title": "After a meeting, read", "default": "notes" },
+          "meet_account_id": { "type": "string", "title": "Google Meet account" }
+        },
+        "required": ["notes_from"]
+      } } },
+    { "id": "done", "type": "FUNCTION", "label": "Keep your choices",
+      "config": { "function_name": "meetings_setup_done", "input_mapping": {
+        "brief_when": { "type": "expression", "value": "timing.brief_when" },
+        "notes_from": { "type": "expression", "value": "after.notes_from" },
+        "meet_account_id": { "type": "expression", "value": "after.meet_account_id", "optional": true } } } },
+    { "id": "due", "type": "FUNCTION", "label": "Write the first briefs",
+      "config": { "function_name": "meetings_due", "input_mapping": {
+        "first_run": { "type": "literal", "value": true } } } },
+    { "id": "needs", "type": "FUNCTION", "label": "What needs you on the calendar",
+      "config": { "function_name": "meetings_needs_you", "input_mapping": {} } },
+    // Last, so nothing waits on it: Meetings' block in /memory/AGENTS.md and
+    // its guide (_contract README, "Memory block").
+    { "id": "memory", "type": "FUNCTION", "label": "Tell this Lemma's agents about Meetings",
+      "config": { "function_name": "meetings_memory", "input_mapping": {
+        "remove": { "type": "literal", "value": false } } } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [
+    { "id": "e1", "source": "connect", "target": "hold" },
+    { "id": "e2", "source": "hold", "target": "read" },
+    { "id": "e3", "source": "read", "target": "sort" },
+    { "id": "e4", "source": "sort_pass", "target": "sort" },
+    { "id": "e5", "source": "sort", "target": "kinds" },
+    { "id": "e6", "source": "kinds", "target": "kinds_apply" },
+    { "id": "e7", "source": "kinds_apply", "target": "timing" },
+    { "id": "e8", "source": "timing", "target": "after" },
+    { "id": "e9", "source": "after", "target": "done" },
+    { "id": "e10", "source": "done", "target": "due" },
+    { "id": "e11", "source": "due", "target": "needs" },
+    { "id": "e11n", "source": "needs", "target": "memory" },
+    { "id": "e12", "source": "memory", "target": "end" }
+  ]
+}

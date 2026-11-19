@@ -1,0 +1,30 @@
+{
+  // One row per person: when they want their day, and how their last check
+  // went. Per person, so "my settings" is the only row they see.
+  "name": "today_settings",
+  "primary_key_column": "id",
+  "enable_rls": true,
+  "visibility": "POD",
+  "columns": [
+    { "name": "display_name", "type": "TEXT", "max_length": 200 },
+    // IANA zone the morning time is read in.
+    { "name": "timezone", "type": "TEXT", "max_length": 64, "default": "UTC" },
+    // "When do you want your day?" as HH:MM in their own time.
+    { "name": "morning_at", "type": "TEXT", "max_length": 5, "default": "08:00" },
+    // start -> done: the one question Today asks, answered.
+    { "name": "setup_step", "type": "ENUM", "required": true, "default": "start", "options": ["start", "done"] },
+    { "name": "setup_done_at", "type": "DATETIME" },
+    // The person's own morning schedule (a TIME schedule on today-sweep,
+    // made by the app as them): its id, to move it when the time changes.
+    { "name": "schedule_id", "type": "TEXT", "max_length": 64 },
+    // The last check: when, and what it did.
+    { "name": "last_swept_at", "type": "DATETIME" },
+    { "name": "last_sweep", "type": "JSON" },
+    // The morning note as it would be sent, written by every check. Lemma
+    // cannot yet send it to the person at their time (see README), so the app
+    // shows it instead.
+    { "name": "day_note", "type": "TEXT", "max_length": 1200 },
+    { "name": "day_note_at", "type": "DATETIME" }
+  ],
+  "config": {}
+}

@@ -1,0 +1,31 @@
+{
+  "name": "Deal tracker",
+  "line": "sales",
+  "position": 6,
+  "job": "Deals that move when the conversation does",
+  "intro": "Deal tracker keeps your pipeline current from what was actually said in mail and meetings. Every change waits for a person, with the sentence it came from, and the weekly review writes itself.",
+  "does": [
+    "Proposes new deals, stage moves, amounts and close dates from what was said.",
+    "Never changes a deal on its own: you keep, change or dismiss each proposal.",
+    "Writes the weekly review: what moved, what is closing, what went quiet."
+  ],
+  "jobs": ["SALES", "FOUNDER"],
+  "accounts": [],
+  "setup": [
+    "Name your stages, each with what reaching it means.",
+    "Pick a currency.",
+    "Bring in the deals you have: paste a spreadsheet, or find them in your last 30 days of mail and meeting notes.",
+    "Review what it found, each with its sentence.",
+    "Pick the day and time for the weekly review."
+  ],
+  "today": [
+    { "verb": "decide", "line": "Deal changes it found, waiting for your yes" },
+    { "verb": "do", "line": "Deals of yours closing within three days" },
+    { "verb": "drifting", "line": "Deals whose people have gone quiet" }
+  ],
+  "pictures": [
+    { "shot": "board", "caption": "The board by stage, with changes waiting for you" },
+    { "shot": "deal", "caption": "A deal's history, each change with its sentence" },
+    { "shot": "review", "caption": "The weekly review, written from the counts" }
+  ]
+}

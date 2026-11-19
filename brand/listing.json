@@ -1,0 +1,27 @@
+{
+  "name": "Brand kit",
+  "line": "sales",
+  "position": 9,
+  "job": "Everything you make looks and sounds like you",
+  "intro": "Give Brand kit your website, or your logo and guide. It reads your colours, type, logos and voice, shows where it found each, and every plugin that makes something follows them.",
+  "does": [
+    "Reads your brand from your site, keeping screenshots and CSS as evidence.",
+    "Measures contrast between your colours, and keeps every fix you make.",
+    "Makes graphics in your brand, and checks each one before anyone sees it."
+  ],
+  "jobs": ["MARKETING", "FOUNDER"],
+  "accounts": [],
+  "setup": [
+    "Paste your website, upload your logo and guide, or try a made-up brand.",
+    "Watch it read: screenshots, colours, faces and logos as they land.",
+    "Check what it found, fix anything wrong, then press Looks right."
+  ],
+  "today": [
+    { "verb": "decide", "line": "A brand to check after it has been read" },
+    { "verb": "decide", "line": "A design to review, or one that breaks the brand" }
+  ],
+  "pictures": [
+    { "shot": "brand", "caption": "Colours by role, with where each was found" },
+    { "shot": "brand-design", "caption": "A banner, checked against the brand" }
+  ]
+}

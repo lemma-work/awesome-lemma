@@ -1,0 +1,16 @@
+{
+  // Every team-wide row the sample made (a deal, its history and notes), or
+  // a deal kept from a sample conversation, so the sample's clear removes
+  // exactly those. Per person (RLS): each person's clear removes what their
+  // own sample made. Their own rows read from the sample say so themselves
+  // (`deals_read.sample`, `deals_change.sample`).
+  "name": "deals_sample_row",
+  "primary_key_column": "id",
+  "enable_rls": true,
+  "visibility": "POD",
+  "columns": [
+    { "name": "table_name", "type": "TEXT", "required": true, "max_length": 64 },
+    { "name": "row_id", "type": "UUID", "required": true }
+  ],
+  "config": {}
+}

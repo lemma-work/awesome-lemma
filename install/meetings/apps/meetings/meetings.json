@@ -1,0 +1,6 @@
+{
+  "name": "meetings",
+  "description": "Every meeting with people from outside, prepared before and written up after: this week by day with each brief, and a meeting's decisions and promises with the sentence they came from.",
+  "public_slug": "${meetings_slug}",
+  "visibility": "POD"
+}

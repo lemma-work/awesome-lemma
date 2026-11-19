@@ -1,0 +1,16 @@
+{
+  // people_company is team-wide: a change there has no person behind the row,
+  // so the run is the schedule's owner, and the look-up sees only what the
+  // whole team may see. Fires on the write that made research wanted: a new
+  // row (the first look-up) or an update (look again).
+  "name": "people-lookup-wanted",
+  "schedule_type": "DATASTORE",
+  "config": {
+    "table_name": "people_company",
+    "operations": ["INSERT", "UPDATE"],
+    "when": { "research_state": { "to": "wanted" } },
+    "bulk_writes": "each"
+  },
+  "workflow_name": "people-company-lookup",
+  "is_active": true
+}

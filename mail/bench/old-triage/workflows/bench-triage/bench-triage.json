@@ -1,0 +1,22 @@
+{
+  // The Inbox's triage step as its workflows called it (AGENT node, same
+  // input mapping), fed from a form so the bench can hand it a batch.
+  "name": "bench-triage",
+  "description": "Run the original triage agent on one batch.",
+  "start": { "type": "MANUAL" },
+  "nodes": [
+    { "id": "packets", "type": "FORM", "label": "Batch",
+      "config": { "input_schema": { "type": "object", "properties": {
+        "me": { "type": "object" }, "now_local": { "type": "string" }, "splits": { "type": "array" },
+        "rules": { "type": "array" }, "threads": { "type": "array" } }, "required": ["threads"] } } },
+    { "id": "judge", "type": "AGENT", "label": "Triage",
+      "config": { "agent_name": "triage", "input_mapping": {
+        "me": { "type": "expression", "value": "packets.me" },
+        "now_local": { "type": "expression", "value": "packets.now_local" },
+        "splits": { "type": "expression", "value": "packets.splits" },
+        "rules": { "type": "expression", "value": "packets.rules" },
+        "threads": { "type": "expression", "value": "packets.threads" } } } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [ { "id": "e1", "source": "packets", "target": "judge" }, { "id": "e2", "source": "judge", "target": "end" } ]
+}

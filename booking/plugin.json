@@ -1,0 +1,9 @@
+{
+  // Booking page carries Meetings inside its bundle, so one install into an
+  // empty Lemma brings it: Meetings reads the calendars, and a booking becomes
+  // one of its meetings, with Meetings' brief. Read by _build/assemble.py,
+  // which merges Meetings from its own folder into install/booking/,
+  // the bundle that is installed.
+  "name": "booking",
+  "carries": ["meetings"]
+}

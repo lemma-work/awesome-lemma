@@ -1,0 +1,29 @@
+{
+  // Resumable reading, one row per mailbox per kind. A first read will die
+  // partway through a big mailbox; this lets it pick up instead of restarting.
+  // It is also the lock: a push and the catch-up landing together must not both
+  // write the same messages.
+  "name": "mail_sync_state",
+  "primary_key_column": "id",
+  "enable_rls": true,
+  "visibility": "POD",
+  "columns": [
+    { "name": "mailbox_id", "type": "UUID", "required": true,
+      "foreign_key": { "references": "mail_mailbox.id" } },
+    { "name": "kind", "type": "ENUM", "required": true, "options": ["backfill", "incremental"] },
+    //   backfill:    recent -> corpus_sent -> corpus_fill -> index_only -> done
+    //   incremental: recent -> corpus_fill -> done (then back to recent)
+    { "name": "phase", "type": "TEXT", "max_length": 32 },
+    // A page token while a phase is mid-flight, else an epoch watermark.
+    { "name": "cursor", "type": "TEXT", "max_length": 2000 },
+    { "name": "state", "type": "ENUM", "required": true, "default": "idle",
+      "options": ["idle", "running", "error", "done"] },
+    { "name": "lease_until", "type": "DATETIME" },
+    { "name": "progress_done", "type": "INTEGER", "default": 0 },
+    { "name": "progress_total", "type": "INTEGER" },
+    { "name": "cutoff_at", "type": "DATETIME" },
+    { "name": "last_run_at", "type": "DATETIME" },
+    { "name": "last_error", "type": "TEXT", "max_length": 2000 }
+  ],
+  "config": {}
+}

@@ -1,0 +1,26 @@
+{
+  // Who fits this team: one sentence and a few example companies. One row
+  // for the Lemma, team-wide (no RLS): a team has one ideal customer, so every
+  // company has one fit. Whoever sets Lead research up first writes it; any
+  // member can change it, and the next scores use it. The row's id is
+  // uuid5(PROFILE_NS, "profile"), PROFILE_NS = 7d2f4b1c-9a3e-4c58-8e61-2b0f5d9c4a17,
+  // so two set-ups at once write one row.
+  "name": "leads_profile",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    // "B2B software teams of 20-200 in Europe".
+    { "name": "fit_sentence", "type": "TEXT", "max_length": 400 },
+    // A few companies that fit well, as typed: ["Lumen Labs", "brightwave-health.example"].
+    { "name": "fit_examples", "type": "JSON" },
+    // A fingerprint of the sentence and examples: a fit scored against an
+    // older one is scored again.
+    { "name": "fit_version", "type": "TEXT", "max_length": 64 },
+    // Who wrote it last, for "set by" on screen.
+    { "name": "set_by", "type": "TEXT", "max_length": 64 },
+    { "name": "set_by_name", "type": "TEXT", "max_length": 200 },
+    { "name": "set_at", "type": "DATETIME" }
+  ],
+  "config": {}
+}

@@ -1,0 +1,22 @@
+{
+  // A person fixed what Brand kit had: what an asset is, whether a design
+  // follows the brand, or a colour or face it read. The newest twenty of each
+  // kind go with every later call as worked examples; a fixed colour or face
+  // is kept when the brand is read again.
+  "name": "brand_correction",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "kind", "type": "ENUM", "required": true, "options": ["asset", "check", "color", "font", "voice"] },
+    { "name": "brand_id", "type": "UUID" },
+    // The asset, the version, or the role ("accent", "display").
+    { "name": "subject", "type": "TEXT", "required": true, "max_length": 200 },
+    { "name": "from_answer", "type": "JSON" },
+    { "name": "to_answer", "type": "JSON", "required": true },
+    // What the call saw (assets and checks), kept short: examples are capped.
+    { "name": "evidence", "type": "TEXT", "max_length": 6000 },
+    { "name": "by_name", "type": "TEXT", "max_length": 200 }
+  ],
+  "config": {}
+}

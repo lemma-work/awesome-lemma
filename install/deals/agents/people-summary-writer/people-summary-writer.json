@@ -1,0 +1,34 @@
+{
+  // Says where things stand with one person, from the conversations and
+  // meetings it is handed, citing each one, and notes facts worth keeping.
+  // No tools: everything it may use arrives in the input, so it cannot wander
+  // and cannot invent a source. It returns JSON; people_save_summary writes it.
+  "name": "people-summary-writer",
+  "description": "Writes 'where things stand' with one person in two to four sentences, each citing the conversation or meeting it came from, and notes durable facts about them with their source.",
+  "visibility": "POD",
+  "toolsets": [],
+  "instruction": { "$file": "instruction.md" },
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "summary": {
+        "type": "string",
+        "description": "Two to four plain sentences, under 80 words, each ending with the [n] of the source(s) it rests on."
+      },
+      "facts": {
+        "type": "array",
+        "description": "Up to four durable facts about the person worth remembering next time, each from one source. Empty when none.",
+        "items": {
+          "type": "object",
+          "properties": {
+            "fact": { "type": "string", "description": "One short line: their role, where they are, how they like to work." },
+            "source_n": { "type": "integer", "description": "The n of the source it came from." }
+          },
+          "required": ["fact", "source_n"]
+        }
+      }
+    },
+    "required": ["summary", "facts"]
+  },
+  "permissions": { "grants": [] }
+}

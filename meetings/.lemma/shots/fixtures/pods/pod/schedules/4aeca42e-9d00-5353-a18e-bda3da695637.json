@@ -1,0 +1,8 @@
+{
+  "id": "4aeca42e-9d00-5353-a18e-bda3da695637",
+  "name": "meetings-sweep-user-sam",
+  "schedule_type": "TIME",
+  "workflow_name": "meetings-sweep",
+  "config": { "cron": "*/15 * * * *", "timezone": "Asia/Kolkata" },
+  "is_active": true
+}

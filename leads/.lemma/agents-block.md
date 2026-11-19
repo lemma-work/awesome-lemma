@@ -1,0 +1,1 @@
+- Lead research is installed: people and companies looked up, each fact with its link. Ask with `leads_request`; more: `/memory/plugins/leads.md`.

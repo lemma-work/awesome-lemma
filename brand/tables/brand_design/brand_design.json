@@ -1,0 +1,41 @@
+{
+  // A graphic made in the brand: a launch post, a social image, a banner.
+  // Every version is kept (brand_version); this row points at the current
+  // one. Team-wide: the library is the team's, so a fourth launch post can
+  // look like the first three.
+  "name": "brand_design",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "brand_id", "type": "UUID", "required": true, "foreign_key": { "references": "brand.id" } },
+    { "name": "title", "type": "TEXT", "required": true, "max_length": 240 },
+    // social_post 1080×1080, social_card 1200×630, story 1080×1920,
+    // banner 1500×500, poster 1080×1350, one_pager 816×1056, other.
+    { "name": "kind", "type": "ENUM", "required": true, "default": "social_post",
+      "options": ["social_post", "social_card", "story", "banner", "poster", "one_pager", "other"] },
+    //   making     the assistant is on it
+    //   review     the current version follows the brand; waiting for a person
+    //   off_brand  the current version broke a rule (brand_version says which)
+    //   approved   a person approved it
+    //   failed     the assistant stopped without a version
+    //   archived   put away
+    { "name": "state", "type": "ENUM", "required": true, "default": "making",
+      "options": ["making", "review", "off_brand", "approved", "failed", "archived"] },
+    { "name": "prompt", "type": "TEXT", "max_length": 4000 },
+    // The current version and its files.
+    { "name": "version", "type": "INTEGER", "required": true, "default": 0 },
+    { "name": "artifact_path", "type": "FILE_PATH" },
+    { "name": "preview_path", "type": "FILE_PATH" },
+    // The folder its versions live in: <folder>/v1/, <folder>/v2/…
+    { "name": "folder", "type": "FILE_PATH" },
+    { "name": "activity", "type": "TEXT", "max_length": 400 },
+    // Who asked for it, and where: chat, app, sample.
+    { "name": "requested_by", "type": "USER" },
+    { "name": "requested_name", "type": "TEXT", "max_length": 200 },
+    { "name": "made_from", "type": "ENUM", "options": ["chat", "app", "sample"] },
+    { "name": "approved_at", "type": "DATETIME" },
+    { "name": "approved_by", "type": "TEXT", "max_length": 200 }
+  ],
+  "config": {}
+}

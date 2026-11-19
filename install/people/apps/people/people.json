@@ -1,0 +1,6 @@
+{
+  "name": "people",
+  "description": "Everyone you deal with and where you stand: their company, how warm things are, the last contact either way, what's owed both ways and the next meeting, with a page for each person.",
+  "public_slug": "${people_slug}",
+  "visibility": "POD"
+}

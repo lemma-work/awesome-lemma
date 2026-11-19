@@ -1,0 +1,6 @@
+{
+  "connector": "outlook",
+  "mode": "PER_MEMBER",
+  "required": false,
+  "purpose": "Mail: Reads your Outlook mail to sort it and draft the replies you owe, and sends a reply only when you press Send. Meetings: Reads your Outlook calendar: the next two weeks for briefs, the last month for what was said. Never adds, changes or answers an event."
+}

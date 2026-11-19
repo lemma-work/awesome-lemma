@@ -1,0 +1,6 @@
+{
+  "name": "decks",
+  "description": "Decks: a deck from one sentence, in your brand. Approve the outline, watch the cards arrive, ask for changes that touch only the cards they are about, present, print, or export to PowerPoint.",
+  "public_slug": "${decks_slug}",
+  "visibility": "POD"
+}

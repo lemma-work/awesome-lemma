@@ -1,0 +1,26 @@
+{
+  // One email domain of a company: acme.com, acme.co.uk. A company has as
+  // many as it uses; a plugin that meets an address looks its domain up here.
+  //
+  // A separate table rather than a list on the company, for the reasons
+  // `person_handle` is one: a lookup by domain is a plain join, and moving a
+  // domain to another company (or merging two) is moving rows. The row's id is
+  // uuid5(COMPANY_NS, domain), COMPANY_NS = c6fc6ea2-4356-443e-8065-e1d71b8f6359,
+  // so a domain belongs to one company only, and two members' jobs adding the
+  // same domain at once write the same row instead of two.
+  //
+  // Team-wide (no RLS), like `company`. Shared definition (plugins/_contract);
+  // carried unchanged by every plugin that uses it; _contract/lint.py fails on
+  // any difference. Free webmail (gmail.com, outlook.com…) never makes one.
+  "name": "company_domain",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "company_id", "type": "UUID", "required": true,
+      "foreign_key": { "references": "company.id" } },
+    // Lowercased, without "www.": acme.co.uk.
+    { "name": "domain", "type": "TEXT", "required": true, "max_length": 253 }
+  ],
+  "config": {}
+}

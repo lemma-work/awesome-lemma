@@ -1,0 +1,11 @@
+{
+  // People map gave someone a company. Its refresh makes companies after its
+  // read sorts people, so "worth looking up?" waits for this when a kind
+  // arrived first (a work address with no company yet).
+  "name": "leads-company-known",
+  "schedule_type": "DATASTORE",
+  "config": { "table_name": "people_person", "operations": ["UPDATE"],
+              "when": { "company_id": { "changed": true } }, "bulk_writes": "each" },
+  "workflow_name": "leads-consider-on-company",
+  "is_active": true
+}

@@ -1,0 +1,1 @@
+- Deal tracker is installed: the team's deals, in the Deals app (`deal` table). How to use it: `/memory/plugins/deals.md`.

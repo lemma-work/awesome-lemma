@@ -1,0 +1,37 @@
+{
+  "format_version": 4,
+  "name": "Lead research",
+  "description": "Looks up each new person and company the first time they matter: their role, what the company does, its size, recent news and how well they fit you, every fact with its source. Brings People map, Mail and Meetings with it.",
+  "variables": {
+    "inbox_slug": {
+      "type": "app_slug",
+      "source_value": "mail-inbox",
+      "default": "mail-inbox",
+      "description": "Public URL slug for the Inbox app (unique platform-wide; a suffix is added on collision)"
+    },
+    "meetings_slug": {
+      "type": "app_slug",
+      "source_value": "meetings",
+      "default": "meetings",
+      "description": "Public URL slug for the Meetings app (unique platform-wide; a suffix is added on collision)"
+    },
+    "people_slug": {
+      "type": "app_slug",
+      "source_value": "people",
+      "default": "people",
+      "description": "Public URL slug for the People app (unique platform-wide; a suffix is added on collision)"
+    },
+    "companies_slug": {
+      "type": "app_slug",
+      "source_value": "companies",
+      "default": "companies",
+      "description": "Public URL slug for the Companies app (unique platform-wide; a suffix is added on collision)"
+    },
+    "leads_slug": {
+      "type": "app_slug",
+      "source_value": "leads",
+      "default": "leads",
+      "description": "Public URL slug for the Leads app (unique platform-wide; a suffix is added on collision)"
+    }
+  }
+}

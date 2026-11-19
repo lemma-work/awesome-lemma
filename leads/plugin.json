@@ -1,0 +1,7 @@
+{
+  // Lead research carries People map (which carries Mail and Meetings), so
+  // one install into an empty Lemma brings all four: it looks up the people
+  // People map counts as someone you deal with. Read by _build/assemble.py.
+  "name": "leads",
+  "carries": ["people"]
+}

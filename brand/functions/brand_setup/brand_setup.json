@@ -1,0 +1,29 @@
+{
+  "name": "brand_setup",
+  "description": "Brand kit's set-up: the memory block in /memory/AGENTS.md (whatever the Lemma writes or makes for the team follows its brand and voice), its guide at /memory/plugins/brand.md, and the playbooks in /brand/. Safe to run again.",
+  "type": "API",
+  "visibility": "POD",
+  "code": {
+    "$file": "code.py"
+  },
+  "permissions": {
+    "grants": [
+      {
+        "resource_type": "folder",
+        "resource_name": "/brand",
+        "permission_ids": [
+          "folder.read",
+          "folder.write"
+        ]
+      },
+      {
+        "resource_type": "folder",
+        "resource_name": "/memory",
+        "permission_ids": [
+          "folder.read",
+          "folder.write"
+        ]
+      }
+    ]
+  }
+}

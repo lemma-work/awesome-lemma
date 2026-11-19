@@ -1,0 +1,25 @@
+{
+  // Where a fact about the brand came from: a screenshot of a page, the CSS
+  // it was read from, a line of copy, a page of an uploaded guide. The Brand
+  // app shows each colour, face, logo and voice line beside its evidence.
+  "name": "brand_evidence",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "brand_id", "type": "UUID", "required": true, "foreign_key": { "references": "brand.id" } },
+    // The read it came from: a later read's evidence replaces it.
+    { "name": "job_id", "type": "UUID" },
+    { "name": "kind", "type": "ENUM", "required": true, "options": ["screenshot", "css", "copy", "document", "file"] },
+    // What it supports: colors, fonts, logos, voice, or one colour's role
+    // ("color:accent") or one face's role ("font:display").
+    { "name": "about", "type": "TEXT", "required": true, "max_length": 64 },
+    { "name": "path", "type": "FILE_PATH" },
+    // The page it came from.
+    { "name": "url", "type": "TEXT", "max_length": 1000 },
+    // The lines themselves: CSS declarations, quoted copy.
+    { "name": "excerpt", "type": "TEXT", "max_length": 4000 },
+    { "name": "note", "type": "TEXT", "max_length": 500 }
+  ],
+  "config": {}
+}

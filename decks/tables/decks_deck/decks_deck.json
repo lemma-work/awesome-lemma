@@ -1,0 +1,49 @@
+{
+  // A deck: one sentence in, an outline a person approves, then cards. The
+  // team's: everyone in the Lemma sees and edits the Lemma's decks (who made
+  // each is on it). Work on a deck is asked for in decks_job, which is each
+  // person's own, so it runs as them.
+  //
+  // `look` is the deck's look: the Lemma's brand (the shared `brand` row,
+  // Brand kit's) or one of Deck maker's themes. A brand deck follows the
+  // team's current brand: the app draws it from the brand row, and every
+  // piece of work on it (decks_plan) takes the brand's look and voice afresh;
+  // `look` and `voice` here are the last ones taken, used when the brand is
+  // gone. A theme deck keeps its theme.
+  //   { "source": "brand" | "theme", "theme_id", "name", "surface", "raised",
+  //     "ink", "muted", "accent", "accent_ink", "heading_font", "body_font",
+  //     "radius", "logo_path", "dark" }
+  "name": "decks_deck",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "title", "type": "TEXT", "max_length": 200 },
+    // The one sentence it was made from, word for word.
+    { "name": "prompt", "type": "TEXT", "required": true, "max_length": 2000 },
+    // Optional notes, and files under /decks/<deck id>/ ([{ "path", "name" }]).
+    { "name": "notes", "type": "TEXT", "max_length": 20000 },
+    { "name": "files", "type": "JSON" },
+    //   outlining      the outline is being written
+    //   outline_ready  waiting for a person to approve the outline
+    //   writing        cards are being written, one at a time
+    //   ready          every card is written
+    //   failed         the outline or every card failed; `error` says why
+    { "name": "status", "type": "ENUM", "required": true, "default": "outlining",
+      "options": ["outlining", "outline_ready", "writing", "ready", "failed"] },
+    { "name": "card_count", "type": "INTEGER", "default": 8 },
+    { "name": "density", "type": "ENUM", "default": "balanced", "options": ["concise", "balanced", "detailed"] },
+    { "name": "look", "type": "JSON" },
+    // How the brand talks (its voice line and the voice part of its guide),
+    // taken with the look. Empty for a theme.
+    { "name": "voice", "type": "TEXT", "max_length": 4000 },
+    // Where it was asked for: app, chat (the Lemma's assistant), sample.
+    { "name": "source", "type": "ENUM", "required": true, "default": "app", "options": ["app", "chat", "sample"] },
+    { "name": "made_by", "type": "TEXT", "max_length": 64 },
+    { "name": "made_by_name", "type": "TEXT", "max_length": 200 },
+    { "name": "approved_at", "type": "DATETIME" },
+    { "name": "ready_at", "type": "DATETIME" },
+    { "name": "error", "type": "TEXT", "max_length": 2000 }
+  ],
+  "config": {}
+}

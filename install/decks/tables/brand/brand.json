@@ -1,0 +1,78 @@
+{
+  // The team's brand: its colours with what each is for, its type, its logo
+  // files, the guide that says how it looks and talks, and where it came from.
+  // Brand kit writes it; every plugin that makes something reads it (Deck
+  // maker, Proposals, LinkedIn, Newsletter, Mail's drafts), so what the Lemma
+  // makes looks and sounds like the team.
+  //
+  // Read the default row (`is_default`) whose state is `check` or `ready`.
+  // Apply `tokens` (or link `theme_css_path`), take logos from `logos`, and
+  // read the guide at `guide_path` before writing words for the team. Never
+  // invent a colour, a typeface or a logo the row does not have.
+  //
+  // Shared definition (plugins/_contract), first written by Brand kit. Carried
+  // unchanged by every plugin that uses it; _contract/lint.py fails on any
+  // difference. Team-wide (no RLS): a brand belongs to the team, and one
+  // person's re-read changes it for everyone.
+  "name": "brand",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "name", "type": "TEXT", "required": true, "max_length": 120 },
+    // The one readers use when a Lemma holds more than one (a product line,
+    // a client's brand).
+    { "name": "is_default", "type": "BOOLEAN", "required": true, "default": false },
+    //   new      made, nothing read yet
+    //   reading  being read from its source; the last values (if any) still stand
+    //   check    read, waiting for a person to check it; usable
+    //   ready    checked by a person
+    //   archived no longer used
+    { "name": "state", "type": "ENUM", "required": true, "default": "new",
+      "options": ["new", "reading", "check", "ready", "archived"] },
+    // Where it came from: website, files (an uploaded logo and guide), manual,
+    // sample; and the provider's own id for it (the site's address, the
+    // folder the files are in).
+    { "name": "source", "type": "TEXT", "required": true, "default": "website", "max_length": 32 },
+    { "name": "source_id", "type": "TEXT", "max_length": 500 },
+    // The team's own website, when it has one.
+    { "name": "site_url", "type": "TEXT", "max_length": 500 },
+    // Every colour with its role, in order:
+    //   [{ "role": "accent", "value": "#5a3fd4", "name": "Violet",
+    //      "for": "Buttons and the one thing to look at", "from": "--color-primary in site.css" }]
+    // Roles: ink (body text), surface (the page), surface_2 (cards, panels),
+    // line (borders), muted (secondary text), accent, accent_ink (text on the
+    // accent, measured), ok, bad; anything else is "extra".
+    { "name": "colors", "type": "JSON" },
+    // Type by role: { "display": { "family": "Fraunces", "stack": "Fraunces, Georgia, serif",
+    //   "weight": 500, "source": "google" }, "body": {…}, "mono": {…} }.
+    // source: google, open (another open licence), licensed (named, not
+    // stored: the team licenses it), system.
+    { "name": "fonts", "type": "JSON" },
+    // The same as flat custom properties renderers apply: "--brand-ink",
+    // "--brand-surface", "--brand-surface-2", "--brand-line", "--brand-muted",
+    // "--brand-accent", "--brand-accent-ink", "--brand-ok", "--brand-bad",
+    // "--brand-font-display", "--brand-font-body", "--brand-font-mono",
+    // "--brand-radius". theme_css_path is the same as a stylesheet to link.
+    { "name": "tokens", "type": "JSON" },
+    { "name": "theme_css_path", "type": "FILE_PATH" },
+    // The main logo file, and every logo variant:
+    //   [{ "variant": "primary", "path": "/brand/acme/assets/logo.svg", "on": "light" }]
+    // variant: primary, inverse (for dark grounds), mono, mark (the symbol alone).
+    { "name": "logo_path", "type": "FILE_PATH" },
+    { "name": "logos", "type": "JSON" },
+    // The written guide (markdown): what the brand is, its colours and type
+    // and what each is for, its logo, and its voice with real phrases from
+    // the team. Read it before writing for the team.
+    { "name": "guide_path", "type": "FILE_PATH" },
+    // How it talks, in a sentence or two, for a prompt; the guide has the rest.
+    { "name": "voice", "type": "TEXT", "max_length": 1000 },
+    // The folder its files live in.
+    { "name": "root_path", "type": "FILE_PATH" },
+    // When it was last read from its source, and last checked by a person.
+    { "name": "synced_at", "type": "DATETIME" },
+    { "name": "checked_at", "type": "DATETIME" },
+    { "name": "checked_by", "type": "TEXT", "max_length": 200 }
+  ],
+  "config": {}
+}

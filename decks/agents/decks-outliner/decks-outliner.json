@@ -1,0 +1,33 @@
+{
+  // Writes a deck's outline from one sentence (and the person's notes and
+  // files, when there are any): a title and one line per card. Runs only to
+  // write. No tools: everything arrives in the input, so it cannot wander;
+  // decks_save_outline writes what it returns, and a person approves it
+  // before any card is written.
+  "name": "decks-outliner",
+  "description": "Writes a deck's outline from one sentence, the person's notes and files: a title and, for each card, a title, one line on what it covers and a layout. Returns JSON; writes nothing.",
+  "visibility": "POD",
+  "toolsets": [],
+  "instruction": { "$file": "instruction.md" },
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "title": { "type": "string", "description": "The deck's title, at most 8 words." },
+      "cards": {
+        "type": "array",
+        "description": "Exactly card_count cards, in order. The first is the title card (hero), the last the closing card.",
+        "items": {
+          "type": "object",
+          "properties": {
+            "title": { "type": "string", "description": "The card's title, at most 8 words, specific." },
+            "outline": { "type": "string", "description": "One or two sentences on what the card says." },
+            "layout": { "type": "string", "enum": ["hero", "prose", "bullets", "two-column", "quote", "stats", "visual-left", "visual-right", "closing"] }
+          },
+          "required": ["title", "outline", "layout"]
+        }
+      }
+    },
+    "required": ["title", "cards"]
+  },
+  "permissions": { "grants": [] }
+}

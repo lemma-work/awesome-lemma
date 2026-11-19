@@ -1,0 +1,14 @@
+{
+  // Fires when Meetings has read a meeting's transcript or notes (it writes
+  // `summarized_at`). meeting is per person: the run is the meeting's owner.
+  "name": "deals-heard-meeting",
+  "schedule_type": "DATASTORE",
+  "config": {
+    "table_name": "meeting",
+    "operations": ["UPDATE"],
+    "when": { "summarized_at": { "changed": true } },
+    "bulk_writes": "each"
+  },
+  "workflow_name": "deals-listen-meeting",
+  "is_active": true
+}

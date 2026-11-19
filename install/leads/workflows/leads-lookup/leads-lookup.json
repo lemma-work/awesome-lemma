@@ -1,0 +1,61 @@
+{
+  // A lead took one of today's places (or the person asked): look them up,
+  // as the lead's owner.
+  //
+  //   context   mark it running; ask People map's company look-up when the
+  //             company has none; nothing to search for a personal address or
+  //             a reserved test domain (not found at once), or a sample lead
+  //   look      leads-researcher: the person at work and the company, every
+  //             fact with its page
+  //   save      keep only what a page confirmed, with its link and when
+  //   fit       how well the company fits (Decisions); waits for People map's
+  //             look-up, and when it is still running, waits a minute more
+  "name": "leads-lookup",
+  "description": "Look one lead up on the web: their role, what the company does, its size and recent news, each with its source, then how well the company fits.",
+  "max_concurrent_runs": 3,
+  "start": { "type": "DATASTORE_EVENT", "config": { "table_name": "leads_person", "operations": ["INSERT", "UPDATE"] } },
+  "nodes": [
+    { "id": "context", "type": "FUNCTION", "label": "Who to look up",
+      "config": { "function_name": "leads_lookup_context", "input_mapping": {
+        "person_id": { "type": "expression", "value": "start.metadata.record_id" } } } },
+    { "id": "route", "type": "DECISION", "label": "Search the web?",
+      "config": { "rules": [
+        { "condition": "context.search == `true`", "next_node_id": "look" },
+        { "condition": "context.go == `true`", "next_node_id": "fit" } ] } },
+    { "id": "look", "type": "AGENT", "label": "Look them up",
+      "config": { "agent_name": "leads-researcher", "input_mapping": {
+        "person": { "type": "expression", "value": "context.person" },
+        "company": { "type": "expression", "value": "context.company" },
+        "today": { "type": "expression", "value": "context.today" } } } },
+    { "id": "save", "type": "FUNCTION", "label": "Keep what a page confirmed",
+      "config": { "function_name": "leads_save", "input_mapping": {
+        "person_id": { "type": "expression", "value": "start.metadata.record_id" },
+        "result": { "type": "expression", "value": "look" },
+        "started_at": { "type": "expression", "value": "context.started_at" } } } },
+    { "id": "fit", "type": "FUNCTION", "label": "How well it fits",
+      "config": { "function_name": "leads_fit", "input_mapping": {
+        "person_id": { "type": "expression", "value": "start.metadata.record_id" } } } },
+    { "id": "again", "type": "DECISION", "label": "Company look-up still running?",
+      "config": { "rules": [ { "condition": "fit.pending == `true`", "next_node_id": "wait" } ] } },
+    { "id": "wait", "type": "WAIT_UNTIL", "label": "A minute", "config": { "timeout_seconds": 60 } },
+    { "id": "fit_again", "type": "FUNCTION", "label": "How well it fits, with what there is",
+      "config": { "function_name": "leads_fit", "input_mapping": {
+        "person_id": { "type": "expression", "value": "start.metadata.record_id" },
+        "last": { "type": "literal", "value": true } } } },
+    { "id": "skip", "type": "END", "label": "Nothing to do" },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [
+    { "id": "e0", "source": "route", "target": "skip", "label": "not wanted (default)" },
+    { "id": "e1", "source": "context", "target": "route" },
+    { "id": "e2", "source": "route", "target": "look" },
+    { "id": "e3", "source": "route", "target": "fit" },
+    { "id": "e4", "source": "look", "target": "save" },
+    { "id": "e5", "source": "save", "target": "fit" },
+    { "id": "e6", "source": "fit", "target": "again" },
+    { "id": "e7", "source": "again", "target": "end", "label": "scored (default)" },
+    { "id": "e8", "source": "again", "target": "wait" },
+    { "id": "e9", "source": "wait", "target": "fit_again" },
+    { "id": "e10", "source": "fit_again", "target": "end" }
+  ]
+}
