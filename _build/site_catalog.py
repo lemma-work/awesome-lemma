@@ -160,6 +160,11 @@ def makers() -> dict[str, str]:
     return found
 
 
+# Where "Add to a Lemma" installs from: the published repository, one
+# assembled bundle per plugin under install/<folder>.
+INSTALL_REPO = "lemma-work/awesome-lemma"
+
+
 def built_folders() -> list[Path]:
     return sorted(p for p in ROOT.iterdir() if p.is_dir() and not p.name.startswith(("_", ".")) and (p / "pod.json").is_file() and (p / "listing.json").is_file())
 
@@ -431,7 +436,7 @@ def build(site: Path) -> dict:
             "demo": demo,
             "demoViews": demo_views,
             "landing": landing,
-            "install": None,
+            "install": f"/import/github/{INSTALL_REPO}?path=install/{folder.name}",
         })
 
     for group, maker in owners.items():
