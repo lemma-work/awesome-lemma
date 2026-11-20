@@ -15,11 +15,14 @@ _kit/.cache/
 *.log
 
 # Builds the server or a script makes again. install/<plugin>/ is committed:
-# it is the folder a Lemma installs from, and holds sources only.
+# it is the folder a Lemma installs from, and holds sources plus each app's build.
 _build/out/
 */apps/*/source/dist/
 */apps/*/dist.zip
 *.zip
+# ...except the build each app in install/ ships, so installing builds nothing
+# (`_build/assemble.py --install` makes it; see "Prebuilt apps" there).
+!install/*/apps/*/dist.zip
 *.tsbuildinfo
 .vite/
 __pycache__/

@@ -32,8 +32,13 @@ How parts merge:
   its plugin.
 - `pod.json` is the plugin's own (name, description), with the variables of
   every plugin in it; one variable defined two ways is an error.
-- Apps are copied from `source/` without node_modules, builds or zips: an
-  import builds each app from its source.
+- Apps are copied from `source/` without node_modules, builds or zips. With
+  `--install`, each app is then built once here, and `install/<plugin>/apps/
+  <app>/` gets `dist.zip` (the build) and `dist.source-digest` (the digest of
+  the source it was built from). An import deploys that build as it is while
+  the digest still names the app's source, so installing a plugin builds
+  nothing; edit the source and forget to rebuild, and the import builds from
+  source as before. See "Prebuilt apps" below.
 - `--without-connector <id>` leaves a connector out, with every grant on it.
   The importer refuses a bundle that declares a connector the organization has
   no installation of, even an optional one, so a bundle for an org without
@@ -50,15 +55,31 @@ and `_build/install.py` uploads it. Every install bundle leaves out the
 connectors in INSTALL_WITHOUT. `_contract/lint.py` fails when a bundle in
 install/ is not what a fresh assembly makes, or is missing what the
 server-side import needs (`install_problems`).
+
+Prebuilt apps (`--install` only). Each app is built with `npm ci` (its
+package-lock.json, the versions the plugin was tried with) and `npm run build`
+in a scratch copy of its source, with no VITE_* variable set: the apps read
+their Lemma, the API's address and sign-in from the page the host serves
+(`window.__LEMMA_CONFIG__`), so one build serves every Lemma. A build that
+holds the path it was built in, or a home directory, is refused. Builds are
+kept in `_build/out/.dists/<digest>.zip`, and an app whose source has not
+changed since its last build is not built again: the Inbox app five plugins
+carry is built once. The digest is lemma-pod-bundle's `app_source_digest`
+(lemma_pod_bundle/app_build.py in lemma-platform), recomputed here because this
+script uses the standard library only; `_digest_problems` pins it to the value
+that package's test pins.
 """
 
 from __future__ import annotations
 
 import argparse
 import hashlib
+import io
 import json
+import os
 import re
 import shutil
+import subprocess
 import sys
 import tempfile
 import zipfile
@@ -70,6 +91,16 @@ CONTRACT = ROOT / "_contract" / "tables"
 OUT = HERE / "out"
 INSTALL = ROOT / "install"
 KIT_APP_FILES = ROOT / "_kit" / "app-files"
+# A prebuilt app (lemma_pod_bundle.app_build): its build, and the digest of the
+# source it was built from. Neither is a source file: they are made here, after
+# the assembly, and kept out of its record (_files).
+DIST_ARCHIVE = "dist.zip"
+DIST_STAMP = "dist.source-digest"
+DIST_CACHE = OUT / ".dists"
+# lemma_pod_bundle.APP_SOURCE_EXCLUDE_DIRS: never part of an app's source, so
+# never part of its digest.
+APP_SOURCE_EXCLUDE_DIRS = frozenset({"node_modules", ".git", "dist", "build", ".next", ".turbo",
+                                     ".cache", "coverage", "__pycache__"})
 # Connectors the bundles in install/ leave out, with every grant on them. The
 # importer refuses a bundle that declares a connector the organization has no
 # installation of, even one marked "required": false. Google Meet transcripts
@@ -145,6 +176,8 @@ def _files(folder: Path) -> list[Path]:
     for path in sorted(folder.rglob("*")):
         rel = path.relative_to(folder)
         if any(part in SKIP_NAMES for part in rel.parts) or path.name.endswith(SKIP_SUFFIXES):
+            continue
+        if path.name == DIST_STAMP:
             continue
         if path.is_file():
             out.append(path)
@@ -373,23 +406,142 @@ def install_without(plugin: str, root: Path = ROOT) -> tuple[str, ...]:
 
 
 def build_install(plugin: str, root: Path = ROOT, install: Path = INSTALL) -> tuple[dict, list[str]]:
-    """Write install/<plugin>/ and its assembly record; return the record and any problems."""
+    """Write install/<plugin>/ and its assembly record, with every app built;
+    return the record and any problems."""
+    _keep_builds(install / plugin)  # assemble() empties the folder first
     record = assemble(plugin, install / plugin, install_without(plugin, root), root)
     (install / f"{plugin}.assembly.json").write_text(json.dumps(record, indent=2) + "\n")
-    return record, references(install / plugin) + install_ready(install / plugin)
+    problems = references(install / plugin)
+    for source in sorted((install / plugin).glob("apps/*/source")):
+        if (source / "package.json").is_file():
+            try:
+                prebuild_app(source.parent)
+            except AssemblyError as exc:
+                problems.append(f"apps/{source.parent.name}: {exc}")
+    return record, problems + install_ready(install / plugin)
+
+
+# --------------------------------------------------------------------------- prebuilt apps
+
+
+def app_source_digest(source: Path) -> str:
+    """lemma_pod_bundle.app_source_digest: sha256 over each source file's posix
+    path, a NUL byte and the sha256 of its bytes, in path order, leaving out
+    APP_SOURCE_EXCLUDE_DIRS."""
+    files = []
+    for path in source.rglob("*"):
+        rel = path.relative_to(source)
+        if path.is_file() and not any(part in APP_SOURCE_EXCLUDE_DIRS for part in rel.parts):
+            files.append((rel.as_posix(), path))
+    digest = hashlib.sha256()
+    for rel, path in sorted(files, key=lambda item: item[0]):
+        digest.update(rel.encode("utf-8") + b"\0" + hashlib.sha256(path.read_bytes()).digest())
+    return "sha256:" + digest.hexdigest()
+
+
+def _stamp(app: Path) -> str | None:
+    path = app / DIST_STAMP
+    return path.read_text().strip() if path.is_file() else None
+
+
+def _keep_builds(bundle: Path) -> None:
+    """Put the current builds already in a bundle into the cache, so emptying
+    it for a fresh assembly costs no rebuild."""
+    for app in sorted(bundle.glob("apps/*")):
+        dist, stamp = app / DIST_ARCHIVE, _stamp(app)
+        if dist.is_file() and stamp and (app / "source").is_dir() and stamp == app_source_digest(app / "source"):
+            DIST_CACHE.mkdir(parents=True, exist_ok=True)
+            cached = DIST_CACHE / f"{stamp.removeprefix('sha256:')}.zip"
+            if not cached.is_file():
+                shutil.copyfile(dist, cached)
+
+
+def prebuild_app(app: Path) -> bool:
+    """Give an app its dist.zip and dist.source-digest; True when it was built
+    now, False when an earlier build of the same source was reused."""
+    source = app / "source"
+    digest = app_source_digest(source)
+    cached = DIST_CACHE / f"{digest.removeprefix('sha256:')}.zip"
+    built = not cached.is_file()
+    if built:
+        archive = _build_app(source, app.name)
+        DIST_CACHE.mkdir(parents=True, exist_ok=True)
+        tmp = cached.with_suffix(".partial")
+        tmp.write_bytes(archive)
+        tmp.replace(cached)
+    shutil.copyfile(cached, app / DIST_ARCHIVE)
+    (app / DIST_STAMP).write_text(digest + "\n")
+    return built
+
+
+def _build_app(source: Path, name: str) -> bytes:
+    """Build an app's source in a scratch copy and return its dist as a zip
+    whose bytes depend on the build alone (sorted names, fixed times)."""
+    npm = shutil.which("npm")
+    if npm is None:
+        raise AssemblyError("npm is not on PATH; it builds each app (Node 22 or later)")
+    env = {k: v for k, v in os.environ.items() if not k.startswith("VITE_")}
+    env["CI"] = "1"
+    with tempfile.TemporaryDirectory(prefix=f"lemma-plugin-app-{name}-") as tmp:
+        work = Path(tmp) / "src"
+        shutil.copytree(source, work, ignore=shutil.ignore_patterns(*APP_SOURCE_EXCLUDE_DIRS))
+        install = [npm, "ci"] if (work / "package-lock.json").is_file() else [npm, "install"]
+        for command in (install + ["--no-audit", "--no-fund", "--loglevel=error"], [npm, "run", "build"]):
+            done = subprocess.run(command, cwd=work, env=env, capture_output=True, text=True)
+            if done.returncode != 0:
+                tail = (done.stderr or done.stdout).strip().splitlines()[-15:]
+                raise AssemblyError(f"`{' '.join(command[1:])}` failed:\n    " + "\n    ".join(tail))
+        dist = work / "dist"
+        if not (dist / "index.html").is_file():
+            raise AssemblyError("the build made no dist/index.html")
+        leaks = [str(Path(tmp).resolve()), tmp, str(Path.home())]
+        buffer = io.BytesIO()
+        with zipfile.ZipFile(buffer, "w", zipfile.ZIP_DEFLATED) as archive:
+            for path in sorted(p for p in dist.rglob("*") if p.is_file()):
+                data = path.read_bytes()
+                for leak in leaks:
+                    if leak.encode() in data:
+                        raise AssemblyError(f"dist/{path.relative_to(dist)} holds the path {leak}; "
+                                            "a build must not carry where it was made")
+                info = zipfile.ZipInfo(path.relative_to(dist).as_posix(), date_time=(1980, 1, 1, 0, 0, 0))
+                info.compress_type = zipfile.ZIP_DEFLATED
+                info.external_attr = 0o644 << 16
+                archive.writestr(info, data)
+        return buffer.getvalue()
+
+
+#: lemma-pod-bundle's tests/test_app_build.py pins the digest of this tree to
+#: this value; the two must agree, or every install would build from source.
+_PINNED_TREE = {"package.json": "{}", "index.html": "<div></div>", "src/main.tsx": "x"}
+_PINNED_DIGEST = "sha256:21375bd9cff07b5be76e2347a199dd35e81acda1af34a500782d43eb367cc99a"
+
+
+def _digest_problems() -> list[str]:
+    with tempfile.TemporaryDirectory() as tmp:
+        for rel, text in _PINNED_TREE.items():
+            (Path(tmp) / rel).parent.mkdir(parents=True, exist_ok=True)
+            (Path(tmp) / rel).write_text(text)
+        got = app_source_digest(Path(tmp))
+    if got != _PINNED_DIGEST:
+        return [f"app_source_digest no longer agrees with lemma-pod-bundle's ({got}); every import would rebuild"]
+    return []
 
 
 def install_ready(bundle: Path) -> list[str]:
-    """What a server-side import of this folder needs and must not get: each app
-    builds from source/ with pnpm, so it needs its package.json, every file: dependency
-    it names (the vendored kit and SDK tarballs) and the kit's pnpm-workspace.yaml;
-    and nothing the server builds anyway or that is never committed."""
+    """What a server-side import of this folder needs and must not get: each app's
+    build, stamped with its source's digest, so the import deploys it instead of
+    building; what building it from source/ with pnpm needs all the same, for when
+    it does (its package.json, every file: dependency it names -- the vendored kit
+    and SDK tarballs -- and the kit's pnpm-workspace.yaml); and nothing else that
+    is built or never committed."""
     where = f"{bundle.parent.name}/{bundle.name}"
     problems: list[str] = []
     if not (bundle / "pod.json").is_file():
         problems.append(f"{where}: no pod.json")
     for path in sorted(bundle.rglob("*")):
         rel = path.relative_to(bundle)
+        if len(rel.parts) == 3 and rel.parts[0] == "apps" and path.name in (DIST_ARCHIVE, DIST_STAMP):
+            continue  # an app's own prebuilt build, checked below
         if path.name in SKIP_NAMES or path.name.endswith(SKIP_SUFFIXES) or path.name.startswith(".lemma.") or path.suffix == ".log":
             problems.append(f"{where}/{rel}: an install bundle never holds this (a build, a dependency or local state)")
     for package in sorted(bundle.glob("apps/*/source/package.json")):
@@ -411,6 +563,21 @@ def install_ready(bundle: Path) -> list[str]:
             if not mine.is_file() or mine.read_bytes() != common.read_bytes():
                 problems.append(f"{where}/apps/{app}: source/{common.name} is not _kit/app-files/{common.name}; "
                                 "the importer's pnpm needs it to build")
+        dist, stamp = source.parent / DIST_ARCHIVE, _stamp(source.parent)
+        rebuild = f"; run _build/assemble.py --install {bundle.name}"
+        if not dist.is_file() or stamp is None:
+            problems.append(f"{where}/apps/{app}: has no prebuilt dist.zip and dist.source-digest, "
+                            f"so every install builds it" + rebuild)
+        elif stamp != app_source_digest(source):
+            problems.append(f"{where}/apps/{app}: dist.zip was built from other source, "
+                            f"so every install builds it" + rebuild)
+        else:
+            try:
+                with zipfile.ZipFile(dist) as archive:
+                    if "index.html" not in archive.namelist():
+                        problems.append(f"{where}/apps/{app}: dist.zip has no index.html at its root" + rebuild)
+            except zipfile.BadZipFile:
+                problems.append(f"{where}/apps/{app}: dist.zip does not open" + rebuild)
     return problems
 
 
@@ -420,6 +587,7 @@ def install_problems(root: Path = ROOT, install: Path = INSTALL) -> list[str]:
     problems: list[str] = []
     if not install.is_dir():
         return [f"install/ is missing; run _build/assemble.py --install"]
+    problems += _digest_problems()
     for extra in sorted(p.name for p in install.iterdir() if p.is_dir() and p.name not in names):
         problems.append(f"install/{extra} is not a plugin here; remove it")
     for name in names:

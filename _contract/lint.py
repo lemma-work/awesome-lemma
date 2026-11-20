@@ -60,7 +60,9 @@ that does not start with "_"):
    (file for file, Google Meet left out), and it holds what the server-side
    import needs (each app's vendored kit and SDK tarballs and the kit's
    pnpm-workspace.yaml) and nothing it must not (node_modules, builds, zips,
-   local env files). Regenerate with `_build/assemble.py --install`.
+   local env files) -- except each app's own prebuilt dist.zip, which must be
+   there and stamped with the digest of the app's source, so an install
+   deploys it instead of building. Regenerate with `_build/assemble.py --install`.
 
 It prints every problem it finds, not just the first, then any warnings.
 """

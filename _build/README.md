@@ -55,8 +55,29 @@ it lacks what the server-side import needs (each app's `source/package.json`,
 every `file:` dependency it names, which are the vendored kit and SDK
 tarballs in `source/vendor/`, and `_kit/app-files/pnpm-workspace.yaml`); or
 when it holds anything it must not (`node_modules`, `dist`, `.vite`,
-`__pycache__`, zips, `tsbuildinfo`, logs, `.lemma.*.env`). The server builds
-every app from its source, so no build output is ever committed.
+`__pycache__`, zips, `tsbuildinfo`, logs, `.lemma.*.env`); or when an app's
+build is missing or was made from other source.
+
+### Prebuilt apps
+
+`--install` builds every app once, here, so that installing a plugin builds
+nothing. Each `install/<plugin>/apps/<app>/` gets two files beside `source/`:
+
+- `dist.zip`: the build (`npm ci` from the app's `package-lock.json`, then
+  `npm run build`, with no `VITE_*` variable set);
+- `dist.source-digest`: the digest of the source it was built from.
+
+The importer deploys `dist.zip` as it is while the digest still names the
+app's `source/`; otherwise it builds the app from source in the importer's
+sandbox, as every install did before. This needs Node (22 or later) on your
+PATH. Builds are kept in `_build/out/.dists/` by digest, so an app whose source
+did not change is not built again, and the same source always gives the same
+bytes: a `dist.zip` changes in a commit only when its app did.
+
+One build serves every Lemma because the apps read their Lemma, the API's
+address and sign-in from the page the host serves (`window.__LEMMA_CONFIG__`),
+never from build-time values. An app that read `import.meta.env.VITE_LEMMA_*`
+for those would need building per Lemma, and must not be shipped prebuilt.
 
 Every install bundle is assembled without the connectors in
 `INSTALL_WITHOUT` (`assemble.py`): today `googlemeet`, so Meetings, Booking
@@ -74,7 +95,7 @@ have none for Google Meet.
 | Tables, functions, agents, workflows, schedules, surfaces, apps, files | Copied folder by folder. One name in two plugins only when it is the same thing: a shared contract table byte for byte, or an identical folder. Anything else is an error naming both plugins |
 | Connectors | Two plugins declaring one connector (Mail's and Meetings' `outlook`) become one: the same mode or an error, required if either requires it, both purposes, each naming its plugin |
 | `pod.json` | The plugin's own name and description; the variables of every plugin (each app's slug); one variable defined two ways is an error |
-| Apps | `source/` without `node_modules`, builds, zips or `tsbuildinfo`: an import builds each app from its source, with its vendored kit |
+| Apps | `source/` without `node_modules`, builds, zips or `tsbuildinfo`; with `--install`, plus `dist.zip` and `dist.source-digest` (see Prebuilt apps) |
 | Left out | Everything outside the bundle's resource folders: `bin/`, `bench/`, `.lemma/`, `local/`, READMEs, `plugin.json` itself |
 
 `--without-connector <id>` leaves a connector out, with every grant on it. The
@@ -124,8 +145,9 @@ show`), or to `LEMMA_API_URL` when that is set. `--pod` defaults to
 `LEMMA_POD_ID`. Pass `--var <app>_slug=<free slug>` for each app: a default
 name that is already taken gets a suffix.
 
-The importer builds each app in its sandbox with pnpm, which is why every app
-carries `_kit/app-files/pnpm-workspace.yaml`.
+An app whose `dist.zip` does not match its source is built in the importer's
+sandbox with pnpm, which is why every app still carries
+`_kit/app-files/pnpm-workspace.yaml`.
 
 ## The website's plugin pages
 
