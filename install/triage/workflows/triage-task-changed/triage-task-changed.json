@@ -1,0 +1,15 @@
+{
+  // Started by the `triage-task-changed` schedule: a Triage task's status
+  // changed in Tasks. Done tells the askers; canceled puts the item back.
+  "name": "triage-task-changed",
+  "description": "A Triage task moved: when it's done, the item is done and everyone who asked is told where they asked.",
+  "max_concurrent_runs": 4,
+  "start": { "type": "DATASTORE_EVENT", "config": { "table_name": "task", "operations": ["UPDATE"] } },
+  "nodes": [
+    { "id": "moved", "type": "FUNCTION", "label": "The item follows its task",
+      "config": { "function_name": "triage_on_task", "input_mapping": {
+        "task_id": { "type": "expression", "value": "start.metadata.record_id" } } } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [ { "id": "e1", "source": "moved", "target": "end" } ]
+}

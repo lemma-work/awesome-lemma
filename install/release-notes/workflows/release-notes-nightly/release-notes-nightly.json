@@ -1,0 +1,14 @@
+{
+  // The nightly catch-up, made at set-up as the person setting up: merges and
+  // deploys a skipped webhook missed.
+  "name": "release-notes-nightly",
+  "description": "Nightly: catch merges and deploys a webhook missed, and redraft when anything new came in.",
+  "start": { "type": "SCHEDULED", "config": { "schedule_type": "CRON" } },
+  "nodes": [
+    { "id": "reconcile", "type": "FUNCTION", "label": "Catch up",
+      "config": { "function_name": "release_notes_reconcile", "input_mapping": {} } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [ { "id": "e1", "source": "reconcile", "target": "end" } ],
+  "visibility": "POD"
+}

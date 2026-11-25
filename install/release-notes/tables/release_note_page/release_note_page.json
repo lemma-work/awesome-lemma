@@ -1,0 +1,27 @@
+{
+  // One published release as the public changelog page and the card show it.
+  // Public: the changelog app reads it through the Lemma's web widget key with
+  // no sign-in, so nothing private goes here (no names of who asked, only how
+  // many). Written by release_notes_publish.
+  "name": "release_note_page",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "PUBLIC",
+  "columns": [
+    { "name": "published_on", "type": "DATE", "required": true },
+    { "name": "version", "type": "TEXT", "required": true, "max_length": 120 },
+    { "name": "title", "type": "TEXT", "required": true, "max_length": 300 },
+    // [{section, title, text, asked}] in the note's order.
+    { "name": "lines", "type": "JSON", "required": true },
+    // What people must do, when the release asks something of them.
+    { "name": "need", "type": "TEXT", "max_length": 2000 },
+    { "name": "asked_total", "type": "INTEGER", "default": 0 },
+    // How the page looks: the product's name and the brand's colours and
+    // faces as Brand kit had them when it was published (brand is not
+    // public, so the page cannot read it). Empty: the page uses its own.
+    { "name": "product", "type": "TEXT", "max_length": 120 },
+    { "name": "brand", "type": "JSON" },
+    { "name": "sample", "type": "BOOLEAN", "default": false }
+  ],
+  "config": {}
+}

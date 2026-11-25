@@ -1,0 +1,6 @@
+{
+  "name": "tasks",
+  "description": "Everything you have to do, done by you or handed to an agent: your own list, your team's projects, a board, and each task's timeline of people and agents.",
+  "public_slug": "${tasks_slug}",
+  "visibility": "POD"
+}

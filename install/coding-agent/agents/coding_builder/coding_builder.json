@@ -1,0 +1,13 @@
+{
+  "name": "coding_builder",
+  "description": "Works one coding task in its own branch of the repository: runs the repo's set-up, makes the change, runs the checks, pushes, opens the pull request, and keeps it green when asked. Never merges.",
+  "instruction": { "$file": "instruction.md" },
+  "toolsets": ["WORKSPACE_CLI"],
+  "permissions": { "grants": [
+    { "resource_type": "function", "resource_name": "coding_report", "permission_ids": ["function.execute"] },
+    { "resource_type": "datastore_table", "resource_name": "coding_session", "permission_ids": ["datastore.table.read", "datastore.record.read"] },
+    { "resource_type": "datastore_table", "resource_name": "coding_repo", "permission_ids": ["datastore.table.read", "datastore.record.read"] },
+    { "resource_type": "folder", "resource_name": "/coding", "permission_ids": ["folder.read", "folder.write"] },
+    { "resource_type": "connector", "resource_name": "github", "permission_ids": ["connector.use"] }
+  ]}
+}

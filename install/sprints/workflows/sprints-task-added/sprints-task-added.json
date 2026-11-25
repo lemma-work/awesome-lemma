@@ -1,0 +1,19 @@
+{
+  // Started by the `sprints-task-added` schedule: a new team task. Urgent or
+  // high work from a source the lead watches (Incidents, Triage, PR review)
+  // that lands while a sprint runs is offered as a pull-in; sprints_on_task
+  // checks the source and priority itself.
+  "name": "sprints-task-added",
+  "description": "A team task came in: if it is urgent work from a watched source mid-sprint, suggest pulling it in.",
+  "max_concurrent_runs": 4,
+  "start": { "type": "DATASTORE_EVENT", "config": { "table_name": "task", "operations": ["INSERT"] } },
+  "nodes": [
+    { "id": "look", "type": "FUNCTION", "label": "Pull it in?",
+      "config": { "function_name": "sprints_on_task", "input_mapping": {
+        "task_id": { "type": "expression", "value": "start.metadata.record_id" },
+        "op": { "type": "literal", "value": "insert" },
+        "at": { "type": "expression", "value": "start.metadata.event_occurred_at" } } } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [ { "id": "e1", "source": "look", "target": "end" } ]
+}

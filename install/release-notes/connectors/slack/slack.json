@@ -1,0 +1,6 @@
+{
+  "connector": "slack",
+  "mode": "SHARED",
+  "required": false,
+  "purpose": "Optional: posts the published note to the channel you pick, and replies in the thread of someone who asked in Slack when a person presses Send."
+}

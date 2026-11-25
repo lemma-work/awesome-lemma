@@ -1,0 +1,22 @@
+{
+  "name": "tasks_setup_done",
+  "description": "Set-up, last step: keeps what the person chose (promises, agents) and what this Lemma has, and opens Tasks.",
+  "type": "API",
+  "visibility": "POD",
+  "code": {
+    "$file": "code.py"
+  },
+  "permissions": {
+    "grants": [
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "tasks_settings",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read",
+          "datastore.record.write"
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "connector": "resend",
+  "mode": "SHARED",
+  "required": false,
+  "purpose": "Emails each update the lead sends to the set-up's list, from the Lemma's own mailbox. Without it, updates go to Slack only."
+}

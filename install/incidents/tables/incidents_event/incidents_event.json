@@ -1,0 +1,30 @@
+{
+  // One moment of an incident: a message, a pin, a change, a deploy, a
+  // Triage signal, something the Lemma did, an update sent. The id is
+  // uuid5(incident, source, source_id), so gathering again never duplicates.
+  // The write-up cites these by id.
+  "name": "incidents_event",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "incident_id", "type": "UUID", "required": true,
+      "foreign_key": { "references": "incidents_incident.id" } },
+    { "name": "at", "type": "DATETIME", "required": true },
+    { "name": "kind", "type": "ENUM", "required": true,
+      "options": ["message", "pin", "status", "severity", "role", "change", "deploy", "triage", "lemma", "update", "declared"] },
+    { "name": "source", "type": "ENUM", "required": true, "options": ["slack", "github", "triage", "lemma", "app"] },
+    // The provider's own id: a Slack ts, a PR's url, a run id.
+    { "name": "source_id", "type": "TEXT", "max_length": 400 },
+    // Who: a person's name, "GitHub", "Coding agent", "Lemma".
+    { "name": "actor", "type": "TEXT", "max_length": 200 },
+    { "name": "text", "type": "TEXT", "max_length": 4000 },
+    { "name": "url", "type": "TEXT", "max_length": 600 },
+    // Pinned in the channel.
+    { "name": "starred", "type": "BOOLEAN", "default": false },
+    // Anything else: {from, to} for a change of status, {repo, ref, number}
+    // for a change, {users} for a Triage signal.
+    { "name": "detail", "type": "JSON" }
+  ],
+  "config": {}
+}

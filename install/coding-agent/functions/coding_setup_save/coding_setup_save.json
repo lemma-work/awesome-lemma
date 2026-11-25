@@ -1,0 +1,38 @@
+{
+  "name": "coding_setup_save",
+  "description": "Coding agent's set-up, once for the Lemma (safe to run again): the repositories the agent may work in, each with set-up commands and notes [{full_name, default_branch, setup, notes, enabled}], and the defaults (agent, model, keep green, tries, issue label). Writes the memory block.",
+  "type": "API",
+  "visibility": "POD",
+  "code": {
+    "$file": "code.py"
+  },
+  "permissions": {
+    "grants": [
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "coding_settings",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read",
+          "datastore.record.write"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "coding_repo",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read",
+          "datastore.record.write"
+        ]
+      },
+      {
+        "resource_type": "function",
+        "resource_name": "coding_memory",
+        "permission_ids": [
+          "function.execute"
+        ]
+      }
+    ]
+  }
+}

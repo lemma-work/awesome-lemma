@@ -136,6 +136,28 @@ def _agenda(text: str | None) -> str:
     return "\n".join(keep)[:4000]
 
 
+NAMES = {"google": "Google Calendar", "outlook": "Outlook"}
+
+
+def _why(cal: dict, exc: Exception) -> str:
+    """What stopped a calendar's read, said so the person can act on it.
+
+    A calendar connected after Meetings was added to the Lemma, in an
+    organization that had no such connector then, is the usual one: the
+    import left the optional connector out and dropped this function's grant
+    on it, and connecting declares the connector but grants nothing, so the
+    read is refused `connector.use` (or finds no connector).
+    """
+    text = str(exc)
+    name = NAMES.get(str(cal.get("provider") or ""), "This calendar")
+    if "connector.use" in text or "POD_CONNECTOR_NOT_FOUND" in text:
+        return (f"Meetings isn't allowed to read {name} in this Lemma yet, probably because it was added before "
+                f"{name} was set up here. Ask whoever runs this Lemma to add Meetings again, which gives it access.")
+    if "REAUTH_REQUIRED" in text or "CONNECTION_REQUIRED" in text:
+        return f"{name} needs connecting again: its sign-in has expired or was removed."
+    return text
+
+
 RESPONSE = {"accepted": "accepted", "declined": "declined", "tentative": "tentative", "needsAction": "needs_action",
             "tentativelyAccepted": "tentative", "none": "needs_action", "notResponded": "needs_action",
             "organizer": "accepted"}
@@ -256,8 +278,9 @@ def meetings_calendar_read(ctx: FunctionContext, data: MeetingsCalendarReadInput
             try:
                 fetched[cal["id"]] = job.result()
             except Exception as exc:  # noqa: BLE001 — one calendar failing must not hide the others
-                errors.append(f"{cal.get('email')}: {exc}"[:300])
-                pod.table("meetings_calendar").update(cal["id"], {"last_error": str(exc)[:600]})
+                why = _why(cal, exc)
+                errors.append(f"{cal.get('email')}: {why}"[:400])
+                pod.table("meetings_calendar").update(cal["id"], {"last_error": why[:600]})
 
     totals = {"meetings": 0, "outside": 0, "ahead": 0, "behind": 0, "new": 0, "changed": 0, "cancelled": 0, "to_sort": 0}
     met: dict[str, str | None] = {}  # handle -> name, everyone but the owner
@@ -362,6 +385,8 @@ def meetings_calendar_read(ctx: FunctionContext, data: MeetingsCalendarReadInput
     parts = [f"Read {totals['meetings']} meetings", f"{totals['outside']} with people from outside"]
     if totals["to_sort"]:
         parts.append(f"{totals['to_sort']} to sort")
+    if errors and not fetched:
+        parts = ["Couldn't read your calendar" if len(calendars) == 1 else "Couldn't read your calendars"]
     return MeetingsCalendarReadResult(calendars=len(calendars), errors=errors, message=", ".join(parts),
                                       people_added=added, people_known=known, **totals)
 

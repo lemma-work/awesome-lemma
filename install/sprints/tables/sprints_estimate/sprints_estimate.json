@@ -1,0 +1,15 @@
+{
+  // A team task's estimate, in points. The id is the task's id. Kept here,
+  // not on `task`: a contract column waits for a second writer.
+  "name": "sprints_estimate",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "points", "type": "FLOAT", "required": true },
+    { "name": "by", "type": "TEXT", "max_length": 200 },
+    { "name": "by_user_id", "type": "USER" },
+    { "name": "at", "type": "DATETIME" }
+  ],
+  "config": {}
+}

@@ -1,0 +1,55 @@
+{
+  // A pull request closed on GitHub (the WEBHOOK schedule set-up made, on the
+  // Lemma's shared GitHub connection). If it merged into a watched
+  // repository, keep it and who asked for it, then redraft the open note.
+  "name": "release-notes-on-merge",
+  "description": "A pull request merged: keep it, its kind and who asked for it, then redraft the open release's note around it.",
+  "run_title": ["start.payload.pull_request.title"],
+  "max_concurrent_runs": 1,
+  "start": { "type": "EVENT", "config": { "connector_id": "github", "connector_trigger_id": "github:http:pull_request" } },
+  "nodes": [
+    { "id": "merge", "type": "FUNCTION", "label": "Keep the pull request",
+      "config": { "function_name": "release_notes_on_merge", "input_mapping": {
+        "repo": { "type": "expression", "value": "start.payload.repository.full_name" },
+        "number": { "type": "expression", "value": "start.payload.pull_request.number" },
+        "action": { "type": "expression", "value": "start.payload.action", "optional": true },
+        "merged": { "type": "expression", "value": "start.payload.pull_request.merged", "optional": true },
+        "base": { "type": "expression", "value": "start.payload.pull_request.base.ref", "optional": true },
+        "default_branch": { "type": "expression", "value": "start.payload.repository.default_branch", "optional": true } } } },
+    { "id": "merged", "type": "DECISION", "label": "Merged here?",
+      "config": { "rules": [ { "condition": "merge.skip == `true`", "next_node_id": "end" } ] } },
+    { "id": "brief", "type": "FUNCTION", "label": "What the note is made of",
+      "config": { "function_name": "release_notes_draft", "input_mapping": {
+        "mode": { "type": "literal", "value": "brief" },
+        "note_id": { "type": "expression", "value": "merge.note_id" } } } },
+    { "id": "anything", "type": "DECISION", "label": "Anything to write?",
+      "config": { "rules": [ { "condition": "brief.skip == `true`", "next_node_id": "end" } ] } },
+    { "id": "write", "type": "AGENT", "label": "Write the lines",
+      "config": { "agent_name": "release-notes-writer",
+        "input_mapping": {
+          "product": { "type": "expression", "value": "brief.brief.product" },
+          "version": { "type": "expression", "value": "brief.brief.version" },
+          "voice": { "type": "expression", "value": "brief.brief.voice", "optional": true },
+          "changes": { "type": "expression", "value": "brief.brief.changes" },
+          "kept_lines": { "type": "expression", "value": "brief.brief.kept_lines" } } } },
+    { "id": "save", "type": "FUNCTION", "label": "Keep the note",
+      "config": { "function_name": "release_notes_draft",
+        "input_mapping": {
+          "mode": { "type": "literal", "value": "save" },
+          "note_id": { "type": "expression", "value": "brief.note_id" },
+          "groups": { "type": "expression", "value": "brief.groups" },
+          "written": { "type": "expression", "value": "write" } } } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [
+    { "id": "e1", "source": "merge", "target": "merged" },
+    { "id": "e2", "source": "merged", "target": "brief", "label": "merged into a watched repository" },
+    { "id": "e3", "source": "merged", "target": "end", "label": "not ours" },
+    { "id": "e4", "source": "brief", "target": "anything" },
+    { "id": "e5", "source": "anything", "target": "write", "label": "changes to write" },
+    { "id": "e6", "source": "anything", "target": "end", "label": "nothing people would notice" },
+    { "id": "e7", "source": "write", "target": "save" },
+    { "id": "e8", "source": "save", "target": "end" }
+  ],
+  "visibility": "POD"
+}

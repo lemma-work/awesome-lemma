@@ -1,0 +1,37 @@
+{
+  // The Lemma's sprint set-up: one row (id fixed by sprints_setup_save). One
+  // cadence per Lemma: the Lemma is the team. Team-wide, no RLS.
+  "name": "sprints_settings",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    // 1 to 4 weeks.
+    { "name": "length_weeks", "type": "INTEGER", "required": true, "default": 2 },
+    // The weekday a sprint starts on.
+    { "name": "start_weekday", "type": "ENUM", "required": true, "default": "mon",
+      "options": ["mon", "tue", "wed", "thu", "fri", "sat", "sun"] },
+    // IANA zone: which day it is, and when the lead's 06:00 run is.
+    { "name": "timezone", "type": "TEXT", "max_length": 64, "default": "UTC" },
+    // What a sprint is measured in: points (estimates) or tasks (a count).
+    { "name": "measure", "type": "ENUM", "required": true, "default": "points", "options": ["points", "tasks"] },
+    // Who plans and closes sprints: the "decide" items in Today go to them.
+    { "name": "lead_user_id", "type": "USER" },
+    { "name": "lead_name", "type": "TEXT", "max_length": 200 },
+    // The estimate scale, keys 1 to 5 in the app. Default [1, 2, 3, 5, 8].
+    { "name": "scale", "type": "JSON" },
+    // Task sources whose high or urgent work, landing mid-sprint, is offered
+    // to the lead as a pull-in. Default ["incidents", "triage", "pr_review"].
+    { "name": "watch_sources", "type": "JSON" },
+    { "name": "setup_done_at", "type": "DATETIME" },
+    // The sample sprint is loaded.
+    { "name": "sample", "type": "BOOLEAN", "default": false },
+    // The lead's own schedules, made by the app as them: the daily 06:00 run
+    // (sprints-daily) and the trigger that tells them about a suggestion
+    // (sprints-lead). `schedule_user_id` is whose they are.
+    { "name": "schedule_id", "type": "TEXT", "max_length": 64 },
+    { "name": "lead_schedule_id", "type": "TEXT", "max_length": 64 },
+    { "name": "schedule_user_id", "type": "USER" }
+  ],
+  "config": {}
+}

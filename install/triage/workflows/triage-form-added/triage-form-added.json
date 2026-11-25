@@ -1,0 +1,19 @@
+{
+  // A visitor's answer to the report form. Its schedule is made by the app,
+  // as the person who turns the form on, with include_outside_rows (a bundle
+  // can't carry that field, and without it every visitor's row is dropped);
+  // so the run is theirs. row_author names the contact ("contact:<id>") or
+  // "visitor".
+  "name": "triage-form-added",
+  "description": "A report from the form: who it is from, its page, version and screenshot, filed like any other.",
+  "max_concurrent_runs": 4,
+  "start": { "type": "DATASTORE_EVENT", "config": { "table_name": "triage_form", "operations": ["INSERT"] } },
+  "nodes": [
+    { "id": "file", "type": "FUNCTION", "label": "File the form's report",
+      "config": { "function_name": "triage_on_form", "input_mapping": {
+        "record_id": { "type": "expression", "value": "start.metadata.record_id" },
+        "row_author": { "type": "expression", "value": "start.metadata.row_author", "optional": true } } } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [ { "id": "e1", "source": "file", "target": "end" } ]
+}

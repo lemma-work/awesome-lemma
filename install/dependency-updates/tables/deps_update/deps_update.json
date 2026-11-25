@@ -1,0 +1,65 @@
+{
+  // One candidate update: one package in one repository to one version. Its
+  // id is uuid5(DEPS_NS, "repo|ecosystem|package|to_version"), so a run that
+  // finds it again updates the same row. Team-wide, no RLS.
+  "name": "deps_update",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "repo", "type": "TEXT", "required": true, "max_length": 200 },
+    { "name": "ecosystem", "type": "ENUM", "required": true, "options": ["npm", "pypi", "actions"] },
+    // The manager it is installed with: pnpm, npm, yarn, uv, pip, poetry, actions.
+    { "name": "manager", "type": "TEXT", "max_length": 20 },
+    { "name": "package", "type": "TEXT", "required": true, "max_length": 214 },
+    { "name": "from_version", "type": "TEXT", "max_length": 64 },
+    { "name": "to_version", "type": "TEXT", "required": true, "max_length": 64 },
+    { "name": "bump", "type": "ENUM", "required": true, "default": "patch", "options": ["patch", "minor", "major"] },
+    { "name": "released_at", "type": "DATETIME" },
+    // npm's downloads of this version in the last week; none for PyPI or Actions.
+    { "name": "downloads_week", "type": "INTEGER" },
+    //   waiting     out fewer days than the wait
+    //   ready       joins the next batch
+    //   needs_you   a major, held for a person (a "decide" in Today)
+    //   risky       held: new install script, new publisher, hours old
+    //   in_batch    committed on a batch branch, pull request not open yet
+    //   opened      in an open pull request
+    //   merged      its pull request merged
+    //   dropped     taken out of a batch (Drop, or @lemma drop)
+    //   by_hand     an Actions update the App may not push (no workflows permission)
+    //   ignored     an ignore or a rule covers it
+    //   superseded  a newer version of it was found
+    { "name": "state", "type": "ENUM", "required": true, "default": "waiting",
+      "options": ["waiting", "ready", "needs_you", "risky", "in_batch", "opened", "merged", "dropped", "by_hand", "ignored", "superseded"] },
+    // One line: why it is in this state.
+    { "name": "why", "type": "TEXT", "max_length": 300 },
+    // The Lemma's read of the changelog against this repository.
+    { "name": "lemma_read", "type": "TEXT", "max_length": 1200 },
+    // What changed, one line each (the Lemma's reading of the changelog).
+    { "name": "changes", "type": "JSON" },
+    // Where this repository uses what changed: [{at: "src/routes.tsx:42", line}].
+    { "name": "uses", "type": "JSON" },
+    // How many files in the repository use it.
+    { "name": "touches", "type": "INTEGER" },
+    // Where the changelog came from: "GitHub releases", "CHANGELOG.md", "npm registry".
+    { "name": "read_from", "type": "TEXT", "max_length": 200 },
+    // Tried here: none, passed, failed, fixed (passed after one fix commit).
+    { "name": "tried", "type": "ENUM", "default": "none", "options": ["none", "passed", "failed", "fixed"] },
+    { "name": "tried_note", "type": "TEXT", "max_length": 300 },
+    // A security fix: {ghsa, cve, severity, summary, source (github|osv|audit),
+    // reach (yes|not_found|unknown), reach_note, reach_at}.
+    { "name": "security", "type": "JSON" },
+    // What the registry says: {install_script, new_publisher, age_hours, note}.
+    { "name": "risk", "type": "JSON" },
+    { "name": "batch_id", "type": "UUID" },
+    { "name": "pr_number", "type": "INTEGER" },
+    // The commit that installs it, and the fix commit if one was needed.
+    { "name": "commit_sha", "type": "TEXT", "max_length": 64 },
+    { "name": "fix_sha", "type": "TEXT", "max_length": 64 },
+    // A person's choice: monday, own, not_yet, let_through, ignore, take_now, put_back.
+    { "name": "choice", "type": "TEXT", "max_length": 20 },
+    { "name": "decided_by", "type": "TEXT", "max_length": 200 },
+    { "name": "decided_at", "type": "DATETIME" }
+  ],
+  "config": {}
+}

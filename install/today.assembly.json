@@ -17,8 +17,8 @@
   "files": {
     "apps/today/source/.gitignore": "004929f15e2f811a7dac2bbc448e9b633991e21e4d1d579ff4666915ddae1243",
     "apps/today/source/index.html": "9d907ea7486a41fea5f46a5844c2fc025bcc4931df1f6a6f9947a2c1cb5554ed",
-    "apps/today/source/package-lock.json": "10ef0ebce15ae378f6efcb1fdfe109fcbc63218997153c99b90cbd0b384a2135",
-    "apps/today/source/package.json": "04c095afdd206b450fcc79290aa6f5453e25c953d7e9fde5984ffeb50c0a7859",
+    "apps/today/source/package-lock.json": "8af5267a08ee76bca57c0669758c22765a9374af64050e7f110ef27ada0ea2b3",
+    "apps/today/source/package.json": "c28322ff6f92a54ed862589569d93aba026ae5bcf3c3926f61fe1e458c8a8994",
     "apps/today/source/pnpm-workspace.yaml": "9c4e1837b7df3c50bd17368aa2f2fec6c514b34e03414574a056ee797c7137fd",
     "apps/today/source/src/App.tsx": "6b4232e760710440b4f236796a52e8e86a82a4c3a2243935cc7d227b0ce8ba69",
     "apps/today/source/src/Day.tsx": "54944d8bfebb4ff1250480149a8b2438665ae939a930aa529be110e3ef2a63a1",
@@ -29,7 +29,7 @@
     "apps/today/source/src/types.ts": "13621538c7dcf9ba3d8b87f5420e7e577c68f705584ca6a9611b72ec65d093f0",
     "apps/today/source/src/vite-env.d.ts": "65996936fbb042915f7b74a200fcdde7e410f32a669b1ab9597cfaa4b0faddb5",
     "apps/today/source/tsconfig.json": "062dcc7e2090e113eab412fed9afd1df973cc92be64c6a9f1caca9bfe42fbe57",
-    "apps/today/source/vendor/lemma-plugins-kit-0.1.0-efbfe529.tgz": "2860f17852912e39f12aebf0fe6ba716a61178befe34643178d57ba38409029f",
+    "apps/today/source/vendor/lemma-plugins-kit-0.1.0-c70cb30a.tgz": "6193dc69b3419403653f34a346d3b9eb9b9d8b898adc2c5e6225fed28aed9a8a",
     "apps/today/source/vendor/lemma-sdk-0.10.1.tgz": "fae311df7451ae288f82ffa1244ba3e312ea91bb629e174251df15ffbcded67b",
     "apps/today/source/vite.config.ts": "cf3f1fad214f15e74aae28d4af7cc7d4bd29fe6610d05be56a74a71250c3e357",
     "apps/today/today.json": "501883823284ef265ebe0a81f6bed8bc052ec76e71799fa16505c0aae45c33c4",
@@ -43,5 +43,5 @@
     "tables/today_settings/today_settings.json": "618ecb8ba05285d6679289a9192928ff9ea79de3c39444fa0673c943681da7cd",
     "workflows/today-sweep/today-sweep.json": "bf5d08fe2ededbfb26fe6e5966b60442adc854961fd2c651aa5ed5b877defc9f"
   },
-  "hash": "4bfd93ad13cda06e29ae6bf6b4af69232356accf6118a04f133c1e8372c4b04a"
+  "hash": "7456183e9ebb1558d38f4d0cccbcb0d501948b4df24127421f260b2d9361c629"
 }

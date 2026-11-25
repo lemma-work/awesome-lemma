@@ -3,10 +3,10 @@
 
 import { useMemo, useState } from "react";
 import { CalendarCheck, CalendarClock, CalendarX, Copy, ExternalLink, FlaskConical, Link2, Settings as Cog, Sparkles, Trash2 } from "lucide-react";
-import { Avatar, Banner, Button, Card, Empty, Header, Pill, Segmented, Switch, agoText, go, plural, runFunction, useToast } from "@lemma-plugins/kit";
+import { Avatar, Banner, Button, Card, Empty, Header, Pill, Segmented, Switch, agoText, go, openApp, plural, runFunction, useToast } from "@lemma-plugins/kit";
 import { clock, daysText, length, place, shortDay } from "../time";
 import { KIND_LABEL, PROVIDER_LABEL, useBooking, type Request } from "./data";
-import { pageLink, findWidget, turnOff, turnOn } from "./turnOn";
+import { pageLink, findWidget, onSample, turnOff, turnOn } from "./turnOn";
 import { useEffect } from "react";
 
 type View = "ahead" | "declined" | "past";
@@ -53,6 +53,8 @@ export function Home() {
   const unsure = lists.ahead.filter((r) => r.unsure).length;
   const used = calendars.filter((c) => (settings.calendars || []).includes(c.id));
   const sample = used.some((c) => c.provider === "sample");
+  // Bookings go on the sample calendar: the page can't be turned on there.
+  const held = onSample(settings, calendars);
 
   const flip = async (on: boolean) => {
     setBusy("flip");
@@ -72,6 +74,8 @@ export function Home() {
   const sampleRun = async (mode: "load" | "clear") => {
     setBusy(mode);
     try {
+      // A page left off keeps no fresh times of its own; the sample books one.
+      if (mode === "load" && page.state !== "on") await runFunction("booking_slots", { force: true });
       const out = await runFunction<{ message: string }>("booking_sample_data", { mode });
       if (mode === "clear") await runFunction("booking_needs_you", {});
       toast(out.message);
@@ -115,7 +119,7 @@ export function Home() {
         </div>
 
         <aside className="bk-side">
-          <Card title="Your page" icon={Link2} action={<Switch checked={page.state === "on"} label={page.state === "on" ? "On" : "Off"} disabled={!!busy} onChange={(v) => void flip(v)} />}>
+          <Card title="Your page" icon={Link2} action={<Switch checked={page.state === "on"} label={page.state === "on" ? "On" : "Off"} disabled={!!busy || (held && page.state !== "on")} onChange={(v) => void flip(v)} />}>
             <div className="bk-props">
               <div className="bk-linkline">
                 <span className="c-ellipsis">{link ? link.split("?")[0].replace(/^https?:\/\//, "") : "…"}</span>
@@ -123,7 +127,7 @@ export function Home() {
                 <Button size="sm" variant="ghost" icon={ExternalLink} label="Open your page" onClick={() => window.open(link, "_blank", "noopener")} />
               </div>
               <dl>
-                <dt>State</dt><dd>{page.state === "on" ? <Pill tone="success">Taking bookings</Pill> : <Pill tone="plain">Off</Pill>}</dd>
+                <dt>State</dt><dd>{page.state !== "on" ? <Pill tone="plain">Off</Pill> : held ? <Pill tone="warning">On, but declining visitors</Pill> : <Pill tone="success">Taking bookings</Pill>}</dd>
                 <dt>Open times</dt><dd>{open.length ? `${open.length}, next ${shortDay(new Date(open[0]), zone)} ${clock(new Date(open[0]), zone)}` : "None in reach"}</dd>
                 <dt>Hours</dt><dd>{daysText(settings.days || [])}, {settings.day_starts}–{settings.day_ends} ({place(zone)})</dd>
                 <dt>Calls</dt><dd>{length(settings.minutes || 30)}, {settings.buffer_minutes} min buffer, {settings.max_per_day} a day at most</dd>
@@ -133,6 +137,17 @@ export function Home() {
                 <dd>{settings.trigger?.include_outside_rows ? <>Reach you{settings.trigger.checked_at ? <span className="c-faint">, checked {agoText(settings.trigger.checked_at)}</span> : null}</> : <Pill tone="danger">Not reaching you</Pill>}</dd>
                 <dt>Times worked out</dt><dd>{page.slots_at ? agoText(page.slots_at) : "Not yet"}</dd>
               </dl>
+              {held ? (
+                <>
+                  <p className="c-muted bk-small bk-held">
+                    {page.state === "on" ? "Bookings go on the sample calendar, so every real visitor is declined. Turn the page off, or" : "Your page stays off while bookings go on the sample calendar: a real visitor would get no invite. To take real bookings,"}{" "}
+                    connect Google Calendar or Outlook in Meetings, then choose it in settings.
+                  </p>
+                  <div className="bk-row">
+                    <Button size="sm" onClick={() => void openApp("meetings")}>Open Meetings</Button>
+                  </div>
+                </>
+              ) : null}
             </div>
           </Card>
           {sample ? (

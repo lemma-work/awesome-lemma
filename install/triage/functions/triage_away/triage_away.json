@@ -1,0 +1,23 @@
+{
+  "name": "triage_away",
+  "description": "Someone away (member_id, name, start, end, part full or half), one row per day in the shared away table; clear takes the days out. Who's on triage skips them.",
+  "type": "API",
+  "visibility": "POD",
+  "code": {
+    "$file": "code.py"
+  },
+  "permissions": {
+    "grants": [
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "away",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read",
+          "datastore.record.write",
+          "datastore.record.delete"
+        ]
+      }
+    ]
+  }
+}

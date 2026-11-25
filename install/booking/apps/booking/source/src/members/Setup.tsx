@@ -491,6 +491,7 @@ function TurnOn({ settings, page }: { settings: Settings; page: Page }) {
   const [steps, setSteps] = useState<StepResult[]>([]);
   const [done, setDone] = useState<boolean | null>(null);
   const [link, setLink] = useState("");
+  const held = steps.some((s) => s.held);
   const begin = useCallback(async () => {
     setSteps([]);
     setDone(null);
@@ -514,22 +515,24 @@ function TurnOn({ settings, page }: { settings: Settings; page: Page }) {
   }, []);
   return (
     <>
-      <h1>{done ? "Your page is on" : done === false ? "Your page isn't on yet" : "Turning your page on…"}</h1>
+      <h1>{done && held ? "Your page is ready to try" : done ? "Your page is on" : done === false ? "Your page isn't on yet" : "Turning your page on…"}</h1>
       <p className="c-setup__lead">
-        {done ? "Share the link anywhere. People pick a time in their own time zone and confirm their email; you get the event and a brief." : "Each step is checked after it's done."}
+        {done && held
+          ? "It stays off while bookings go on the sample calendar. Add a sample booking to see one go through; to take real bookings, connect Google Calendar or Outlook in Meetings, then choose it in settings."
+          : done ? "Share the link anywhere. People pick a time in their own time zone and confirm their email; you get the event and a brief." : "Each step is checked after it's done."}
       </p>
       <ul className="bk-checks">
         {(["open", "widget", "trigger", "refresh", "page"] as const).map((s) => {
           const r = steps.find((x) => x.step === s);
           return (
-            <li key={s} className={r ? (r.ok ? "is-ok" : "is-bad") : ""}>
-              {r ? (r.ok ? <Check size={14} aria-hidden="true" /> : <CircleAlert size={14} aria-hidden="true" />) : <span className="c-spin" aria-hidden="true" />}
+            <li key={s} className={r ? (r.held ? "is-held" : r.ok ? "is-ok" : "is-bad") : ""}>
+              {r ? (r.ok && !r.held ? <Check size={14} aria-hidden="true" /> : <CircleAlert size={14} aria-hidden="true" />) : <span className="c-spin" aria-hidden="true" />}
               <span><strong>{STEP_LABEL[s]}</strong><span className="c-muted">{r?.said || "…"}</span></span>
             </li>
           );
         })}
       </ul>
-      {done && link ? (
+      {done && link && !held ? (
         <div className="bk-link">
           <Link2 size={14} aria-hidden="true" />
           <span className="c-ellipsis">{link.split("?")[0]}</span>
@@ -539,6 +542,7 @@ function TurnOn({ settings, page }: { settings: Settings; page: Page }) {
       <div className="c-setup__row">
         {done === false ? <Button variant="primary" onClick={() => void begin()}>Try again</Button> : null}
         {done ? <Button variant="primary" icon={CalendarDays} onClick={() => { holdTurnOn = false; void reload(); }}>See your bookings</Button> : null}
+        {done && held ? <Button onClick={() => void openApp("meetings")}>Open Meetings</Button> : null}
       </div>
     </>
   );

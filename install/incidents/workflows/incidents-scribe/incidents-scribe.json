@@ -1,0 +1,35 @@
+{
+  // incidents_scribe writes one short text: an incident's Now line, or a
+  // status update draft. Decisions answer only closed questions, so writing is
+  // an agent's job. Started by incidents_refresh or incidents_draft_update,
+  // which submit the brief form at once; incidents_scribe_save keeps the text.
+  "name": "incidents-scribe",
+  "description": "Write an incident's Now line or a status update draft from its events.",
+  "start": { "type": "MANUAL" },
+  "nodes": [
+    { "id": "brief", "type": "FORM", "label": "What to write",
+      "config": { "input_schema": {
+        "type": "object",
+        "properties": {
+          "incident_id": { "type": "string", "title": "Incident" },
+          "kind": { "type": "string", "title": "Now or update", "enum": ["now", "update"] },
+          "context": { "type": "string", "title": "What to write from" }
+        },
+        "required": ["incident_id", "kind", "context"]
+      } } },
+    { "id": "write", "type": "AGENT", "label": "Write it",
+      "config": { "agent_name": "incidents_scribe", "input_mapping": {
+        "context": { "type": "expression", "value": "brief.context" } } } },
+    { "id": "save", "type": "FUNCTION", "label": "Keep it",
+      "config": { "function_name": "incidents_scribe_save", "input_mapping": {
+        "incident_id": { "type": "expression", "value": "brief.incident_id" },
+        "kind": { "type": "expression", "value": "brief.kind" },
+        "result": { "type": "expression", "value": "write" } } } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [
+    { "id": "e1", "source": "brief", "target": "write" },
+    { "id": "e2", "source": "write", "target": "save" },
+    { "id": "e3", "source": "save", "target": "end" }
+  ]
+}

@@ -1,0 +1,4 @@
+{
+  "description": "What the coding agent records to show its work: /coding/<session id>/ holds a recording or screenshot of a change working, linked from the task.",
+  "visibility": "POD"
+}

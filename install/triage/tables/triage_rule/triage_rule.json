@@ -1,0 +1,23 @@
+{
+  // One routing or mark-down rule, tried in order (position). A route names
+  // an owner; a mark-down sets matching items aside with its reason.
+  "name": "triage_rule",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "kind", "type": "ENUM", "required": true, "default": "route", "options": ["route", "mark_down"] },
+    // What it matches; every key given must match: {path (a glob,
+    // "web/checkout/**"), repo, label, door, text (words in the title or
+    // body), kind}.
+    { "name": "match", "type": "JSON", "required": true },
+    { "name": "owner_user_id", "type": "USER" },
+    { "name": "owner_name", "type": "TEXT", "max_length": 200 },
+    // Said beside the suggestion or the mark-down: "owns checkout".
+    { "name": "reason", "type": "TEXT", "max_length": 300 },
+    { "name": "position", "type": "INTEGER", "default": 0 },
+    { "name": "enabled", "type": "BOOLEAN", "default": true },
+    { "name": "sample", "type": "BOOLEAN", "default": false }
+  ],
+  "config": {}
+}

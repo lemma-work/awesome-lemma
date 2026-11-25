@@ -1,0 +1,6 @@
+{
+  "connector": "github",
+  "mode": "PER_MEMBER",
+  "required": false,
+  "purpose": "Your own GitHub, used only for what is done in your name: a review you send back, an approval and a merge you press. Everything else reads through the Lemma's shared GitHub connection, and the Lemma's own posts go out as its bot."
+}

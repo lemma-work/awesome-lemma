@@ -1,0 +1,29 @@
+{
+  // One person away for one day, or half of one. A stretch away (a week off)
+  // is one row per day, so "who is here on Thursday" is a plain read and two
+  // plugins writing the same day write one row. No reason is kept.
+  //
+  // Team-wide (no RLS): whoever plans the work needs to see it.
+  //
+  // Found by id: uuid5(AWAY_NS, "<member id or name>:<day>"), the day as
+  // YYYY-MM-DD, with AWAY_NS = 363239d5-9ea7-40d6-b959-7dc722c3891f: the
+  // member's id when there is one, otherwise the name as written.
+  //
+  // Shared definition (plugins/_contract), first written by Triage (who is on
+  // triage, skipping anyone away) and Sprints (capacity). Carried unchanged
+  // by every plugin that uses it; _contract/lint.py fails on any difference.
+  "name": "away",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    // A member of the Lemma, or empty for someone known only by name. Not
+    // `user_id`: that name is the platform's row-owner column, and a create
+    // that sets it to null is refused as if the table did not exist.
+    { "name": "member_id", "type": "USER" },
+    { "name": "name", "type": "TEXT", "required": true, "max_length": 200 },
+    { "name": "day", "type": "DATE", "required": true },
+    { "name": "part", "type": "ENUM", "required": true, "default": "full", "options": ["full", "half"] }
+  ],
+  "config": {}
+}

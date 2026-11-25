@@ -1,0 +1,24 @@
+{
+  // Started by the `tasks-team-handed` schedule: `task`'s `assignee_agent` changed. One workflow per
+  // schedule (the platform keeps one schedule per workflow). tasks_on_task
+  // reads the fresh row (a DATASTORE update's payload can be empty) and does
+  // what is due: ask once whether an agent could do it, or hand it to its
+  // agent.
+  "name": "tasks-team-handed",
+  "description": "A team task was handed to an agent (or another one): hand it over, with the task as the brief.",
+  "max_concurrent_runs": 4,
+  "start": { "type": "DATASTORE_EVENT", "config": { "table_name": "task", "operations": ["UPDATE"] } },
+  "nodes": [
+    { "id": "look", "type": "FUNCTION", "label": "Ask, or hand it over",
+      "config": { "function_name": "tasks_on_task", "input_mapping": {
+        "task_id": { "type": "expression", "value": "start.metadata.record_id" },
+        "scope": { "type": "literal", "value": "team" } } } },
+    { "id": "needs_you", "type": "FUNCTION", "label": "What needs you now",
+      "config": { "function_name": "tasks_needs_you", "input_mapping": {} } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [
+    { "id": "e1", "source": "look", "target": "needs_you" },
+    { "id": "e2", "source": "needs_you", "target": "end" }
+  ]
+}

@@ -24,6 +24,12 @@ with a demo you can try in a browser with no account.
 | **Lead research** | Know who someone is before you reply | [`leads/`](leads/) |
 | **Brand kit** | Everything you make looks and sounds like you | [`brand/`](brand/) |
 | **Deck maker** | A deck from one sentence, edited by asking | [`decks/`](decks/) |
+| **Sprints** | Sprints with real capacity, carry-over and an honest summary | [`sprints/`](sprints/) |
+| **Triage** | Bugs, alerts and security warnings sorted by how far they reach, each with an owner | [`triage/`](triage/) |
+| **Incidents** | An incident's timeline gathered as it happens, and the write-up after | [`incidents/`](incidents/) |
+| **Release notes** | Notes written from what merged, and word to everyone who asked for it | [`release-notes/`](release-notes/) |
+| **Dependency updates** | Dependency updates batched, checked and opened as one pull request | [`dependency-updates/`](dependency-updates/) |
+| **Coding agent** | An issue turned into a pull request by an agent, and questions about your code answered | [`coding-agent/`](coding-agent/) |
 
 Each line is the plugin's own, from its `listing.json`. Its README says how
 it works, what was measured and what was not verified.
@@ -67,9 +73,13 @@ install.
 Then each person opens the plugin's app once: it walks them through its
 set-up (their mailbox or calendar, or the sample to look around with first).
 
-Plugins that read a calendar install without Google Meet transcripts: the
-importer refuses a connector your organization has not set up, and Meetings
-works from the notes a person writes instead.
+Plugins that read a calendar install without Google Meet transcripts, so
+after a meeting Meetings reads the notes a person writes about it (the
+meeting itself still comes from their calendar, or the sample). A connector a
+plugin marks optional that your organization has not set up (Google Calendar,
+Outlook, Gmail) is left out at install, and the parts that use it come
+without access to it: set the connector up in your organization before you
+add the plugin.
 
 ## How a plugin is laid out
 

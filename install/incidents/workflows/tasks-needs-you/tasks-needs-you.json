@@ -1,0 +1,15 @@
+{
+  // A person's own daily refresh of what in Tasks needs them (needs_you), on
+  // their own TIME schedule made by the app as them, so a task that falls due
+  // today reaches Today's list that morning even if nothing changed. Writes
+  // happen on every change too (the task workflows, the agent's reports).
+  "name": "tasks-needs-you",
+  "description": "Write what in Tasks needs you today to the shared needs_you list: tasks due or late, agents waiting on you, tasks with someone else.",
+  "start": { "type": "SCHEDULED", "config": { "schedule_type": "CRON" } },
+  "nodes": [
+    { "id": "needs_you", "type": "FUNCTION", "label": "What needs you now",
+      "config": { "function_name": "tasks_needs_you", "input_mapping": {} } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [ { "id": "e1", "source": "needs_you", "target": "end" } ]
+}

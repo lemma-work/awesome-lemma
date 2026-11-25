@@ -1,0 +1,73 @@
+{
+  // One agent run on one task: the card on the board is the task, and its
+  // sessions hang under it. A retry, a second agent or a move from the Mac
+  // to the cloud is a new session on the same task. Team-wide (no RLS): the
+  // team sees every card. The conversation itself stays its starter's, so
+  // only they read the transcript; everyone reads the events.
+  "name": "coding_session",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    // The task this works (a `task` row, or the starter's `personal_task`).
+    { "name": "task_id", "type": "UUID", "required": true },
+    { "name": "scope", "type": "ENUM", "required": true, "default": "team", "options": ["personal", "team"] },
+    { "name": "title", "type": "TEXT", "required": true, "max_length": 300 },
+    // Where the work came from, as the task says it: triage, pr-review, tasks,
+    // coding-agent (New task), github (an issue labelled for the agent), chat.
+    { "name": "source", "type": "TEXT", "max_length": 40 },
+    { "name": "source_url", "type": "TEXT", "max_length": 600 },
+    { "name": "repo", "type": "TEXT", "required": true, "max_length": 200 },
+    // Where its branch starts: a branch, a tag, a commit or pull/<n>/head.
+    { "name": "ref", "type": "TEXT", "max_length": 255 },
+    // Set when it pushes to an existing pull request's own branch instead of
+    // a branch of its own.
+    { "name": "push_to", "type": "TEXT", "max_length": 255 },
+    // Which agent runs it: a runtime profile id (system:lemma is Lemma in the
+    // cloud), the model, cloud or the starter's Mac, and its name as shown.
+    { "name": "profile_id", "type": "TEXT", "max_length": 120 },
+    { "name": "model", "type": "TEXT", "max_length": 120 },
+    { "name": "place", "type": "ENUM", "required": true, "default": "cloud", "options": ["cloud", "mac"] },
+    { "name": "agent_label", "type": "TEXT", "max_length": 80 },
+    { "name": "conversation_id", "type": "TEXT", "max_length": 64 },
+    // lemma/<slug>, from the conversation's worktree.
+    { "name": "branch", "type": "TEXT", "max_length": 255 },
+    { "name": "pr_number", "type": "INTEGER" },
+    { "name": "pr_url", "type": "TEXT", "max_length": 600 },
+    { "name": "pr_state", "type": "ENUM", "required": true, "default": "none", "options": ["none", "open", "merged", "closed"] },
+    { "name": "checks", "type": "ENUM", "required": true, "default": "none", "options": ["none", "running", "passed", "failed"] },
+    { "name": "checks_text", "type": "TEXT", "max_length": 600 },
+    { "name": "mergeable", "type": "ENUM", "required": true, "default": "unknown", "options": ["unknown", "clean", "conflict"] },
+    { "name": "head_sha", "type": "TEXT", "max_length": 64 },
+    // Keep the pull request green: fix failing checks and answer review
+    // comments in this session, up to max_tries rounds, then ask.
+    { "name": "keep_green", "type": "BOOLEAN", "required": true, "default": true },
+    { "name": "tries", "type": "INTEGER", "required": true, "default": 0 },
+    { "name": "max_tries", "type": "INTEGER", "required": true, "default": 3 },
+    //   starting  being handed over
+    //   working   the agent is on it
+    //   needs_you waiting on a person (see `needs`)
+    //   pr_open   its pull request is open and nothing waits on a person
+    //   merged    a person merged it
+    //   done      finished without a pull request (nothing to change, a question answered)
+    //   stopped   a person stopped it or took it back
+    //   failed    it could not start or broke down
+    { "name": "status", "type": "ENUM", "required": true, "default": "starting",
+      "options": ["starting", "working", "needs_you", "pr_open", "merged", "done", "stopped", "failed"] },
+    { "name": "needs", "type": "ENUM", "required": true, "default": "none",
+      "options": ["none", "question", "approval", "checks_failing", "review", "conflict", "waiting_mac", "failed"] },
+    { "name": "needs_text", "type": "TEXT", "max_length": 2000 },
+    { "name": "result", "type": "TEXT", "max_length": 4000 },
+    // Last known size of the change.
+    { "name": "files_changed", "type": "INTEGER" },
+    { "name": "additions", "type": "INTEGER" },
+    { "name": "deletions", "type": "INTEGER" },
+    { "name": "started_by", "type": "USER" },
+    { "name": "started_by_name", "type": "TEXT", "max_length": 200 },
+    { "name": "started_at", "type": "DATETIME" },
+    { "name": "last_event_at", "type": "DATETIME" },
+    { "name": "finished_at", "type": "DATETIME" },
+    { "name": "error", "type": "TEXT", "max_length": 2000 }
+  ],
+  "config": {}
+}

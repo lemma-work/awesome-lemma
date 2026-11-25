@@ -1,0 +1,6 @@
+{
+  "name": "release-notes",
+  "description": "The release's note, drafted from what merged with every line's sources, published to GitHub, the changelog page and Slack; and everyone who asked for what shipped, with a reply drafted in the thread they asked in.",
+  "public_slug": "${release_notes_slug}",
+  "visibility": "POD"
+}

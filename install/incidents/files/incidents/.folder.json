@@ -1,0 +1,4 @@
+{
+  "description": "Each incident's write-up, as /incidents/INC-<number>.md: drafted from the incident's events on resolve, every claim linked to the event behind it.",
+  "visibility": "POD"
+}

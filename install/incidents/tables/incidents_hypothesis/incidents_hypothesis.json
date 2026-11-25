@@ -1,0 +1,28 @@
+{
+  // One likely cause, from incidents_investigator. It never acts: a person
+  // confirms it or says it is not it.
+  "name": "incidents_hypothesis",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "incident_id", "type": "UUID", "required": true,
+      "foreign_key": { "references": "incidents_incident.id" } },
+    { "name": "text", "type": "TEXT", "required": true, "max_length": 2000 },
+    { "name": "confidence", "type": "ENUM", "required": true, "options": ["likely", "possible", "inconclusive"] },
+    // How many of the signs it looked at agree: "3 of 4 signs agree".
+    { "name": "agree", "type": "INTEGER" },
+    { "name": "signs", "type": "INTEGER" },
+    // [{text, event_id, url, source}]: each piece of evidence is an event or a link.
+    { "name": "evidence", "type": "JSON" },
+    // [{text}]: what it looked at and could rule out.
+    { "name": "ruled_out", "type": "JSON" },
+    // [{text, source}]: every source it could not read, named.
+    { "name": "not_checked", "type": "JSON" },
+    { "name": "state", "type": "ENUM", "required": true, "default": "open", "options": ["open", "confirmed", "not_it"] },
+    // When it was posted to the incident's channel.
+    { "name": "posted_ts", "type": "TEXT", "max_length": 32 },
+    { "name": "posted_at", "type": "DATETIME" }
+  ],
+  "config": {}
+}

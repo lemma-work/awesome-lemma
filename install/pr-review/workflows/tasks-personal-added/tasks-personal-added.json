@@ -1,0 +1,24 @@
+{
+  // Started by the `tasks-personal-added` schedule: a row added to `personal_task`. One workflow per
+  // schedule (the platform keeps one schedule per workflow). tasks_on_task
+  // reads the fresh row (a DATASTORE update's payload can be empty) and does
+  // what is due: ask once whether an agent could do it, or hand it to its
+  // agent.
+  "name": "tasks-personal-added",
+  "description": "A new personal task: ask once whether an agent could do it, or hand it over when it was made for an agent.",
+  "max_concurrent_runs": 4,
+  "start": { "type": "DATASTORE_EVENT", "config": { "table_name": "personal_task", "operations": ["INSERT"] } },
+  "nodes": [
+    { "id": "look", "type": "FUNCTION", "label": "Ask, or hand it over",
+      "config": { "function_name": "tasks_on_task", "input_mapping": {
+        "task_id": { "type": "expression", "value": "start.metadata.record_id" },
+        "scope": { "type": "literal", "value": "personal" } } } },
+    { "id": "needs_you", "type": "FUNCTION", "label": "What needs you now",
+      "config": { "function_name": "tasks_needs_you", "input_mapping": {} } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [
+    { "id": "e1", "source": "look", "target": "needs_you" },
+    { "id": "e2", "source": "needs_you", "target": "end" }
+  ]
+}

@@ -1,0 +1,4 @@
+{
+  "description": "Each closed sprint's summary, as /sprints/<number>.md: the numbers and the tasks behind them, written at close.",
+  "visibility": "POD"
+}

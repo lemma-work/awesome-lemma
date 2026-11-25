@@ -51,8 +51,8 @@
   "files": {
     "apps/tasks/source/.gitignore": "004929f15e2f811a7dac2bbc448e9b633991e21e4d1d579ff4666915ddae1243",
     "apps/tasks/source/index.html": "a1fe1d315a2f39c9969c1f8257838b30c8d7c05c3d3d3c9677fca7ba715e9122",
-    "apps/tasks/source/package-lock.json": "0cb1ca18d0be399c1aed02c5752da651123d23b0e4f65185c3fdbd6f0b36033c",
-    "apps/tasks/source/package.json": "6821a21e565d5ad7acc7328564201881098c745d86147fa8a467598103778921",
+    "apps/tasks/source/package-lock.json": "4585d0dbef5b4f2b2de0da260b3f4f4dc0828527d9bf06b3a300daf24bc21438",
+    "apps/tasks/source/package.json": "9303f984d82cd9b89a740ade9cc1ffdd0521f7a44159de33cc0373389c4a292d",
     "apps/tasks/source/pnpm-workspace.yaml": "9c4e1837b7df3c50bd17368aa2f2fec6c514b34e03414574a056ee797c7137fd",
     "apps/tasks/source/src/App.tsx": "de42b566c64e243c91fd5720f8f2b8643ac01163d88644e859d515cb5470cd40",
     "apps/tasks/source/src/List.tsx": "fbb1cbc1948470fedcfc49dad3e552a0229a210442a1aec20d0b8ec3dc277fdd",
@@ -74,7 +74,7 @@
     "apps/tasks/source/src/types.ts": "612710a764f28f984dbc6e30b4dbf956a5e89c61107e2bb2ef3db8b28a091738",
     "apps/tasks/source/src/vite-env.d.ts": "65996936fbb042915f7b74a200fcdde7e410f32a669b1ab9597cfaa4b0faddb5",
     "apps/tasks/source/tsconfig.json": "062dcc7e2090e113eab412fed9afd1df973cc92be64c6a9f1caca9bfe42fbe57",
-    "apps/tasks/source/vendor/lemma-plugins-kit-0.1.0-efbfe529.tgz": "2860f17852912e39f12aebf0fe6ba716a61178befe34643178d57ba38409029f",
+    "apps/tasks/source/vendor/lemma-plugins-kit-0.1.0-c70cb30a.tgz": "6193dc69b3419403653f34a346d3b9eb9b9d8b898adc2c5e6225fed28aed9a8a",
     "apps/tasks/source/vendor/lemma-sdk-0.10.1.tgz": "fae311df7451ae288f82ffa1244ba3e312ea91bb629e174251df15ffbcded67b",
     "apps/tasks/source/vite.config.ts": "cf3f1fad214f15e74aae28d4af7cc7d4bd29fe6610d05be56a74a71250c3e357",
     "apps/tasks/tasks.json": "f76ea1383b4157a88d5fc2a40da11608f3f29e8bc9b8eb69eebd600c9fc7f530",
@@ -92,7 +92,7 @@
     "functions/tasks_move/tasks_move.json": "873d3039ee8725a402f2687c064b920550cb5d1a891f995621a199e95af6c4d9",
     "functions/tasks_needs_you/code.py": "a9f74b0f58d6a30adadbbc7d3e14f3c5031bbc96f703a3ad3ae4b3be6663cca5",
     "functions/tasks_needs_you/tasks_needs_you.json": "f8ad0a588a0610cd2a82338cc2dd177f318dff0b368b23ab6a5e7d89a13800db",
-    "functions/tasks_on_task/code.py": "c20e61d90f2732c230048449c5ece8231b8cf11a7515605a3394e5ef6d7e524f",
+    "functions/tasks_on_task/code.py": "51cb2cb2505132f4c474448ce82947f7be27ccc320a3b64197000e43bf2ac217",
     "functions/tasks_on_task/tasks_on_task.json": "21d7689ede3f882048967a7b597f8e39646a0b2ed400421a8bb7e0806603bd87",
     "functions/tasks_report/code.py": "8e57cf0bca8faba909ced7fc2c67a306be3d534963cbb4cbd22acb265c8f693c",
     "functions/tasks_report/tasks_report.json": "d6451f5be9d18a9bab318036c02c60aaf737d9cb352bef49759fae61328bd121",
@@ -132,5 +132,5 @@
     "workflows/tasks-team-added/tasks-team-added.json": "8d438d9a726d68647ecc84fb068634c91820ac3556096094826814e109e83d4a",
     "workflows/tasks-team-handed/tasks-team-handed.json": "9873093a94aab2d092a05b020053405329aa76cb5bfd6a8ea09b88abd6946bcc"
   },
-  "hash": "4bf1afcba4ad1af7cdc6ec7345441d1fb044dd755aef9e80e233ac23c3fa8544"
+  "hash": "11730f8e9b2468c97d9ce7283f89f019a05d4565b66803b6fe866fe308ee6c27"
 }

@@ -1,0 +1,9 @@
+{
+  // A task row handed to an agent (or to another one): only a write that
+  // changed `assignee_agent`, never a status move or an edit.
+  "name": "tasks-team-handed",
+  "schedule_type": "DATASTORE",
+  "config": { "table_name": "task", "operations": ["UPDATE"], "when": { "assignee_agent": { "changed": true } }, "bulk_writes": "each" },
+  "workflow_name": "tasks-team-handed",
+  "is_active": true
+}

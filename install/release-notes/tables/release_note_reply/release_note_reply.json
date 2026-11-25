@@ -1,0 +1,26 @@
+{
+  // A reply to someone who asked in a place anyone can read, outside every
+  // member's mail: a comment on their GitHub issue, or a reply in their Slack
+  // thread posted by the Lemma's Slack app. id = the ask's id. Nothing is
+  // posted until a person presses Send (release_notes_send_reply).
+  "name": "release_note_reply",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "ask_id", "type": "UUID", "required": true },
+    { "name": "note_id", "type": "UUID" },
+    { "name": "channel", "type": "ENUM", "required": true, "options": ["github", "slack"] },
+    // An issue as "owner/repo#880", or a Slack thread as "<channel>:<ts>".
+    { "name": "target", "type": "TEXT", "required": true, "max_length": 400 },
+    { "name": "body", "type": "TEXT", "required": true, "max_length": 4000 },
+    { "name": "state", "type": "ENUM", "required": true, "default": "proposed",
+      "options": ["proposed", "approved", "sent", "failed", "discarded"] },
+    { "name": "sent_by", "type": "USER" },
+    { "name": "sent_at", "type": "DATETIME" },
+    { "name": "url", "type": "TEXT", "max_length": 500 },
+    { "name": "error", "type": "TEXT", "max_length": 1000 },
+    { "name": "sample", "type": "BOOLEAN", "default": false }
+  ],
+  "config": {}
+}

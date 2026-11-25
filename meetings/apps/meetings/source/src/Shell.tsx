@@ -77,7 +77,7 @@ function Nav({ route, onPick }: { route: Route; onPick: () => void }) {
 
 export function Shell() {
   const route = useRoute();
-  const { meetings, sample, reload, errors } = useMeetings();
+  const { meetings, sample, calendars, reload, errors } = useMeetings();
   const [open, setOpen] = useState(false);
   useEffect(() => setOpen(false), [route.page]);
 
@@ -96,6 +96,9 @@ export function Shell() {
   }, [busy, reload]);
 
   const errs = Object.entries(errors).filter(([, v]) => v);
+  // A calendar whose last read failed, said in words (the mark beside it in
+  // the side list is only a sign).
+  const stopped = calendars.filter((c) => c.last_error && c.provider !== "sample" && c.state !== "stopped");
   let page;
   if (route.page === "meeting") page = <MeetingPage id={route.id} />;
   else if (route.page === "settings") page = <SettingsPage />;
@@ -123,6 +126,15 @@ export function Shell() {
             <Banner action={<Button size="sm" onClick={() => to.settings()}>Connect my calendar</Button>}>
               <b>Sample calendar.</b> Made-up meetings at .example addresses, so you can see how it works.
             </Banner>
+          </div>
+        ) : null}
+        {stopped.length ? (
+          <div className="mt-strip">
+            {stopped.map((c) => (
+              <Banner key={c.id} tone="danger" icon={TriangleAlert}>
+                <b>Couldn't read {c.email}.</b> {c.last_error}
+              </Banner>
+            ))}
           </div>
         ) : null}
         {errs.length ? (

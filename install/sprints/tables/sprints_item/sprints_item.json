@@ -1,0 +1,44 @@
+{
+  // One team task in one sprint. Its id is uuid5(SPRINTS_NS, "<sprint id>:<task id>"),
+  // so adding twice is one row. Membership lives here, not on `task`: "added
+  // after the start" and "3rd sprint" are facts about a task in a sprint.
+  "name": "sprints_item",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "sprint_id", "type": "UUID", "required": true,
+      "foreign_key": { "references": "sprints_sprint.id" } },
+    // A row of the shared `task` table (no foreign key: a task deleted in
+    // Tasks leaves its sprint history).
+    { "name": "task_id", "type": "UUID", "required": true },
+    // In the sprint when it started (frozen by sprints_start); false for work
+    // added after.
+    { "name": "in_at_start", "type": "BOOLEAN", "default": false },
+    { "name": "added_at", "type": "DATETIME" },
+    { "name": "added_by", "type": "TEXT", "max_length": 200 },
+    { "name": "removed_at", "type": "DATETIME" },
+    { "name": "removed_by", "type": "TEXT", "max_length": 200 },
+    //   open      in the sprint, not done
+    //   done      done in this sprint
+    //   carried   not done at close; carried into the next sprint
+    //   split     not done at close; part carried, the rest a new backlog task
+    //   backlog   taken out, or sent back to the backlog at close
+    //   dropped   dropped at close (the task is canceled)
+    { "name": "outcome", "type": "ENUM", "required": true, "default": "open",
+      "options": ["open", "done", "carried", "split", "backlog", "dropped"] },
+    // The sprint it was carried from, when it was.
+    { "name": "carried_from", "type": "UUID" },
+    // Which sprint this is for the task: 1 for its first, 2 for "2nd sprint".
+    { "name": "nth", "type": "INTEGER", "default": 1 },
+    // Its estimate when it was added; frozen for planned work at the start.
+    { "name": "points_at_add", "type": "FLOAT" },
+    { "name": "started_at", "type": "DATETIME" },
+    { "name": "done_at", "type": "DATETIME" },
+    // Who it was on at close (for each person's usual): a person's name or
+    // an agent.
+    { "name": "closed_assignee", "type": "TEXT", "max_length": 200 },
+    { "name": "closed_points", "type": "FLOAT" }
+  ],
+  "config": {}
+}

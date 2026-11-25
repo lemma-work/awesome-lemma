@@ -1,0 +1,30 @@
+{
+  // What a Decisions call answered, and what became of it. The id is the
+  // thing asked about: a task's id (kind agent: could an agent do this with
+  // what this Lemma has?) or a promise's id (kind promise: is this work to
+  // do, or just a reply?). Private to the person it was asked for.
+  "name": "tasks_decision",
+  "primary_key_column": "id",
+  "enable_rls": true,
+  "visibility": "POD",
+  "columns": [
+    { "name": "kind", "type": "ENUM", "required": true, "options": ["agent", "promise"] },
+    // agent: yes, no, needs_person. promise: work, reply. unsure under 0.5.
+    { "name": "answer", "type": "TEXT", "required": true, "max_length": 16 },
+    { "name": "confidence", "type": "FLOAT" },
+    { "name": "reason", "type": "TEXT", "max_length": 300 },
+    //   open       a suggestion the person has not acted on
+    //   accepted   they took it (handed the task over; made the promise a task)
+    //   dismissed  they said no
+    //   made       promises set to automatic: the task was made
+    //   quiet      nothing to suggest (no, a reply, ...)
+    { "name": "state", "type": "ENUM", "required": true, "default": "open",
+      "options": ["open", "accepted", "dismissed", "made", "quiet"] },
+    // The task a promise became, and whether it is personal or team.
+    { "name": "task_id", "type": "UUID" },
+    // What the call saw, so a correction can become an example.
+    { "name": "evidence", "type": "TEXT", "max_length": 4000 },
+    { "name": "seconds", "type": "FLOAT" }
+  ],
+  "config": {}
+}

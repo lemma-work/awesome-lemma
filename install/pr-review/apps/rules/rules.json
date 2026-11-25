@@ -1,0 +1,6 @@
+{
+  "name": "rules",
+  "description": "The rules every pull request is read against, read from your repositories' own files and proposed from past review comments: active, proposed, paused and retired, each with its record of findings raised, fixed and dismissed.",
+  "public_slug": "${prr_rules_slug}",
+  "visibility": "POD"
+}

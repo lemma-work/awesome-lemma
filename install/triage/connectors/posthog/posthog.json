@@ -1,0 +1,6 @@
+{
+  "connector": "posthog",
+  "mode": "SHARED",
+  "required": false,
+  "purpose": "PostHog error tracking issues, read every 15 minutes over PostHog's MCP server, counted in people and sessions. Without it, PostHog is named as not checked."
+}

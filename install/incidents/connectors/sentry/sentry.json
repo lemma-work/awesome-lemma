@@ -1,0 +1,6 @@
+{
+  "connector": "sentry",
+  "mode": "SHARED",
+  "required": false,
+  "purpose": "Read by the investigator for errors around an incident. Without it, errors are named as not checked."
+}

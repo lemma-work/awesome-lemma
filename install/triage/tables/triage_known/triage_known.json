@@ -1,0 +1,19 @@
+{
+  // One item the team published as known, in the team's own words. The app
+  // marks this table Public when the team turns known issues on, so the
+  // form and the visitor chat can read it; nothing else of an item is ever
+  // public. The id is the item's id.
+  "name": "triage_known",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "item_id", "type": "UUID" },
+    { "name": "title", "type": "TEXT", "required": true, "max_length": 300 },
+    { "name": "state", "type": "ENUM", "required": true, "default": "investigating", "options": ["investigating", "being_fixed", "fixed"] },
+    // A page address prefix, for "we know about a problem on this page".
+    { "name": "page", "type": "TEXT", "max_length": 1000 },
+    { "name": "updated_at", "type": "DATETIME" }
+  ],
+  "config": {}
+}

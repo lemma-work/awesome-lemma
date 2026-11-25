@@ -82,10 +82,21 @@ for those would need building per Lemma, and must not be shipped prebuilt.
 Every install bundle is assembled without the connectors in
 `INSTALL_WITHOUT` (`assemble.py`): today `googlemeet`, so Meetings, Booking
 page, People map, Deal tracker and Lead research install without Google Meet
-transcripts (Meetings falls back to the notes a person writes). The importer
-refuses a bundle that declares a connector the organization has no
-installation of, even one marked `"required": false`, and most organizations
-have none for Google Meet.
+transcripts (after a meeting, Meetings reads the notes a person writes about
+it). The importer used to refuse a bundle declaring a connector the
+organization has no installation of, even one marked `"required": false`.
+It now leaves such an optional connector out (`SKIPPED`, platform
+`pod_bundle/infrastructure/connector_planning.py`, `_can_go_without`) and
+drops the grants on it (`connector_grants.py`), so `INSTALL_WITHOUT` can be
+emptied once an install on the hosted Lemma confirms the importer there
+skips; until then it stays, so no install depends on that.
+
+A connector skipped at install stays out: connecting it later (from a
+plugin's own set-up) declares it in the Lemma on first use but grants the
+plugin's functions nothing, so they are refused `connector.use` on it. Adding
+the plugin again once the connector is set up should restore the grants (the
+importer keeps a grant on a connector the Lemma already declares); not yet
+seen working.
 
 ## How parts merge
 
@@ -98,12 +109,14 @@ have none for Google Meet.
 | Apps | `source/` without `node_modules`, builds, zips or `tsbuildinfo`; with `--install`, plus `dist.zip` and `dist.source-digest` (see Prebuilt apps) |
 | Left out | Everything outside the bundle's resource folders: `bin/`, `bench/`, `.lemma/`, `local/`, READMEs, `plugin.json` itself |
 
-`--without-connector <id>` leaves a connector out, with every grant on it. The
-importer refuses a bundle that declares a connector the organization has no
-installation of, even one marked `"required": false`
-(`lemma-backend/app/modules/pod_bundle/domain/connector_plan.py` in the
-platform, `_resolve_one`), so a bundle for an organization without Google
-Meet is assembled without it, as Meetings' own `bin/import.sh` does.
+`--without-connector <id>` leaves a connector out, with every grant on it.
+The importer now does the same by itself for an optional connector the
+organization has no installation of (and nothing in the bundle runs through:
+a schedule or surface), planned `SKIPPED`
+(`lemma-backend/app/modules/pod_bundle/infrastructure/connector_planning.py`
+in the platform, `_can_go_without`); the CLI's `lemma pods import` too.
+Leaving one out here is for an importer older than that, as Meetings' own
+`bin/import.sh` does.
 
 Beside each build, `<plugin>.assembly.json` says which plugin every part came
 from, what was merged, what was left out, and a hash of every file.

@@ -1,0 +1,6 @@
+{
+  "name": "sprints",
+  "description": "The team's sprints over its tasks: plan with each person's real capacity, run with the work that came in kept apart, close with a choice for every unfinished task and a summary drafted from the numbers.",
+  "public_slug": "${sprints_slug}",
+  "visibility": "POD"
+}

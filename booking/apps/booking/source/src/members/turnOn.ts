@@ -12,10 +12,13 @@
 //            drops every visitor's row as FILTERED
 //   refresh  the person's own booking-refresh-<id>, every 15 minutes
 //   page     the link (with the widget's key) kept for decline emails; the
-//            page on; its first open times
+//            page on; its first open times. Left off while bookings go on
+//            Meetings' sample calendar: a real visitor would be told "booked"
+//            with no invite (booking_confirm declines them too). Everything
+//            above still runs, so a sample booking goes through it all
 
-import { client, runFunction, update, whoAmI } from "@lemma-plugins/kit";
-import type { Page, Settings } from "./data";
+import { client, q, runFunction, update, whoAmI } from "@lemma-plugins/kit";
+import type { Calendar, Page, Settings } from "./data";
 
 export const OPEN_COLUMNS = ["page_id", "starts_at", "name", "email", "about", "zone", "ref"];
 /** What a visitor may read of their own requests (through the chat). */
@@ -26,6 +29,18 @@ export interface StepResult {
   step: "open" | "widget" | "trigger" | "refresh" | "page";
   ok: boolean;
   said: string;
+  /** The page was left off on purpose: its bookings go on the sample calendar. */
+  held?: boolean;
+}
+
+export const SAMPLE_HELD =
+  "Left off: bookings go on the sample calendar, so a real visitor would get no invite. Connect Google Calendar or Outlook in Meetings, then choose it in settings.";
+
+/** Bookings go on Meetings' sample calendar: such a page can't take a real visitor. */
+export function onSample(settings: Settings, calendars: Pick<Calendar, "id" | "provider">[]): boolean {
+  const ids = settings.calendars || [];
+  const id = settings.event_calendar && ids.includes(settings.event_calendar) ? settings.event_calendar : ids[0];
+  return calendars.find((c) => c.id === id)?.provider === "sample";
 }
 
 interface Widget {
@@ -189,6 +204,14 @@ export async function turnOn(settings: Settings, page: Page, onStep: (r: StepRes
   try {
     if (!ok) throw new Error("Left off until the steps above work.");
     await update("booking_settings", settings.id, { page_url: pageLink(page, key) });
+    const calendars = await q<Pick<Calendar, "id" | "provider">>("SELECT id, provider FROM meetings_calendar");
+    if (onSample(settings, calendars)) {
+      if (page.state === "on") await update("booking_page", page.id, { state: "off" });
+      // Its times still, so a sample booking has one to take.
+      await runFunction("booking_slots", { force: true });
+      say({ step: "page", ok: true, held: true, said: SAMPLE_HELD });
+      return ok;
+    }
     await update("booking_page", page.id, { state: "on" });
     const slots = await runFunction<{ open: number; days: number; message: string; errors: string[] }>("booking_slots", {});
     say({ step: "page", ok: !slots.errors?.length, said: slots.errors?.length ? slots.errors.join(" ") : `On, with ${slots.open} open times over ${slots.days} days.` });

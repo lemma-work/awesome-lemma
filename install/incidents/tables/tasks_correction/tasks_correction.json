@@ -1,0 +1,19 @@
+{
+  // The person answered one of Tasks' questions differently: they handed over
+  // a task the call said no to, dismissed a suggestion, made a "reply" promise
+  // a task, or said a promise-made task is not one. The newest twenty of each
+  // kind go with every later call as worked examples.
+  "name": "tasks_correction",
+  "primary_key_column": "id",
+  "enable_rls": true,
+  "visibility": "POD",
+  "columns": [
+    { "name": "kind", "type": "ENUM", "required": true, "options": ["agent", "promise"] },
+    { "name": "subject_id", "type": "UUID" },
+    { "name": "from_answer", "type": "TEXT", "max_length": 16 },
+    { "name": "to_answer", "type": "TEXT", "required": true, "max_length": 16 },
+    // What the call saw, kept short: examples are capped at 32 KiB in all.
+    { "name": "evidence", "type": "TEXT", "max_length": 1600 }
+  ],
+  "config": {}
+}

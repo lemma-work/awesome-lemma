@@ -12,9 +12,9 @@
 // The run's id is kept on the person's settings, so a reload lands where they were.
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { CalendarDays, Check, CircleHelp, FileText, Mic, Moon, NotebookPen, SkipForward, Sparkles, Timer } from "lucide-react";
+import { CalendarDays, Check, CircleAlert, CircleHelp, FileText, Mic, Moon, NotebookPen, SkipForward, Sparkles, Timer } from "lucide-react";
 import {
-  Button, Card, Face, Menu, MenuItem, MenuLabel, Pill, Spinner, Switch, client, orgId, plural, q, runFunction, update, useToast, whoAmI,
+  Banner, Button, Card, Face, Menu, MenuItem, MenuLabel, Pill, Spinner, Switch, client, orgId, plural, q, runFunction, update, useToast, whoAmI,
 } from "@lemma-plugins/kit";
 import { useMeetings } from "./data";
 import { KIND_HINT, KIND_ICON, KIND_LABEL, KIND_PLURAL, Faces, KindPill, peopleLine } from "./marks";
@@ -116,7 +116,7 @@ export function Setup() {
   } else if (waiting === "connect") {
     body = <Connect run={run} />;
   } else if (waiting === "kinds") {
-    body = <Kinds run={run} />;
+    body = <Kinds run={run} onRestart={restart} />;
   } else if (waiting === "timing") {
     body = <Timing run={run} />;
   } else if (waiting === "after") {
@@ -176,6 +176,25 @@ function useAccounts(connectors: string[]) {
   return { accounts, org };
 }
 
+/** The connectors this organization has installed (any member may read which). Null when that can't be read. */
+function useInstalled(org: string | null): Set<string> | null {
+  const [installed, setInstalled] = useState<Set<string> | null>(null);
+  useEffect(() => {
+    if (!org) return;
+    void client.connectors.authConfigs.list(org, { limit: 100 }).then(
+      (r) => setInstalled(new Set((r.items || []).filter((i) => i.status !== "DISABLED").map((i) => i.connector_id))),
+      () => setInstalled(null),
+    );
+  }, [org]);
+  return installed;
+}
+
+/** A non-admin's Connect on a connector the organization never installed. */
+function notInstalled(e: unknown): boolean {
+  const err = e as { code?: string; message?: string };
+  return err?.code === "CONNECTOR_NOT_INSTALLED" || /not installed in this organization/i.test(err?.message || "");
+}
+
 async function connectRequest(org: string, connector: string): Promise<string | null> {
   const req = (await client.connectors.createConnectRequest(org, { connector_id: connector, return_to: location.href } as never)) as {
     authorization_url?: string | null;
@@ -187,7 +206,17 @@ function Connect({ run }: { run: Run }) {
   const { settings } = useMeetings();
   const toast = useToast();
   const { accounts, org } = useAccounts(["google_calendar", "outlook"]);
+  const installed = useInstalled(org);
   const [connector, setConnector] = useState<"google_calendar" | "outlook">("google_calendar");
+  const [chose, setChose] = useState(false);
+  // Start on a calendar this organization has: one the person already
+  // connected, else one installed here, else Google (an admin's Connect adds it).
+  useEffect(() => {
+    if (chose || accounts == null) return;
+    const order = ["google_calendar", "outlook"] as const;
+    const pick = order.find((c) => accounts.some((a) => a.connector_id === c)) || order.find((c) => installed?.has(c));
+    if (pick) setConnector(pick);
+  }, [accounts, installed, chose]);
   const [picked, setPicked] = useState("");
   const [busy, setBusy] = useState("");
   const mine = (accounts || []).filter((a) => a.connector_id === connector);
@@ -213,7 +242,13 @@ function Connect({ run }: { run: Run }) {
       if (url) location.href = url;
       else toast("That calendar is already connected: pick it in the list.");
     } catch (e) {
-      toast(`Couldn't start connecting ${NAMES[connector]}: ${e instanceof Error ? e.message : e}`);
+      if (notInstalled(e)) {
+        const other = connector === "google_calendar" ? "outlook" : "google_calendar";
+        const instead = installed?.has(other) ? `${NAMES[other]} or the sample calendar` : "the sample calendar";
+        toast(`${NAMES[connector]} isn't added to this organization yet: ask an admin to add it on the Connectors page, or use ${instead}.`);
+      } else {
+        toast(`Couldn't start connecting ${NAMES[connector]}: ${e instanceof Error ? e.message : e}`);
+      }
     } finally {
       setBusy("");
     }
@@ -256,11 +291,12 @@ function Connect({ run }: { run: Run }) {
         <div className="c-choices" style={{ marginTop: 0 }} role="radiogroup" aria-label="Calendar">
           {(["google_calendar", "outlook"] as const).map((c) => (
             <label key={c} className="c-choice">
-              <input type="radio" name="calendar" checked={connector === c} onChange={() => setConnector(c)} />
+              <input type="radio" name="calendar" checked={connector === c} onChange={() => { setConnector(c); setChose(true); }} />
               <CalendarDays size={16} aria-hidden="true" className="c-faint" />
               <span className="c-grow">{NAMES[c]}</span>
               <span className="c-faint">
-                {accounts == null ? "" : (accounts || []).filter((a) => a.connector_id === c).length ? "Connected" : "Not connected"}
+                {accounts == null ? "" : (accounts || []).filter((a) => a.connector_id === c).length ? "Connected"
+                  : installed && !installed.has(c) ? "Not added to this organization" : "Not connected"}
               </span>
             </label>
           ))}
@@ -308,7 +344,7 @@ function Connect({ run }: { run: Run }) {
 /* ---------- 2. reading ---------- */
 
 function Working({ run }: { run: Run | null }) {
-  const read = output(run, "read") as { message?: string; meetings?: number; outside?: number } | null;
+  const read = output(run, "read") as { message?: string; meetings?: number; outside?: number; errors?: string[] } | null;
   const sorts = (run?.step_history || []).filter((s) => s.node_id === "sort_pass" && s.output_data);
   const sorted = sorts.reduce((n, s) => n + Number((s.output_data as { sorted?: number }).sorted || 0), 0);
   const node = run?.active_wait?.node_id || run?.step_history?.[run.step_history.length - 1]?.node_id || "";
@@ -342,6 +378,12 @@ function Working({ run }: { run: Run | null }) {
             {l.text}
           </div>
         ))}
+        {(read?.errors || []).map((e) => (
+          <div key={e}>
+            <CircleAlert size={14} aria-hidden="true" />
+            Couldn't read {e}
+          </div>
+        ))}
       </div>
     </>
   );
@@ -361,7 +403,7 @@ function wouldBrief(m: Meeting, on: Set<Kind>): boolean | null {
   return nb.value;
 }
 
-function Kinds({ run }: { run: Run }) {
+function Kinds({ run, onRestart }: { run: Run; onRestart: () => Promise<void> }) {
   const { meetings, settings, reload } = useMeetings();
   const toast = useToast();
   const [on, setOn] = useState<Set<Kind>>(() => new Set((settings?.kinds_on || ["customer", "investor", "candidate", "partner"]) as Kind[]));
@@ -381,7 +423,7 @@ function Kinds({ run }: { run: Run }) {
   const shown = ahead.filter((m) => m.outside || on.has("internal"));
   const briefed = shown.filter((m) => wouldBrief(m, on) === true);
   const count = (k: Kind) => ahead.filter((m) => m.kind === k).length;
-  const read = output(run, "read") as { meetings?: number; outside?: number } | null;
+  const read = output(run, "read") as { meetings?: number; outside?: number; errors?: string[] } | null;
 
   const toggle = (k: Kind, value: boolean) => {
     const next = new Set(on);
@@ -416,6 +458,11 @@ function Kinds({ run }: { run: Run }) {
   return (
     <>
       <h1>Which meetings get a brief?</h1>
+      {read?.errors?.length ? (
+        <Banner tone="danger" action={<Button size="sm" busy={busy === "restart"} onClick={() => { setBusy("restart"); void onRestart().finally(() => setBusy("")); }}>Start again</Button>}>
+          <b>Your calendar couldn't be read{read.meetings ? " in full" : ""}.</b> {read.errors.join(" ")}
+        </Banner>
+      ) : null}
       <p className="c-setup__lead">
         It read {plural(read?.meetings ?? meetings.length, "meeting")}, {read?.outside ?? meetings.filter((m) => m.outside).length} with
         people from outside. Switch kinds on or off; the list below shows what you'd get in the next two weeks.

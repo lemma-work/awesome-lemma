@@ -1,0 +1,17 @@
+{
+  // Started by the `triage-report-added` schedule: a row added to
+  // triage_report (a poll, GitHub, Slack, the form). triage_on_report reads
+  // the fresh row and does the six steps; a report already filed inline
+  // (New report, the assistant) is left alone.
+  "name": "triage-report-added",
+  "description": "A new report: read it, match it, count its reach, suggest an owner, mark it down by rule, and answer the reporter.",
+  "max_concurrent_runs": 4,
+  "start": { "type": "DATASTORE_EVENT", "config": { "table_name": "triage_report", "operations": ["INSERT"] } },
+  "nodes": [
+    { "id": "file", "type": "FUNCTION", "label": "File the report",
+      "config": { "function_name": "triage_on_report", "input_mapping": {
+        "report_id": { "type": "expression", "value": "start.metadata.record_id" } } } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [ { "id": "e1", "source": "file", "target": "end" } ]
+}

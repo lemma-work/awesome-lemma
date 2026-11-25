@@ -1,0 +1,38 @@
+{
+  "name": "prr_hold",
+  "description": "Hold a pull request that is merging by itself (hold true), or let it go (hold false): it merges only if every condition still holds. Logged.",
+  "type": "API",
+  "visibility": "POD",
+  "code": {
+    "$file": "code.py"
+  },
+  "permissions": {
+    "grants": [
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "pull_request",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read",
+          "datastore.record.write"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "prr_merge_log",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read",
+          "datastore.record.write"
+        ]
+      },
+      {
+        "resource_type": "function",
+        "resource_name": "prr_settle",
+        "permission_ids": [
+          "function.execute"
+        ]
+      }
+    ]
+  }
+}

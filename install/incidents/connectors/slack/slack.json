@@ -1,0 +1,6 @@
+{
+  "connector": "slack",
+  "mode": "SHARED",
+  "required": false,
+  "purpose": "Opens each incident's channel, invites the people, pins and edits the header, reads the channel into the timeline, and posts the updates the lead sends. The same Slack app as the Lemma's bot."
+}

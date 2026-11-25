@@ -1,0 +1,6 @@
+{
+  "name": "dependencies",
+  "description": "The team's dependency updates: what joins Monday's batch, what waits for a person, security fixes opened the same day, and each pull request the Lemma opened with how it was checked.",
+  "public_slug": "${deps_slug}",
+  "visibility": "POD"
+}

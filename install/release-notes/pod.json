@@ -1,0 +1,25 @@
+{
+  "format_version": 4,
+  "name": "Release notes",
+  "description": "Notes written from what merged, and word to everyone who asked for it: every merge redrafts the open release's note, the note is ready when the release goes live, and publishing puts it on GitHub, a public changelog page and Slack, then drafts a reply to each person who asked, in the thread they asked in.",
+  "variables": {
+    "inbox_slug": {
+      "type": "app_slug",
+      "source_value": "mail-inbox",
+      "default": "mail-inbox",
+      "description": "Public URL slug for the Inbox app (unique platform-wide; a suffix is added on collision)"
+    },
+    "release_notes_slug": {
+      "type": "app_slug",
+      "source_value": "lemma-release-notes",
+      "default": "lemma-release-notes",
+      "description": "Public URL slug for the Release notes app (unique platform-wide; a suffix is added on collision)"
+    },
+    "changelog_slug": {
+      "type": "app_slug",
+      "source_value": "lemma-changelog",
+      "default": "lemma-changelog",
+      "description": "Public URL slug for the changelog page anyone can read (unique platform-wide; a suffix is added on collision)"
+    }
+  }
+}

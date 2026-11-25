@@ -1,0 +1,51 @@
+{
+  // One repository's rules, started by prr_setup_save (a form it fills at
+  // once) and by the Rules app's Read the repositories again: its rule files
+  // and merged pull requests' review comments read, the scout's proposals
+  // checked and kept (all proposed until someone accepts them), and PR
+  // review's memory block written last, so nothing waits on it.
+  "name": "prr-setup",
+  "description": "Read one repository's rule files and review comments, propose rules from them, and tell this Lemma's agents PR review is here.",
+  "run_title": ["repo.repo"],
+  "start": { "type": "MANUAL" },
+  "nodes": [
+    { "id": "repo", "type": "FORM", "label": "The repository",
+      "config": { "input_schema": {
+        "type": "object",
+        "properties": { "repo": { "type": "string", "title": "Repository (owner/name)" } },
+        "required": ["repo"]
+      } } },
+    { "id": "read", "type": "FUNCTION", "label": "Read its rule files and review comments",
+      "config": { "function_name": "prr_read_rules", "input_mapping": {
+        "repo": { "type": "expression", "value": "repo.repo" } } } },
+    { "id": "found", "type": "DECISION", "label": "Anything to read?",
+      "config": { "rules": [ { "condition": "read.found == `true`", "next_node_id": "scout" } ] } },
+    { "id": "scout", "type": "AGENT", "label": "Propose rules",
+      "config": { "agent_name": "prr_scout", "input_mapping": {
+        "repo": { "type": "expression", "value": "read.repo" },
+        "files": { "type": "expression", "value": "read.files" },
+        "comments": { "type": "expression", "value": "read.comments" },
+        "existing": { "type": "expression", "value": "read.existing", "optional": true } } } },
+    { "id": "keep", "type": "FUNCTION", "label": "Check each source and keep them",
+      "config": { "function_name": "prr_save_rules", "input_mapping": {
+        "repo": { "type": "expression", "value": "read.repo" },
+        "sha": { "type": "expression", "value": "read.sha", "optional": true },
+        "files": { "type": "expression", "value": "read.files" },
+        "comments": { "type": "expression", "value": "read.comments" },
+        "result": { "type": "expression", "value": "scout" } } } },
+    { "id": "memory", "type": "FUNCTION", "label": "Tell this Lemma's agents about PR review",
+      "config": { "function_name": "prr_memory", "input_mapping": {
+        "remove": { "type": "literal", "value": false } } } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [
+    { "id": "e1", "source": "repo", "target": "read" },
+    { "id": "e2", "source": "read", "target": "found" },
+    { "id": "e3", "source": "found", "target": "memory", "label": "no rule files and no comments (the default)" },
+    { "id": "e4", "source": "found", "target": "scout", "label": "something to read" },
+    { "id": "e5", "source": "scout", "target": "keep" },
+    { "id": "e6", "source": "keep", "target": "memory" },
+    { "id": "e7", "source": "memory", "target": "end" }
+  ],
+  "visibility": "POD"
+}

@@ -1,0 +1,38 @@
+{
+  // What happened on a team task, people and agents in one timeline: a
+  // comment, a status move, a hand-over, an agent's progress, a question it
+  // asked, an outside action it wants approved, a file it made. Team-wide like
+  // `task`. A personal task's timeline is `tasks_personal_activity` (the same
+  // columns, private), for the same reason `personal_task` is its own table.
+  "name": "tasks_activity",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "task_id", "type": "UUID", "required": true,
+      "foreign_key": { "references": "task.id" } },
+    //   comment     words from a person, or progress from an agent
+    //   question    an agent asks; answered by the next reply
+    //   approval    an agent wants to send or change something outside the
+    //               Lemma; `state` pending until a person approves or declines
+    //   result      an agent's finished work
+    //   status, assign, field, created, moved, started, stopped: what changed
+    { "name": "kind", "type": "ENUM", "required": true, "default": "comment",
+      "options": ["comment", "question", "approval", "result", "status", "assign", "field", "created", "moved", "started", "stopped"] },
+    { "name": "actor_kind", "type": "ENUM", "required": true, "default": "person",
+      "options": ["person", "agent", "lemma"] },
+    { "name": "actor_user_id", "type": "USER" },
+    // A person's name, or the agent's (`pod_default` is the Lemma's own).
+    { "name": "actor_name", "type": "TEXT", "max_length": 200 },
+    // Markdown.
+    { "name": "body", "type": "TEXT", "max_length": 20000 },
+    // kind-specific: {from, to} for a move; for an approval {action, to,
+    // text}; {files: [paths]} for files an agent made.
+    { "name": "detail", "type": "JSON" },
+    // A question or an approval: pending, answered, approved, declined.
+    { "name": "state", "type": "ENUM", "options": ["pending", "answered", "approved", "declined"] },
+    { "name": "decided_by", "type": "TEXT", "max_length": 200 },
+    { "name": "decided_at", "type": "DATETIME" }
+  ],
+  "config": {}
+}

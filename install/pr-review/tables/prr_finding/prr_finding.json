@@ -1,0 +1,49 @@
+{
+  // One problem a review round found, the same row on every push: matched by
+  // `fingerprint`, so a finding fixed in a later commit is marked fixed, and
+  // one a person dismissed (not worth fixing) or called wrong is never asked
+  // again. Team-wide.
+  "name": "prr_finding",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    // Stable across pushes: <rule id or kind>:<path>:<short slug>, never a line.
+    { "name": "fingerprint", "type": "TEXT", "required": true, "max_length": 200 },
+    { "name": "pull_request_id", "type": "UUID", "required": true },
+    { "name": "key", "type": "TEXT", "required": true, "max_length": 220 },
+    // The rule it breaks (prr_rule), or null for a plain bug.
+    { "name": "rule_id", "type": "UUID" },
+    { "name": "severity", "type": "ENUM", "required": true, "default": "should_fix",
+      "options": ["must_fix", "should_fix", "nit"] },
+    { "name": "path", "type": "TEXT", "max_length": 500 },
+    { "name": "line", "type": "INTEGER" },
+    { "name": "end_line", "type": "INTEGER" },
+    { "name": "title", "type": "TEXT", "required": true, "max_length": 300 },
+    { "name": "body", "type": "TEXT", "max_length": 4000 },
+    { "name": "suggestion", "type": "TEXT", "max_length": 4000 },
+    // open; fixed (gone at `fixed_in`, on lines that push changed);
+    // dismissed (not worth fixing); wrong (the finding is wrong).
+    { "name": "state", "type": "ENUM", "required": true, "default": "open",
+      "options": ["open", "fixed", "dismissed", "wrong"] },
+    { "name": "fixed_in", "type": "TEXT", "max_length": 64 },
+    // reviewer: the agent found it. code: found by code (two open pull
+    // requests adding the same migration number).
+    { "name": "found_by", "type": "ENUM", "required": true, "default": "reviewer", "options": ["reviewer", "code"] },
+    { "name": "first_round", "type": "UUID" },
+    { "name": "first_sha", "type": "TEXT", "max_length": 64 },
+    { "name": "last_seen_round", "type": "UUID" },
+    { "name": "last_seen_sha", "type": "TEXT", "max_length": 64 },
+    // Who dismissed it, called it wrong or reopened it, when, and why.
+    { "name": "decided_by", "type": "USER" },
+    { "name": "decided_at", "type": "DATETIME" },
+    { "name": "decided_note", "type": "TEXT", "max_length": 600 },
+    // The team task "Fix it" made (shared `task`, source pr-review).
+    { "name": "task_id", "type": "UUID" },
+    // The round whose GitHub review carried it (Send back, or the findings
+    // posted as a review), so it is not posted twice.
+    { "name": "posted_round", "type": "UUID" },
+    { "name": "sample", "type": "BOOLEAN", "default": false }
+  ],
+  "config": {}
+}

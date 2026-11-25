@@ -32,7 +32,8 @@ Meetings' set-up (theirs)  ─▶ booking-setup (per person; the app is the scre
    booking_request contact-owned and open to confirmed visitors (7 columns) · the Lemma's
    web widget (booking-host, answers anyone, allowed on the app's address) · the person's
    own trigger booking-request-<id> (INSERT, when page_id = theirs, include_outside_rows,
-   bulk_writes each) · their booking-refresh-<id> (every 15 min) · page_url, page on
+   bulk_writes each) · their booking-refresh-<id> (every 15 min) · page_url, page on (left
+   off while bookings go on Meetings' sample calendar: a sample booking still goes through)
 
 visitor: /<handle>?k=<widget key> ─▶ open times in their own zone ─▶ name, email, what about
    ─▶ email code ─▶ Lemma.addRow(booking_request) ─▶ waits for booking_outcome

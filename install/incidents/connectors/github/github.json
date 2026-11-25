@@ -1,0 +1,6 @@
+{
+  "connector": "github",
+  "mode": "SHARED",
+  "required": false,
+  "purpose": "Merges, pushes, deploy workflow runs and releases in the repositories you watch, for what changed before an incident; the investigator reads the diffs of the suspect pull requests. Never writes to GitHub."
+}

@@ -1,0 +1,11 @@
+{
+  // A promise the owner made (i_owe), written by Mail or Meetings to the
+  // shared `promise` table. `bulk_writes: each`: Mail's reader writes
+  // promises in bulk, and a bulk write skips a datastore trigger unless the
+  // schedule asks for each row.
+  "name": "tasks-promise-made",
+  "schedule_type": "DATASTORE",
+  "config": { "table_name": "promise", "operations": ["INSERT"], "when": { "direction": "i_owe" }, "bulk_writes": "each" },
+  "workflow_name": "tasks-promise",
+  "is_active": true
+}

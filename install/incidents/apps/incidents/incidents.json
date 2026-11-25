@@ -1,0 +1,6 @@
+{
+  "name": "incidents",
+  "description": "The team's incidents: declare one, follow its timeline as it is gathered from the channel, GitHub and Triage, send the updates the Lemma drafts, and review the write-up it drafts on resolve, with every claim linked to its event.",
+  "public_slug": "${incidents_slug}",
+  "visibility": "POD"
+}

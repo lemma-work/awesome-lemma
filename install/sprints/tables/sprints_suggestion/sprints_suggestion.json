@@ -1,0 +1,32 @@
+{
+  // Something the Lemma proposes about a sprint, worked out from its numbers:
+  //   risk        what may slip (a 3rd sprint, someone over their usual, waiting)
+  //   pull_in     urgent work that came in mid-sprint: pull it in? (a decide
+  //               item for the lead)
+  //   move_out    at this pace, move these to the next sprint
+  //   close       at close, one per unfinished task: carry, split, backlog or
+  //               drop, and why (one Decisions call each)
+  // The id is uuid5 of (sprint, kind, task ids), so a refresh updates it.
+  "name": "sprints_suggestion",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "sprint_id", "type": "UUID", "required": true },
+    { "name": "kind", "type": "ENUM", "required": true, "options": ["risk", "pull_in", "move_out", "close"] },
+    { "name": "task_ids", "type": "JSON" },
+    // One line, with tasks named by number.
+    { "name": "text", "type": "TEXT", "max_length": 1000 },
+    // A close suggestion's choice (carry, split, backlog, drop); a risk's
+    // label (3rd sprint, over, waiting).
+    { "name": "choice", "type": "TEXT", "max_length": 32 },
+    { "name": "reason", "type": "TEXT", "max_length": 300 },
+    { "name": "confidence", "type": "FLOAT" },
+    // The numbers behind it, and for a close choice the evidence sent.
+    { "name": "detail", "type": "JSON" },
+    { "name": "state", "type": "ENUM", "required": true, "default": "open", "options": ["open", "taken", "dismissed"] },
+    { "name": "decided_by", "type": "TEXT", "max_length": 200 },
+    { "name": "decided_at", "type": "DATETIME" }
+  ],
+  "config": {}
+}

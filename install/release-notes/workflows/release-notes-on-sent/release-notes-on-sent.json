@@ -1,0 +1,17 @@
+{
+  // Each member's own trigger on `draft` (rows: OWNER_READABLE): a reply
+  // Release notes drafted was sent through Mail (the ask is told) or thrown
+  // away.
+  "name": "release-notes-on-sent",
+  "description": "A reply you were drafted went out (they are told) or was thrown away.",
+  "max_concurrent_runs": 2,
+  "start": { "type": "DATASTORE_EVENT", "config": { "table_name": "draft", "operations": ["UPDATE"] } },
+  "nodes": [
+    { "id": "sent", "type": "FUNCTION", "label": "Told?",
+      "config": { "function_name": "release_notes_on_sent", "input_mapping": {
+        "draft_id": { "type": "expression", "value": "start.metadata.record_id" } } } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [ { "id": "e1", "source": "sent", "target": "end" } ],
+  "visibility": "POD"
+}

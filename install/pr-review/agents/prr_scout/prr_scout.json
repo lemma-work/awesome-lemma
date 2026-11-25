@@ -1,0 +1,37 @@
+{
+  "name": "prr_scout",
+  "description": "Proposes review rules for one repository from its own rule files and the review comments on its merged pull requests: one checkable sentence each, with its scope, severity and the words it came from. Everything it proposes waits for a person to accept it.",
+  "visibility": "POD",
+  "instruction": { "$file": "instruction.md" },
+  "toolsets": [],
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "repo": { "type": "string" },
+      "files": { "type": "array", "description": "Rule files read at the default branch: {path, kind, scope, lines}." },
+      "comments": { "type": "array", "description": "Review comments on merged pull requests: {id, pr, who, path, body}." },
+      "existing": { "type": "array", "description": "Rules this Lemma already has: {id, text, state, source}." }
+    },
+    "required": ["repo", "files", "comments"]
+  },
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "rules": { "type": "array", "items": { "type": "object", "properties": {
+        "text": { "type": "string", "description": "One sentence a reviewer can check from a diff, in the team's own words." },
+        "source_kind": { "type": "string", "enum": ["file", "comments"] },
+        "file": { "type": "string", "description": "For a file rule: the path it was read from." },
+        "line": { "type": "integer", "description": "For a file rule: the line its words start on." },
+        "quotes": { "type": "array", "items": { "type": "object", "properties": {
+          "text": { "type": "string", "description": "Copied word for word." }, "comment_id": { "type": "string" } }, "required": ["text"] } },
+        "scope": { "type": "array", "items": { "type": "string" } },
+        "severity": { "type": "string", "enum": ["must_fix", "should_fix", "nit"] },
+        "checkable": { "type": "boolean" },
+        "not_checkable_why": { "type": "string" }
+      }, "required": ["text", "source_kind", "quotes", "severity", "checkable"] } },
+      "summary": { "type": "string", "description": "Two or three plain sentences on what was found." }
+    },
+    "required": ["rules", "summary"]
+  },
+  "permissions": { "grants": [] }
+}

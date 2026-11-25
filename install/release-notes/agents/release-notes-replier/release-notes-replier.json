@@ -1,0 +1,22 @@
+{
+  // Writes one reply telling someone that what they asked for has shipped,
+  // in the member's own voice, from the brief release_notes_tell gathered.
+  // No tools. Never sends: the reply is a Mail draft until a person presses Send.
+  "name": "release-notes-replier",
+  "description": "Writes one short reply, in the member's own voice and in the thread the person asked in, telling them what they asked for has shipped. Never sends.",
+  "visibility": "POD",
+  "toolsets": [],
+  "instruction": { "$file": "instruction.md" },
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "skip": { "type": "boolean", "description": "True only when the shipped change plainly is not what they asked for." },
+      "skip_reason": { "type": "string" },
+      "body": { "type": "string", "description": "Plain text. Paragraphs separated by one blank line." },
+      "rationale": { "type": "string", "description": "One sentence for the margin: what you used." },
+      "used": { "type": "array", "items": { "type": "string" }, "description": "Short labels: 'your thread, Sep 12', 'note line: Export any report to CSV', 'asked 10 weeks ago, so it says sorry'." }
+    },
+    "required": ["skip", "body", "rationale"]
+  },
+  "permissions": { "grants": [] }
+}

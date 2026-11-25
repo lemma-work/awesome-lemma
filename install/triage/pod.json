@@ -1,0 +1,19 @@
+{
+  "format_version": 4,
+  "name": "Triage",
+  "description": "Bugs, alerts and security warnings sorted by how far they reach, each with an owner: reports from the app, the Lemma, Slack, GitHub, a report form, Sentry, PostHog and GitHub's security alerts become one item each, counted in people where a source can count them, with a suggested owner and the reason, and one key per decision. Accepting makes a team task; everyone who asked is told when it is done.",
+  "variables": {
+    "tasks_slug": {
+      "type": "app_slug",
+      "source_value": "lemma-tasks",
+      "default": "lemma-tasks",
+      "description": "Public URL slug for the Tasks app (unique platform-wide; a suffix is added on collision)"
+    },
+    "triage_slug": {
+      "type": "app_slug",
+      "source_value": "lemma-triage",
+      "default": "lemma-triage",
+      "description": "Public URL slug for the Triage app (unique platform-wide; a suffix is added on collision)"
+    }
+  }
+}

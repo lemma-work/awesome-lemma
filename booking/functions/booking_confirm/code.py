@@ -15,7 +15,9 @@ In order, cheapest first:
     who        the row came from a confirmed contact (the insert's author,
                "contact:<id>", stamped by the server), or is the owner's own
                sample at a .example address. Anything else is declined and
-               nobody is emailed.
+               nobody is emailed, as is a real visitor on a page whose
+               bookings go on Meetings' sample calendar (no invite could
+               reach them)
     rules      the time is one the page offers (days, hours, the grid, notice,
                how far ahead), checked from the settings, not the page's copy
     first      nobody booked that time first (the earlier row wins, so two
@@ -31,7 +33,9 @@ In order, cheapest first:
     event      created on the owner's chosen calendar with the video link,
                inviting the visitor (the owner is the organiser). On the sample
                calendar the event is added to the sample's own fixture and
-               nothing leaves the Lemma
+               nothing leaves the Lemma. A calendar that fails or makes no
+               event declines the request with a try-again reason (the error
+               kept in `answers`), so the page always gets an outcome
     meeting    a Meetings `meeting` (the same id Meetings' own calendar read
                gives the event, so the two never double up) with its kind, and
                its `meetings_work` row asking for the brief at once, which
@@ -440,6 +444,13 @@ def booking_confirm(ctx: FunctionContext, data: BookingConfirmInput) -> BookingC
         return decline("This page isn't taking bookings right now.", mine="I'm not taking bookings right now.")
     if not calendars:
         return decline("The page has no calendar to check.", notify=False)
+    if not sample and event_cal.get("provider") == "sample":
+        # The app won't turn a page on there; this catches one left on from
+        # before, or moved to the sample in settings: a real visitor is never
+        # told "booked" when no invite can reach them.
+        return decline("Bookings go on the sample calendar, so a real visitor can't be booked. Connect Google "
+                       "Calendar or Outlook in Meetings, then choose it in the booking page's settings.",
+                       notify=False, public_reason="This page isn't taking bookings yet.")
 
     # --- rules
     if not _fits(settings, zone, start, now):
@@ -568,6 +579,19 @@ def booking_confirm(ctx: FunctionContext, data: BookingConfirmInput) -> BookingC
     owner_email = (event_cal.get("email") or ctx.user_email or "").lower()
     video = settings.get("video") or "none"
     join_url = None
+
+    def create_event(connector: str, operation: str, payload: dict) -> dict:
+        """The event the calendar made, or nothing (the error kept on the
+        request) so the decline below always gives the visitor an outcome. The
+        time stays free: they can book it again."""
+        try:
+            created = result_of(pod.connectors.execute(connector, operation, payload,
+                                                       account_id=event_cal.get("account_id")))
+        except Exception as exc:  # noqa: BLE001 — never leave the visitor waiting on no outcome
+            answers["event_error"] = f"{type(exc).__name__}: {exc}"[:300]
+            return {}
+        return created.get("response_data") or created
+
     if event_cal.get("provider") == "sample":
         event_id = f"booking-{request['id']}"
         join_url = f"https://meet.example/booking-{str(request['id'])[:8]}" if video != "none" else None
@@ -594,9 +618,7 @@ def booking_confirm(ctx: FunctionContext, data: BookingConfirmInput) -> BookingC
             "send_updates": "all", "create_meeting_room": video == "google_meet", "guestsCanModify": False,
             "extended_properties": {"private": {"booking_request": str(request["id"])}},
         }
-        created = result_of(pod.connectors.execute("google_calendar", "GOOGLECALENDAR_CREATE_EVENT", payload,
-                                                    account_id=event_cal.get("account_id")))
-        created = created.get("response_data") or created
+        created = create_event("google_calendar", "GOOGLECALENDAR_CREATE_EVENT", payload)
         event_id = created.get("id")
         join_url = created.get("hangoutLink") or next(
             (p.get("uri") for p in ((created.get("conferenceData") or {}).get("entryPoints") or []) if p.get("entryPointType") == "video"), None)
@@ -609,9 +631,7 @@ def booking_confirm(ctx: FunctionContext, data: BookingConfirmInput) -> BookingC
         }
         if video == "teams":
             payload.update({"is_online_meeting": True, "online_meeting_provider": "teamsForBusiness"})
-        created = result_of(pod.connectors.execute("outlook", "OUTLOOK_CALENDAR_CREATE_EVENT", payload,
-                                                   account_id=event_cal.get("account_id")))
-        created = created.get("response_data") or created
+        created = create_event("outlook", "OUTLOOK_CALENDAR_CREATE_EVENT", payload)
         event_id = created.get("id")
         join_url = ((created.get("onlineMeeting") or {}).get("joinUrl") or created.get("onlineMeetingUrl"))
     if not event_id:

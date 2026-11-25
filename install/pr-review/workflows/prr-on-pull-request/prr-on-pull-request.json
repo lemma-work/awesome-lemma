@@ -1,0 +1,21 @@
+{
+  // A pull request opened, pushed to, reopened, marked ready, closed or
+  // labelled on GitHub (the prr-pull-requests WEBHOOK schedule the app makes
+  // at set-up, on the Lemma's shared GitHub connection). Code decides what it
+  // means; no model here.
+  "name": "prr-on-pull-request",
+  "description": "A pull request moved on GitHub: bring it in, and queue a review round when one is due.",
+  "run_title": ["start.payload.pull_request.title"],
+  "start": { "type": "EVENT", "config": { "connector_id": "github", "connector_trigger_id": "github:http:pull_request" } },
+  "nodes": [
+    { "id": "intake", "type": "FUNCTION", "label": "Bring it in",
+      "config": { "function_name": "prr_intake", "input_mapping": {
+        "event": { "type": "literal", "value": "pull_request" },
+        "repo": { "type": "expression", "value": "start.payload.repository.full_name" },
+        "number": { "type": "expression", "value": "start.payload.pull_request.number" },
+        "action": { "type": "expression", "value": "start.payload.action", "optional": true } } } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [ { "id": "e1", "source": "intake", "target": "end" } ],
+  "visibility": "POD"
+}

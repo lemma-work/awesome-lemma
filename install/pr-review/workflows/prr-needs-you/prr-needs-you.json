@@ -1,0 +1,17 @@
+{
+  // Each member's own trigger on `pull_request` (the prr-needs-you-<user>
+  // DATASTORE schedule the app makes for each member, rows OWNER_READABLE,
+  // when waits_since changed): Review this and Merge this in their Today.
+  // A schedule runs as its maker, and needs_you is each member's own.
+  "name": "prr-needs-you",
+  "description": "Who a pull request waits on changed: your Review this and Merge this in Today.",
+  "max_concurrent_runs": 1,
+  "start": { "type": "DATASTORE_EVENT", "config": { "table_name": "pull_request", "operations": ["INSERT", "UPDATE"] } },
+  "nodes": [
+    { "id": "needs_you", "type": "FUNCTION", "label": "What waits on you",
+      "config": { "function_name": "prr_needs_you", "input_mapping": {} } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [ { "id": "e1", "source": "needs_you", "target": "end" } ],
+  "visibility": "POD"
+}

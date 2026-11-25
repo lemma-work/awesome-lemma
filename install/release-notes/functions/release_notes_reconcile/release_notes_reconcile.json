@@ -1,0 +1,66 @@
+{
+  "name": "release_notes_reconcile",
+  "description": "Nightly: pull requests merged since the last release that the webhook missed go through release_notes_on_merge, the deploy workflow's newest successful run through release_notes_on_live, and the note is redrafted when anything new came in.",
+  "type": "API",
+  "visibility": "POD",
+  "code": {
+    "$file": "code.py"
+  },
+  "permissions": {
+    "grants": [
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "release_note_settings",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "release_note",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "release_note_pr",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read"
+        ]
+      },
+      {
+        "resource_type": "function",
+        "resource_name": "release_notes_on_merge",
+        "permission_ids": [
+          "function.execute"
+        ]
+      },
+      {
+        "resource_type": "function",
+        "resource_name": "release_notes_on_live",
+        "permission_ids": [
+          "function.execute"
+        ]
+      },
+      {
+        "resource_type": "workflow",
+        "resource_name": "release-notes-redraft",
+        "permission_ids": [
+          "workflow.read",
+          "workflow.execute"
+        ]
+      },
+      {
+        "resource_type": "connector",
+        "resource_name": "github",
+        "permission_ids": [
+          "connector.use"
+        ]
+      }
+    ]
+  }
+}

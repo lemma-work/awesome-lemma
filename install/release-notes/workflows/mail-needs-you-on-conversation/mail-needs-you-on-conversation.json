@@ -1,0 +1,24 @@
+{
+  // Keeps Mail's part of the person's day current on the shared needs_you list.
+  // One workflow per schedule (the server allows one schedule per workflow,
+  // person and Lemma): this one is mail-needs-you-conversation (a mail conversation's state changed)'s, run as the row's owner. It asks
+  // whether a late promise in the conversation is worth a nudge, then writes
+  // what in that one conversation needs the person.
+  "name": "mail-needs-you-on-conversation",
+  "description": "Ask whether a late promise in one mail conversation is worth a nudge, then write what in it needs the person to needs_you, and resolve what no longer does.",
+  "max_concurrent_runs": 4,
+  "start": { "type": "DATASTORE_EVENT", "config": { "table_name": "conversation", "operations": ["UPDATE"] } },
+  "nodes": [
+    { "id": "nudge", "type": "FUNCTION", "label": "Worth a nudge yet?",
+      "config": { "function_name": "mail_nudge_check",
+        "input_mapping": { "conversation_id": { "type": "expression", "value": "start.metadata.record_id" } } } },
+    { "id": "write", "type": "FUNCTION", "label": "What needs you here",
+      "config": { "function_name": "mail_needs_you",
+        "input_mapping": { "conversation_id": { "type": "expression", "value": "start.metadata.record_id" } } } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [
+    { "id": "e0", "source": "nudge", "target": "write" },
+    { "id": "e1", "source": "write", "target": "end" }
+  ]
+}

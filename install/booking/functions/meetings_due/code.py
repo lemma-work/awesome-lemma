@@ -91,8 +91,23 @@ def _due(start: datetime, brief_when: str, zone: ZoneInfo) -> datetime:
     return datetime.combine(local.date() - timedelta(days=1), time(18, 0), zone).astimezone(timezone.utc)
 
 
+def _offset(began: datetime | None, at: Any) -> str | None:
+    """How far into the call `at` is, as m:ss (h:mm:ss past an hour), or None."""
+    when = _parse(at)
+    if not began or not when:
+        return None
+    seconds = max(0, int((when - began).total_seconds()))
+    hours, rest = divmod(seconds, 3600)
+    minutes, secs = divmod(rest, 60)
+    return f"{hours}:{minutes:02d}:{secs:02d}" if hours else f"{minutes}:{secs:02d}"
+
+
 def _meet_transcript(pod: Any, meeting: dict, account_id: str, zone: ZoneInfo) -> str | None:
-    """The transcript Google Meet kept, as 'Speaker: words' lines, or None.
+    """The transcript Google Meet kept, as '[m:ss] Speaker: words' lines, or None.
+
+    The time in front is how far into the call the line began, from the entry's
+    `startTime` against the conference record's: a reader can point a quote at
+    its minute. A line Meet gave no time keeps no prefix.
 
     Written against Google Meet's REST shapes as the googlemeet connector
     documents them (conference records filtered by the space's meeting code,
@@ -117,6 +132,7 @@ def _meet_transcript(pod: Any, meeting: dict, account_id: str, zone: ZoneInfo) -
                  if str(t.get("state") or "").upper() in ("FILE_GENERATED", "ENDED")]
         if not ready:
             continue
+        began = _parse(record.get("startTime") or record.get("start_time"))
         names: dict[str, str] = {}
         participants = _result(pod.connectors.execute("googlemeet", "GOOGLEMEET_LIST_PARTICIPANTS", {
             "parent": name, "page_size": 100}, account_id=account_id))
@@ -134,7 +150,9 @@ def _meet_transcript(pod: Any, meeting: dict, account_id: str, zone: ZoneInfo) -
             for entry in page.get("transcriptEntries") or page.get("transcript_entries") or []:
                 text = " ".join(str(entry.get("text") or "").split())
                 if text:
-                    lines.append(f"{names.get(entry.get('participant') or '', 'Someone')}: {text}")
+                    at = _offset(began, entry.get("startTime") or entry.get("start_time"))
+                    who = names.get(entry.get("participant") or "", "Someone")
+                    lines.append(f"[{at}] {who}: {text}" if at else f"{who}: {text}")
             token = page.get("nextPageToken") or page.get("next_page_token")
             if not token:
                 break

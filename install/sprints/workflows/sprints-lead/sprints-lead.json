@@ -1,0 +1,16 @@
+{
+  // The lead's own trigger on a new suggestion, made by the app as the lead
+  // (sprints-lead-<user>): `sprints_suggestion` has no row owner, so the run
+  // is the schedule's owner, the lead, and can write their "decide" item for
+  // urgent work that came in, whoever's change made the suggestion.
+  "name": "sprints-lead",
+  "description": "Something came in mid-sprint: tell the sprint lead in Today.",
+  "max_concurrent_runs": 2,
+  "start": { "type": "DATASTORE_EVENT", "config": { "table_name": "sprints_suggestion", "operations": ["INSERT"] } },
+  "nodes": [
+    { "id": "needs_you", "type": "FUNCTION", "label": "What needs the lead",
+      "config": { "function_name": "sprints_needs_you", "input_mapping": {} } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [ { "id": "e1", "source": "needs_you", "target": "end" } ]
+}

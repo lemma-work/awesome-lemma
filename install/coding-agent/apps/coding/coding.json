@@ -1,0 +1,6 @@
+{
+  "name": "coding",
+  "description": "The team's coding agents in one place: a board of every task an agent works, from handing it over to the merged pull request, with what needs a person on top; each task's activity, transcript and change; a new task in one line; and questions about the code answered with the lines they come from.",
+  "public_slug": "${coding_slug}",
+  "visibility": "POD"
+}

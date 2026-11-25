@@ -1,0 +1,90 @@
+{
+  // A person's set-up, one run each, started by the Tasks app on their first
+  // open (and by anyone who joins later). The app is the screen for its
+  // forms; each waits for that person.
+  //
+  //   scope     just you, or your team too (and the first team project)
+  //   promises  only with Mail or Meetings in the Lemma: promises you made
+  //             become tasks automatically, you're asked each time, or never
+  //   agents    which agents can take tasks (the Lemma's own assistant first)
+  //   done      keeps the answers; then promises from the last 30 days and
+  //             every open task are asked about once
+  //   memory    Tasks' block in /memory/AGENTS.md and its guide, so the
+  //             Lemma's agents know Tasks is here (tasks_memory)
+  "name": "tasks-setup",
+  "description": "Set up one person's tasks: just you or your team too, what to do with promises you made, and which agents can take tasks.",
+  "run_title": ["scope_apply.message"],
+  "start": { "type": "MANUAL" },
+  "nodes": [
+    { "id": "scope", "type": "FORM", "label": "Just you, or your team too",
+      "config": { "input_schema": {
+        "type": "object",
+        "properties": {
+          "scope": { "type": "string", "enum": ["me", "team"], "title": "Just you, or your team too", "default": "me" },
+          "project_name": { "type": "string", "title": "Your first team project" },
+          "display_name": { "type": "string", "title": "Your name" },
+          "timezone": { "type": "string", "title": "Time zone" },
+          "has_promises": { "type": "boolean", "title": "Mail or Meetings is in this Lemma", "default": false }
+        },
+        "required": ["scope"]
+      } } },
+    { "id": "scope_apply", "type": "FUNCTION", "label": "Keep it",
+      "config": { "function_name": "tasks_setup_scope", "input_mapping": {
+        "scope": { "type": "expression", "value": "scope.scope" },
+        "project_name": { "type": "expression", "value": "scope.project_name", "optional": true },
+        "display_name": { "type": "expression", "value": "scope.display_name", "optional": true },
+        "timezone": { "type": "expression", "value": "scope.timezone", "optional": true },
+        "has_promises": { "type": "expression", "value": "scope.has_promises", "optional": true } } } },
+    { "id": "route", "type": "DECISION", "label": "Mail or Meetings here?",
+      "config": { "rules": [
+        { "condition": "scope_apply.has_promises == `true`", "next_node_id": "promises" }
+      ] } },
+    { "id": "promises", "type": "FORM", "label": "Promises you made",
+      "config": { "input_schema": {
+        "type": "object",
+        "properties": {
+          "promises": { "type": "string", "enum": ["auto", "ask", "never"], "title": "Promises you made", "default": "ask" }
+        },
+        "required": ["promises"]
+      } } },
+    { "id": "agents", "type": "FORM", "label": "Which agents can take tasks",
+      "config": { "input_schema": {
+        "type": "object",
+        "properties": {
+          "agents": { "type": "array", "title": "Agents that can take tasks", "uniqueItems": true,
+                      "items": { "type": "string" }, "default": ["pod_default"] },
+          "capabilities": { "type": "object", "title": "What this Lemma has" }
+        },
+        "required": ["agents"]
+      } } },
+    { "id": "done", "type": "FUNCTION", "label": "Keep your choices",
+      "config": { "function_name": "tasks_setup_done", "input_mapping": {
+        "promises": { "type": "expression", "value": "promises.promises", "optional": true },
+        "agents": { "type": "expression", "value": "agents.agents" },
+        "capabilities": { "type": "expression", "value": "agents.capabilities", "optional": true } } } },
+    { "id": "promises_catch_up", "type": "FUNCTION", "label": "Ask about promises from the last 30 days",
+      "config": { "function_name": "tasks_from_promise", "input_mapping": {
+        "catch_up": { "type": "literal", "value": true } } } },
+    { "id": "tasks_catch_up", "type": "FUNCTION", "label": "Ask which tasks an agent could do",
+      "config": { "function_name": "tasks_on_task", "input_mapping": {
+        "catch_up": { "type": "literal", "value": true } } } },
+    // Last, so nothing else waits on it: Tasks' block in /memory/AGENTS.md and
+    // its guide (_contract README, "Memory block"). It never fails the run.
+    { "id": "memory", "type": "FUNCTION", "label": "Tell this Lemma's agents about Tasks",
+      "config": { "function_name": "tasks_memory", "input_mapping": {
+        "remove": { "type": "literal", "value": false } } } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [
+    { "id": "e1", "source": "scope", "target": "scope_apply" },
+    { "id": "e2", "source": "scope_apply", "target": "route" },
+    { "id": "e4", "source": "route", "target": "agents", "label": "neither (the default: listed first)" },
+    { "id": "e3", "source": "route", "target": "promises", "label": "Mail or Meetings here" },
+    { "id": "e5", "source": "promises", "target": "agents" },
+    { "id": "e6", "source": "agents", "target": "done" },
+    { "id": "e7", "source": "done", "target": "promises_catch_up" },
+    { "id": "e8", "source": "promises_catch_up", "target": "tasks_catch_up" },
+    { "id": "e9", "source": "tasks_catch_up", "target": "memory" },
+    { "id": "e10", "source": "memory", "target": "end" }
+  ]
+}

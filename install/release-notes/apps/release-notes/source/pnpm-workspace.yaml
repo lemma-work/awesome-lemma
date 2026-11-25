@@ -1,0 +1,9 @@
+# A server-side import builds this app with pnpm in the importer's sandbox.
+# pnpm 10 and later refuse a dependency's install script unless it is allowed,
+# and Vite's esbuild needs its own: without this the build fails before it runs.
+# onlyBuiltDependencies is pnpm 10's spelling; allowBuilds is pnpm 11's.
+onlyBuiltDependencies:
+  - esbuild
+allowBuilds:
+  esbuild: true
+  browser-tabs-lock: false

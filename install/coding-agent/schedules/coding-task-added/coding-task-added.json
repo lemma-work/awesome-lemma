@@ -1,0 +1,11 @@
+{
+  // A new task row made for the coding agent (`assignee_agent` coding_builder):
+  // every other new task starts no run. Starts coding-task-added.
+  // `bulk_writes: each`: the sample and a share write in bulk, and a bulk
+  // write skips a datastore trigger unless the schedule asks for each row.
+  "name": "coding-task-added",
+  "schedule_type": "DATASTORE",
+  "config": { "table_name": "task", "operations": ["INSERT"], "when": { "assignee_agent": "coding_builder" }, "bulk_writes": "each" },
+  "workflow_name": "coding-task-added",
+  "is_active": true
+}

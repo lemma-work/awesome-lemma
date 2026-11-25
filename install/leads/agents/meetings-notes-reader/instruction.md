@@ -40,7 +40,8 @@ month's last day. Otherwise null.
 ## quotes
 
 Every decision and promise carries `quote`: one sentence copied character for
-character from the text, without the speaker's name in front. Anything whose
+character from the text, without the time or the speaker's name in front (a
+transcript line may start `[12:31] Name:`). Anything whose
 sentence is not in the text word for word is thrown away, so never paraphrase
 a quote, and never join two sentences into one.
 

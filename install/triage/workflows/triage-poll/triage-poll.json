@@ -1,0 +1,14 @@
+{
+  // Every 15 minutes (the bundled `triage-poll` schedule): the sources with
+  // no trigger (Sentry, PostHog; Slack until lemma-platform#1245), and a
+  // GitHub catch-up.
+  "name": "triage-poll",
+  "description": "Read Sentry, PostHog, the watched Slack channels and GitHub for new reports and new numbers.",
+  "start": { "type": "SCHEDULED", "config": { "schedule_type": "CRON" } },
+  "nodes": [
+    { "id": "poll", "type": "FUNCTION", "label": "Read the sources",
+      "config": { "function_name": "triage_poll", "input_mapping": {} } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [ { "id": "e1", "source": "poll", "target": "end" } ]
+}

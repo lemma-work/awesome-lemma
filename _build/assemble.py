@@ -40,9 +40,10 @@ How parts merge:
   nothing; edit the source and forget to rebuild, and the import builds from
   source as before. See "Prebuilt apps" below.
 - `--without-connector <id>` leaves a connector out, with every grant on it.
-  The importer refuses a bundle that declares a connector the organization has
-  no installation of, even an optional one, so a bundle for an org without
-  Google Meet is assembled without it (as Meetings' bin/import.sh does).
+  The importer now skips an optional connector the organization has no
+  installation of, and drops the grants on it, by itself; an older importer
+  refused the bundle instead, so this is for one of those (as Meetings'
+  bin/import.sh does).
 
 Beside the bundle: `_build/out/<plugin>.assembly.json` says which plugin each
 part came from, what was merged or left out, and a hash of every file, which
@@ -101,11 +102,14 @@ DIST_CACHE = OUT / ".dists"
 # never part of its digest.
 APP_SOURCE_EXCLUDE_DIRS = frozenset({"node_modules", ".git", "dist", "build", ".next", ".turbo",
                                      ".cache", "coverage", "__pycache__"})
-# Connectors the bundles in install/ leave out, with every grant on them. The
-# importer refuses a bundle that declares a connector the organization has no
-# installation of, even one marked "required": false. Google Meet transcripts
-# are optional (Meetings falls back to the notes a person writes) and most
-# organizations have no googlemeet installation, so install/ goes without it.
+# Connectors the bundles in install/ leave out, with every grant on them.
+# Google Meet transcripts are optional (after a meeting Meetings reads the
+# notes a person writes about it) and most organizations have no googlemeet
+# installation. The importer used to refuse a bundle declaring a connector the
+# organization has no installation of, even one marked "required": false; it
+# now skips an optional one (platform pod_bundle connector_planning.py,
+# _can_go_without) and drops its grants. Kept until an install on the hosted
+# Lemma confirms that, then this can be ().
 INSTALL_WITHOUT = ("googlemeet",)
 KINDS =("tables", "functions", "agents", "workflows", "schedules", "connectors", "surfaces", "apps", "files")
 SKIP_NAMES = {"node_modules", "dist", ".vite", "__pycache__", ".DS_Store"}

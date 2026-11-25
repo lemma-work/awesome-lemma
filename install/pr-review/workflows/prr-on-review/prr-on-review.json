@@ -1,0 +1,20 @@
+{
+  // A review submitted or dismissed on GitHub (the prr-reviews WEBHOOK
+  // schedule): a person's approval can change who a pull request waits on.
+  "name": "prr-on-review",
+  "description": "A review was submitted or dismissed on GitHub: settle who the pull request waits on.",
+  "run_title": ["start.payload.pull_request.title"],
+  "start": { "type": "EVENT", "config": { "connector_id": "github", "connector_trigger_id": "github:http:pull_request_review" } },
+  "nodes": [
+    { "id": "intake", "type": "FUNCTION", "label": "Settle it again",
+      "config": { "function_name": "prr_intake", "input_mapping": {
+        "event": { "type": "literal", "value": "pull_request_review" },
+        "repo": { "type": "expression", "value": "start.payload.repository.full_name" },
+        "number": { "type": "expression", "value": "start.payload.pull_request.number" },
+        "action": { "type": "expression", "value": "start.payload.action", "optional": true },
+        "queue": { "type": "literal", "value": "no" } } } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [ { "id": "e1", "source": "intake", "target": "end" } ],
+  "visibility": "POD"
+}

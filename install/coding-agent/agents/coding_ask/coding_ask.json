@@ -1,0 +1,11 @@
+{
+  "name": "coding_ask",
+  "description": "Answers a question about a repository from its own checkout, citing path:line for every claim. Reads only: never edits, commits or pushes.",
+  "instruction": { "$file": "instruction.md" },
+  "toolsets": ["WORKSPACE_CLI"],
+  "permissions": { "grants": [
+    { "resource_type": "function", "resource_name": "coding_answer", "permission_ids": ["function.execute"] },
+    { "resource_type": "datastore_table", "resource_name": "coding_question", "permission_ids": ["datastore.table.read", "datastore.record.read"] },
+    { "resource_type": "datastore_table", "resource_name": "coding_repo", "permission_ids": ["datastore.table.read", "datastore.record.read"] }
+  ]}
+}

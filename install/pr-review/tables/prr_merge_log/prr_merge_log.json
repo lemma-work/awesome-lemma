@@ -1,0 +1,27 @@
+{
+  // Every would-merge, merge, hold and refusal, with every condition as
+  // code checked it then. Team-wide; written only by PR review's functions.
+  "name": "prr_merge_log",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "pull_request_id", "type": "UUID", "required": true },
+    { "name": "key", "type": "TEXT", "required": true, "max_length": 220 },
+    { "name": "sha", "type": "TEXT", "max_length": 64 },
+    // would_merge (watch mode), merging (the wait started), merged, held,
+    // unheld, refused (a condition failed at merge time), failed (GitHub
+    // said no), person_merged.
+    { "name": "action", "type": "ENUM", "required": true,
+      "options": ["would_merge", "merging", "merged", "held", "unheld", "refused", "failed", "person_merged"] },
+    // auto (GitHub's auto-merge), queue (the merge queue), squash.
+    { "name": "how", "type": "TEXT", "max_length": 32 },
+    // [{name, ok, detail}], as checked.
+    { "name": "conditions", "type": "JSON" },
+    { "name": "by", "type": "USER" },
+    { "name": "at", "type": "DATETIME", "required": true },
+    { "name": "note", "type": "TEXT", "max_length": 600 },
+    { "name": "sample", "type": "BOOLEAN", "default": false }
+  ],
+  "config": {}
+}

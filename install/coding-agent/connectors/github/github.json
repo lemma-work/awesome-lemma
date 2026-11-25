@@ -1,0 +1,6 @@
+{
+  "connector": "github",
+  "mode": "SHARED",
+  "required": false,
+  "purpose": "Reads the coding agent's pull requests, their checks and review comments, so it can keep them green and say when they merge; a labelled issue can hand work to the agent. Merging stays with a person."
+}

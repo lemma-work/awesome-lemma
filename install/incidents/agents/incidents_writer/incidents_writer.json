@@ -1,0 +1,43 @@
+{
+  "name": "incidents_writer",
+  "description": "Drafts an incident's write-up from its events only: every claim carries the ids of the events behind it, and no figure an event does not give. Reads only.",
+  "instruction": { "$file": "instruction.md" },
+  "toolsets": [],
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "context": { "type": "string", "description": "From incidents_resolve, as JSON: incident, events (each with its id), likely causes, updates sent, tasks already made, what was not connected." }
+    },
+    "required": ["context"]
+  },
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "title": { "type": "string", "description": "The headline: what happened, in a short past-tense line, as 'Checkout returned 502 for EU card payments'. About the incident, never about this write-up." },
+      "sections": { "type": "array", "items": { "type": "object", "properties": {
+        "key": { "type": "string", "enum": ["summary", "impact", "why", "went", "other"] },
+        "heading": { "type": "string" },
+        "items": { "type": "array", "items": { "type": "object", "properties": {
+          "kind": { "type": "string", "enum": ["p", "li"], "description": "p: a sentence of a paragraph; li: a list item." },
+          "text": { "type": "string", "description": "One claim: one sentence." },
+          "cites": { "type": "array", "items": { "type": "string" }, "description": "The ids of the events behind this claim." }
+        }, "required": ["kind", "text", "cites"] } }
+      }, "required": ["key", "heading", "items"] } },
+      "timeline": { "type": "array", "items": { "type": "object", "properties": {
+        "at": { "type": "string", "description": "The event's time, as given." },
+        "text": { "type": "string" },
+        "cites": { "type": "array", "items": { "type": "string" } }
+      }, "required": ["at", "text", "cites"] } },
+      "followups": { "type": "array", "items": { "type": "object", "properties": {
+        "title": { "type": "string", "description": "A follow-up to do, as a task title." },
+        "why": { "type": "string" },
+        "owner_name": { "type": "string", "description": "Who, only when an event names them for it." }
+      }, "required": ["title"] } },
+      "not_used": { "type": "array", "items": { "type": "string" }, "description": "What the write-up could not draw on, from not_connected." }
+    },
+    "required": ["title", "sections", "timeline", "followups"]
+  },
+  "permissions": { "grants": [
+    { "resource_type": "datastore_table", "resource_name": "incidents_event", "permission_ids": ["datastore.table.read", "datastore.record.read"] }
+  ]}
+}

@@ -1,0 +1,19 @@
+{
+  // A push to GitHub. For a repository that goes live by tag, a new tag is the
+  // release: what it points at is what shipped.
+  "name": "release-notes-on-tag",
+  "description": "A tag was pushed: for a repository released by tag, mark what it points at as shipped and the note ready.",
+  "max_concurrent_runs": 1,
+  "start": { "type": "EVENT", "config": { "connector_id": "github", "connector_trigger_id": "github:http:push" } },
+  "nodes": [
+    { "id": "live", "type": "FUNCTION", "label": "A new tag?",
+      "config": { "function_name": "release_notes_on_live", "input_mapping": {
+        "event": { "type": "literal", "value": "push" },
+        "repo": { "type": "expression", "value": "start.payload.repository.full_name" },
+        "ref": { "type": "expression", "value": "start.payload.ref", "optional": true },
+        "after": { "type": "expression", "value": "start.payload.after", "optional": true } } } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [ { "id": "e1", "source": "live", "target": "end" } ],
+  "visibility": "POD"
+}

@@ -1,0 +1,26 @@
+{
+  // One answer to the report form. The app opens it to people outside the
+  // Lemma (public rows) for the columns a team keeps on; each answer becomes
+  // a report (triage_on_form). Files land in /forms/triage_form. The
+  // `description` of each open column is the form's label.
+  "name": "triage_form",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "what_happened", "type": "TEXT", "required": true, "max_length": 5000, "description": "What happened?" },
+    { "name": "expected", "type": "TEXT", "max_length": 2000, "description": "What did you expect?" },
+    { "name": "steps", "type": "TEXT", "max_length": 4000, "description": "Steps to see it again (optional)" },
+    { "name": "how_bad", "type": "ENUM", "options": ["cant_work", "can_carry_on", "small"], "description": "How bad is it?" },
+    { "name": "where_url", "type": "TEXT", "max_length": 1000, "description": "Where? The page address, if you have it" },
+    { "name": "screenshot", "type": "FILE_PATH", "max_length": 1000, "description": "Screenshot or file (optional)" },
+    { "name": "email", "type": "TEXT", "max_length": 320, "description": "Your email, to hear back when it's fixed" },
+    // Filled by a host page (the in-product form), never typed.
+    { "name": "app_version", "type": "TEXT", "max_length": 80, "description": "App version" },
+    { "name": "browser", "type": "TEXT", "max_length": 120, "description": "Browser" },
+    { "name": "page", "type": "TEXT", "max_length": 1000, "description": "Page" },
+    // Internal: the report it became.
+    { "name": "report_id", "type": "UUID" }
+  ],
+  "config": {}
+}

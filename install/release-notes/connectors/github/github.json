@@ -1,0 +1,6 @@
+{
+  "connector": "github",
+  "mode": "SHARED",
+  "required": false,
+  "purpose": "One GitHub connection for the whole Lemma: reads the pull requests that merge and the deploys that finish in the repositories you pick, and puts the published note on the release. A comment is posted only when a person presses Send."
+}

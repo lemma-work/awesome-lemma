@@ -1,0 +1,42 @@
+{
+  // PR review's set-up: one row for the Lemma (id = uuid5(PRR_NS, "settings")).
+  "name": "prr_settings",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    // Who posts on GitHub: bot (the Lemma's GitHub App, from a function) or
+    // reviewer (each reviewer as themselves, from the app).
+    { "name": "posts_as", "type": "ENUM", "required": true, "default": "reviewer", "options": ["bot", "reviewer"] },
+    // The Lemma check on every pull request (as the bot).
+    { "name": "check_on", "type": "BOOLEAN", "default": false },
+    // off; summary: one comment edited in place each round; review: the
+    // findings on their lines, posted once per round.
+    { "name": "comments", "type": "ENUM", "required": true, "default": "off", "options": ["off", "summary", "review"] },
+    // The bot approves a clean round and withdraws it on a push that breaks a rule.
+    { "name": "approve_when_clean", "type": "BOOLEAN", "default": false },
+    // Merging by itself, for every repository whose merge_mode is watch or
+    // merge: {paths: [globs], max_lines, max_files, wait_minutes, how (auto,
+    // queue, squash), approve_first, update_bots: [logins], update_branch_prefix}.
+    { "name": "merge", "type": "JSON" },
+    // At most this many rounds a day, and merges by itself a day.
+    { "name": "daily_cap", "type": "INTEGER", "default": 60 },
+    { "name": "daily_merge_cap", "type": "INTEGER", "default": 20 },
+    // Pause reviews: nothing new is queued while it is on.
+    { "name": "paused", "type": "BOOLEAN", "default": false },
+    // The Pull requests app's address, for the check's link.
+    { "name": "app_url", "type": "TEXT", "max_length": 500 },
+    // What the platform let the bot do when last tried: {app: ok |
+    // needs_platform | no_permission, checks: ..., at}.
+    { "name": "platform", "type": "JSON" },
+    // The schedules set-up asked the app to make, by name -> id, and who made them.
+    { "name": "schedules", "type": "JSON" },
+    { "name": "schedule_user_id", "type": "USER" },
+    // Rules read from files start active instead of proposed.
+    { "name": "accept_file_rules", "type": "BOOLEAN", "default": false },
+    { "name": "setup_done_at", "type": "DATETIME" },
+    { "name": "setup_by", "type": "USER" },
+    { "name": "sample", "type": "BOOLEAN", "default": false }
+  ],
+  "config": {}
+}

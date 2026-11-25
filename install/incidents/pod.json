@@ -1,0 +1,19 @@
+{
+  "format_version": 4,
+  "name": "Incidents",
+  "description": "An incident's timeline gathered as it happens, and the write-up drafted after: declare from the app or Slack, a channel opened and kept in step, a likely cause with its evidence, updates drafted for the lead to send, and a write-up where every claim links to the event behind it.",
+  "variables": {
+    "tasks_slug": {
+      "type": "app_slug",
+      "source_value": "lemma-tasks",
+      "default": "lemma-tasks",
+      "description": "Public URL slug for the Tasks app (unique platform-wide; a suffix is added on collision)"
+    },
+    "incidents_slug": {
+      "type": "app_slug",
+      "source_value": "lemma-incidents",
+      "default": "lemma-incidents",
+      "description": "Public URL slug for the Incidents app (unique platform-wide; a suffix is added on collision)"
+    }
+  }
+}

@@ -36,6 +36,7 @@
 .bk-checks li > svg { margin-top: 2px; color: var(--c-faint); }
 .bk-checks li.is-ok > svg { color: var(--c-success); }
 .bk-checks li.is-bad > svg { color: var(--c-danger); }
+.bk-checks li.is-held > svg { color: var(--c-warning); }
 .bk-checks strong { font-weight: 500; }
 .bk-link { margin-top: 18px; display: flex; gap: 8px; align-items: center; padding: 8px 10px; border-radius: var(--c-radius); background: var(--c-subtle); font-size: 13px; min-width: 0; }
 .bk-link > svg { color: var(--c-faint); flex: none; }
@@ -63,6 +64,8 @@
 .bk-props dt { color: var(--c-muted); }
 .bk-props dd { margin: 0; min-width: 0; overflow-wrap: anywhere; }
 .bk-props dd a { color: inherit; display: inline-flex; gap: 4px; align-items: center; }
+.bk-held { margin: 14px 0 0; padding-top: 12px; border-top: 1px solid var(--c-border); }
+.bk-note { margin: 8px 0 0; }
 .bk-linkline { display: flex; align-items: center; gap: 2px; margin-bottom: 12px; padding: 6px 4px 6px 10px; border-radius: var(--c-radius); background: var(--c-subtle); font-size: 12.5px; min-width: 0; }
 .bk-linkline .c-ellipsis { flex: 1; min-width: 0; }
 .bk-small { font-size: 12.5px; line-height: 1.55; }

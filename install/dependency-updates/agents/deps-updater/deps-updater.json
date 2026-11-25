@@ -1,0 +1,35 @@
+{
+  // Dependency updates' worker. Started by the schedules set-up makes as the
+  // owner (the weekly batch and the daily security run per repository, the
+  // Dependabot alert event, @lemma comments on a dependency pull request),
+  // and by the app as a person (Open now, its own PR, Drop, Put back, Ask).
+  //
+  // It runs unattended: it never asks anyone anything. What needs a person
+  // goes into deps_update (needs_you, risky) through deps_record, which
+  // writes the owner's "decide" items in Today.
+  //
+  // WORKSPACE_CLI: a shell with git, gh, node, pnpm, uv and pip, for clones,
+  // installs and tests. The GitHub grant gives it pulls_create, checks_create
+  // and the rest, and the credentials git and gh use in the sandbox.
+  // Reads its own tables (the POD tools follow the grants); writes only
+  // through deps_record.
+  //
+  // Not set: `machine`. The brief asks for a pod machine of its own (2 vCPU,
+  // 4 GB), but _build/assemble.py does not carry a bundle's machines/ yet, so
+  // an installed agent would name a machine its Lemma lacks. It runs on the
+  // invoking person's own default machine until the assembler carries it.
+  "name": "deps-updater",
+  "description": "Keeps each watched repository's dependencies current: one tested pull request per repository each week, majors and risky releases held for a person, security fixes opened the same day, @lemma comments on its pull requests carried out. Never merges.",
+  "instruction": { "$file": "instruction.md" },
+  "toolsets": ["WORKSPACE_CLI"],
+  "permissions": { "grants": [
+    { "resource_type": "connector", "resource_name": "github", "permission_ids": ["connector.use"] },
+    { "resource_type": "function", "resource_name": "deps_record", "permission_ids": ["function.execute"] },
+    { "resource_type": "datastore_table", "resource_name": "deps_settings", "permission_ids": ["datastore.table.read", "datastore.record.read"] },
+    { "resource_type": "datastore_table", "resource_name": "deps_repo", "permission_ids": ["datastore.table.read", "datastore.record.read"] },
+    { "resource_type": "datastore_table", "resource_name": "deps_update", "permission_ids": ["datastore.table.read", "datastore.record.read"] },
+    { "resource_type": "datastore_table", "resource_name": "deps_batch", "permission_ids": ["datastore.table.read", "datastore.record.read"] },
+    { "resource_type": "datastore_table", "resource_name": "deps_ignore", "permission_ids": ["datastore.table.read", "datastore.record.read"] },
+    { "resource_type": "datastore_table", "resource_name": "deps_rule", "permission_ids": ["datastore.table.read", "datastore.record.read"] }
+  ]}
+}

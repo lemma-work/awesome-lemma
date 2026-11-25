@@ -1,0 +1,15 @@
+{
+  // The sprint lead's daily run, on their own TIME schedule (06:00 in the
+  // set-up's zone) that the app makes as them at set-up: a schedule runs as
+  // whoever made it, and the lead's "decide" items in Today must be written
+  // as the lead.
+  "name": "sprints-daily",
+  "description": "Each morning: open and start sprints when due, reconcile the running sprint, prepare the close on its last day, refresh what may slip, and write the lead's items in Today.",
+  "start": { "type": "SCHEDULED", "config": { "schedule_type": "CRON" } },
+  "nodes": [
+    { "id": "tick", "type": "FUNCTION", "label": "The day's sprint work",
+      "config": { "function_name": "sprints_tick", "input_mapping": {} } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [ { "id": "e1", "source": "tick", "target": "end" } ]
+}

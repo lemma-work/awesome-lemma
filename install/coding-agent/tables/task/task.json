@@ -1,0 +1,61 @@
+{
+  // A task the team can see: in a team project, or shared by whoever made
+  // it. Done by a person or handed to an agent. From any source: a task typed
+  // in Tasks, one made from a promise, and one later synced from Linear are
+  // the same row, told apart by `source` and the provider's id.
+  //
+  // A person's own private tasks are `personal_task`, the same columns with
+  // row-level security: the platform's RLS lets a row through to its owner
+  // only, so "private until shared" is two tables, and sharing a task moves
+  // it here, keeping its id. Read both for "everything on my plate".
+  //
+  // Shared definition (plugins/_contract), first written by Tasks. Carried
+  // unchanged by every plugin that uses it; _contract/lint.py fails on any
+  // difference. A plugin's own state about a task goes in its own table,
+  // keyed by the task's id (Tasks: `tasks_run`, `tasks_decision`).
+  "name": "task",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    // A short number people can say ("#14").
+    { "name": "number", "type": "SERIAL", "auto": true, "unique": true },
+    { "name": "title", "type": "TEXT", "required": true, "max_length": 300 },
+    // Markdown.
+    { "name": "description", "type": "TEXT", "max_length": 20000 },
+    // waiting: waiting on a person (an answer, an approval, a review).
+    { "name": "status", "type": "ENUM", "required": true, "default": "todo",
+      "options": ["todo", "in_progress", "waiting", "done", "canceled"] },
+    { "name": "priority", "type": "ENUM", "required": true, "default": "none",
+      "options": ["none", "low", "medium", "high", "urgent"] },
+    // The day it is due, in the owner's own calendar.
+    { "name": "due_on", "type": "DATE" },
+    { "name": "project_id", "type": "UUID",
+      "foreign_key": { "references": "project.id" } },
+    // A sub-task's parent, in the same table.
+    { "name": "parent_id", "type": "UUID" },
+    // A list of short words.
+    { "name": "labels", "type": "JSON" },
+    // Who does it: nobody yet, a person (a member of the Lemma), or an agent.
+    { "name": "assignee_kind", "type": "ENUM", "required": true, "default": "none",
+      "options": ["none", "person", "agent"] },
+    { "name": "assignee_user_id", "type": "USER" },
+    { "name": "assignee_name", "type": "TEXT", "max_length": 200 },
+    // The agent's name; `pod_default` is the Lemma's own assistant.
+    { "name": "assignee_agent", "type": "TEXT", "max_length": 120 },
+    // Whose task it is: who made it, or who it was made for.
+    { "name": "owner_user_id", "type": "USER" },
+    { "name": "owner_name", "type": "TEXT", "max_length": 200 },
+    // Where it came from: tasks (typed), chat (the Lemma made it when
+    // asked), promise (a promise the owner made), linear, jira, asana, or
+    // the plugin that made it (onboarding, launch, ...).
+    { "name": "source", "type": "TEXT", "required": true, "default": "tasks", "max_length": 32 },
+    // The provider's own id (for a promise, the promise row's id) and address.
+    { "name": "source_id", "type": "TEXT", "max_length": 400 },
+    { "name": "source_url", "type": "TEXT", "max_length": 1000 },
+    // The sentence it came from, word for word, when it came from one.
+    { "name": "quote", "type": "TEXT", "max_length": 600 },
+    { "name": "done_at", "type": "DATETIME" }
+  ],
+  "config": {}
+}

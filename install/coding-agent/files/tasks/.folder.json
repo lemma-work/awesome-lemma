@@ -1,0 +1,4 @@
+{
+  "description": "What agents made while working tasks, one folder per task (/tasks/<task id>/). Linked from the task's timeline.",
+  "visibility": "POD"
+}

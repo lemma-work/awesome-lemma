@@ -1,0 +1,29 @@
+{
+  "name": "release_notes_setup_save",
+  "description": "Release notes' set-up: the product's name, repositories (each with how it goes live: the deploy workflow's name or a tag), the Slack channel, who publishes. Writes the memory block. Safe to run again.",
+  "type": "API",
+  "visibility": "POD",
+  "code": {
+    "$file": "code.py"
+  },
+  "permissions": {
+    "grants": [
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "release_note_settings",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read",
+          "datastore.record.write"
+        ]
+      },
+      {
+        "resource_type": "function",
+        "resource_name": "release_notes_memory",
+        "permission_ids": [
+          "function.execute"
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,20 @@
+{
+  // GitHub's issue_comment webhook. The app makes one WEBHOOK schedule per event at
+  // set-up, as the person, through the Lemma's GitHub connector (GitHub routes
+  // by installation; triage_on_github keeps only the watched repositories).
+  "name": "triage-github-issue-comment",
+  "description": "A '+1' or 'same here' on a watched issue adds the commenter as someone who asked.",
+  "max_concurrent_runs": 4,
+  "start": { "type": "EVENT", "config": {
+    "connector_id": "github",
+    "connector_trigger_id": "github:http:issue_comment"
+  } },
+  "nodes": [
+    { "id": "read", "type": "FUNCTION", "label": "Read it",
+      "config": { "function_name": "triage_on_github", "input_mapping": {
+        "event": { "type": "literal", "value": "issue_comment" },
+        "payload": { "type": "expression", "value": "start.payload" } } } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [ { "id": "e1", "source": "read", "target": "end" } ]
+}

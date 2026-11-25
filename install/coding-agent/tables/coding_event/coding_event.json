@@ -1,0 +1,26 @@
+{
+  // One line of a task's Activity. The id is uuid5 of where it came from (a
+  // webhook delivery, a commit, a report), so a webhook that fires for every
+  // member's schedule, or twice, writes it once.
+  "name": "coding_event",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "task_id", "type": "UUID", "required": true },
+    { "name": "session_id", "type": "UUID" },
+    { "name": "at", "type": "DATETIME", "required": true },
+    { "name": "kind", "type": "ENUM", "required": true,
+      "options": ["assigned", "started", "checked_out", "setup", "progress", "question", "answered", "approval",
+                  "pr_opened", "pushed", "check_failed", "checks_passed", "review_comment", "review", "fixing",
+                  "conflict", "merged", "closed", "result", "stopped", "failed", "moved"] },
+    // Who: a person's name, an agent's label, "GitHub".
+    { "name": "actor", "type": "TEXT", "max_length": 200 },
+    { "name": "text", "type": "TEXT", "max_length": 4000 },
+    { "name": "url", "type": "TEXT", "max_length": 600 },
+    // {path, line} for a review comment, {name, conclusion} for a check,
+    // {sha, additions, deletions} for a push, {try, of} for a fix round.
+    { "name": "detail", "type": "JSON" }
+  ],
+  "config": {}
+}

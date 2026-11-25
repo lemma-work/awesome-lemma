@@ -1,0 +1,11 @@
+{
+  // A new personal_task row: asked once whether an agent could do it, or handed
+  // over when it was made for an agent. `bulk_writes: each`: the sample and
+  // a share write in bulk, and a bulk write skips a datastore trigger unless
+  // the schedule asks for each row.
+  "name": "tasks-personal-added",
+  "schedule_type": "DATASTORE",
+  "config": { "table_name": "personal_task", "operations": ["INSERT"], "bulk_writes": "each" },
+  "workflow_name": "tasks-personal-added",
+  "is_active": true
+}

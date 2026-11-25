@@ -1,0 +1,14 @@
+{
+  // Every 15 minutes, on the TIME schedule the app makes at set-up as the
+  // person who set Incidents up (a schedule runs as its maker; no function can
+  // make one). The fallback until Slack's channel trigger is live.
+  "name": "incidents-tick",
+  "description": "Every 15 minutes: gather open incidents, draft a due update, and write this person's items in Today.",
+  "start": { "type": "SCHEDULED", "config": { "schedule_type": "CRON" } },
+  "nodes": [
+    { "id": "tick", "type": "FUNCTION", "label": "Gather and draft",
+      "config": { "function_name": "incidents_tick", "input_mapping": {} } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [ { "id": "e1", "source": "tick", "target": "end" } ]
+}

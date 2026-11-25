@@ -1,0 +1,34 @@
+{
+  // One line of a note. The Lemma writes lines with edited_by empty and
+  // rewrites them on every merge; a line a person edited (edited_by set) is
+  // never rewritten, only kept, moved or left as it is.
+  "name": "release_note_line",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "note_id", "type": "UUID", "required": true,
+      "foreign_key": { "references": "release_note.id" } },
+    // lead: what the note leads with (one to three). need: something people
+    // must do (a breaking change). improved, fixed: the rest, one line each.
+    { "name": "section", "type": "ENUM", "required": true, "default": "improved",
+      "options": ["lead", "need", "improved", "fixed"] },
+    { "name": "position", "type": "INTEGER", "required": true, "default": 0 },
+    // A lead line's heading; empty for a one-line entry.
+    { "name": "title", "type": "TEXT", "max_length": 200 },
+    { "name": "text", "type": "TEXT", "required": true, "max_length": 2000 },
+    // Its sources: pull request numbers, and issues as "owner/repo#880".
+    { "name": "prs", "type": "JSON" },
+    { "name": "issues", "type": "JSON" },
+    // How many people asked for it (open, shipped or told asks on its work).
+    { "name": "asked", "type": "INTEGER", "default": 0 },
+    // A picture a person added, a file in this Lemma.
+    { "name": "picture_path", "type": "FILE_PATH" },
+    { "name": "edited_by", "type": "USER" },
+    { "name": "edited_at", "type": "DATETIME" },
+    // Kept but not shown in the note.
+    { "name": "hidden", "type": "BOOLEAN", "default": false },
+    { "name": "sample", "type": "BOOLEAN", "default": false }
+  ],
+  "config": {}
+}

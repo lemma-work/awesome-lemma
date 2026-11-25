@@ -101,16 +101,24 @@ export VITE_LEMMA_API_URL=https://api.lemma.work VITE_LEMMA_AUTH_URL=https://lem
 bin/import.sh --var meetings_slug=<free slug>
 ```
 
-`bin/import.sh` is `lemma pods import` with one workaround: the importer stops
-on any declared connector the organisation has no installation of, even one
-marked `required: false`, and refuses a grant on a connector the bundle does
-not declare. When the organisation has no `googlemeet` installation (the test
-organisation had none), the script imports a staged copy without
-`connectors/googlemeet` and without that grant on `meetings_due`. With an
-installation it imports this folder as it is. `bin/import.sh functions/<name>`
-imports one function the same way. Pass `--var meetings_slug=…`: the CLI
-ignores the variable's default. `install/meetings/` is always without Google
-Meet, for the same reason.
+`bin/import.sh` is `lemma pods import` with one workaround, for an importer
+that stops on any declared connector the organisation has no installation of,
+even one marked `required: false`. Current importers (the CLI and the server)
+leave such an optional connector out and drop the grants on it instead. When
+the organisation has no `googlemeet` installation (the test organisation had
+none), the script imports a staged copy without `connectors/googlemeet` and
+without that grant on `meetings_due`. With an installation it imports this
+folder as it is. `bin/import.sh functions/<name>` imports one function the
+same way. Pass `--var meetings_slug=…`: the CLI ignores the variable's
+default. `install/meetings/` is still without Google Meet (`INSTALL_WITHOUT`
+in `_build/assemble.py`).
+
+Set up Google Calendar or Outlook in the organisation before adding Meetings.
+One it lacks then is left out, with `meetings_calendar_read`'s grant on it:
+connecting it later from the set-up declares it in the Lemma but grants
+nothing, so the read is refused. The set-up then says the calendar couldn't
+be read and why, and the app's frame says it too; adding Meetings again should
+give it access (not yet seen working).
 
 `bin/lemma` is the `lemma` CLI bound to one Lemma: it reads `LEMMA_SERVER`,
 `LEMMA_ORG_ID` and `LEMMA_POD_ID` from the environment or from a gitignored
@@ -250,7 +258,9 @@ people and 10 promises were untouched.
 The `googlemeet` connector's catalog has the operations (conference records by
 Meet code, `GOOGLEMEET_GET_TRANSCRIPTS_BY_CONFERENCE_RECORD_ID`,
 `GOOGLEMEET_LIST_TRANSCRIPT_ENTRIES`, participants for names), and
-`meetings_due` reads them into `Speaker: words` lines. **Not seen working**:
+`meetings_due` reads them into `[m:ss] Speaker: words` lines, the time
+being how far into the call the line began (so a quote can point at its
+minute; User interviews reads it). **Not seen working**:
 the test organisation had no googlemeet installation and no real account was connected,
 so whether it returns transcripts, and the operations' exact parameter names,
 are unverified. Google keeps a transcript only when someone turned

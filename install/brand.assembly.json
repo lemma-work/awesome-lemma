@@ -37,8 +37,8 @@
   "files": {
     "apps/brand/brand.json": "7f10c8e96d5fcc7c8f440c748f986f37865e7ce00f4676b4a11149b8170ac9f1",
     "apps/brand/source/index.html": "14c329836670b05d2d5864b48cb06e1da6eb76df7f89d42c0bf1fecd49c0019c",
-    "apps/brand/source/package-lock.json": "c4ffe04aa46ef2fb1b176811f5b5850c79be059203c222ffd941a553b70c1273",
-    "apps/brand/source/package.json": "3d48f7e69dd1fd54424b1a7273c705fcc9bc54fa5c193a1400c217beab5f198c",
+    "apps/brand/source/package-lock.json": "98902feff9dc22a5cac5c80f084ccf741d85fb69efb23e4da354e644fda19394",
+    "apps/brand/source/package.json": "6d600d6469310e5676eefc5695e06fe7d37d5b4e679b39ae52649762fba1adaa",
     "apps/brand/source/pnpm-workspace.yaml": "9c4e1837b7df3c50bd17368aa2f2fec6c514b34e03414574a056ee797c7137fd",
     "apps/brand/source/src/App.tsx": "9d97a084e44b1e22c3623e5979ce59c01154e1192bf4e7477231059ce7091781",
     "apps/brand/source/src/BrandPage.tsx": "a67bb0d5d762c39f68164a4aef829c471c9700be7c015ae301e875a441a61d50",
@@ -53,7 +53,7 @@
     "apps/brand/source/src/types.ts": "e09008bc08d441562631eecf04abb4c18d74cabfdc4c4c69f36637d234f0c589",
     "apps/brand/source/src/vite-env.d.ts": "65996936fbb042915f7b74a200fcdde7e410f32a669b1ab9597cfaa4b0faddb5",
     "apps/brand/source/tsconfig.json": "062dcc7e2090e113eab412fed9afd1df973cc92be64c6a9f1caca9bfe42fbe57",
-    "apps/brand/source/vendor/lemma-plugins-kit-0.1.0-efbfe529.tgz": "2860f17852912e39f12aebf0fe6ba716a61178befe34643178d57ba38409029f",
+    "apps/brand/source/vendor/lemma-plugins-kit-0.1.0-c70cb30a.tgz": "6193dc69b3419403653f34a346d3b9eb9b9d8b898adc2c5e6225fed28aed9a8a",
     "apps/brand/source/vendor/lemma-sdk-0.10.1.tgz": "fae311df7451ae288f82ffa1244ba3e312ea91bb629e174251df15ffbcded67b",
     "apps/brand/source/vite.config.ts": "cf3f1fad214f15e74aae28d4af7cc7d4bd29fe6610d05be56a74a71250c3e357",
     "files/brand/.folder.json": "381e7ea841fab68c4c46ef4557629b083bb76e9a4c29a13876e20a628fe6abd6",
@@ -97,5 +97,5 @@
     "tables/needs_you/needs_you.json": "2439130d401d4914c118b73e5bdc42856ac271074d77c64063a4a3c2de68bb3c",
     "workflows/brand-job/brand-job.json": "70eeb75e836cbf768f0527b391be6b1d0be446634328a17357c0a5e2319a4a91"
   },
-  "hash": "f9ef6700aad647eb737d97cacfcc80fdea7e3c442789e24af11686a6305b7eaf"
+  "hash": "91dce5edf03bd9214dfcc9e0b1c311d158290f8fcbe09cf2a8b32af3fa66a9a6"
 }

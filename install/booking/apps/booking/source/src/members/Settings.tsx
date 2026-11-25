@@ -4,10 +4,10 @@
 
 import { useEffect, useState } from "react";
 import { ArrowLeft, CalendarDays, Clock, Link2, Power, Video } from "lucide-react";
-import { Button, Card, Header, Switch, go, runFunction, useToast } from "@lemma-plugins/kit";
+import { Button, Card, Header, Switch, go, openApp, runFunction, update, useToast } from "@lemma-plugins/kit";
 import { DAY_NAMES, length } from "../time";
 import { PROVIDER_LABEL, useBooking } from "./data";
-import { appOrigin, turnOff, turnOn } from "./turnOn";
+import { appOrigin, onSample, turnOff, turnOn } from "./turnOn";
 import { addressOf, useMailAccounts } from "./Setup";
 
 export function Settings() {
@@ -33,14 +33,19 @@ export function Settings() {
   const mail = useMailAccounts();
   const senders = (mail || []).filter((a) => (eventCal?.provider === "outlook" ? a.connector_id === "outlook" : a.connector_id === "gmail"));
   const sender = String(v.mail_account_id ?? settings?.mail_account_id ?? "");
+  const held = onSample(settings, calendars);
 
   const save = async () => {
     setBusy("save");
     try {
       const out = await runFunction<{ ok: boolean; problem?: string; message: string }>("booking_save", v);
       if (!out.ok) return toast(out.problem || "Couldn't save.");
+      // Moved onto the sample calendar: a real visitor there would get no invite.
+      const off = page.state === "on" && onSample({ ...settings, calendars: cals, event_calendar: (v.event_calendar as string) || null }, calendars);
+      if (off) await update("booking_page", page.id, { state: "off" });
       const slots = await runFunction<{ open: number; errors: string[] }>("booking_slots", { force: true });
-      toast(slots.errors?.length ? `Saved, but ${slots.errors[0]}` : `Saved. ${slots.open} open times.`);
+      toast(off ? "Saved. Your page is off while bookings go on the sample calendar."
+        : slots.errors?.length ? `Saved, but ${slots.errors[0]}` : `Saved. ${slots.open} open times.`);
       await reload();
     } catch (e) {
       toast(`Couldn't save: ${e instanceof Error ? e.message : e}`);
@@ -162,10 +167,14 @@ export function Settings() {
 
         <Card title="Turn the page off" icon={Power}>
           <p className="bk-small c-muted">Off, the page says you aren't taking bookings and your open times stop being worked out. Bookings already made stay on your calendar.</p>
+          {held && page.state !== "on" ? (
+            <p className="bk-small c-muted bk-note">It can't go on while bookings go on the sample calendar: a real visitor would get no invite. Connect Google Calendar or Outlook in Meetings, then choose it above and save.</p>
+          ) : null}
           <div className="bk-row">
-            <Button variant={page.state === "on" ? "danger" : "primary"} busy={busy === "flip"} onClick={() => void flip()}>
+            <Button variant={page.state === "on" ? "danger" : "primary"} busy={busy === "flip"} disabled={held && page.state !== "on"} onClick={() => void flip()}>
               {page.state === "on" ? "Turn the page off" : "Turn the page on"}
             </Button>
+            {held && page.state !== "on" ? <Button onClick={() => void openApp("meetings")}>Open Meetings</Button> : null}
           </div>
         </Card>
       </div>

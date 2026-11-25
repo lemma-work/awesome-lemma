@@ -1,0 +1,28 @@
+{
+  // Release notes' set-up, one row for the Lemma (id = uuid5(RN_NS, "settings")).
+  "name": "release_note_settings",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    // The product's name, as the page and the notes say it.
+    { "name": "product", "type": "TEXT", "max_length": 120 },
+    // [{name: "owner/repo", live_via: workflow|tag|deployment|merge,
+    //   workflow: "Deploy", environment: "production", paths: ["web/**"]}]
+    { "name": "repos", "type": "JSON" },
+    // A Slack channel id and name for the published note; empty for none.
+    { "name": "slack_channel", "type": "TEXT", "max_length": 40 },
+    { "name": "slack_channel_name", "type": "TEXT", "max_length": 120 },
+    // Who publishes: [{user_id, name}]. They get the "notes are ready" choice.
+    { "name": "publishers", "type": "JSON" },
+    // The schedules set-up made, by name -> id, and who made them (they run
+    // as that person).
+    { "name": "schedules", "type": "JSON" },
+    { "name": "schedule_user_id", "type": "USER" },
+    // The changelog page's address, once known.
+    { "name": "page_url", "type": "TEXT", "max_length": 500 },
+    { "name": "setup_done_at", "type": "DATETIME" },
+    { "name": "sample", "type": "BOOLEAN", "default": false }
+  ],
+  "config": {}
+}

@@ -1,0 +1,23 @@
+{
+  // One claim in a write-up that the review found nothing behind, or that an
+  // event contradicts; with what the Lemma offers to do about it.
+  "name": "incidents_flag",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "incident_id", "type": "UUID", "required": true,
+      "foreign_key": { "references": "incidents_incident.id" } },
+    // The write-up section's key (summary, impact, why, ...).
+    { "name": "section", "type": "TEXT", "required": true, "max_length": 40 },
+    // The claim, word for word as the write-up has it.
+    { "name": "claim", "type": "TEXT", "required": true, "max_length": 600 },
+    { "name": "reason", "type": "TEXT", "max_length": 600 },
+    // What could settle it: "Count failed EU card charges in Stripe".
+    { "name": "offer", "type": "TEXT", "max_length": 300 },
+    // open; fixed (the sentence was rewritten or removed); kept (a person
+    // stood by it).
+    { "name": "state", "type": "ENUM", "required": true, "default": "open", "options": ["open", "fixed", "kept"] }
+  ],
+  "config": {}
+}

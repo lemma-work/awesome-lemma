@@ -1,0 +1,41 @@
+{
+  // Each member's own trigger on `ask` (rows: OWNER_READABLE, made when they
+  // first open the app), so it runs as them: an ask they heard has shipped.
+  // Read their thread, write the reply in their voice, keep it as a Mail draft
+  // in that thread and put "Tell Jo it shipped" in their Today.
+  "name": "release-notes-tell",
+  "description": "Someone you heard asking has had their work ship: draft your reply in the thread they asked in, for you to send.",
+  "run_title": ["start.payload.name"],
+  "max_concurrent_runs": 2,
+  "start": { "type": "DATASTORE_EVENT", "config": { "table_name": "ask", "operations": ["UPDATE"] } },
+  "nodes": [
+    { "id": "brief", "type": "FUNCTION", "label": "Read the thread",
+      "config": { "function_name": "release_notes_tell", "input_mapping": {
+        "mode": { "type": "literal", "value": "brief" },
+        "ask_id": { "type": "expression", "value": "start.metadata.record_id" } } } },
+    { "id": "mine", "type": "DECISION", "label": "Yours to tell?",
+      "config": { "rules": [ { "condition": "brief.skip == `true`", "next_node_id": "end" } ] } },
+    { "id": "write", "type": "AGENT", "label": "Write the reply",
+      "config": { "agent_name": "release-notes-replier", "input_mapping": {
+        "to": { "type": "expression", "value": "brief.brief.to" },
+        "thread": { "type": "expression", "value": "brief.brief.thread" },
+        "shipped": { "type": "expression", "value": "brief.brief.shipped" },
+        "waited_days": { "type": "expression", "value": "brief.brief.waited_days" },
+        "say_sorry": { "type": "expression", "value": "brief.brief.say_sorry" },
+        "voice": { "type": "expression", "value": "brief.brief.voice", "optional": true } } } },
+    { "id": "save", "type": "FUNCTION", "label": "Keep it as a draft",
+      "config": { "function_name": "release_notes_tell", "input_mapping": {
+        "mode": { "type": "literal", "value": "save" },
+        "ask_id": { "type": "expression", "value": "start.metadata.record_id" },
+        "written": { "type": "expression", "value": "write" } } } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [
+    { "id": "e1", "source": "brief", "target": "mine" },
+    { "id": "e2", "source": "mine", "target": "write", "label": "yours, shipped, not drafted yet" },
+    { "id": "e3", "source": "mine", "target": "end", "label": "not yours to tell" },
+    { "id": "e4", "source": "write", "target": "save" },
+    { "id": "e5", "source": "save", "target": "end" }
+  ],
+  "visibility": "POD"
+}
