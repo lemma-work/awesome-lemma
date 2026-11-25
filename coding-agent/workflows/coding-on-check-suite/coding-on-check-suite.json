@@ -1,0 +1,24 @@
+{
+  // GitHub's check_suite webhook. GitHub routes by installation, not by repository,
+  // so coding_on_github keeps only what concerns the coding agent's sessions.
+  // The app makes one WEBHOOK schedule per member at set-up (and again on open
+  // when one is missing), as that member: `coding-on-check-suite-<first 8 of the user id>`,
+  // config {source: "github", event: "check_suite"} (bin/app-schedules.json). A
+  // schedule runs as its maker, so each member's run writes the events and only
+  // the session's starter's own run does the fixing.
+  "name": "coding-on-check-suite",
+  "description": "A check suite finished on a coding agent pull request: failed or all passed.",
+  "max_concurrent_runs": 4,
+  "start": { "type": "EVENT", "config": {
+    "connector_id": "github",
+    "connector_trigger_id": "github:http:check_suite"
+  } },
+  "nodes": [
+    { "id": "read", "type": "FUNCTION", "label": "Read it for the coding agent",
+      "config": { "function_name": "coding_on_github", "input_mapping": {
+        "event": { "type": "literal", "value": "check_suite" },
+        "payload": { "type": "expression", "value": "start.payload" } } } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [ { "id": "e1", "source": "read", "target": "end" } ]
+}

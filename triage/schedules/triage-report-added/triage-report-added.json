@@ -1,0 +1,10 @@
+{
+  // A new triage_report row, from a poll, GitHub, Slack or the form.
+  // `bulk_writes: each`: the poll writes reports in bulk, and a bulk write
+  // skips a datastore trigger unless the schedule asks for each row.
+  "name": "triage-report-added",
+  "schedule_type": "DATASTORE",
+  "config": { "table_name": "triage_report", "operations": ["INSERT"], "bulk_writes": "each" },
+  "workflow_name": "triage-report-added",
+  "is_active": true
+}

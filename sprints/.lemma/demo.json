@@ -1,0 +1,33 @@
+{
+  "anchor": "2026-11-24",
+  "zone": [
+    "Asia/Kolkata",
+    "Asia/Calcutta"
+  ],
+  "apps": [
+    {
+      "name": "sprints",
+      "label": "Sprints",
+      "start": "/"
+    }
+  ],
+  "user": {
+    "id": "user-sample",
+    "email": "maya@example.com",
+    "first_name": "Maya",
+    "last_name": "Wong",
+    "name": "Maya Wong",
+    "is_active": true,
+    "is_superuser": false,
+    "is_verified": true,
+    "created_at": "2026-01-01T00:00:00Z",
+    "updated_at": "2026-01-01T00:00:00Z"
+  },
+  "notes": {
+    "sprints_start": "In the demo nothing starts: in a Lemma this freezes the plan as in at the start, keeps each person's capacity as it is now, and opens the sprint after it.",
+    "sprints_close": "In the demo nothing closes: in a Lemma this carries, splits, sends back or drops each task as chosen, writes the numbers and /sprints/47.md, and opens Sprint 48 with the carried work in it.",
+    "sprints_close_prepare": "In the demo the Lemma isn't asked again: in a Lemma this asks once per unfinished task, and drafts the summary from the numbers.",
+    "sprints_setup_save": "In the demo the set-up isn't saved.",
+    "sprints_sample_data": "In the demo the sample stays."
+  }
+}

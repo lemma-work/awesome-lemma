@@ -1,0 +1,19 @@
+{
+  // A GitHub login and the member of this Lemma it belongs to, the paths
+  // they own, and whether they take reviews. Team-wide. A login with no
+  // member here is outside the team.
+  "name": "prr_member",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "login", "type": "TEXT", "required": true, "unique": true, "max_length": 100 },
+    { "name": "user_id", "type": "USER" },
+    { "name": "name", "type": "TEXT", "max_length": 200 },
+    // Globs they own: a change there waits on them first.
+    { "name": "owns", "type": "JSON" },
+    { "name": "reviews", "type": "BOOLEAN", "default": true },
+    { "name": "sample", "type": "BOOLEAN", "default": false }
+  ],
+  "config": {}
+}

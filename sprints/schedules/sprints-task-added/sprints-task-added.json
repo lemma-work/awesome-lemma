@@ -1,0 +1,8 @@
+{
+  // A new team task, one run each (Incidents and Triage may write in bulk).
+  "name": "sprints-task-added",
+  "schedule_type": "DATASTORE",
+  "config": { "table_name": "task", "operations": ["INSERT"], "bulk_writes": "each" },
+  "workflow_name": "sprints-task-added",
+  "is_active": true
+}

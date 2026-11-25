@@ -1,0 +1,21 @@
+{
+  // A message in an incident's channel. Each incident's own WEBHOOK schedule
+  // (incidents-channel-<n>, config {team_id, channel_id}) starts this; the app
+  // makes it at declare as the person, and removes it at resolve. Needs the
+  // Slack channel trigger (lemma-platform#1245): until it is live, the tick
+  // reads the channel instead.
+  "name": "incidents-on-message",
+  "description": "A message in an incident's channel: add it to the timeline as it happens.",
+  "max_concurrent_runs": 4,
+  "start": { "type": "EVENT", "config": {
+    "connector_id": "slack",
+    "connector_trigger_id": "slack:http:slack_channel_message"
+  } },
+  "nodes": [
+    { "id": "keep", "type": "FUNCTION", "label": "Add it to the timeline",
+      "config": { "function_name": "incidents_on_message", "input_mapping": {
+        "payload": { "type": "expression", "value": "start.payload" } } } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [ { "id": "e1", "source": "keep", "target": "end" } ]
+}

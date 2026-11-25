@@ -1,0 +1,41 @@
+{
+  // Redraft one note: started from the app's Redraft, the nightly catch-up,
+  // or chat, with the note as the record the run is about (or the newest
+  // open note when none is named).
+  "name": "release-notes-redraft",
+  "description": "Redraft the open release note from every pull request since the last release, keeping the lines a person edited.",
+  "max_concurrent_runs": 1,
+  "start": { "type": "MANUAL" },
+  "nodes": [
+    { "id": "brief", "type": "FUNCTION", "label": "What the note is made of",
+      "config": { "function_name": "release_notes_draft", "input_mapping": {
+        "mode": { "type": "literal", "value": "brief" },
+        "note_id": { "type": "expression", "value": "start.metadata.record_id", "optional": true } } } },
+    { "id": "anything", "type": "DECISION", "label": "Anything to write?",
+      "config": { "rules": [ { "condition": "brief.skip == `true`", "next_node_id": "end" } ] } },
+    { "id": "write", "type": "AGENT", "label": "Write the lines",
+      "config": { "agent_name": "release-notes-writer",
+        "input_mapping": {
+          "product": { "type": "expression", "value": "brief.brief.product" },
+          "version": { "type": "expression", "value": "brief.brief.version" },
+          "voice": { "type": "expression", "value": "brief.brief.voice", "optional": true },
+          "changes": { "type": "expression", "value": "brief.brief.changes" },
+          "kept_lines": { "type": "expression", "value": "brief.brief.kept_lines" } } } },
+    { "id": "save", "type": "FUNCTION", "label": "Keep the note",
+      "config": { "function_name": "release_notes_draft",
+        "input_mapping": {
+          "mode": { "type": "literal", "value": "save" },
+          "note_id": { "type": "expression", "value": "brief.note_id" },
+          "groups": { "type": "expression", "value": "brief.groups" },
+          "written": { "type": "expression", "value": "write" } } } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [
+    { "id": "e1", "source": "brief", "target": "anything" },
+    { "id": "e2", "source": "anything", "target": "write", "label": "changes to write" },
+    { "id": "e3", "source": "anything", "target": "end", "label": "nothing people would notice" },
+    { "id": "e4", "source": "write", "target": "save" },
+    { "id": "e5", "source": "save", "target": "end" }
+  ],
+  "visibility": "POD"
+}

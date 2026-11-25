@@ -1,0 +1,62 @@
+#!/bin/bash
+# The Lemma CLI for this plugin's folder, bound to one Lemma.
+#
+# Runs `lemma` from PATH (`uv tool install lemma-terminal`) with the server and
+# organization given, so every script here talks to the same Lemma:
+#
+#   LEMMA_SERVER   the CLI server to use (`lemma servers list`; lemma-cloud is lemma.work)
+#   LEMMA_ORG_ID   your organization's id (`lemma orgs list`)
+#   LEMMA_POD_ID   the Lemma's id (`lemma pods list`)
+#
+# Set them in the environment, or in a .lemma.env file in this plugin's folder
+# (gitignored, never committed). The CLI's own .lemma.<server>.env there is read
+# too. A value already in the environment wins; --pod <id> on the command line
+# names the Lemma instead of LEMMA_POD_ID. --org is passed explicitly
+# because connector commands ignore LEMMA_ORG_ID from the environment.
+set -euo pipefail
+here="$(cd "$(dirname "$0")/.." && pwd)"
+
+load() {  # LEMMA_* lines from an env file, without overriding the environment
+  local file="$1" key value
+  [ -f "$file" ] || return 0
+  while IFS='=' read -r key value || [ -n "$key" ]; do
+    key="${key#export }"
+    key="${key// /}"
+    case "$key" in LEMMA_SERVER | LEMMA_ORG_ID | LEMMA_POD_ID) ;; *) continue ;; esac
+    value="${value%$'\r'}"
+    value="${value%\"}"; value="${value#\"}"
+    value="${value%\'}"; value="${value#\'}"
+    if [ -z "${!key:-}" ]; then export "$key=$value"; fi
+  done < "$file"
+}
+
+load "$here/.lemma.env"
+if [ -n "${LEMMA_SERVER:-}" ]; then load "$here/.lemma.$LEMMA_SERVER.env"; fi
+
+needed="LEMMA_SERVER LEMMA_ORG_ID LEMMA_POD_ID"
+for arg in "$@"; do  # a --pod on the command line names the Lemma itself
+  case "$arg" in --pod | --pod=*) needed="LEMMA_SERVER LEMMA_ORG_ID" ;; esac
+done
+missing=""
+for name in $needed; do
+  if [ -z "${!name:-}" ]; then missing="$missing $name"; fi
+done
+if [ -n "$missing" ]; then
+  cat >&2 <<EOF
+bin/lemma: not set:$missing
+Set them in the environment, or in $here/.lemma.env (gitignored):
+
+  LEMMA_SERVER=lemma-cloud
+  LEMMA_ORG_ID=<org-id>
+  LEMMA_POD_ID=<pod-id>
+
+\`lemma servers list\`, \`lemma orgs list\` and \`lemma pods list\` show yours.
+To make a Lemma first, run \`lemma pods create "<name>"\` without this wrapper.
+EOF
+  exit 2
+fi
+if ! command -v lemma >/dev/null 2>&1; then
+  echo "bin/lemma: the lemma CLI is not on PATH (uv tool install lemma-terminal)" >&2
+  exit 127
+fi
+cd "$here" && exec lemma --server "$LEMMA_SERVER" --org "$LEMMA_ORG_ID" "$@"

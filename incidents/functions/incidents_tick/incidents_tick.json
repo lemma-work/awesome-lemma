@@ -1,0 +1,58 @@
+{
+  "name": "incidents_tick",
+  "description": "Every 15 minutes: gather every open incident, draft the update when one is due, and write this person's items in Today. Nothing to do with no open incident.",
+  "type": "API",
+  "visibility": "POD",
+  "code": {
+    "$file": "code.py"
+  },
+  "permissions": {
+    "grants": [
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "incidents_settings",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "incidents_incident",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "incidents_update",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read"
+        ]
+      },
+      {
+        "resource_type": "function",
+        "resource_name": "incidents_gather",
+        "permission_ids": [
+          "function.execute"
+        ]
+      },
+      {
+        "resource_type": "function",
+        "resource_name": "incidents_draft_update",
+        "permission_ids": [
+          "function.execute"
+        ]
+      },
+      {
+        "resource_type": "function",
+        "resource_name": "incidents_needs_you",
+        "permission_ids": [
+          "function.execute"
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "name": "changelog",
+  "description": "The team's public changelog: every published release note, newest first, in the team's brand. Anyone can read it; nobody signs in.",
+  "public_slug": "${changelog_slug}",
+  "visibility": "PUBLIC"
+}

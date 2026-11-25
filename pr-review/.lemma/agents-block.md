@@ -1,0 +1,1 @@
+- PR review is installed: pull requests read against the team's rules, and who each waits on. How to use it: `/memory/plugins/pr-review.md`.

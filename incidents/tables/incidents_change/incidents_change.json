@@ -1,0 +1,26 @@
+{
+  // One change in a watched repository: the "what changed" ledger, kept
+  // whether or not an incident is open, so a new incident can look back an
+  // hour. Written by incidents_on_github from GitHub's webhooks.
+  "name": "incidents_change",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "repo", "type": "TEXT", "required": true, "max_length": 200 },
+    // merge (a pull request merged), push (to the default branch), deploy
+    // (a deploy workflow run finished), release (published).
+    { "name": "kind", "type": "ENUM", "required": true, "options": ["merge", "push", "deploy", "release"] },
+    // #2291, a branch, a tag, a run number.
+    { "name": "ref", "type": "TEXT", "max_length": 200 },
+    { "name": "title", "type": "TEXT", "max_length": 400 },
+    { "name": "author", "type": "TEXT", "max_length": 200 },
+    { "name": "at", "type": "DATETIME", "required": true },
+    { "name": "url", "type": "TEXT", "max_length": 600 },
+    // The top paths it touched, when GitHub said.
+    { "name": "files", "type": "JSON" },
+    // success, failure, ... for a deploy.
+    { "name": "outcome", "type": "TEXT", "max_length": 40 }
+  ],
+  "config": {}
+}

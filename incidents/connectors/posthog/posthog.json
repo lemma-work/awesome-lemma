@@ -1,0 +1,6 @@
+{
+  "connector": "posthog",
+  "mode": "SHARED",
+  "required": false,
+  "purpose": "Read by the investigator for who an incident reached. Without it, that is named as not checked."
+}

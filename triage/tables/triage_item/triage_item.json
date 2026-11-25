@@ -1,0 +1,84 @@
+{
+  // One problem. Reports merge into it; it is what is ranked, owned,
+  // accepted or declined. Shown as T-<number>. Team-wide, no RLS.
+  "name": "triage_item",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "number", "type": "SERIAL", "auto": true, "unique": true },
+    { "name": "title", "type": "TEXT", "required": true, "max_length": 300 },
+    // Every option from the start: an import never changes an existing ENUM.
+    { "name": "kind", "type": "ENUM", "required": true, "default": "bug", "options": ["bug", "alert", "security", "request"] },
+    // inbox: waiting for a decision. snoozed: until snoozed_until.
+    // marked_down: set aside by a rule or a person, back when it changes.
+    // done: its task is done.
+    { "name": "state", "type": "ENUM", "required": true, "default": "inbox",
+      "options": ["inbox", "accepted", "declined", "duplicate", "snoozed", "marked_down", "done"] },
+    // From reach (triage_reach), never typed.
+    { "name": "priority", "type": "ENUM", "required": true, "default": "medium", "options": ["urgent", "high", "medium", "low"] },
+    // Reach, each figure in its own unit: people a tracker counted, its
+    // events, people who asked, companies among them; the main unit; when
+    // it was read.
+    { "name": "reach_people", "type": "INTEGER" },
+    { "name": "reach_events", "type": "INTEGER" },
+    { "name": "reach_asks", "type": "INTEGER", "default": 0 },
+    { "name": "reach_companies", "type": "INTEGER", "default": 0 },
+    { "name": "reach_unit", "type": "ENUM", "default": "reports", "options": ["people", "asked", "repo", "reports"] },
+    { "name": "reach_read_at", "type": "DATETIME" },
+    // The words beside the figure: "rising", "4× usual", "reachable".
+    { "name": "reach_note", "type": "TEXT", "max_length": 120 },
+    // People by hour, newest last: the last 24 points ([[iso hour, people]]),
+    // and the history the 7-day average is taken from (at most 168 points).
+    { "name": "trend", "type": "JSON" },
+    { "name": "history", "type": "JSON" },
+    { "name": "escalating", "type": "BOOLEAN", "default": false },
+    { "name": "regressed", "type": "BOOLEAN", "default": false },
+    { "name": "first_seen", "type": "DATETIME" },
+    { "name": "last_report_at", "type": "DATETIME" },
+    { "name": "repo", "type": "TEXT", "max_length": 200 },
+    // Files it points at, the top frame first: ["web/checkout/summary.tsx:54"].
+    { "name": "paths", "type": "JSON" },
+    // The doors its reports came through, for the list's chips.
+    { "name": "doors", "type": "JSON" },
+    // A security alert's facts, from its report (see triage_report.security).
+    { "name": "security", "type": "JSON" },
+    // The suggested owner and why, in words; the rule that answered; the
+    // others that fit ([{user_id, name, reason}]).
+    { "name": "owner_user_id", "type": "USER" },
+    { "name": "owner_name", "type": "TEXT", "max_length": 200 },
+    { "name": "owner_reason", "type": "TEXT", "max_length": 400 },
+    { "name": "owner_rule", "type": "ENUM", "options": ["route", "codeowners", "last_change", "rotation", "person", "none"] },
+    { "name": "alternatives", "type": "JSON" },
+    // An open item it may be the same as (unsure: never merged on its own),
+    // with the reason; and the item it was marked a duplicate of.
+    { "name": "looks_like", "type": "UUID" },
+    { "name": "looks_like_note", "type": "TEXT", "max_length": 400 },
+    { "name": "duplicate_of", "type": "UUID" },
+    // The team task made on accept (shared `task`, by id).
+    { "name": "task_id", "type": "UUID" },
+    { "name": "snoozed_until", "type": "DATETIME" },
+    { "name": "marked_down_reason", "type": "TEXT", "max_length": 400 },
+    // Who marked it down: "lemma" (a rule) or a member's id.
+    { "name": "marked_down_by", "type": "TEXT", "max_length": 64 },
+    { "name": "decline_reason", "type": "TEXT", "max_length": 1000 },
+    { "name": "decided_by", "type": "USER" },
+    { "name": "decided_at", "type": "DATETIME" },
+    // The Lemma's read (triage_reader): two or three sentences, every claim
+    // from an evidence line; the evidence ([{source, asked, answer, state:
+    // checked | nothing_found | not_checked, url}], every entry with an
+    // answer, a source not checked saying why); a fix hint.
+    { "name": "summary", "type": "TEXT", "max_length": 2000 },
+    { "name": "evidence", "type": "JSON" },
+    { "name": "fix_hint", "type": "TEXT", "max_length": 1000 },
+    { "name": "read_state", "type": "ENUM", "default": "none", "options": ["none", "reading", "done", "failed"] },
+    { "name": "read_at", "type": "DATETIME" },
+    // What the item's source looked like when it was marked down or read,
+    // so a mark-down holds until the source changes: "<reports>:<people band>".
+    { "name": "source_version", "type": "TEXT", "max_length": 200 },
+    // Pull requests and issues it relates to: [{ref, title, url, note}].
+    { "name": "related", "type": "JSON" },
+    { "name": "sample", "type": "BOOLEAN", "default": false }
+  ],
+  "config": {}
+}

@@ -1,0 +1,19 @@
+{
+  "format_version": 4,
+  "name": "PR review",
+  "description": "Every pull request read against your team's own rules before anyone reviews it, and the small clean ones merged without anyone having to: the rules come from the files your repositories already have and the review comments your team keeps writing, every push gets a round with a ledger of each rule and findings on their lines, and an inbox says who each pull request waits on.",
+  "variables": {
+    "prr_pull_requests_slug": {
+      "type": "app_slug",
+      "source_value": "lemma-pull-requests",
+      "default": "lemma-pull-requests",
+      "description": "Public URL slug for the Pull requests app (unique platform-wide; a suffix is added on collision)"
+    },
+    "prr_rules_slug": {
+      "type": "app_slug",
+      "source_value": "lemma-review-rules",
+      "default": "lemma-review-rules",
+      "description": "Public URL slug for the Rules app (unique platform-wide; a suffix is added on collision)"
+    }
+  }
+}

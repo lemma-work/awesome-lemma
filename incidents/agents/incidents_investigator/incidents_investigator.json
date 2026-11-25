@@ -1,0 +1,43 @@
+{
+  "name": "incidents_investigator",
+  "description": "Names an incident's likely cause from its events and the changes before it, with the evidence for it, what it ruled out, and every source it could not check. May answer inconclusive. Reads only; never acts.",
+  "instruction": { "$file": "instruction.md" },
+  "toolsets": ["CONNECTORS"],
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "context": { "type": "string", "description": "From incidents_investigate, as JSON: incident, events (each with its id), changes, repos, sources (which connectors this Lemma has), question, earlier causes." }
+    },
+    "required": ["context"]
+  },
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "text": { "type": "string", "description": "The likely cause in one or two plain sentences, or what is known when it is inconclusive." },
+      "confidence": { "type": "string", "enum": ["likely", "possible", "inconclusive"] },
+      "agree": { "type": "integer", "description": "How many of the signs you looked at point to this cause." },
+      "signs": { "type": "integer", "description": "How many signs you looked at." },
+      "evidence": { "type": "array", "items": { "type": "object", "properties": {
+        "text": { "type": "string", "description": "One piece of evidence, in a line: what and when." },
+        "event_id": { "type": "string", "description": "The id of the event it is, when it is one." },
+        "url": { "type": "string" },
+        "source": { "type": "string", "enum": ["github", "deploy", "slack", "triage", "sentry", "posthog", "mcp", "other"] }
+      }, "required": ["text"] } },
+      "ruled_out": { "type": "array", "items": { "type": "object", "properties": {
+        "text": { "type": "string", "description": "Something you looked at and could rule out, and why." }
+      }, "required": ["text"] } },
+      "not_checked": { "type": "array", "items": { "type": "object", "properties": {
+        "text": { "type": "string", "description": "A source you could not read, named, and why." },
+        "source": { "type": "string" }
+      }, "required": ["text"] } }
+    },
+    "required": ["text", "confidence", "evidence", "ruled_out", "not_checked"]
+  },
+  "permissions": { "grants": [
+    { "resource_type": "datastore_table", "resource_name": "incidents_event", "permission_ids": ["datastore.table.read", "datastore.record.read"] },
+    { "resource_type": "datastore_table", "resource_name": "incidents_change", "permission_ids": ["datastore.table.read", "datastore.record.read"] },
+    { "resource_type": "connector", "resource_name": "github", "permission_ids": ["connector.use"] },
+    { "resource_type": "connector", "resource_name": "sentry", "permission_ids": ["connector.use"] },
+    { "resource_type": "connector", "resource_name": "posthog", "permission_ids": ["connector.use"] }
+  ]}
+}

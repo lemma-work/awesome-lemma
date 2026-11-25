@@ -1,0 +1,73 @@
+{
+  // One incident, the team's. INC-<number> everywhere a person sees it.
+  "name": "incidents_incident",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "number", "type": "INTEGER", "required": true, "unique": true },
+    { "name": "title", "type": "TEXT", "required": true, "max_length": 300 },
+    // A key from incidents_settings.severities ("sev2").
+    { "name": "severity", "type": "TEXT", "required": true, "max_length": 32, "default": "sev2" },
+    { "name": "status", "type": "ENUM", "required": true, "default": "declared",
+      "options": ["declared", "investigating", "fixing", "monitoring", "resolved"] },
+    // Roles. responders: [{user_id, name, email, slack_id}] (the Lemma is
+    // always one and is not listed).
+    { "name": "lead_user_id", "type": "USER" },
+    { "name": "lead_name", "type": "TEXT", "max_length": 200 },
+    { "name": "comms_user_id", "type": "USER" },
+    { "name": "comms_name", "type": "TEXT", "max_length": 200 },
+    { "name": "responders", "type": "JSON" },
+    // What is hurt: the service, who is affected in words, and how many
+    // people with where that number came from ("Sentry users"). A number no
+    // source gave is never written.
+    { "name": "service", "type": "TEXT", "max_length": 120 },
+    { "name": "impact", "type": "TEXT", "max_length": 300 },
+    { "name": "people_affected", "type": "INTEGER" },
+    { "name": "people_source", "type": "TEXT", "max_length": 120 },
+    // started: the first error; noticed: when someone or something saw it.
+    { "name": "started_at", "type": "DATETIME" },
+    { "name": "started_source", "type": "TEXT", "max_length": 120 },
+    { "name": "noticed_at", "type": "DATETIME" },
+    { "name": "noticed_source", "type": "TEXT", "max_length": 120 },
+    { "name": "declared_at", "type": "DATETIME", "required": true },
+    { "name": "declared_by", "type": "TEXT", "max_length": 200 },
+    { "name": "resolved_at", "type": "DATETIME" },
+    // Its Slack channel and the pinned header message the Lemma edits.
+    { "name": "channel_id", "type": "TEXT", "max_length": 32 },
+    { "name": "channel_name", "type": "TEXT", "max_length": 80 },
+    { "name": "header_ts", "type": "TEXT", "max_length": 32 },
+    // Whether the channel is in the Lemma's Slack surface (so its bot hears
+    // it), and the schedule on its messages, made by the app as a person:
+    // a function can do neither (see README, "Connecting a channel").
+    { "name": "channel_connected", "type": "BOOLEAN", "default": false },
+    { "name": "channel_schedule_id", "type": "TEXT", "max_length": 64 },
+    // Where it was declared: app, slack, triage; and that item.
+    { "name": "source", "type": "ENUM", "required": true, "default": "app", "options": ["app", "slack", "triage"] },
+    { "name": "source_id", "type": "TEXT", "max_length": 200 },
+    { "name": "source_url", "type": "TEXT", "max_length": 600 },
+    { "name": "source_label", "type": "TEXT", "max_length": 200 },
+    // "Now": the summary drafted from the events, refreshed in place.
+    { "name": "summary", "type": "TEXT", "max_length": 2000 },
+    { "name": "summary_at", "type": "DATETIME" },
+    // The channel has been read up to this Slack ts.
+    { "name": "gathered_to_ts", "type": "TEXT", "max_length": 32 },
+    { "name": "gathered_at", "type": "DATETIME" },
+    // When the next update is due (the severity's cadence after the last).
+    { "name": "update_due_at", "type": "DATETIME" },
+    // The write-up: none, drafting, to_review, reviewed; its file; and its
+    // structure for the app (sections of claims, each with the event ids
+    // behind it, the timeline, what it was built from).
+    { "name": "writeup_state", "type": "ENUM", "required": true, "default": "none",
+      "options": ["none", "drafting", "to_review", "reviewed"] },
+    { "name": "writeup_path", "type": "TEXT", "max_length": 300 },
+    { "name": "writeup", "type": "JSON" },
+    { "name": "writeup_at", "type": "DATETIME" },
+    { "name": "reviewed_by", "type": "TEXT", "max_length": 200 },
+    // Follow-ups the write-up proposed, until a person accepts one (it
+    // becomes a team task) or sets it aside: [{key, title, why, owner_name,
+    // state: proposed|accepted|dismissed, task_id}].
+    { "name": "followups", "type": "JSON" }
+  ],
+  "config": {}
+}

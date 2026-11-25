@@ -1,0 +1,24 @@
+{
+  // GitHub's pull_request_review webhook. GitHub routes by installation, not by repository,
+  // so coding_on_github keeps only what concerns the coding agent's sessions.
+  // The app makes one WEBHOOK schedule per member at set-up (and again on open
+  // when one is missing), as that member: `coding-on-review-<first 8 of the user id>`,
+  // config {source: "github", event: "pull_request_review"} (bin/app-schedules.json). A
+  // schedule runs as its maker, so each member's run writes the events and only
+  // the session's starter's own run does the fixing.
+  "name": "coding-on-review",
+  "description": "A review on a coding agent pull request: approved, or changes requested for keep green to make.",
+  "max_concurrent_runs": 4,
+  "start": { "type": "EVENT", "config": {
+    "connector_id": "github",
+    "connector_trigger_id": "github:http:pull_request_review"
+  } },
+  "nodes": [
+    { "id": "read", "type": "FUNCTION", "label": "Read it for the coding agent",
+      "config": { "function_name": "coding_on_github", "input_mapping": {
+        "event": { "type": "literal", "value": "pull_request_review" },
+        "payload": { "type": "expression", "value": "start.payload" } } } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [ { "id": "e1", "source": "read", "target": "end" } ]
+}

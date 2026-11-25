@@ -1,0 +1,24 @@
+{
+  // GitHub's check_run webhook. GitHub routes by installation, not by repository,
+  // so coding_on_github keeps only what concerns the coding agent's sessions.
+  // The app makes one WEBHOOK schedule per member at set-up (and again on open
+  // when one is missing), as that member: `coding-on-check-run-<first 8 of the user id>`,
+  // config {source: "github", event: "check_run"} (bin/app-schedules.json). A
+  // schedule runs as its maker, so each member's run writes the events and only
+  // the session's starter's own run does the fixing.
+  "name": "coding-on-check-run",
+  "description": "A check finished on a coding agent pull request: a failure goes on the task, and keep green fixes it.",
+  "max_concurrent_runs": 4,
+  "start": { "type": "EVENT", "config": {
+    "connector_id": "github",
+    "connector_trigger_id": "github:http:check_run"
+  } },
+  "nodes": [
+    { "id": "read", "type": "FUNCTION", "label": "Read it for the coding agent",
+      "config": { "function_name": "coding_on_github", "input_mapping": {
+        "event": { "type": "literal", "value": "check_run" },
+        "payload": { "type": "expression", "value": "start.payload" } } } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [ { "id": "e1", "source": "read", "target": "end" } ]
+}

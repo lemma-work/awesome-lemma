@@ -1,0 +1,19 @@
+{
+  // A repository the team lets the agent work in, with what it runs first.
+  // The id is uuid5 of the full name, so adding it twice is one row.
+  "name": "coding_repo",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "full_name", "type": "TEXT", "required": true, "max_length": 200 },
+    { "name": "default_branch", "type": "TEXT", "max_length": 255 },
+    // Set-up commands, one per line, run before any work and reported.
+    { "name": "setup", "type": "TEXT", "max_length": 4000 },
+    // Anything the agent should know: how to run the tests, what not to touch.
+    { "name": "notes", "type": "TEXT", "max_length": 4000 },
+    { "name": "enabled", "type": "BOOLEAN", "required": true, "default": true },
+    { "name": "added_by", "type": "USER" }
+  ],
+  "config": {}
+}

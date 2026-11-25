@@ -1,0 +1,52 @@
+{
+  // One review round, started by prr_intake (a form it fills at once, so the
+  // run never waits on a person): claim the round, read the pull request at
+  // its head commit, keep what was found, settle where it stands.
+  //
+  // The reviewer starts in a checkout of the repository at the head commit
+  // (the step's `repository` and `ref`, lemma-platform PR #1248). A platform
+  // without them ignores both, and the reviewer clones by hand (its
+  // instruction checks which).
+  "name": "prr-review",
+  "description": "Review one pull request at one commit against the team's rules: claim the round, read it, keep the ledger and findings, settle who it waits on.",
+  "run_title": ["begin.key"],
+  "start": { "type": "MANUAL" },
+  "nodes": [
+    { "id": "queued", "type": "FORM", "label": "The round",
+      "config": { "input_schema": {
+        "type": "object",
+        "properties": { "round_id": { "type": "string", "title": "Round" } },
+        "required": ["round_id"]
+      } } },
+    { "id": "begin", "type": "FUNCTION", "label": "Claim it and gather what code knows",
+      "config": { "function_name": "prr_begin_round", "input_mapping": {
+        "round_id": { "type": "expression", "value": "queued.round_id" } } } },
+    { "id": "go", "type": "DECISION", "label": "Still the head commit?",
+      "config": { "rules": [ { "condition": "begin.proceed == `true`", "next_node_id": "read" } ] } },
+    { "id": "read", "type": "AGENT", "label": "Read it against the rules",
+      "config": { "agent_name": "prr_reviewer",
+        "repository": { "type": "expression", "value": "begin.repo" },
+        "ref": { "type": "expression", "value": "begin.sha" },
+        "timeout_seconds": 3600,
+        "input_mapping": { "context": { "type": "expression", "value": "begin.context" } } } },
+    { "id": "save", "type": "FUNCTION", "label": "Keep the ledger and findings",
+      "config": { "function_name": "prr_save_round", "input_mapping": {
+        "round_id": { "type": "expression", "value": "begin.round_id" },
+        "result": { "type": "expression", "value": "read" } } } },
+    { "id": "settle", "type": "FUNCTION", "label": "Settle where it stands",
+      "config": { "function_name": "prr_settle", "input_mapping": {
+        "pull_request_id": { "type": "expression", "value": "begin.pull_request_id" } } } },
+    { "id": "skipped", "type": "END", "label": "Nothing to read" },
+    { "id": "done", "type": "END", "label": "Reviewed" }
+  ],
+  "edges": [
+    { "id": "e1", "source": "queued", "target": "begin" },
+    { "id": "e2", "source": "begin", "target": "go" },
+    { "id": "e3", "source": "go", "target": "skipped", "label": "superseded, or claimed by another run (the default)" },
+    { "id": "e4", "source": "go", "target": "read", "label": "the head commit" },
+    { "id": "e5", "source": "read", "target": "save" },
+    { "id": "e6", "source": "save", "target": "settle" },
+    { "id": "e7", "source": "settle", "target": "done" }
+  ],
+  "visibility": "POD"
+}

@@ -1,0 +1,19 @@
+{
+  // Started by the `coding-task-handed` schedule: `task`'s `assignee_agent`
+  // changed. One workflow per schedule (the platform keeps one schedule per
+  // workflow). coding_on_task reads the fresh row (a DATASTORE update's
+  // payload can be empty) and starts a session only when the task is now the
+  // coding agent's and has no live one.
+  "name": "coding-task-handed",
+  "description": "A team task was assigned to the coding agent: start a session on it.",
+  "max_concurrent_runs": 4,
+  "start": { "type": "DATASTORE_EVENT", "config": { "table_name": "task", "operations": ["UPDATE"] } },
+  "nodes": [
+    { "id": "hand", "type": "FUNCTION", "label": "Hand it to the coding agent",
+      "config": { "function_name": "coding_on_task", "input_mapping": {
+        "task_id": { "type": "expression", "value": "start.metadata.record_id" },
+        "scope": { "type": "literal", "value": "team" } } } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [ { "id": "e1", "source": "hand", "target": "end" } ]
+}

@@ -1,0 +1,26 @@
+{
+  "anchor": "2026-11-24T19:00:00Z",
+  "zone": ["Asia/Kolkata", "Asia/Calcutta"],
+  "apps": [
+    { "name": "release-notes", "label": "Release notes", "start": "/" },
+    { "name": "changelog", "label": "Changelog page", "start": "/" }
+  ],
+  "user": {
+    "id": "user-sample",
+    "email": "maya@example.com",
+    "first_name": "Maya",
+    "last_name": "Wong",
+    "name": "Maya Wong",
+    "is_active": true,
+    "is_superuser": false,
+    "is_verified": true,
+    "created_at": "2026-01-01T00:00:00Z",
+    "updated_at": "2026-01-01T00:00:00Z"
+  },
+  "notes": {
+    "release_notes_on_note": "",
+    "release_notes_sample_data": "In the demo the sample stays.",
+    "release_notes_setup_save": "In the demo the set-up isn't saved.",
+    "release-notes-redraft": "In the demo the note isn't redrafted: in a Lemma the writer drafts it again from every pull request since the last release, keeping your edits."
+  }
+}

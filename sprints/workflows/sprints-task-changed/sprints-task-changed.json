@@ -1,0 +1,22 @@
+{
+  // Started by the `sprints-task-changed` schedule: a team task was updated.
+  // The schedule's `when` cannot say "status OR an assignee changed" (its
+  // conditions only AND together), so it watches every update and
+  // sprints_on_task returns at once unless status or an assignee is in
+  // `changed`. The trigger hands over the values before the change.
+  "name": "sprints-task-changed",
+  "description": "A team task changed: record what moved in the running sprint, with the value before.",
+  "max_concurrent_runs": 4,
+  "start": { "type": "DATASTORE_EVENT", "config": { "table_name": "task", "operations": ["UPDATE"] } },
+  "nodes": [
+    { "id": "record", "type": "FUNCTION", "label": "Record the change",
+      "config": { "function_name": "sprints_on_task", "input_mapping": {
+        "task_id": { "type": "expression", "value": "start.metadata.record_id" },
+        "op": { "type": "literal", "value": "update" },
+        "changed": { "type": "expression", "value": "start.metadata.changed" },
+        "previous": { "type": "expression", "value": "start.metadata.previous" },
+        "at": { "type": "expression", "value": "start.metadata.event_occurred_at" } } } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [ { "id": "e1", "source": "record", "target": "end" } ]
+}

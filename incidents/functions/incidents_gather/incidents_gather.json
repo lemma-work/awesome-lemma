@@ -1,0 +1,61 @@
+{
+  "name": "incidents_gather",
+  "description": "Read an incident (or every open one) in full: the channel since the last read, its threads and pins, and the changes from an hour before it started. Never duplicates. Redraws Now when something came in. For 'catch me up'.",
+  "type": "API",
+  "visibility": "POD",
+  "code": {
+    "$file": "code.py"
+  },
+  "permissions": {
+    "grants": [
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "incidents_settings",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "incidents_incident",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read",
+          "datastore.record.write"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "incidents_event",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read",
+          "datastore.record.write"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "incidents_change",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read"
+        ]
+      },
+      {
+        "resource_type": "connector",
+        "resource_name": "slack",
+        "permission_ids": [
+          "connector.use"
+        ]
+      },
+      {
+        "resource_type": "function",
+        "resource_name": "incidents_refresh",
+        "permission_ids": [
+          "function.execute"
+        ]
+      }
+    ]
+  }
+}

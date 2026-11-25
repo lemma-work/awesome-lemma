@@ -1,0 +1,47 @@
+{
+ "items": [
+  {
+   "id": "system:lemma",
+   "name": "Lemma",
+   "kind": "MODEL_PROVIDER",
+   "availability_status": "READY",
+   "default_model_name": "claude-sonnet-4-5",
+   "model_catalog": [
+    {
+     "name": "claude-sonnet-4-5",
+     "display_name": "Sonnet 4.5"
+    },
+    {
+     "name": "claude-opus-4-5",
+     "display_name": "Opus 4.5"
+    }
+   ]
+  },
+  {
+   "id": "harness:claude-code",
+   "name": "Claude Code",
+   "kind": "HARNESS",
+   "availability_status": "READY",
+   "default_model_name": null,
+   "model_catalog": []
+  },
+  {
+   "id": "harness:codex",
+   "name": "Codex",
+   "kind": "HARNESS",
+   "availability_status": "OFFLINE",
+   "default_model_name": null,
+   "model_catalog": []
+  },
+  {
+   "id": "harness:cursor",
+   "name": "Cursor",
+   "kind": "HARNESS",
+   "availability_status": "NOT_INSTALLED",
+   "default_model_name": null,
+   "model_catalog": []
+  }
+ ],
+ "limit": 50,
+ "next_page_token": null
+}

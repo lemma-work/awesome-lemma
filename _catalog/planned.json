@@ -29,14 +29,6 @@
     { "name": "Decision log", "line": "founder", "position": 25, "one": "Every decision, who made it and why, from wherever it was said", "buildsOn": ["meetings", "mail", "chat"] },
     { "name": "Due diligence", "line": "founder", "position": 26, "one": "Files for investors behind one link, with who opened what", "buildsOn": ["fundraising"] },
 
-    { "name": "PR review", "line": "dev", "position": 27, "one": "Every pull request read against your team's own rules before anyone reviews it", "buildsOn": [] },
-    { "name": "Triage", "line": "dev", "position": 28, "one": "Bugs, alerts and security warnings sorted by how far they reach, each with an owner", "buildsOn": ["tasks"] , "merges": ["Issues", "Vulnerability tracker"] },
-    { "name": "Coding agent", "line": "dev", "position": 29, "one": "An issue turned into a pull request by an agent, and questions about your code answered", "buildsOn": ["triage", "pr-review"] , "merges": ["Codebase questions"] },
-    { "name": "Release notes", "line": "dev", "position": 30, "one": "Notes written from what merged, and word to everyone who asked for it", "buildsOn": ["pr-review", "triage"] , "merges": ["Releases"] },
-    { "name": "Dependency updates", "line": "dev", "position": 31, "one": "Dependency updates batched, checked and opened as one pull request", "buildsOn": ["pr-review"] },
-    { "name": "Incidents", "line": "dev", "position": 32, "one": "An incident's timeline gathered as it happens, and the write-up drafted after", "buildsOn": ["triage", "chat"] },
-    { "name": "Sprints", "line": "dev", "position": 33, "one": "Sprints with real capacity, carry-over and an honest summary", "buildsOn": ["tasks"] },
-
     { "name": "User feedback", "line": "product", "position": 34, "one": "What people say about your product and your rivals, filed under the feature it is about", "buildsOn": ["people-map"] , "merges": ["Mentions"] },
     { "name": "Roadmap", "line": "product", "position": 35, "one": "Features ranked by who asked, with the spec drafted from what they said", "buildsOn": ["user-feedback", "deal-tracker"] , "merges": ["Specs"] },
     { "name": "Competitor watch", "line": "product", "position": 36, "one": "What your rivals ship and charge, and what people say about them", "buildsOn": ["user-feedback"] },

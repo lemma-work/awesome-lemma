@@ -1,0 +1,66 @@
+{
+  "about": "The schedules the app makes for each member at set-up, and again on open when one is missing, as that member (client.schedules.create; no function can make a schedule). Name each `${name_prefix}-${first 8 characters of the member's user id}`. Send every field below except name_prefix and why. A schedule runs as its maker: each member's webhook runs write the events, the session's starter's own run fixes, and each member's tick looks after the sessions they started.",
+  "schedules": [
+    {
+      "name_prefix": "coding-tick",
+      "schedule_type": "TIME",
+      "workflow_name": "coding-tick",
+      "config": { "cron": "*/15 * * * *" },
+      "why": "Conversations finished, failed or waiting; merged, closed and conflicting pull requests (a conflict sends no webhook); checks a webhook missed"
+    },
+    {
+      "name_prefix": "coding-on-pull-request",
+      "schedule_type": "WEBHOOK",
+      "workflow_name": "coding-on-pull-request",
+      "pod_connector": "github",
+      "connector_trigger_id": "github:http:pull_request",
+      "config": { "source": "github", "event": "pull_request", "actions": ["opened", "reopened", "ready_for_review", "synchronize", "closed"] },
+      "why": "The session's pull request: opened, pushed to, merged or closed"
+    },
+    {
+      "name_prefix": "coding-on-check-run",
+      "schedule_type": "WEBHOOK",
+      "workflow_name": "coding-on-check-run",
+      "pod_connector": "github",
+      "connector_trigger_id": "github:http:check_run",
+      "config": { "source": "github", "event": "check_run", "actions": ["completed"] },
+      "why": "A check failed (fix round) or passed"
+    },
+    {
+      "name_prefix": "coding-on-check-suite",
+      "schedule_type": "WEBHOOK",
+      "workflow_name": "coding-on-check-suite",
+      "pod_connector": "github",
+      "connector_trigger_id": "github:http:check_suite",
+      "config": { "source": "github", "event": "check_suite", "actions": ["completed"] },
+      "why": "All checks passed, or a suite failed"
+    },
+    {
+      "name_prefix": "coding-on-review-comment",
+      "schedule_type": "WEBHOOK",
+      "workflow_name": "coding-on-review-comment",
+      "pod_connector": "github",
+      "connector_trigger_id": "github:http:pull_request_review_comment",
+      "config": { "source": "github", "event": "pull_request_review_comment", "actions": ["created"] },
+      "why": "A review comment with its path:line (fix round)"
+    },
+    {
+      "name_prefix": "coding-on-review",
+      "schedule_type": "WEBHOOK",
+      "workflow_name": "coding-on-review",
+      "pod_connector": "github",
+      "connector_trigger_id": "github:http:pull_request_review",
+      "config": { "source": "github", "event": "pull_request_review", "actions": ["submitted"] },
+      "why": "Approved, or changes requested (fix round)"
+    },
+    {
+      "name_prefix": "coding-on-issues",
+      "schedule_type": "WEBHOOK",
+      "workflow_name": "coding-on-issues",
+      "pod_connector": "github",
+      "connector_trigger_id": "github:http:issues",
+      "config": { "source": "github", "event": "issues", "actions": ["labeled"] },
+      "why": "An issue labelled with the set-up's label starts a session; every member having it is safe (the first run claims the session), and the session is that member's"
+    }
+  ]
+}

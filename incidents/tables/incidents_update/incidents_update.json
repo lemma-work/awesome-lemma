@@ -1,0 +1,21 @@
+{
+  // One status update: drafted by the Lemma, sent only when a person says so.
+  "name": "incidents_update",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "incident_id", "type": "UUID", "required": true,
+      "foreign_key": { "references": "incidents_incident.id" } },
+    { "name": "body", "type": "TEXT", "required": true, "max_length": 3000 },
+    // Where it goes: {channel: true, announce: true, email: ["a@x.example"]}.
+    { "name": "recipients", "type": "JSON" },
+    { "name": "state", "type": "ENUM", "required": true, "default": "draft", "options": ["draft", "sent", "discarded"] },
+    { "name": "drafted_at", "type": "DATETIME" },
+    { "name": "sent_at", "type": "DATETIME" },
+    { "name": "sent_by", "type": "TEXT", "max_length": 200 },
+    // What sending did: {channel: "ok", announce: "ok", email: "not connected"}.
+    { "name": "delivery", "type": "JSON" }
+  ],
+  "config": {}
+}

@@ -1,0 +1,20 @@
+{
+  // GitHub's check_suite webhook. Set-up makes one WEBHOOK schedule for it, as the
+  // owner, through the Lemma's GitHub connector (GitHub routes by
+  // installation, not by repository; deps_on_github keeps only watched ones).
+  "name": "deps-on-check-suite",
+  "description": "Checks finished on a commit: keep them when it is one of the Lemma's pull requests.",
+  "max_concurrent_runs": 4,
+  "start": { "type": "EVENT", "config": {
+    "connector_id": "github",
+    "connector_trigger_id": "github:http:check_suite"
+  } },
+  "nodes": [
+    { "id": "keep", "type": "FUNCTION", "label": "Keep what GitHub says",
+      "config": { "function_name": "deps_on_github", "input_mapping": {
+        "event": { "type": "literal", "value": "check_suite" },
+        "payload": { "type": "expression", "value": "start.payload" } } } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [ { "id": "e1", "source": "keep", "target": "end" } ]
+}

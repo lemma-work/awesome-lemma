@@ -1,0 +1,45 @@
+{
+ "items": [
+  {
+   "pod_member_id": "member-asha",
+   "user_id": "user-sample",
+   "user_name": "Asha Rao",
+   "user_email": "asha@acme.example",
+   "email": "asha@acme.example",
+   "roles": [
+    "POD_ADMIN"
+   ]
+  },
+  {
+   "pod_member_id": "member-ravi",
+   "user_id": "user-ravi",
+   "user_name": "Ravi Kumar",
+   "user_email": "ravi@acme.example",
+   "email": "ravi@acme.example",
+   "roles": [
+    "POD_EDITOR"
+   ]
+  },
+  {
+   "pod_member_id": "member-mei",
+   "user_id": "user-mei",
+   "user_name": "Mei Lin",
+   "user_email": "mei@acme.example",
+   "email": "mei@acme.example",
+   "roles": [
+    "POD_EDITOR"
+   ]
+  },
+  {
+   "pod_member_id": "member-tom",
+   "user_id": "user-tom",
+   "user_name": "Tom Becker",
+   "user_email": "tom@acme.example",
+   "email": "tom@acme.example",
+   "roles": [
+    "POD_EDITOR"
+   ]
+  }
+ ],
+ "total": 4
+}

@@ -1,0 +1,6 @@
+{
+  // Coding agent carries Tasks: a card on its board is a team task, and the
+  // agent is that task's assignee. Read by _build/assemble.py.
+  "name": "coding-agent",
+  "carries": ["tasks"]
+}

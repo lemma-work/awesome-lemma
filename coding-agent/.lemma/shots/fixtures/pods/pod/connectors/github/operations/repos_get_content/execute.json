@@ -1,0 +1,20 @@
+[
+ {
+  "match": "deliver.py",
+  "response": {
+   "result": {
+    "encoding": "utf-8",
+    "content": "\"\"\"Sending webhook deliveries.\"\"\"\nfrom __future__ import annotations\n\nimport httpx\n\nfrom api.webhooks import events, log\nfrom api.webhooks.models import Event, Hook\n\nclient = httpx.AsyncClient()\n\nMAX_BODY = 256 * 1024\n\n\ndef too_big(body: dict) -> bool:\n    return len(str(body)) > MAX_BODY\n\n\n\n\n\n\n\ndef body_for(event: Event) -> dict:\n    return {\"id\": event.id, \"type\": event.type, \"data\": event.data}\n\n\ndef signed(hook: Hook, body: dict) -> dict:\n    return {\"X-Acme-Signature\": hook.sign(body)}\n\n\nasync def fan_out(event: Event) -> None:\n    for hook in event.hooks():\n        await deliver(hook, event)\n\n\n# ---------------------------------------------------------------------------\n# One delivery: post the event to the hook's URL once, and record what came\n# back in the delivery log.\n# ---------------------------------------------------------------------------\n\n\nasync def deliver(hook: Hook, event: Event) -> None:\n    body = body_for(event)\n    resp = await client.post(hook.url, json=body, headers=signed(hook, body), timeout=10)\n    if resp.is_success:\n\n    #\n    #\n    #\n    #\n    #\n    #\n    #\n    #\n    #\n    #\n    #\n    #\n    #\n    #\n    #\n    #\n    #\n    #\n    #\n    #\n    #\n    #\n    #\n    #\n    #\n    #\n    #\n    #\n    #\n    #\n    #\n    #\n    #\n    #\n    #\n    #\n    #\n    #\n    #\n    # Responses outside 2xx land here. 4xx means the hook is wrong;\n    # 5xx means the receiver is having trouble.\n    log.failed(hook, event, resp.status_code)\n    event.state = \"failed\"\n    await events.save(event)\n"
+   }
+  }
+ },
+ {
+  "match": "export.ts",
+  "response": {
+   "result": {
+    "encoding": "utf-8",
+    "content": "import { fetchRows } from \"./rows\";\nimport { header, toLine } from \"./columns\";\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nexport async function buildCsv(report: Report): Promise<string> {\n  const rows = await fetchRows(report.id);\n  const lines = rows.map((row) => toLine(report.columns, row));\n  return [header(report.columns), ...lines].join(\"\\n\");\n}"
+   }
+  }
+ }
+]

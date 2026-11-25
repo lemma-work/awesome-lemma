@@ -1,0 +1,16 @@
+{
+  // A person's own refresh of what in Triage needs them (needs_you), on
+  // their own TIME schedule made by the app as them (triage-needs-you-<id>),
+  // so whoever is on triage this week finds an urgent item in Today even if
+  // they haven't opened Triage. needs_you rows are each member's own, so only
+  // a run as that member can write them.
+  "name": "triage-needs-you",
+  "description": "Write what in Triage needs you to the shared needs_you list: urgent items when you're on triage, people to tell.",
+  "start": { "type": "SCHEDULED", "config": { "schedule_type": "CRON" } },
+  "nodes": [
+    { "id": "needs_you", "type": "FUNCTION", "label": "What needs you now",
+      "config": { "function_name": "triage_needs_you", "input_mapping": {} } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [ { "id": "e1", "source": "needs_you", "target": "end" } ]
+}

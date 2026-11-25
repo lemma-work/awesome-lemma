@@ -1,0 +1,9 @@
+{
+  // Incidents carries Tasks inside its bundle, so one install into an empty
+  // Lemma brings both: an incident's follow-ups are the team's tasks.
+  // It listens for Triage (Declare from a Triage item) and will carry it once
+  // Triage ships. Read by _build/assemble.py, which merges Tasks from its own
+  // folder into install/incidents/, the bundle that is installed.
+  "name": "incidents",
+  "carries": ["tasks"]
+}

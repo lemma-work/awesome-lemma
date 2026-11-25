@@ -1,0 +1,6 @@
+{
+  "connector": "github",
+  "mode": "SHARED",
+  "required": true,
+  "purpose": "One GitHub connection for the whole Lemma: reads the pull requests and the rule files (AGENTS.md, CONTRIBUTING.md, REVIEW.md and the like) in the repositories you pick, and is how the Lemma's bot posts what Settings allows: the Lemma check, a review sent back, an approval, a merge. What you do as yourself goes through your own GitHub."
+}

@@ -1,0 +1,25 @@
+{
+ "items": [
+  {
+   "full_name": "acme/api",
+   "default_branch": "main",
+   "private": true
+  },
+  {
+   "full_name": "acme/web",
+   "default_branch": "main",
+   "private": true
+  },
+  {
+   "full_name": "acme/mobile",
+   "default_branch": "main",
+   "private": true
+  },
+  {
+   "full_name": "acme/infra",
+   "default_branch": "main",
+   "private": true
+  }
+ ],
+ "complete": true
+}

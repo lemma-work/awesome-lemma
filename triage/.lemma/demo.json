@@ -1,0 +1,37 @@
+{
+  "anchor": "2026-11-25T10:26:00Z",
+  "zone": "UTC",
+  "apps": [
+    {
+      "name": "triage",
+      "label": "Triage",
+      "start": "/"
+    }
+  ],
+  "labels": {
+    "tasks": "Tasks",
+    "incidents": "Incidents",
+    "coding": "Coding agent",
+    "dependencies": "Dependency updates"
+  },
+  "user": {
+    "id": "user-sample",
+    "email": "tom@acme.example",
+    "first_name": "Tom",
+    "last_name": "Okafor",
+    "name": "Tom Okafor",
+    "is_active": true,
+    "is_superuser": false,
+    "is_verified": true,
+    "created_at": "2026-01-01T00:00:00Z",
+    "updated_at": "2026-01-01T00:00:00Z"
+  },
+  "notes": {
+    "triage_read": "In the demo the Lemma doesn't read again: in a Lemma, triage_reader checks every source this Lemma has and names each one it couldn't check.",
+    "triage_setup_save": "In the demo the set-up isn't saved.",
+    "triage_sample_data": "In the demo the sample stays.",
+    "triage_away": "In the demo nobody's days change.",
+    "triage_needs_you": "",
+    "triage_poll": "In the demo nothing is read: in a Lemma, Sentry, PostHog, Slack and GitHub are read every 15 minutes."
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "name": "prr_read_rules",
+  "description": "Read a repository's rule files at its default branch (AGENTS.md, CLAUDE.md, REVIEW.md, CONTRIBUTING.md, .github/copilot-instructions.md, .github/instructions/*.instructions.md, .cursor/BUGBOT.md) with numbered lines and what each applies to, and the review comments on its last 60 merged pull requests, for the scout. Without repo: starts prr-setup for each watched repository (Read the repositories again).",
+  "type": "API",
+  "visibility": "POD",
+  "code": {
+    "$file": "code.py"
+  },
+  "permissions": {
+    "grants": [
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "prr_rule",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "repository",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read"
+        ]
+      },
+      {
+        "resource_type": "workflow",
+        "resource_name": "prr-setup",
+        "permission_ids": [
+          "workflow.read",
+          "workflow.execute"
+        ]
+      },
+      {
+        "resource_type": "connector",
+        "resource_name": "github",
+        "permission_ids": [
+          "connector.use"
+        ]
+      }
+    ]
+  }
+}

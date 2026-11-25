@@ -1,0 +1,89 @@
+{
+  // One pull request, as of its latest push: one row per pull request in a
+  // watched repository, kept by PR review from GitHub's own events. Facts
+  // only: where it stands, who it waits on and what the latest review round
+  // decided. The findings, the rules and the rounds themselves are PR
+  // review's own (`prr_finding`, `prr_rule`, `prr_round`).
+  //
+  // Team-wide (no RLS): everyone in the Lemma sees every pull request.
+  //
+  // Shared definition (plugins/_contract), first written by PR review, and
+  // written only by it. Release notes reads `summary` and `linked_issues`;
+  // Dependency updates and Coding agent read `review_state` and `verdict` by
+  // `key`. A plugin's own state about a pull request goes in its own table,
+  // naming it by `key` or this row's id.
+  "name": "pull_request",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    // owner/repo#number: how every plugin finds it.
+    { "name": "key", "type": "TEXT", "required": true, "unique": true, "max_length": 220 },
+    // The `repository` row, by id, and its full_name. No foreign key: a
+    // repository the team stops watching keeps its pull requests' history.
+    { "name": "repository_id", "type": "UUID" },
+    { "name": "repo", "type": "TEXT", "required": true, "max_length": 200 },
+    { "name": "number", "type": "INTEGER", "required": true },
+    { "name": "title", "type": "TEXT", "max_length": 500 },
+    { "name": "url", "type": "TEXT", "max_length": 500 },
+    // The author's GitHub login, and the member they are (when they are one).
+    { "name": "author", "type": "TEXT", "max_length": 100 },
+    { "name": "author_user_id", "type": "USER" },
+    // member: someone on the team. agent: opened by an agent (the Lemma's
+    // bot, or an agent's branch). bot: a dependency bot (Dependency updates,
+    // dependabot, renovate). outside: anyone else.
+    { "name": "author_kind", "type": "ENUM", "required": true, "default": "outside",
+      "options": ["member", "agent", "bot", "outside"] },
+    { "name": "state", "type": "ENUM", "required": true, "default": "open",
+      "options": ["open", "closed", "merged"] },
+    { "name": "draft", "type": "BOOLEAN", "default": false },
+    { "name": "head_sha", "type": "TEXT", "max_length": 64 },
+    { "name": "head_ref", "type": "TEXT", "max_length": 255 },
+    { "name": "base_ref", "type": "TEXT", "max_length": 255 },
+    { "name": "additions", "type": "INTEGER" },
+    { "name": "deletions", "type": "INTEGER" },
+    { "name": "changed_files", "type": "INTEGER" },
+    { "name": "labels", "type": "JSON" },
+    // Decided by code from the team's risky paths and the size (lockfiles
+    // not counted); a review round may raise it, never lower it.
+    { "name": "risk", "type": "ENUM", "required": true, "default": "low",
+      "options": ["low", "medium", "high"] },
+    // Who it waits on: a member's user id, `nobody` (a review is running, or
+    // it is merging by itself), or `author` (an author who is not a member).
+    // `waits_for` says for what; `waits_since` changes whenever either does.
+    { "name": "waits_on", "type": "TEXT", "max_length": 64 },
+    { "name": "waits_on_name", "type": "TEXT", "max_length": 200 },
+    { "name": "waits_for", "type": "ENUM", "options": ["review", "merge", "fix", "round", "nothing"] },
+    { "name": "waits_since", "type": "DATETIME" },
+    // unreviewed, queued, reviewing, reviewed (a round finished at
+    // `reviewed_sha`), failed (the latest round did not finish), off.
+    { "name": "review_state", "type": "ENUM", "required": true, "default": "unreviewed",
+      "options": ["unreviewed", "queued", "reviewing", "reviewed", "failed", "off"] },
+    { "name": "reviewed_sha", "type": "TEXT", "max_length": 64 },
+    // Decided by code on the latest finished round: changes (a must-fix
+    // finding is open), needs_person (high risk, or an outside author),
+    // clean. Null until a round finishes.
+    { "name": "verdict", "type": "ENUM", "options": ["clean", "changes", "needs_person"] },
+    // What the change does, in plain words, for people who don't read code.
+    { "name": "summary", "type": "TEXT", "max_length": 2000 },
+    // The issues it says it closes: ["owner/repo#12"].
+    { "name": "linked_issues", "type": "JSON" },
+    // GitHub's checks on the head commit, and whether GitHub can merge it.
+    { "name": "checks", "type": "ENUM", "options": ["passing", "failing", "running", "none"] },
+    { "name": "mergeable", "type": "ENUM", "options": ["yes", "no", "unknown"] },
+    // Merging by itself: would_merge (watching), merging (waiting out
+    // `merge_due_at`), held (a person or a lemma-hold label stopped it),
+    // merged_by_itself. Null when none of these.
+    { "name": "merge_state", "type": "ENUM",
+      "options": ["would_merge", "merging", "held", "merged_by_itself"] },
+    { "name": "merge_due_at", "type": "DATETIME" },
+    { "name": "opened_at", "type": "DATETIME" },
+    { "name": "merged_at", "type": "DATETIME" },
+    { "name": "closed_at", "type": "DATETIME" },
+    // Where it came from: github, or sample.
+    { "name": "source", "type": "TEXT", "required": true, "default": "github", "max_length": 32 },
+    // GitHub's own id for the pull request (its node id).
+    { "name": "source_id", "type": "TEXT", "max_length": 400 }
+  ],
+  "config": {}
+}

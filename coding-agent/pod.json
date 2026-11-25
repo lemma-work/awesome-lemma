@@ -1,0 +1,13 @@
+{
+  "format_version": 4,
+  "name": "Coding agent",
+  "description": "An issue turned into a pull request by an agent, and questions about your code answered. Hand a task to Lemma in the cloud, or to Claude Code or Codex on your Mac; it works in its own branch, opens the pull request, and keeps it green until a person merges it.",
+  "variables": {
+    "coding_slug": {
+      "type": "app_slug",
+      "source_value": "lemma-coding",
+      "default": "lemma-coding",
+      "description": "Public URL slug for the Coding agent app (unique platform-wide; a suffix is added on collision)"
+    }
+  }
+}

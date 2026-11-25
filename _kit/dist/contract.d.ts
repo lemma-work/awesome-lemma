@@ -1,3 +1,41 @@
+/** A row of the shared `ask` table. */
+export interface AskRow {
+    id: string;
+    work_source: string;
+    work_id: string;
+    work_url?: string | null;
+    task_id?: string | null;
+    work_title?: string | null;
+    handle_kind: string;
+    handle: string;
+    name?: string | null;
+    company_id?: string | null;
+    company_name?: string | null;
+    source: string;
+    source_account?: string | null;
+    source_id: string;
+    source_url?: string | null;
+    heard_by?: unknown | null;
+    conversation_id?: string | null;
+    asked_at: string;
+    state: "suggested" | "open" | "declined" | "shipped" | "told" | "dropped";
+    shipped_in?: string | null;
+    shipped_at?: string | null;
+    told_at?: string | null;
+    plugin: string;
+    created_at?: string;
+    updated_at?: string;
+}
+/** A row of the shared `away` table. */
+export interface AwayRow {
+    id: string;
+    member_id?: unknown | null;
+    name: string;
+    day: string;
+    part: "full" | "half";
+    created_at?: string;
+    updated_at?: string;
+}
 /** A row of the shared `brand` table. */
 export interface BrandRow {
     id: string;
@@ -115,6 +153,62 @@ export interface DraftRow {
     sent_at?: string | null;
     source_message_id?: string | null;
     error?: string | null;
+    created_at?: string;
+    updated_at?: string;
+}
+/** A row of the shared `feature` table. */
+export interface FeatureRow {
+    id: string;
+    product_id: string;
+    name: string;
+    description?: string | null;
+    parent_id?: string | null;
+    aliases?: unknown | null;
+    state: "suggested" | "active" | "merged" | "archived";
+    merged_into?: string | null;
+    origin: "team" | "lemma" | "import";
+    stage: "idea" | "planned" | "building" | "beta" | "live" | "declined";
+    stage_at?: string | null;
+    owner_user_id?: unknown | null;
+    work_source?: string | null;
+    work_id?: string | null;
+    work_url?: string | null;
+    task_id?: string | null;
+    source?: string | null;
+    source_id?: string | null;
+    created_at?: string;
+    updated_at?: string;
+}
+/** A row of the shared `feedback` table. */
+export interface FeedbackRow {
+    id: string;
+    quote: string;
+    point?: string | null;
+    product_id?: string | null;
+    feature_id?: string | null;
+    feature_said?: string | null;
+    filed_by?: "lemma" | "person" | null;
+    kind: "request" | "problem" | "praise" | "question" | "comparison" | "other";
+    compared_with?: unknown | null;
+    sentiment?: "positive" | "negative" | "mixed" | "neutral" | null;
+    importance: "unknown" | "nice" | "important" | "blocker";
+    handle_kind?: string | null;
+    handle?: string | null;
+    name?: string | null;
+    company_id?: string | null;
+    company_name?: string | null;
+    source: string;
+    source_account?: string | null;
+    source_id: string;
+    source_url?: string | null;
+    at_seconds?: number | null;
+    heard_by?: unknown | null;
+    conversation_id?: string | null;
+    is_public?: boolean | null;
+    authenticity: "unknown" | "organic" | "sponsored" | "affiliate" | "likely_ai" | "brand";
+    said_at: string;
+    state: "new" | "processed" | "set_aside";
+    plugin: string;
     created_at?: string;
     updated_at?: string;
 }
@@ -248,6 +342,21 @@ export interface PersonalTaskRow {
     created_at?: string;
     updated_at?: string;
 }
+/** A row of the shared `product` table. */
+export interface ProductRow {
+    id: string;
+    name: string;
+    role: "ours" | "rival";
+    company_id?: string | null;
+    url?: string | null;
+    aliases?: unknown | null;
+    keywords?: unknown | null;
+    active?: boolean | null;
+    source?: string | null;
+    source_id?: string | null;
+    created_at?: string;
+    updated_at?: string;
+}
 /** A row of the shared `project` table. */
 export interface ProjectRow {
     id: string;
@@ -276,6 +385,67 @@ export interface PromiseRow {
     quote?: string | null;
     due_at?: string | null;
     state: "open" | "done" | "dropped";
+    created_at?: string;
+    updated_at?: string;
+}
+/** A row of the shared `pull_request` table. */
+export interface PullRequestRow {
+    id: string;
+    key: string;
+    repository_id?: string | null;
+    repo: string;
+    number: number;
+    title?: string | null;
+    url?: string | null;
+    author?: string | null;
+    author_user_id?: unknown | null;
+    author_kind: "member" | "agent" | "bot" | "outside";
+    state: "open" | "closed" | "merged";
+    draft?: boolean | null;
+    head_sha?: string | null;
+    head_ref?: string | null;
+    base_ref?: string | null;
+    additions?: number | null;
+    deletions?: number | null;
+    changed_files?: number | null;
+    labels?: string[] | null;
+    risk: "low" | "medium" | "high";
+    waits_on?: string | null;
+    waits_on_name?: string | null;
+    waits_for?: "review" | "merge" | "fix" | "round" | "nothing" | null;
+    waits_since?: string | null;
+    review_state: "unreviewed" | "queued" | "reviewing" | "reviewed" | "failed" | "off";
+    reviewed_sha?: string | null;
+    verdict?: "clean" | "changes" | "needs_person" | null;
+    summary?: string | null;
+    linked_issues?: unknown | null;
+    checks?: "passing" | "failing" | "running" | "none" | null;
+    mergeable?: "yes" | "no" | "unknown" | null;
+    merge_state?: "would_merge" | "merging" | "held" | "merged_by_itself" | null;
+    merge_due_at?: string | null;
+    opened_at?: string | null;
+    merged_at?: string | null;
+    closed_at?: string | null;
+    source: string;
+    source_id?: string | null;
+    created_at?: string;
+    updated_at?: string;
+}
+/** A row of the shared `repository` table. */
+export interface RepositoryRow {
+    id: string;
+    full_name: string;
+    default_branch?: string | null;
+    html_url?: string | null;
+    review_mode: "off" | "once" | "every_push";
+    merge_mode: "off" | "watch" | "merge";
+    allow_auto_merge?: boolean | null;
+    merge_queue?: boolean | null;
+    required_check?: string | null;
+    required_approvals?: number | null;
+    checked_at?: string | null;
+    source: string;
+    source_id?: string | null;
     created_at?: string;
     updated_at?: string;
 }

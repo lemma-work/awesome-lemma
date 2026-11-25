@@ -1,0 +1,39 @@
+{
+  "scope": {
+    "kind": "still",
+    "width": 686,
+    "height": 368,
+    "alt": "Sprint 47's scope graph: scope steps up twice and down once after the start, each step numbered and listed with what came in, from where, and who",
+    "bleed": null,
+    "window": null,
+    "phone": {
+      "width": 374,
+      "height": 506,
+      "bleed": null
+    }
+  },
+  "lanes": {
+    "kind": "loop",
+    "width": 1184,
+    "height": 820,
+    "alt": "Planning Sprint 48: the Lemma's draft is used, and the urgent incident lands in the lane of the person with room, nobody over their capacity",
+    "bleed": null,
+    "window": null
+  },
+  "decide": {
+    "kind": "loop",
+    "width": 1184,
+    "height": 820,
+    "alt": "Closing Sprint 47: the Lemma's suggestion is taken for every unfinished task, and the task in its 3rd sprint is split instead",
+    "bleed": null,
+    "window": null
+  },
+  "summary": {
+    "kind": "still",
+    "width": 449,
+    "height": 690,
+    "alt": "The summary drafted from the numbers: planned, added, taken out, done and not done, what slipped, what carried, who carried more than usual",
+    "bleed": null,
+    "window": null
+  }
+}

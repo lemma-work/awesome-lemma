@@ -1,0 +1,69 @@
+{
+  "name": "prr_send_back",
+  "description": "Send a pull request back on GitHub as the Lemma's bot: one review requesting changes, with the open findings on their lines and the rule each breaks. Only when the bot posts; sending back as yourself is the app's.",
+  "type": "API",
+  "visibility": "POD",
+  "code": {
+    "$file": "code.py"
+  },
+  "permissions": {
+    "grants": [
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "pull_request",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "prr_round",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "prr_finding",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read",
+          "datastore.record.write"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "prr_rule",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "prr_settings",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read",
+          "datastore.record.write"
+        ]
+      },
+      {
+        "resource_type": "function",
+        "resource_name": "prr_settle",
+        "permission_ids": [
+          "function.execute"
+        ]
+      },
+      {
+        "resource_type": "connector",
+        "resource_name": "github",
+        "permission_ids": [
+          "connector.use"
+        ]
+      }
+    ]
+  }
+}

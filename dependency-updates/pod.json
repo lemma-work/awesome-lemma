@@ -1,0 +1,13 @@
+{
+  "format_version": 4,
+  "name": "Dependency updates",
+  "description": "Dependency updates batched, checked and opened as one pull request: each week, one pull request per repository with every update installed and tested, majors and risky releases held for a person, and security fixes opened the same day. The Lemma never merges.",
+  "variables": {
+    "deps_slug": {
+      "type": "app_slug",
+      "source_value": "lemma-dependencies",
+      "default": "lemma-dependencies",
+      "description": "Public URL slug for the Dependencies app (unique platform-wide; a suffix is added on collision)"
+    }
+  }
+}

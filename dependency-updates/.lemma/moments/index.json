@@ -1,0 +1,57 @@
+{
+  "batch": {
+    "kind": "still",
+    "width": 1184,
+    "height": 820,
+    "alt": "Monday's batch pull request for northwind/web: open, 4 of 4 checks passing, approved with 1 note, 7 updates and 1 fix by the Lemma, with its checks, review and what was held out beside it",
+    "bleed": null,
+    "window": null,
+    "phone": {
+      "width": 374,
+      "height": 247,
+      "bleed": null
+    }
+  },
+  "major": {
+    "kind": "still",
+    "width": 580,
+    "height": 900,
+    "alt": "react-router 6.30.1 to 7.9.4 held for a person: what changed, the one line in src/routes.tsx that uses it, the Lemma's read, and Add to Monday, Its own PR or Not yet",
+    "bleed": null,
+    "window": null,
+    "phone": {
+      "width": 390,
+      "height": 900,
+      "bleed": null
+    }
+  },
+  "halving": {
+    "kind": "still",
+    "width": 816,
+    "height": 580,
+    "alt": "How the batch was checked: the test failure, the updates tried in halves until zod alone failed, the Lemma's one-line fix as its own commit, then tests, checks and the review passing",
+    "bleed": null,
+    "window": null,
+    "phone": {
+      "width": 374,
+      "height": 827,
+      "bleed": null
+    }
+  },
+  "security": {
+    "kind": "still",
+    "width": 818,
+    "height": 222,
+    "alt": "Two security fixes opened the same day, outside the batch: next 15.4.8 (high), where the code reaches the vulnerable matcher, and pyjwt 2.10.1 (moderate), where it doesn't",
+    "bleed": null,
+    "window": null
+  },
+  "risky": {
+    "kind": "loop",
+    "width": 818,
+    "height": 224,
+    "alt": "color-convert 3.1.1 held as risky: hours old, from a new maintainer, adding a postinstall script; a person lets it through",
+    "bleed": null,
+    "window": null
+  }
+}

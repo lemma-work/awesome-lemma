@@ -1,0 +1,29 @@
+{
+  "name": "triage_setup_save",
+  "description": "Keep Triage's set-up (only the fields given): repositories, rotation, Slack channels, Sentry, PostHog, the report form, acknowledgements, thresholds; done writes the memory block. Safe to run again.",
+  "type": "API",
+  "visibility": "POD",
+  "code": {
+    "$file": "code.py"
+  },
+  "permissions": {
+    "grants": [
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "triage_settings",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read",
+          "datastore.record.write"
+        ]
+      },
+      {
+        "resource_type": "function",
+        "resource_name": "triage_memory",
+        "permission_ids": [
+          "function.execute"
+        ]
+      }
+    ]
+  }
+}

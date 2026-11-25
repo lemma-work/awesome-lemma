@@ -353,6 +353,11 @@ and `node _kit/bin/shoot.mjs http://127.0.0.1:4613 <out> tasks=/ tasks-board=/bo
 - **One schedule per workflow.** A second DATASTORE schedule on the same
   workflow is refused ("Global workflow already has a schedule for this
   user…"), after the first was made; so added and handed are two workflows.
+- **Another plugin's agent on a task.** Coding agent assigns its cards to
+  `coding_builder`, which Tasks may not hand work to; dispatching it anyway
+  failed the task. `tasks_on_task` now hands a task to a named agent only when
+  that agent is in `tasks_settings.agents`, and otherwise leaves it alone: no
+  run, no failure. Allowed agents are unchanged.
 - **A DECISION node's default is its first-listed edge**, not a labelled one.
 - **Workflow runs take no inputs at start**: the hand-over passes the brief
   through the run's first FORM.

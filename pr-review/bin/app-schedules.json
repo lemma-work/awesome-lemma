@@ -1,0 +1,24 @@
+{
+  "about": "The schedules the Pull requests app makes at set-up, as the person setting up (client.schedules.create; no function can make a schedule: a workload can't be granted schedule.create on the pod). prr_setup_save returns the same list as `schedules` and `member_schedule`. The three WEBHOOK schedules are made once for the Lemma, by name, on the shared GitHub connection (`pod_connector`: the server writes the installation id itself); the needs-you trigger once per member, named `${name_prefix}-${first 8 characters of the member's user id}`, by that member's own app. Keep what was made in prr_settings.schedules. The 15-minute prr-sync is in the bundle (schedules/prr-sync). After lemma-platform #1246: a check_run WEBHOOK (actions requested_action) for the Lemma check's Re-run button.",
+  "schedules": [
+    { "name": "prr-pull-requests", "schedule_type": "WEBHOOK", "workflow_name": "prr-on-pull-request", "pod_connector": "github",
+      "connector_trigger_id": "github:http:pull_request",
+      "config": { "source": "github", "event": "pull_request",
+                  "actions": ["opened", "synchronize", "reopened", "ready_for_review", "closed", "labeled", "unlabeled"] },
+      "why": "A push gets a round; a close settles it; the lemma-hold label holds a merge" },
+    { "name": "prr-reviews", "schedule_type": "WEBHOOK", "workflow_name": "prr-on-review", "pod_connector": "github",
+      "connector_trigger_id": "github:http:pull_request_review",
+      "config": { "source": "github", "event": "pull_request_review", "actions": ["submitted", "dismissed"] },
+      "why": "A person's approval changes who it waits on" },
+    { "name": "prr-check-suites", "schedule_type": "WEBHOOK", "workflow_name": "prr-on-check-suite", "pod_connector": "github",
+      "connector_trigger_id": "github:http:check_suite",
+      "config": { "source": "github", "event": "check_suite", "actions": ["completed"] },
+      "why": "Checks finished: the moment a clean pull request can merge" }
+  ],
+  "member_schedule": {
+    "name_prefix": "prr-needs-you", "schedule_type": "DATASTORE", "workflow_name": "prr-needs-you",
+    "config": { "table_name": "pull_request", "operations": ["INSERT", "UPDATE"], "rows": "OWNER_READABLE",
+                "bulk_writes": "each", "when": { "waits_since": { "changed": true } } },
+    "why": "Each member's own: Review this and Merge this in their Today"
+  }
+}

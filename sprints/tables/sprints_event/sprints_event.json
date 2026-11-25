@@ -1,0 +1,28 @@
+{
+  // One thing that happened to a sprint's task: the scope graph and each
+  // sprint's history are drawn from these. Written by Sprints' trigger on
+  // `task` (with the values before the change), by its own functions, and by
+  // the daily reconcile for anything a trigger missed.
+  "name": "sprints_event",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "sprint_id", "type": "UUID", "required": true },
+    { "name": "task_id", "type": "UUID", "required": true },
+    { "name": "kind", "type": "ENUM", "required": true,
+      "options": ["added", "removed", "started", "done", "reopened", "estimated", "assigned", "status"] },
+    { "name": "at", "type": "DATETIME", "required": true },
+    // Who did it, when known: a trigger on the team's `task` table does not
+    // say who wrote the row, so a change made outside Tasks' app is unknown.
+    { "name": "actor_kind", "type": "ENUM", "default": "unknown", "options": ["person", "agent", "lemma", "unknown"] },
+    { "name": "actor_name", "type": "TEXT", "max_length": 200 },
+    { "name": "actor_user_id", "type": "USER" },
+    // {from, to} for a change; {points} for added and removed; {source,
+    // source_id} for work that came in.
+    { "name": "detail", "type": "JSON" },
+    { "name": "via", "type": "ENUM", "required": true, "default": "app",
+      "options": ["trigger", "app", "chat", "reconcile", "start", "close"] }
+  ],
+  "config": {}
+}

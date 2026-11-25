@@ -1,0 +1,41 @@
+{
+  // One rule every pull request in its scope is read against: one checkable
+  // sentence. Read from the repositories' own files (AGENTS.md,
+  // CONTRIBUTING.md, REVIEW.md, ...), proposed from review comments, or typed
+  // by a person. Nothing proposed is used until someone accepts it.
+  // Team-wide. Its record (raised, fixed, dismissed, acted on) is counted
+  // from prr_finding, never stored.
+  "name": "prr_rule",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "text", "type": "TEXT", "required": true, "max_length": 400 },
+    // Globs it applies to (empty: every file), and the repository (null: all).
+    { "name": "scope", "type": "JSON" },
+    { "name": "repo", "type": "TEXT", "max_length": 200 },
+    { "name": "severity", "type": "ENUM", "required": true, "default": "should_fix",
+      "options": ["must_fix", "should_fix", "nit"] },
+    { "name": "state", "type": "ENUM", "required": true, "default": "proposed",
+      "options": ["proposed", "active", "paused", "retired"] },
+    // file: read from a rule file. comments: proposed from review comments.
+    // typed: a person wrote it.
+    { "name": "source_kind", "type": "ENUM", "required": true, "default": "typed",
+      "options": ["file", "comments", "typed"] },
+    // CONTRIBUTING.md:42 (checked by code against what was read), or
+    // "4 review comments"; with the quotes it came from: [{who, where, text}].
+    { "name": "source", "type": "TEXT", "max_length": 500 },
+    { "name": "quotes", "type": "JSON" },
+    // The base commit the file was read at, and when the scout last saw it.
+    { "name": "source_sha", "type": "TEXT", "max_length": 64 },
+    { "name": "seen_at", "type": "DATETIME" },
+    // Whether a reviewer can check it from a diff, and why not.
+    { "name": "checkable", "type": "BOOLEAN", "default": true },
+    { "name": "not_checkable_why", "type": "TEXT", "max_length": 300 },
+    { "name": "proposed_by", "type": "TEXT", "max_length": 32 },
+    { "name": "decided_by", "type": "USER" },
+    { "name": "decided_at", "type": "DATETIME" },
+    { "name": "sample", "type": "BOOLEAN", "default": false }
+  ],
+  "config": {}
+}

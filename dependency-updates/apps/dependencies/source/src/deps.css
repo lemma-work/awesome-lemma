@@ -1,0 +1,143 @@
+/* Dependencies' own layout on the kit: an engineering tool with GitHub's
+   density. Only the kit's --c-* roles, never a colour of its own; nothing
+   heavier than 500; versions, paths and code in the system monospace. At
+   375px no sideways scroll: tables scroll inside their own box. */
+
+.dp-app { min-height: 100vh; }
+.dp-strip { padding: 10px var(--gutter) 0; }
+.dp-strip .c-banner { margin-bottom: 0; padding: 8px 12px; }
+.dp-body { padding-top: 16px; }
+.dp-narrow { max-width: 860px; }
+.dp-small { font-size: 12px; }
+.dp-nowrap { white-space: nowrap; }
+.dp-mono, .dp-code, .dp-diff { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-variant-numeric: tabular-nums; }
+.dp-mono { font-size: 12px; font-weight: 400; }
+.c-input.dp-mono { font-size: 12.5px; }
+.dp-link { border: 0; background: none; padding: 0; font: inherit; color: var(--c-info); cursor: pointer; text-align: left; }
+.dp-link:hover { text-decoration: underline; text-underline-offset: 2px; }
+.dp-strike { text-decoration: line-through; color: var(--c-faint); }
+.dp-wrap-row { flex-wrap: wrap; }
+.dp-foot { margin-top: 8px; font-size: 12px; color: var(--c-faint); }
+.dp-foot--in { margin: 0; padding: 8px 14px 10px; border-top: 1px solid var(--c-border); }
+.dp-none { color: var(--c-faint); font-size: 12.5px; padding: 4px 2px; }
+.dp-para { line-height: 1.5; }
+.dp-warn { color: var(--c-warning); }
+
+/* ---------- the toolbar and the status line ---------- */
+
+.dp-toolbar-end { margin-left: auto; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; min-width: 0; }
+.dp-status {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 8px 22px; padding: 10px var(--gutter);
+  border-bottom: 1px solid var(--c-border); background: var(--c-subtle); font-size: 12.5px;
+}
+.dp-status > span { display: inline-flex; align-items: center; gap: 6px; flex-wrap: wrap; min-width: 0; }
+
+/* ---------- the week ---------- */
+
+.dp-split { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 22px; align-items: start; }
+.dp-main { min-width: 0; display: flex; flex-direction: column; gap: 22px; }
+.dp-pair { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 22px; }
+.dp-rail { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+@media (max-width: 1080px) { .dp-split { grid-template-columns: minmax(0, 1fr); } }
+
+.dp-section { min-width: 0; }
+.dp-section__head { display: flex; align-items: baseline; gap: 4px 8px; flex-wrap: wrap; margin-bottom: 8px; }
+.dp-section__head h2 { font-size: 13px; display: inline-flex; align-items: center; gap: 7px; }
+.dp-section__head h2 svg { color: var(--c-faint); align-self: center; }
+.dp-section__sub { font-size: 12px; }
+.dp-section__end { margin-left: auto; }
+
+.dp-table td { height: auto; padding-top: 9px; padding-bottom: 9px; vertical-align: top; }
+.dp-table td.dp-wrap { white-space: normal; min-width: 260px; max-width: 460px; line-height: 1.45; }
+.dp-table--flat th:first-child, .dp-table--flat th:last-child { border-radius: 0; }
+.dp-table tr.dp-more td { cursor: default; }
+.dp-table tr.dp-more:hover td { background: none; }
+.dp-table tr.is-dropped td { background: var(--c-subtle); }
+.dp-scroll { overflow-x: auto; }
+.dp-pkg { min-width: 0; }
+.dp-pkg__name { color: var(--c-text); font-weight: 500; }
+.dp-why { display: flex; flex-wrap: wrap; gap: 4px 8px; align-items: center; margin-bottom: 4px; font-size: 12px; }
+
+.dp-read { display: inline-flex; gap: 6px; align-items: flex-start; }
+.dp-read > svg { flex: none; margin-top: 2px; color: var(--c-faint); }
+.dp-read b { font-weight: 500; }
+
+.dp-acts { display: flex; gap: 6px; flex-wrap: wrap; }
+.dp-list .c-li { gap: 12px; }
+.dp-risk { padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; }
+.dp-risk p { line-height: 1.45; }
+
+.dp-lines { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; color: var(--c-muted); line-height: 1.45; }
+.dp-repo { align-items: flex-start; }
+.dp-props { margin-top: 10px; }
+.dp-props dd { display: flex; flex-direction: column; align-items: flex-start; gap: 3px; overflow: visible; white-space: normal; }
+.dp-note { line-height: 1.4; }
+.dp-managers { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 12px; }
+.dp-managers .c-pill::before { display: none; }
+
+/* ---------- the update sheet ---------- */
+
+.dp-sheet-head { display: flex; flex-direction: column; gap: 8px; }
+.dp-block { display: flex; flex-direction: column; gap: 8px; padding-top: 14px; border-top: 1px solid var(--c-border); }
+.dp-block h3 { font-size: 13px; display: flex; align-items: center; gap: 7px; }
+.dp-block h3 svg { color: var(--c-faint); }
+.dp-block p { line-height: 1.55; }
+.dp-block__row { display: flex; flex-direction: column; gap: 4px; }
+.dp-bullets { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 4px; line-height: 1.5; }
+.dp-uses { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.dp-uses li { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.dp-code { display: block; font-size: 12px; padding: 7px 10px; border-radius: var(--c-radius); background: var(--c-subtle); box-shadow: inset 0 0 0 1px var(--c-border); overflow-x: auto; white-space: pre; color: var(--c-text); }
+.dp-sheet-foot { display: flex; flex-direction: column; gap: 6px; width: 100%; }
+
+/* ---------- the pull request ---------- */
+
+.dp-timeline .c-tl-main { line-height: 1.5; }
+.dp-timeline li.is-bad .c-tl-icon { color: var(--c-danger); box-shadow: inset 0 0 0 1px var(--c-danger); }
+.dp-timeline .c-tl-when { display: flex; flex-direction: column; align-items: flex-end; gap: 1px; }
+.dp-day { font-size: 11px; color: var(--c-faint); }
+.dp-file { display: flex; flex-direction: column; gap: 8px; padding: 10px 14px; border-bottom: 1px solid var(--c-border); min-width: 0; }
+.dp-file:last-child { border-bottom: 0; }
+.dp-delta { font-size: 12px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.dp-add { color: var(--c-success); }
+.dp-del { color: var(--c-danger); }
+.dp-diff { margin: 0; padding: 8px 0; border-radius: var(--c-radius); background: var(--c-subtle); box-shadow: inset 0 0 0 1px var(--c-border); font-size: 12px; line-height: 1.6; overflow-x: auto; }
+.dp-diff > span { display: block; padding: 0 12px; white-space: pre; }
+.dp-diff__add { background: color-mix(in srgb, var(--c-success) 11%, transparent); }
+.dp-diff__del { background: color-mix(in srgb, var(--c-danger) 10%, transparent); }
+.dp-diff__ctx { color: var(--c-faint); }
+.dp-side { min-width: 0; }
+.dp-checks { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.dp-checks li { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-width: 0; }
+.dp-checks li > :first-child { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.dp-quote { margin-top: 8px; color: var(--c-muted); line-height: 1.5; }
+.dp-ask { min-height: 64px; }
+.dp-ask-row { margin-top: 8px; }
+
+/* ---------- rules and set-up ---------- */
+
+.dp-add { display: flex; gap: 8px; }
+.dp-intro { padding: 18px 0 20px; }
+.dp-intro h1 { font-size: 20px; line-height: 1.3; }
+.dp-intro p { margin-top: 6px; max-width: 620px; line-height: 1.55; }
+.dp-form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.dp-form--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 10px 0; }
+.dp-switch { margin-top: 14px; align-items: flex-start; }
+.dp-switch > span { line-height: 1.4; }
+.dp-pick { cursor: pointer; }
+.dp-cmd { display: flex; flex-direction: column; gap: 6px; padding: 12px 14px; border-bottom: 1px solid var(--c-border); }
+.dp-cmd:last-child { border-bottom: 0; }
+.dp-cmd__pill { margin-left: auto; }
+
+@media (max-width: 640px) {
+  .dp-toolbar-end { margin-left: 0; width: 100%; }
+  .dp-toolbar-end .c-btn--primary { width: 100%; }
+  .dp-status { gap: 6px 14px; }
+  .dp-table td.dp-wrap { min-width: 220px; }
+  .dp-form, .dp-form--3 { grid-template-columns: minmax(0, 1fr); }
+  .dp-pair { grid-template-columns: minmax(0, 1fr); }
+  .c-record-head h1 { font-size: 19px; }
+}
+
+/* lists the kit draws as ul: no browser indent */
+.dp-app ul.c-list, .dp-app ol.c-timeline { margin: 0; padding-left: 0; list-style: none; }
+.dp-form .c-field { align-content: start; }

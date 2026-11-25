@@ -1,0 +1,19 @@
+{
+  // One person's day off, typed in Sprints (team-visible, no reason). The id
+  // is uuid5(SPRINTS_NS, "<user id or name>:<day>"). Capacity is each
+  // person's usual times the share of working days they are here.
+  "name": "sprints_away",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    // A member of the Lemma, or empty for someone known only by name. Not
+    // `user_id`: that name is the platform's row-owner column, and a create
+    // that sets it to null is refused as if the table did not exist.
+    { "name": "member_id", "type": "USER" },
+    { "name": "name", "type": "TEXT", "required": true, "max_length": 200 },
+    { "name": "day", "type": "DATE", "required": true },
+    { "name": "part", "type": "ENUM", "required": true, "default": "full", "options": ["full", "half"] }
+  ],
+  "config": {}
+}

@@ -1,0 +1,68 @@
+{
+  "name": "prr_sync",
+  "description": "Every 15 minutes: each watched repository's open pull requests through prr_intake, rounds that never finished failed, pull requests whose wait has passed merged through prr_merge, and clean ones still waiting on checks settled again.",
+  "type": "API",
+  "visibility": "POD",
+  "code": {
+    "$file": "code.py"
+  },
+  "permissions": {
+    "grants": [
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "repository",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "pull_request",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read",
+          "datastore.record.write"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "prr_round",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read",
+          "datastore.record.write"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "prr_settings",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read"
+        ]
+      },
+      {
+        "resource_type": "function",
+        "resource_name": "prr_intake",
+        "permission_ids": [
+          "function.execute"
+        ]
+      },
+      {
+        "resource_type": "function",
+        "resource_name": "prr_settle",
+        "permission_ids": [
+          "function.execute"
+        ]
+      },
+      {
+        "resource_type": "function",
+        "resource_name": "prr_merge",
+        "permission_ids": [
+          "function.execute"
+        ]
+      }
+    ]
+  }
+}

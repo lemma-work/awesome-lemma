@@ -1,0 +1,71 @@
+{
+  // The Lemma's Triage set-up: one row (id fixed by triage_setup_save).
+  // Team-wide, no RLS: the queue is the team's.
+  "name": "triage_settings",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    // The repositories watched: [{id, full_name}] ("acme/web").
+    { "name": "repos", "type": "JSON" },
+    // Watched Slack channels: {account (pod connector slug), team_id,
+    // channels: [{id, name}]}.
+    { "name": "slack", "type": "JSON" },
+    // Sentry: {account (pod connector slug), org (slug), projects: [slug]}.
+    { "name": "sentry", "type": "JSON" },
+    // PostHog over its MCP server: {account (pod connector slug),
+    // account_id (the connected account, as Factory passes it), project_id}.
+    { "name": "posthog", "type": "JSON" },
+    // How each door answers a reporter when a report is filed:
+    // {app, assistant, slack, github, form: "off" | "got_it" | "got_it_known"}.
+    { "name": "ack", "type": "JSON" },
+    // Urgent from this many people; the Lemma's read runs on its own from
+    // read_from_people (and for high or critical security alerts).
+    { "name": "urgent_people", "type": "INTEGER", "default": 100 },
+    { "name": "read_from_people", "type": "INTEGER", "default": 25 },
+    // Close the GitHub issue when its task is done (a comment always).
+    { "name": "close_github_on_done", "type": "BOOLEAN", "default": false },
+    // Who's on triage: member ids in order, a week each from rotation_start.
+    { "name": "rotation", "type": "JSON" },
+    { "name": "rotation_start", "type": "DATE" },
+    // Members' handles elsewhere, to turn a CODEOWNERS entry or a commit's
+    // author into a member: [{user_id, name, github, slack}].
+    { "name": "people", "type": "JSON" },
+    // The report form: on, who may send it, the web widget it is drawn by
+    // (its public key and id) and its hosted link.
+    { "name": "form_on", "type": "BOOLEAN", "default": false },
+    { "name": "form_audience", "type": "ENUM", "default": "anyone", "options": ["anyone", "contacts"] },
+    { "name": "widget_key", "type": "TEXT", "max_length": 200 },
+    { "name": "widget_id", "type": "TEXT", "max_length": 64 },
+    { "name": "form_link", "type": "TEXT", "max_length": 600 },
+    // The form's open columns (triage_form), as last opened.
+    { "name": "form_columns", "type": "JSON" },
+    // Known issues are readable by the form and the visitor chat (the
+    // table is marked Public).
+    { "name": "known_public", "type": "BOOLEAN", "default": false },
+    { "name": "setup_done_at", "type": "DATETIME" },
+    { "name": "setup_by", "type": "USER" },
+    // The sample morning is loaded.
+    { "name": "sample", "type": "BOOLEAN", "default": false },
+    // Nothing is posted outside the Lemma: GitHub comments, Slack replies
+    // and Sentry resolves are written down as what would have been sent.
+    // On for the sample; for trying Triage on real repositories quietly.
+    { "name": "quiet", "type": "BOOLEAN", "default": false },
+    // Each source's state in words, for Doors and the bar on top:
+    // {sentry: {state, read_at, note, count}, ...}.
+    { "name": "status", "type": "JSON" },
+    // Where each poll got to: {github: {acme/web: iso}, slack: {C1: ts}}.
+    { "name": "cursors", "type": "JSON" },
+    // What the app made as the person, so it is made once: {name: id}.
+    { "name": "schedules", "type": "JSON" },
+    { "name": "schedule_user_id", "type": "USER" },
+    // Which plugins this Lemma has, as the app last saw (a function cannot
+    // look): {incidents, coding, release_notes, dependency_updates, sprints}.
+    { "name": "plugins", "type": "JSON" },
+    // Sprints' days away (sprints_away), as the app last read them for the
+    // next 30 days, until Sprints writes the shared `away`: {read_at,
+    // days: [{member_id, name, day, part}]}.
+    { "name": "sprints_away", "type": "JSON" }
+  ],
+  "config": {}
+}

@@ -1,0 +1,19 @@
+{
+  // The team's defaults: one row (id fixed by coding_setup_save).
+  "name": "coding_settings",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "default_profile_id", "type": "TEXT", "max_length": 120, "default": "system:lemma" },
+    { "name": "default_model", "type": "TEXT", "max_length": 120 },
+    { "name": "keep_green", "type": "BOOLEAN", "required": true, "default": true },
+    { "name": "max_tries", "type": "INTEGER", "required": true, "default": 3 },
+    // An issue labelled with this on GitHub is handed to the agent.
+    { "name": "issue_label", "type": "TEXT", "max_length": 60, "default": "lemma" },
+    { "name": "setup_done_at", "type": "DATETIME" },
+    { "name": "setup_by", "type": "USER" },
+    { "name": "sample", "type": "BOOLEAN", "default": false }
+  ],
+  "config": {}
+}

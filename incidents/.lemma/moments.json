@@ -1,0 +1,16 @@
+{
+  "//": "The pictures on Incidents' page, taken from its Try it demo by `node _kit/bin/moments.mjs incidents` into .lemma/moments/. Not captured yet.",
+  "captures": [
+    { "name": "timeline", "alt": "INC-14's timeline: messages from the channel, merges and the deploy from GitHub, the Triage signal and what the Lemma did, newest first", "route": "/i/14", "viewport": [1184, 900],
+      "clip": { "selector": ".in-tl", "pad": 8 }, "steps": [{ "wait": 1200 }, { "mouse": [4, 4] }],
+      "phone": { "viewport": [390, 900], "clip": { "selector": ".in-tl", "pad": 6 } } },
+    { "name": "cause", "alt": "The most likely cause: the 13:58 timeout change, with its evidence, what was ruled out, and the two sources not checked", "route": "/i/14", "viewport": [1184, 900],
+      "clip": { "selector": "[aria-labelledby='cause-h']", "pad": 8 }, "steps": [{ "wait": 1200 }, { "mouse": [4, 4] }] },
+    { "name": "send", "alt": "The lead sends the update the Lemma drafted; it lands in the timeline", "loop": true, "cursor": true, "route": "/i/14", "viewport": [1184, 900],
+      "clip": { "x": 0, "y": 34, "width": 1184, "height": 820 }, "poster": 2.4,
+      "steps": [{ "wait": 1200 }, { "click": ".c-btn--primary", "text": "Send update" }, { "wait": 2400 }] },
+    { "name": "links", "alt": "Resolving drafts the write-up; pressing a claim's citation shows the event behind it", "loop": true, "cursor": true, "route": "/i/14", "viewport": [1184, 900],
+      "clip": { "x": 0, "y": 34, "width": 1184, "height": 820 }, "poster": 4,
+      "steps": [{ "wait": 1200 }, { "click": ".in-group--acts .c-btn--ghost", "text": "Resolve and draft the write-up" }, { "wait": 2200 }, { "click": ".in-cite", "text": "#2291" }, { "wait": 2000 }] }
+  ]
+}

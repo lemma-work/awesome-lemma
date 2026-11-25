@@ -1,0 +1,70 @@
+{
+  "name": "Incidents",
+  "line": "dev",
+  "position": 32,
+  "job": "An incident's timeline gathered as it happens, and the write-up after",
+  "intro": "Incidents opens a channel for each incident and keeps its timeline from the channel, GitHub and Triage. Your Lemma names a likely cause with its evidence, drafts the updates the lead sends, and drafts the write-up on resolve, every claim linked to what happened.",
+  "does": [
+    "Declare from the app or by asking your Lemma in Slack: a channel, a pinned header kept current, and #incidents told.",
+    "A likely cause with its evidence, what it ruled out, and every source it couldn't check.",
+    "A write-up where every claim links to its event, with the claims nothing backs flagged, and follow-ups as team tasks."
+  ],
+  "jobs": [
+    "ENGINEERING",
+    "OPERATIONS"
+  ],
+  "accounts": [
+    {
+      "any": [
+        "Slack"
+      ],
+      "why": "One shared Slack connection, the same app as your Lemma's bot: it opens each incident's channel, pins the header and posts the updates the lead sends."
+    },
+    {
+      "any": [
+        "GitHub"
+      ],
+      "why": "One shared GitHub connection: merges, pushes, deploy workflow runs and releases in the repositories you pick, for what changed before an incident."
+    },
+    {
+      "any": [
+        "Email"
+      ],
+      "why": "Only to email updates to a list of people, when your Lemma has its own mailbox.",
+      "optional": true
+    }
+  ],
+  "setup": [
+    "Once for the whole Lemma: the Slack account and #incidents, the repositories to watch, who gets updates by email, and your severity words.",
+    "Or look around with a sample incident: a payments outage, its timeline and three past write-ups.",
+    "Declare from the app, or say \"@Lemma declare checkout 502s\" in Slack."
+  ],
+  "today": [
+    {
+      "verb": "decide",
+      "line": "An update is due: send the one the Lemma drafted"
+    },
+    {
+      "verb": "decide",
+      "line": "Review the write-up for an incident you led"
+    },
+    {
+      "verb": "do",
+      "line": "Follow-ups from an incident, through Tasks"
+    }
+  ],
+  "pictures": [
+    {
+      "shot": "incidents",
+      "caption": "One incident: now, the likely cause, the timeline"
+    },
+    {
+      "shot": "incidents-writeup",
+      "caption": "A write-up with every claim linked to its event"
+    },
+    {
+      "shot": "incidents-list",
+      "caption": "Active incidents, follow-ups and past write-ups"
+    }
+  ]
+}

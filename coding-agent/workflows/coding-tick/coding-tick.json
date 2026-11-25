@@ -1,0 +1,17 @@
+{
+  // Every 15 minutes, on the TIME schedule the app makes for each member at
+  // set-up, as that member: `coding-tick-<first 8 of the user id>`, cron
+  // "*/15 * * * *" (bin/app-schedules.json). A schedule runs as its maker, and
+  // a conversation is readable only by its owner, so each person's tick looks
+  // after the sessions they started. Merge conflicts send no webhook: this is
+  // where they are found.
+  "name": "coding-tick",
+  "description": "Every 15 minutes: this person's coding sessions and pull requests (finished, failed, waiting, merged, conflicts, checks), and their items in Today.",
+  "start": { "type": "SCHEDULED", "config": { "schedule_type": "CRON" } },
+  "nodes": [
+    { "id": "tick", "type": "FUNCTION", "label": "Look after the sessions",
+      "config": { "function_name": "coding_tick", "input_mapping": {} } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [ { "id": "e1", "source": "tick", "target": "end" } ]
+}

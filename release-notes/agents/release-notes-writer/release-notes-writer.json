@@ -1,0 +1,41 @@
+{
+  // Writes the lines of one release note from the brief release_notes_draft
+  // gathered. No tools: everything it may use is in its input, so every line
+  // keeps exactly the sources the brief gave it.
+  "name": "release-notes-writer",
+  "description": "Writes a release note's lines in plain words from the merged pull requests and issues it is given, one line per change, in the team's voice. Never publishes.",
+  "visibility": "POD",
+  "toolsets": [],
+  "instruction": { "$file": "instruction.md" },
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "title": { "type": "string", "description": "The note's headline, from what it leads with, under 80 characters. No version number." },
+      "lines": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "key": { "type": "string", "description": "The change's key from the brief, exactly." },
+            "title": { "type": "string", "description": "For a lead change only: a heading under 60 characters, saying what people can now do." },
+            "text": { "type": "string", "description": "One or two sentences for a lead, one sentence otherwise. For a need: exactly what people must do, and by when." }
+          },
+          "required": ["key", "text"]
+        }
+      },
+      "summaries": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "number": { "type": "integer" },
+            "summary": { "type": "string", "description": "What this pull request changes for people, in under 20 plain words." }
+          },
+          "required": ["number", "summary"]
+        }
+      }
+    },
+    "required": ["title", "lines"]
+  },
+  "permissions": { "grants": [] }
+}

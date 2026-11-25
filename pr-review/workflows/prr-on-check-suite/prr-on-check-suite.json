@@ -1,0 +1,19 @@
+{
+  // GitHub's checks finished on a commit (the prr-check-suites WEBHOOK
+  // schedule): the moment a clean pull request can merge by itself.
+  "name": "prr-on-check-suite",
+  "description": "Checks finished on a commit: settle every open pull request at it, which may start its wait to merge.",
+  "start": { "type": "EVENT", "config": { "connector_id": "github", "connector_trigger_id": "github:http:check_suite" } },
+  "nodes": [
+    { "id": "intake", "type": "FUNCTION", "label": "Settle what it was for",
+      "config": { "function_name": "prr_intake", "input_mapping": {
+        "event": { "type": "literal", "value": "check_suite" },
+        "repo": { "type": "expression", "value": "start.payload.repository.full_name" },
+        "head_sha": { "type": "expression", "value": "start.payload.check_suite.head_sha" },
+        "numbers": { "type": "expression", "value": "start.payload.check_suite.pull_requests", "optional": true },
+        "action": { "type": "expression", "value": "start.payload.action", "optional": true } } } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [ { "id": "e1", "source": "intake", "target": "end" } ],
+  "visibility": "POD"
+}

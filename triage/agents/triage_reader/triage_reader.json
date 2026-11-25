@@ -1,0 +1,37 @@
+{
+  "name": "triage_reader",
+  "description": "Reads one Triage item: what it is, what each source answered, every source it could not check and why, the files it points at, and a fix hint. Reads only; never acts or writes outside its result.",
+  "instruction": { "$file": "instruction.md" },
+  "toolsets": ["CONNECTORS"],
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "context": { "type": "string", "description": "From triage_read, as JSON: the item, its reports (each with its door and words), and the sources this Lemma has (sources, with connected)." }
+    },
+    "required": ["context"]
+  },
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "summary": { "type": "string", "description": "Two or three plain sentences on what this is and what it rests on. Every claim comes from an evidence line." },
+      "evidence": { "type": "array", "items": { "type": "object", "properties": {
+        "source": { "type": "string", "description": "Where you looked: Sentry, PostHog, GitHub, CODEOWNERS, Reports, Open issues, Slack, Code, Logs, ..." },
+        "asked": { "type": "string", "description": "The question you put to it, short: 'Who hits it, since when?'" },
+        "answer": { "type": "string", "description": "What it answered, one line with its figures; for a source you could not check, why ('No logs source is connected')." },
+        "state": { "type": "string", "enum": ["checked", "nothing_found", "not_checked"] },
+        "url": { "type": "string", "description": "A link to what you read, when there is one." }
+      }, "required": ["source", "answer", "state"] } },
+      "paths": { "type": "array", "items": { "type": "string" }, "description": "Files it points at, the most likely first, as path or path:line." },
+      "fix_hint": { "type": "string", "description": "One line on where a fix would go, or empty when you can't tell." }
+    },
+    "required": ["summary", "evidence", "paths"]
+  },
+  "permissions": { "grants": [
+    { "resource_type": "datastore_table", "resource_name": "triage_item", "permission_ids": ["datastore.table.read", "datastore.record.read"] },
+    { "resource_type": "datastore_table", "resource_name": "triage_report", "permission_ids": ["datastore.table.read", "datastore.record.read"] },
+    { "resource_type": "connector", "resource_name": "github", "permission_ids": ["connector.use"] },
+    { "resource_type": "connector", "resource_name": "sentry", "permission_ids": ["connector.use"] },
+    { "resource_type": "connector", "resource_name": "posthog", "permission_ids": ["connector.use"] },
+    { "resource_type": "connector", "resource_name": "slack", "permission_ids": ["connector.use"] }
+  ]}
+}

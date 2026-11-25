@@ -1,0 +1,34 @@
+{
+  // incidents_investigator on one incident. Started by incidents_investigate,
+  // which submits the brief form at once, so the run never waits on a person:
+  // the AGENT step runs the investigator, and incidents_investigate_save keeps
+  // what it found.
+  "name": "incidents-investigate",
+  "description": "Find an incident's likely cause: evidence, what was ruled out, and every source not checked.",
+  "run_title": ["brief.incident_id"],
+  "start": { "type": "MANUAL" },
+  "nodes": [
+    { "id": "brief", "type": "FORM", "label": "The incident",
+      "config": { "input_schema": {
+        "type": "object",
+        "properties": {
+          "incident_id": { "type": "string", "title": "Incident" },
+          "context": { "type": "string", "title": "What to read" }
+        },
+        "required": ["incident_id", "context"]
+      } } },
+    { "id": "look", "type": "AGENT", "label": "Look for the cause",
+      "config": { "agent_name": "incidents_investigator", "input_mapping": {
+        "context": { "type": "expression", "value": "brief.context" } } } },
+    { "id": "save", "type": "FUNCTION", "label": "Keep it, and post it to the channel",
+      "config": { "function_name": "incidents_investigate_save", "input_mapping": {
+        "incident_id": { "type": "expression", "value": "brief.incident_id" },
+        "result": { "type": "expression", "value": "look" } } } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [
+    { "id": "e1", "source": "brief", "target": "look" },
+    { "id": "e2", "source": "look", "target": "save" },
+    { "id": "e3", "source": "save", "target": "end" }
+  ]
+}

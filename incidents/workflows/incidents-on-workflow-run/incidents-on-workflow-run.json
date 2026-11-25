@@ -1,0 +1,23 @@
+{
+  // GitHub's workflow_run webhook for the watched repositories. The app makes one
+  // WEBHOOK schedule per event at set-up, as the person, through the Lemma's
+  // GitHub connector (GitHub routes by installation, not by repository;
+  // incidents_on_github keeps only the repositories the set-up watches).
+  // deployment_status is not here yet: add incidents-on-deployment-status
+  // the same way once the platform subscribes to it.
+  "name": "incidents-on-workflow-run",
+  "description": "A workflow run in a watched repository: keep it when it is the deploy.",
+  "max_concurrent_runs": 4,
+  "start": { "type": "EVENT", "config": {
+    "connector_id": "github",
+    "connector_trigger_id": "github:http:workflow_run"
+  } },
+  "nodes": [
+    { "id": "keep", "type": "FUNCTION", "label": "Keep the change",
+      "config": { "function_name": "incidents_on_github", "input_mapping": {
+        "event": { "type": "literal", "value": "workflow_run" },
+        "payload": { "type": "expression", "value": "start.payload" } } } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [ { "id": "e1", "source": "keep", "target": "end" } ]
+}

@@ -1,0 +1,8 @@
+{
+  // Dependency updates carries nothing in v1. It reads a batch's review
+  // straight from GitHub (the pull_request_review event), so it works with or
+  // without PR review. Once PR review is built it carries `pr-review`, which
+  // wakes on the batch like on any other pull request.
+  "name": "dependency-updates",
+  "carries": []
+}

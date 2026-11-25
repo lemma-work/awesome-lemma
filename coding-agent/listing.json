@@ -1,0 +1,60 @@
+{
+  "name": "Coding agent",
+  "line": "dev",
+  "position": 29,
+  "job": "An issue turned into a pull request by an agent, and questions about your code answered",
+  "intro": "Hand an issue to an agent: Lemma in the cloud, or Claude Code or Codex on your Mac. It works in a branch of its own, opens the pull request, and fixes failing checks and review comments until a person merges it. Ask how the code works and get an answer that points at the lines.",
+  "does": [
+    "One board of every agent's work across your repositories, with what needs you on top.",
+    "Each task's whole story: the transcript, the change, the pull request, every check and review round.",
+    "Questions about your code answered with path:line, and turned into a task in one press."
+  ],
+  "jobs": [
+    "ENGINEERING"
+  ],
+  "accounts": [
+    {
+      "any": [
+        "GitHub"
+      ],
+      "why": "Your own GitHub sign-in: the agent checks out, pushes and opens pull requests as you, and Lemma hears about checks and reviews on them."
+    }
+  ],
+  "setup": [
+    "Pick the repositories the agent may work in, and the commands it runs first in each.",
+    "Choose who runs by default: Lemma in the cloud, or Claude Code or Codex on your Mac.",
+    "Or look around with a sample board: a few tasks, a pull request's whole life, and two answered questions."
+  ],
+  "today": [
+    {
+      "verb": "decide",
+      "line": "An agent's question about a task it is working"
+    },
+    {
+      "verb": "do",
+      "line": "A pull request whose checks still fail after the agent's tries"
+    },
+    {
+      "verb": "do",
+      "line": "A task waiting for your Mac, or for a repository to be picked"
+    }
+  ],
+  "pictures": [
+    {
+      "shot": "coding",
+      "caption": "Every agent's work, with what needs you on top"
+    },
+    {
+      "shot": "coding-activity",
+      "caption": "An issue's whole life, from assignment to ready to merge"
+    },
+    {
+      "shot": "coding-transcript",
+      "caption": "What the agent read, ran and changed"
+    },
+    {
+      "shot": "coding-ask",
+      "caption": "A question answered with the lines it comes from"
+    }
+  ]
+}

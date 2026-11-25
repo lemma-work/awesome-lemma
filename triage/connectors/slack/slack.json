@@ -1,0 +1,6 @@
+{
+  "connector": "slack",
+  "mode": "SHARED",
+  "required": false,
+  "purpose": "Reads the channels you watch for reports (questions and chatter are left alone), and replies in a reporter's thread when it is filed, if you turn that on, and when it is fixed. The same Slack app as the Lemma's bot."
+}

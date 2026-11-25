@@ -1,0 +1,1 @@
+- Coding agent is installed: give tasks to `coding_builder`; ask about code: `coding_ask_start`. Guide `/memory/plugins/coding-agent.md`.

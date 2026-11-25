@@ -1,0 +1,121 @@
+[
+ {
+  "match": "\"pull_number\":1252",
+  "response": {
+   "result": [
+    {
+     "filename": "api/webhooks/deliver.py",
+     "status": 84,
+     "additions": 41,
+     "deletions": 6,
+     "patch": "@@ -40,5 +40,7 @@\n   context line\n-    log.failed(hook, event, resp.status_code)\n-    event.state = \"failed\"\n+    if attempt < MAX_TRIES:\n+        return await requeue(event, delay=with_backoff.delay(attempt))\n+    log.failed(hook, event, resp.status_code, attempt=attempt)\n+    event.state = \"failed\"\n   context line\n"
+    },
+    {
+     "filename": "api/webhooks/queue.py",
+     "status": 20,
+     "additions": 12,
+     "deletions": 2,
+     "patch": "@@ -40,4 +40,5 @@\n   context line\n-def requeue(event):\n+async def requeue(event, delay: float = 0):\n+    await queue.put(event, after=delay)\n   context line\n"
+    },
+    {
+     "filename": "api/webhooks/test_deliver.py",
+     "status": 110,
+     "additions": 28,
+     "deletions": 3,
+     "patch": "@@ -40,3 +40,7 @@\n   context line\n+def test_retries_a_5xx_five_times():\n+    ...\n+def test_backoff_caps_at_sixty_seconds():\n+    ...\n   context line\n"
+    },
+    {
+     "filename": "api/core/retry.py",
+     "status": 8,
+     "additions": 3,
+     "deletions": 1,
+     "patch": "@@ -40,4 +40,5 @@\n   context line\n-MAX_DELAY = 30\n+MAX_DELAY = 60\n+# Shared by invoice sync and webhook delivery.\n   context line\n"
+    }
+   ]
+  }
+ },
+ {
+  "match": "\"pull_number\":1251",
+  "response": {
+   "result": [
+    {
+     "filename": "api/uploads/limits.py",
+     "status": 4,
+     "additions": 4,
+     "deletions": 2,
+     "patch": "@@ -40,4 +40,5 @@\n   context line\n-MAX_UPLOAD = 10 * MB\n+MAX_UPLOAD = 50 * MB\n+# Raised for video uploads; see the upload test's timeout.\n   context line\n"
+    },
+    {
+     "filename": "api/uploads/test_upload.py",
+     "status": 60,
+     "additions": 7,
+     "deletions": 1,
+     "patch": "@@ -40,3 +40,5 @@\n   context line\n+def test_upload_50mb(client, big_file):\n+    assert client.post(\"/uploads\", files=big_file).status_code == 201\n   context line\n"
+    }
+   ]
+  }
+ },
+ {
+  "match": "\"pull_number\":1249",
+  "response": {
+   "result": [
+    {
+     "filename": "api/migrations/0142_owner_column.py",
+     "status": 1,
+     "additions": 41,
+     "deletions": 0,
+     "patch": "@@ -40,3 +40,5 @@\n   context line\n+def upgrade():\n+    op.add_column(\"table\", sa.Column(\"owner_id\", sa.Uuid()))\n   context line\n"
+    },
+    {
+     "filename": "api/tables/models.py",
+     "status": 30,
+     "additions": 9,
+     "deletions": 2,
+     "patch": "@@ -40,4 +40,5 @@\n   context line\n-    name: str\n+    name: str\n+    owner_id: UUID | None = None\n   context line\n"
+    },
+    {
+     "filename": "api/tables/test_models.py",
+     "status": 80,
+     "additions": 14,
+     "deletions": 0,
+     "patch": "@@ -40,3 +40,5 @@\n   context line\n+def test_new_table_has_an_owner():\n+    ...\n   context line\n"
+    }
+   ]
+  }
+ },
+ {
+  "match": "\"pull_number\":1240",
+  "response": {
+   "result": [
+    {
+     "filename": "web/server/routes.ts",
+     "status": "modified",
+     "additions": 0,
+     "deletions": 12,
+     "patch": "@@ -70,4 +70,3 @@\n   context line\n-router.get(\"/export/legacy\", legacyExport);\n   context line\n"
+    },
+    {
+     "filename": "web/server/legacy-export.ts",
+     "status": "removed",
+     "additions": 0,
+     "deletions": 131,
+     "patch": "@@ -1,4 +1,3 @@\n   context line\n-export function legacyExport() {\n   context line\n"
+    }
+   ]
+  }
+ },
+ {
+  "match": "\"pull_number\":1238",
+  "response": {
+   "result": [
+    {
+     "filename": "web/billing/Plan.tsx",
+     "status": 22,
+     "additions": 18,
+     "deletions": 4,
+     "patch": "@@ -40,4 +40,4 @@\n   context line\n-<span>{plan.id}</span>\n+<span>{plan.name}</span>\n   context line\n"
+    }
+   ]
+  }
+ }
+]

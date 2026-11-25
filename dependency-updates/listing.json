@@ -1,0 +1,33 @@
+{
+  "name": "Dependency updates",
+  "line": "dev",
+  "position": 31,
+  "job": "Dependency updates batched, checked and opened as one pull request",
+  "intro": "Each week your Lemma opens one pull request per repository with every dependency update installed and tested, one commit each. It holds majors and risky releases for you, opens security fixes the same day, and never merges.",
+  "does": [
+    "One pull request a week per repository: a failing test is traced to one update by halving, and fixed or held out.",
+    "Majors and releases that add an install script wait for you, with where your code uses what changed.",
+    "Security fixes open the same day, with whether your code reaches the vulnerable part."
+  ],
+  "jobs": ["ENGINEERING"],
+  "accounts": [
+    {
+      "any": ["GitHub"],
+      "why": "One GitHub connection: it clones the repositories you pick, pushes one branch per batch and opens its pull request as the Lemma's GitHub App, and hears checks, reviews and @lemma comments."
+    }
+  ],
+  "setup": [
+    "Once for the whole Lemma: pick repositories, a day and time (Monday 06:00 by default), and the wait (3 days, 14 for a major).",
+    "Or look around with a sample week: four made-up repositories, a batch, two security fixes and a risky release.",
+    "Confirm each repository's install, test and build commands once its first look finds them."
+  ],
+  "today": [
+    { "verb": "decide", "line": "A major held for you: add to Monday, its own pull request, or not yet?" },
+    { "verb": "decide", "line": "A release that adds an install script: let it through?" }
+  ],
+  "pictures": [
+    { "shot": "dependencies", "caption": "The week: security fixes, Monday's batch, and what waits for you" },
+    { "shot": "dependencies-batch", "caption": "A batch pull request: how it was checked, one commit per update" },
+    { "shot": "dependencies-update", "caption": "A held major: what changed and where your code uses it" }
+  ]
+}

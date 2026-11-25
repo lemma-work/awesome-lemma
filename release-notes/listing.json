@@ -1,0 +1,31 @@
+{
+  "name": "Release notes",
+  "line": "dev",
+  "position": 30,
+  "job": "Notes written from what merged, and word to everyone who asked for it",
+  "intro": "Release notes drafts the note from every pull request as it merges, folds out the routine work, and keeps your edits. When the release goes live, publish it to GitHub, a public changelog and Slack, then tell everyone who asked, in the thread they asked in.",
+  "does": [
+    "Every merge redrafts the open note; each line keeps its pull requests and issues, and a line you edited is never rewritten.",
+    "Ready when it's live: the deploy workflow's run says so, and the publisher gets a choice in Today.",
+    "Each person who asked gets a reply drafted where they asked: their email thread, their GitHub issue or their Slack thread. Nothing is sent until someone presses Send."
+  ],
+  "jobs": ["ENGINEERING", "PRODUCT"],
+  "accounts": [
+    { "any": ["GitHub"], "why": "One shared GitHub connection for the Lemma: the repositories it watches, and where the release goes." },
+    { "any": ["Slack"], "why": "Optional: the channel the note is posted to." }
+  ],
+  "setup": [
+    "Once for the whole Lemma: the repositories, how you know a release is live (your deploy workflow, or a tag), an optional Slack channel, and who publishes.",
+    "Or look around with a sample release: a made-up product's v2.14, with the people who asked for it.",
+    "Each person opens the app once, so replies to the people who asked them can be drafted in their own threads."
+  ],
+  "today": [
+    { "verb": "decide", "line": "v2.14 notes are ready" },
+    { "verb": "answer", "line": "Tell Jo it shipped" }
+  ],
+  "pictures": [
+    { "shot": "release-notes", "caption": "What merged, turned into the note, with every line's sources" },
+    { "shot": "release-notes-asked", "caption": "Everyone who asked, with a reply drafted in their own thread" },
+    { "shot": "changelog", "caption": "The public changelog page, newest first" }
+  ]
+}

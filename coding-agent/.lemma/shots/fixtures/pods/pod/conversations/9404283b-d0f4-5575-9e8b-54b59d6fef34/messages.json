@@ -1,0 +1,281 @@
+{
+ "items": [
+  {
+   "conversation_id": "9404283b-d0f4-5575-9e8b-54b59d6fef34",
+   "created_at": "2026-11-25T09:28:00+00:00",
+   "agent_run_id": "184a034d-401c-5045-8188-253d032a4765",
+   "id": "f0bd1073-be58-5b77-8c43-999d165a94ba",
+   "sequence": 1,
+   "kind": "TEXT",
+   "role": "user",
+   "text": "[coding question 1b926ee9-385b-55d7-9cc1-044ce310ae20] Where do we retry failed webhook deliveries, and how many times?"
+  },
+  {
+   "conversation_id": "9404283b-d0f4-5575-9e8b-54b59d6fef34",
+   "created_at": "2026-11-25T09:28:08+00:00",
+   "agent_run_id": "184a034d-401c-5045-8188-253d032a4765",
+   "id": "9350c37b-0737-5531-be2c-057f204bafe1",
+   "sequence": 2,
+   "kind": "TOOL_CALL",
+   "role": "assistant",
+   "tool_name": "grep",
+   "tool_call_id": "call_2",
+   "tool_args": {
+    "pattern": "def deliver",
+    "path": "."
+   }
+  },
+  {
+   "conversation_id": "9404283b-d0f4-5575-9e8b-54b59d6fef34",
+   "created_at": "2026-11-25T09:28:12+00:00",
+   "agent_run_id": "184a034d-401c-5045-8188-253d032a4765",
+   "id": "5a1fd3de-3e76-59ff-8d93-106edf31adb7",
+   "sequence": 3,
+   "kind": "TOOL_RETURN",
+   "role": "tool",
+   "tool_name": "grep",
+   "tool_call_id": "call_2",
+   "tool_result": {
+    "output": "3 matches"
+   }
+  },
+  {
+   "conversation_id": "9404283b-d0f4-5575-9e8b-54b59d6fef34",
+   "created_at": "2026-11-25T09:28:16+00:00",
+   "agent_run_id": "184a034d-401c-5045-8188-253d032a4765",
+   "id": "ba4b89e3-ee36-5bcb-be32-04a7f82c5f72",
+   "sequence": 4,
+   "kind": "TOOL_CALL",
+   "role": "assistant",
+   "tool_name": "grep",
+   "tool_call_id": "call_4",
+   "tool_args": {
+    "pattern": "retry",
+    "path": "."
+   }
+  },
+  {
+   "conversation_id": "9404283b-d0f4-5575-9e8b-54b59d6fef34",
+   "created_at": "2026-11-25T09:28:20+00:00",
+   "agent_run_id": "184a034d-401c-5045-8188-253d032a4765",
+   "id": "51b4f8f6-41d9-59db-94a9-f483764774f0",
+   "sequence": 5,
+   "kind": "TOOL_RETURN",
+   "role": "tool",
+   "tool_name": "grep",
+   "tool_call_id": "call_4",
+   "tool_result": {
+    "output": "3 matches"
+   }
+  },
+  {
+   "conversation_id": "9404283b-d0f4-5575-9e8b-54b59d6fef34",
+   "created_at": "2026-11-25T09:28:24+00:00",
+   "agent_run_id": "184a034d-401c-5045-8188-253d032a4765",
+   "id": "f6bdd193-d8a6-500a-970f-006b32c07d01",
+   "sequence": 6,
+   "kind": "TOOL_CALL",
+   "role": "assistant",
+   "tool_name": "grep",
+   "tool_call_id": "call_6",
+   "tool_args": {
+    "pattern": "with_backoff",
+    "path": "."
+   }
+  },
+  {
+   "conversation_id": "9404283b-d0f4-5575-9e8b-54b59d6fef34",
+   "created_at": "2026-11-25T09:28:28+00:00",
+   "agent_run_id": "184a034d-401c-5045-8188-253d032a4765",
+   "id": "2b29960b-527d-58f0-a677-7fba9b317093",
+   "sequence": 7,
+   "kind": "TOOL_RETURN",
+   "role": "tool",
+   "tool_name": "grep",
+   "tool_call_id": "call_6",
+   "tool_result": {
+    "output": "3 matches"
+   }
+  },
+  {
+   "conversation_id": "9404283b-d0f4-5575-9e8b-54b59d6fef34",
+   "created_at": "2026-11-25T09:28:32+00:00",
+   "agent_run_id": "184a034d-401c-5045-8188-253d032a4765",
+   "id": "b976092e-176f-574d-b49e-a7d3778eeb29",
+   "sequence": 8,
+   "kind": "TOOL_CALL",
+   "role": "assistant",
+   "tool_name": "grep",
+   "tool_call_id": "call_8",
+   "tool_args": {
+    "pattern": "state = \"failed\"",
+    "path": "."
+   }
+  },
+  {
+   "conversation_id": "9404283b-d0f4-5575-9e8b-54b59d6fef34",
+   "created_at": "2026-11-25T09:28:36+00:00",
+   "agent_run_id": "184a034d-401c-5045-8188-253d032a4765",
+   "id": "cc22b5f8-58b6-5a1f-8751-c5fd7abdc373",
+   "sequence": 9,
+   "kind": "TOOL_RETURN",
+   "role": "tool",
+   "tool_name": "grep",
+   "tool_call_id": "call_8",
+   "tool_result": {
+    "output": "3 matches"
+   }
+  },
+  {
+   "conversation_id": "9404283b-d0f4-5575-9e8b-54b59d6fef34",
+   "created_at": "2026-11-25T09:28:40+00:00",
+   "agent_run_id": "184a034d-401c-5045-8188-253d032a4765",
+   "id": "d0dbfbac-46d4-5869-a73c-c953d8906f40",
+   "sequence": 10,
+   "kind": "TOOL_CALL",
+   "role": "assistant",
+   "tool_name": "read_file",
+   "tool_call_id": "call_10",
+   "tool_args": {
+    "path": "api/webhooks/deliver.py"
+   }
+  },
+  {
+   "conversation_id": "9404283b-d0f4-5575-9e8b-54b59d6fef34",
+   "created_at": "2026-11-25T09:28:44+00:00",
+   "agent_run_id": "184a034d-401c-5045-8188-253d032a4765",
+   "id": "0ccd7b7e-43ae-51e0-b160-73699027b194",
+   "sequence": 11,
+   "kind": "TOOL_RETURN",
+   "role": "tool",
+   "tool_name": "read_file",
+   "tool_call_id": "call_10",
+   "tool_result": {
+    "content": "…"
+   }
+  },
+  {
+   "conversation_id": "9404283b-d0f4-5575-9e8b-54b59d6fef34",
+   "created_at": "2026-11-25T09:28:48+00:00",
+   "agent_run_id": "184a034d-401c-5045-8188-253d032a4765",
+   "id": "7035cf30-4b93-522f-bc96-a817610ceb1b",
+   "sequence": 12,
+   "kind": "TOOL_CALL",
+   "role": "assistant",
+   "tool_name": "read_file",
+   "tool_call_id": "call_12",
+   "tool_args": {
+    "path": "api/webhooks/log.py"
+   }
+  },
+  {
+   "conversation_id": "9404283b-d0f4-5575-9e8b-54b59d6fef34",
+   "created_at": "2026-11-25T09:28:52+00:00",
+   "agent_run_id": "184a034d-401c-5045-8188-253d032a4765",
+   "id": "ae67ded4-b9f8-5ffd-9d03-965eb4fe846e",
+   "sequence": 13,
+   "kind": "TOOL_RETURN",
+   "role": "tool",
+   "tool_name": "read_file",
+   "tool_call_id": "call_12",
+   "tool_result": {
+    "content": "…"
+   }
+  },
+  {
+   "conversation_id": "9404283b-d0f4-5575-9e8b-54b59d6fef34",
+   "created_at": "2026-11-25T09:28:56+00:00",
+   "agent_run_id": "184a034d-401c-5045-8188-253d032a4765",
+   "id": "81025aaa-b261-5021-989c-33abaa2de3ba",
+   "sequence": 14,
+   "kind": "TOOL_CALL",
+   "role": "assistant",
+   "tool_name": "read_file",
+   "tool_call_id": "call_14",
+   "tool_args": {
+    "path": "api/core/retry.py"
+   }
+  },
+  {
+   "conversation_id": "9404283b-d0f4-5575-9e8b-54b59d6fef34",
+   "created_at": "2026-11-25T09:29:00+00:00",
+   "agent_run_id": "184a034d-401c-5045-8188-253d032a4765",
+   "id": "f5fa68ba-ee8b-51d2-95fa-4dfdf35e5366",
+   "sequence": 15,
+   "kind": "TOOL_RETURN",
+   "role": "tool",
+   "tool_name": "read_file",
+   "tool_call_id": "call_14",
+   "tool_result": {
+    "content": "…"
+   }
+  },
+  {
+   "conversation_id": "9404283b-d0f4-5575-9e8b-54b59d6fef34",
+   "created_at": "2026-11-25T09:29:04+00:00",
+   "agent_run_id": "184a034d-401c-5045-8188-253d032a4765",
+   "id": "a7d53696-1a92-5885-9fea-1a45351e6be3",
+   "sequence": 16,
+   "kind": "TOOL_CALL",
+   "role": "assistant",
+   "tool_name": "read_file",
+   "tool_call_id": "call_16",
+   "tool_args": {
+    "path": "api/billing/sync.py"
+   }
+  },
+  {
+   "conversation_id": "9404283b-d0f4-5575-9e8b-54b59d6fef34",
+   "created_at": "2026-11-25T09:29:08+00:00",
+   "agent_run_id": "184a034d-401c-5045-8188-253d032a4765",
+   "id": "dae4ad9e-c631-5fb1-be23-da71239fbb58",
+   "sequence": 17,
+   "kind": "TOOL_RETURN",
+   "role": "tool",
+   "tool_name": "read_file",
+   "tool_call_id": "call_16",
+   "tool_result": {
+    "content": "…"
+   }
+  },
+  {
+   "conversation_id": "9404283b-d0f4-5575-9e8b-54b59d6fef34",
+   "created_at": "2026-11-25T09:29:12+00:00",
+   "agent_run_id": "184a034d-401c-5045-8188-253d032a4765",
+   "id": "5d09a46b-3ff6-56c8-ac2d-2f4f1508fa86",
+   "sequence": 18,
+   "kind": "TOOL_CALL",
+   "role": "assistant",
+   "tool_name": "read_file",
+   "tool_call_id": "call_18",
+   "tool_args": {
+    "path": "api/webhooks/test_deliver.py"
+   }
+  },
+  {
+   "conversation_id": "9404283b-d0f4-5575-9e8b-54b59d6fef34",
+   "created_at": "2026-11-25T09:29:16+00:00",
+   "agent_run_id": "184a034d-401c-5045-8188-253d032a4765",
+   "id": "5da9520c-c4a8-5fdd-aaac-e2d1038baf26",
+   "sequence": 19,
+   "kind": "TOOL_RETURN",
+   "role": "tool",
+   "tool_name": "read_file",
+   "tool_call_id": "call_18",
+   "tool_result": {
+    "content": "…"
+   }
+  },
+  {
+   "conversation_id": "9404283b-d0f4-5575-9e8b-54b59d6fef34",
+   "created_at": "2026-11-25T09:29:42+00:00",
+   "agent_run_id": "184a034d-401c-5045-8188-253d032a4765",
+   "id": "5a675e50-3246-567b-a7b6-96eb0876164b",
+   "sequence": 20,
+   "kind": "TEXT",
+   "role": "assistant",
+   "text": "Saved the answer."
+  }
+ ],
+ "next_page_token": null
+}

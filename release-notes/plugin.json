@@ -1,0 +1,11 @@
+{
+  // Release notes carries Mail inside its bundle, so one install brings both:
+  // a reply to someone who asked by email is a Mail draft in their thread,
+  // and Mail delivers it when a person presses Send. PR review and Triage
+  // join `carries` once they are built; until then Release notes reads
+  // GitHub itself and writes its own asks.
+  // Read by _build/assemble.py, which merges Mail from its own folder into
+  // install/release-notes/, the bundle that is installed.
+  "name": "release-notes",
+  "carries": ["mail"]
+}

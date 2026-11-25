@@ -1,0 +1,47 @@
+{
+  // One release's note: the open one being drafted as pull requests merge,
+  // and every one published since. Team-wide. Triage reads that this table
+  // exists to know Release notes is installed, and leaves telling askers to it.
+  "name": "release_note",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    // owner/name, as GitHub writes it.
+    { "name": "repo", "type": "TEXT", "required": true, "max_length": 200 },
+    // What people call it (v2.14), and the tag it is or will be.
+    { "name": "name", "type": "TEXT", "required": true, "max_length": 120 },
+    { "name": "tag", "type": "TEXT", "max_length": 120 },
+    // What it covers: from the last release's tag to this commit.
+    { "name": "from_ref", "type": "TEXT", "max_length": 200 },
+    { "name": "to_sha", "type": "TEXT", "max_length": 64 },
+    // drafting: merges still coming in. ready: it is live; a publisher is
+    // asked. published: on GitHub, the page and Slack.
+    { "name": "state", "type": "ENUM", "required": true, "default": "drafting",
+      "options": ["drafting", "ready", "published"] },
+    // The note's own headline, from its lead lines.
+    { "name": "title", "type": "TEXT", "max_length": 300 },
+    // What is live, where and how we know: deployment (a GitHub deployment
+    // status, once the platform has it), workflow (the deploy workflow's
+    // run), tag (a tag was pushed) or merge (only merged; never called live).
+    { "name": "live_at", "type": "DATETIME" },
+    { "name": "live_env", "type": "TEXT", "max_length": 120 },
+    { "name": "live_via", "type": "ENUM", "options": ["deployment", "workflow", "tag", "merge"] },
+    // The deploy run or tag that said so, for the line under the version.
+    { "name": "live_ref", "type": "TEXT", "max_length": 300 },
+    { "name": "drafted_at", "type": "DATETIME" },
+    // Why the last draft did not finish (the writer, GitHub), else empty.
+    { "name": "draft_error", "type": "TEXT", "max_length": 500 },
+    { "name": "published_at", "type": "DATETIME" },
+    { "name": "published_by", "type": "USER" },
+    // Where it went: the GitHub release, the Slack post.
+    { "name": "github_release_id", "type": "TEXT", "max_length": 40 },
+    { "name": "github_release_url", "type": "TEXT", "max_length": 500 },
+    { "name": "slack_ts", "type": "TEXT", "max_length": 40 },
+    { "name": "page_id", "type": "UUID" },
+    // What publishing did, a line per place, for the published note's page.
+    { "name": "sent", "type": "JSON" },
+    { "name": "sample", "type": "BOOLEAN", "default": false }
+  ],
+  "config": {}
+}

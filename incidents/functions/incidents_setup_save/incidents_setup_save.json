@@ -1,0 +1,36 @@
+{
+  "name": "incidents_setup_save",
+  "description": "Incidents' set-up, once for the Lemma (safe to run again): the Slack connector, #incidents (found, or made), the channel prefix, the repositories to watch [{repo, service, deploy_workflow}], who gets updates by email, the severity words (default SEV1-3), and the schedules the app made. Writes the memory block.",
+  "type": "API",
+  "visibility": "POD",
+  "code": {
+    "$file": "code.py"
+  },
+  "permissions": {
+    "grants": [
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "incidents_settings",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read",
+          "datastore.record.write"
+        ]
+      },
+      {
+        "resource_type": "connector",
+        "resource_name": "slack",
+        "permission_ids": [
+          "connector.use"
+        ]
+      },
+      {
+        "resource_type": "function",
+        "resource_name": "incidents_memory",
+        "permission_ids": [
+          "function.execute"
+        ]
+      }
+    ]
+  }
+}

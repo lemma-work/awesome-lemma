@@ -1,0 +1,17 @@
+{
+  "//": "The pictures on the Coding agent's page, taken from its Try it demo by `node _kit/bin/moments.mjs coding-agent` into .lemma/moments/. Not captured yet.",
+  "captures": [
+    { "name": "board", "alt": "The board: a needs-you lane on top with a question, failing checks and a task waiting for a Mac, then Ready for an agent, Working, Pull request open and Merged this week", "route": "/", "viewport": [1440, 900],
+      "clip": { "selector": ".cd-left", "pad": 0, "height": 760 }, "steps": [{ "wait": 1200 }, { "mouse": [4, 4] }],
+      "phone": { "viewport": [390, 844], "clip": { "x": 0, "y": 34, "width": 390, "height": 760 } } },
+    { "name": "activity", "alt": "A pull request's whole life: assigned, checked out, opened, a failing check fixed, a review answered, ready to merge", "route": "/t/ad204975-fe31-508e-a200-38775bd27f4d", "viewport": [1440, 900],
+      "clip": { "selector": ".cd-sheet", "pad": 0 }, "steps": [{ "wait": 1200 }, { "mouse": [4, 4] }] },
+    { "name": "transcript", "alt": "What the agent read, ran and changed, grouped: set-up, files read, two files edited, three commands with one failing, the recording it made", "route": "/t/2dec01ed-15e6-5d8d-b68e-0a27534aa0bf/transcript", "viewport": [1440, 900],
+      "clip": { "selector": ".cd-sheet", "pad": 0 }, "steps": [{ "wait": 1400 }, { "mouse": [4, 4] }] },
+    { "name": "new-task", "alt": "New task: one composer, with where it runs, the repository, where its branch starts, the agent and its live status, and keep it green", "loop": true, "cursor": true, "route": "/new", "viewport": [1440, 900],
+      "clip": { "selector": ".cd-new__main", "pad": 0, "height": 640 }, "poster": 2,
+      "steps": [{ "wait": 1000 }, { "click": ".cd-wrow .c-btn", "nth": 0 }, { "wait": 900 }, { "click": ".cd-composer__ctrls .c-menu-wrap .c-btn", "nth": 2 }, { "wait": 1600 }] },
+    { "name": "ask", "alt": "A question about the code answered with path:line links to the commit it read, the lines themselves, and the task it became", "route": "/ask/1b926ee9-385b-55d7-9cc1-044ce310ae20", "viewport": [1440, 900],
+      "clip": { "selector": ".cd-ask", "pad": 0, "height": 760 }, "steps": [{ "wait": 1400 }, { "mouse": [4, 4] }] }
+  ]
+}

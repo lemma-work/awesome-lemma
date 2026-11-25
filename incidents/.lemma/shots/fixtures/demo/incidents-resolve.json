@@ -1,0 +1,240 @@
+{
+ "event": {
+  "id": "956f384a-cf9b-539a-8a5e-05041a1294f8",
+  "incident_id": "bcd93022-cd07-5a13-b51c-3685f849b6cb",
+  "at": "2026-11-25T14:47:00+00:00",
+  "kind": "status",
+  "source": "app",
+  "source_id": "resolved:14",
+  "actor": "Mara Lind",
+  "text": "Resolved by Mara: revert deployed, errors stopped",
+  "url": null,
+  "starred": false,
+  "detail": null
+ },
+ "writeup": {
+  "title": "Checkout returned 502 for EU card payments",
+  "drafted_at": "2026-11-25T14:48:00+00:00",
+  "sections": [
+   {
+    "key": "summary",
+    "heading": "Summary",
+    "items": [
+     {
+      "key": "summary.0",
+      "kind": "p",
+      "text": "A change merged at 13:58 cut the EU payment provider's timeout from 10 s to 1 s.",
+      "cites": [
+       "2ea1485d-a610-5110-8393-42e96f153122"
+      ]
+     },
+     {
+      "key": "summary.1",
+      "kind": "p",
+      "text": "The provider takes about 1.4 s to answer, so every EU card payment timed out from the 14:01 deploy until the revert went out at 14:47.",
+      "cites": [
+       "56725595-022d-5234-8608-4a298e9ed0a6",
+       "18b9de89-dc2d-5b87-b58a-e289a9c1cabd",
+       "956f384a-cf9b-539a-8a5e-05041a1294f8"
+      ]
+     },
+     {
+      "key": "summary.2",
+      "kind": "p",
+      "text": "Wallets and non-EU cards were not affected.",
+      "cites": [
+       "a827fb0a-736e-5900-85aa-a451c21a54ae"
+      ]
+     }
+    ]
+   },
+   {
+    "key": "impact",
+    "heading": "Impact",
+    "items": [
+     {
+      "key": "impact.0",
+      "kind": "p",
+      "text": "About 1,240 people saw a failed payment.",
+      "cites": [
+       "a3353ced-24cf-5374-995e-68f34e43e9f2"
+      ]
+     },
+     {
+      "key": "impact.1",
+      "kind": "p",
+      "text": "Roughly €38,000 of orders were delayed, most of them retried later.",
+      "cites": []
+     }
+    ]
+   },
+   {
+    "key": "why",
+    "heading": "Why it happened",
+    "items": [
+     {
+      "key": "why.0",
+      "kind": "p",
+      "text": "The timeout was lowered to make a slow-provider page fail fast.",
+      "cites": [
+       "2ea1485d-a610-5110-8393-42e96f153122"
+      ]
+     },
+     {
+      "key": "why.1",
+      "kind": "p",
+      "text": "Nothing tested the EU provider's real response time, and the change was reviewed by someone who did not own payments.",
+      "cites": [
+       "5e8b8c81-130f-58ee-981c-3a08bf43ed39"
+      ]
+     }
+    ]
+   },
+   {
+    "key": "went",
+    "heading": "What went well, what didn't",
+    "items": [
+     {
+      "key": "went.0",
+      "kind": "li",
+      "text": "Detected within a minute: Triage saw the spike in users before anyone reported it.",
+      "cites": [
+       "a3353ced-24cf-5374-995e-68f34e43e9f2"
+      ]
+     },
+     {
+      "key": "went.1",
+      "kind": "li",
+      "text": "First update took 12 minutes.",
+      "cites": [
+       "29988300-a7f7-5c33-a14c-8da0c9e11411"
+      ]
+     },
+     {
+      "key": "went.2",
+      "kind": "li",
+      "text": "The call wasn't recorded, so its decisions are missing here.",
+      "cites": []
+     }
+    ]
+   }
+  ],
+  "timeline": [
+   {
+    "at": "2026-11-25T13:58:00+00:00",
+    "text": "#2291 merged",
+    "cites": [
+     "2ea1485d-a610-5110-8393-42e96f153122"
+    ]
+   },
+   {
+    "at": "2026-11-25T14:01:00+00:00",
+    "text": "Deployed to production",
+    "cites": [
+     "56725595-022d-5234-8608-4a298e9ed0a6"
+    ]
+   },
+   {
+    "at": "2026-11-25T14:02:00+00:00",
+    "text": "First TimeoutError; Triage marked it escalating",
+    "cites": [
+     "a3353ced-24cf-5374-995e-68f34e43e9f2"
+    ]
+   },
+   {
+    "at": "2026-11-25T14:03:00+00:00",
+    "text": "Mara declared INC-14, SEV2",
+    "cites": [
+     "e6397f79-5f7e-5db7-8bd2-6d56cbb4d8af"
+    ]
+   },
+   {
+    "at": "2026-11-25T14:12:00+00:00",
+    "text": "Likely cause posted",
+    "cites": [
+     "3442a36d-45f1-5b72-8c48-b1556c366a95"
+    ]
+   },
+   {
+    "at": "2026-11-25T14:22:00+00:00",
+    "text": "Confirmed in staging",
+    "cites": [
+     "5e8b8c81-130f-58ee-981c-3a08bf43ed39"
+    ]
+   },
+   {
+    "at": "2026-11-25T14:31:00+00:00",
+    "text": "Revert #2294 opened by the Lemma",
+    "cites": [
+     "18b9de89-dc2d-5b87-b58a-e289a9c1cabd"
+    ]
+   },
+   {
+    "at": "2026-11-25T14:47:00+00:00",
+    "text": "Revert deployed; errors stopped",
+    "cites": [
+     "956f384a-cf9b-539a-8a5e-05041a1294f8"
+    ]
+   }
+  ],
+  "built_from": {
+   "messages": 6,
+   "pinned": 2,
+   "changes": 4,
+   "deploys": 1,
+   "triage": 1,
+   "channel": "inc-14-checkout-502",
+   "triage_label": "TRI-482"
+  },
+  "not_used": [
+   "the call: no transcript connected",
+   "metrics: not connected"
+  ]
+ },
+ "flags": [
+  {
+   "id": "3cfaf0f9-1bec-577b-a0fc-fe2c727ba2b8",
+   "incident_id": "bcd93022-cd07-5a13-b51c-3685f849b6cb",
+   "section": "impact",
+   "state": "open",
+   "claim": "Roughly €38,000 of orders were delayed, most of them retried later.",
+   "reason": "No event backs this figure.",
+   "offer": "Count it from a connected source, or remove the sentence."
+  },
+  {
+   "id": "f8f01629-ff48-5607-b879-a1f67666ffc3",
+   "incident_id": "bcd93022-cd07-5a13-b51c-3685f849b6cb",
+   "section": "why",
+   "state": "open",
+   "claim": "Nothing tested the EU provider's real response time, and the change was reviewed by someone who did not own payments.",
+   "reason": "The events it cites don't say who reviewed #2291.",
+   "offer": "Rewrite it from the events, or keep it."
+  }
+ ],
+ "followups": [
+  {
+   "key": "fu14a",
+   "title": "Contract test for the EU provider's response time",
+   "why": "Nothing tested it.",
+   "owner_name": "Theo Park",
+   "state": "proposed",
+   "task_id": null
+  },
+  {
+   "key": "fu14b",
+   "title": "Alert on EU card failure rate above 2%",
+   "why": "Triage caught it; an alert would too.",
+   "owner_name": "Ines Ruiz",
+   "state": "proposed",
+   "task_id": null
+  },
+  {
+   "key": "fu14c",
+   "title": "Require a payments owner on changes to payments/",
+   "why": "The review may have missed it.",
+   "owner_name": null,
+   "state": "proposed",
+   "task_id": null
+  }
+ ]
+}

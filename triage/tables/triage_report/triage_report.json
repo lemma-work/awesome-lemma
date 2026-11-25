@@ -1,0 +1,87 @@
+{
+  // One thing said in one place: a Slack message, a form answer, a GitHub
+  // issue or comment, a Sentry or PostHog issue, a security alert, a report
+  // to the Lemma. Its words are kept as they were; Triage never edits them.
+  // The id is uuid5(TRIAGE_NS, "report:<door>:<source_id>"), so a re-read or a
+  // redelivery never files twice. `received_at` is when it was said at its
+  // source; the system `created_at` is when Triage filed it.
+  "name": "triage_report",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    // The item it belongs to (empty while new, for a question, or for chatter).
+    { "name": "item_id", "type": "UUID" },
+    { "name": "door", "type": "ENUM", "required": true,
+      "options": ["app", "assistant", "slack", "github", "form", "sentry", "posthog", "dependabot", "code_scanning", "secret_scanning"] },
+    // Where the assistant heard it (chat, slack, teams, email, web), for the
+    // door's chip.
+    { "name": "via", "type": "TEXT", "max_length": 32 },
+    // The account it came through (a Slack team id, a repository), the
+    // provider's own id ("acme/web#1182", "<channel>:<ts>", a Sentry id),
+    // and a link back to it.
+    { "name": "source_account", "type": "TEXT", "max_length": 200 },
+    { "name": "source_id", "type": "TEXT", "required": true, "max_length": 400 },
+    { "name": "source_url", "type": "TEXT", "max_length": 1000 },
+    { "name": "title", "type": "TEXT", "max_length": 300 },
+    { "name": "body", "type": "TEXT", "max_length": 8000 },
+    // The reporter's own words, short, for a task's quote and the list.
+    { "name": "quote", "type": "TEXT", "max_length": 600 },
+    // Who said it: a member, a contact (a known person outside), a visitor
+    // with no confirmed address, or a machine (people a tracker counts are
+    // reach, not askers).
+    { "name": "reporter_kind", "type": "ENUM", "default": "member", "options": ["member", "contact", "visitor", "machine"] },
+    // Their handle as `ask` keeps it: email, slack, github, member, contact.
+    { "name": "handle_kind", "type": "TEXT", "max_length": 32 },
+    { "name": "handle", "type": "TEXT", "max_length": 320 },
+    { "name": "reporter_name", "type": "TEXT", "max_length": 200 },
+    { "name": "company_name", "type": "TEXT", "max_length": 200 },
+    // A visitor's contact, as the insert event named it (contact:<id>).
+    { "name": "contact_id", "type": "UUID" },
+    // What a form or an issue form said around it.
+    { "name": "page", "type": "TEXT", "max_length": 1000 },
+    { "name": "app_version", "type": "TEXT", "max_length": 80 },
+    { "name": "browser", "type": "TEXT", "max_length": 120 },
+    { "name": "steps", "type": "TEXT", "max_length": 4000 },
+    { "name": "expected", "type": "TEXT", "max_length": 2000 },
+    // Attached files, as pod paths (a form's land in /forms/triage_form).
+    { "name": "files", "type": "JSON" },
+    { "name": "how_bad", "type": "ENUM", "options": ["cant_work", "can_carry_on", "small"] },
+    // What a machine counted when it was last read: people, events,
+    // sessions. Null means the source can't count it; 0 means it counted
+    // none.
+    { "name": "people", "type": "INTEGER" },
+    { "name": "events", "type": "INTEGER" },
+    { "name": "sessions", "type": "INTEGER" },
+    { "name": "first_seen", "type": "DATETIME" },
+    { "name": "last_seen", "type": "DATETIME" },
+    // When the source was last read for those numbers.
+    { "name": "read_at", "type": "DATETIME" },
+    // A security alert's facts: {severity, scope (runtime, development),
+    // relationship (direct, transitive), reachable, patch, advisory, rule,
+    // package, alert_number, state}.
+    { "name": "security", "type": "JSON" },
+    // The rest of what a source said: Sentry's priority, substatus,
+    // shortId, culprit; a top frame; labels; an issue form's other fields.
+    { "name": "detail", "type": "JSON" },
+    // Where it points in the code: "web/checkout/summary.tsx:54".
+    { "name": "path", "type": "TEXT", "max_length": 400 },
+    { "name": "repo", "type": "TEXT", "max_length": 200 },
+    // What the read said it is. Every option from the start: an import
+    // never changes an existing ENUM.
+    { "name": "kind", "type": "ENUM", "options": ["bug", "alert", "security", "request", "question", "not_a_report"] },
+    // new: not looked at yet. filed: made a new item. merged: joined an
+    // existing one. question / not_a_report: left alone, and counted.
+    { "name": "state", "type": "ENUM", "required": true, "default": "new",
+      "options": ["new", "filed", "merged", "question", "not_a_report"] },
+    // How it was matched, in words ("same page, same minute as the error").
+    { "name": "match_note", "type": "TEXT", "max_length": 400 },
+    // When it was said at its source.
+    { "name": "received_at", "type": "DATETIME" },
+    // When the reporter was answered, and what was said.
+    { "name": "acked_at", "type": "DATETIME" },
+    { "name": "ack_text", "type": "TEXT", "max_length": 600 },
+    { "name": "sample", "type": "BOOLEAN", "default": false }
+  ],
+  "config": {}
+}

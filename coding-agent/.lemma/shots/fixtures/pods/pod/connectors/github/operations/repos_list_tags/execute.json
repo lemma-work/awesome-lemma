@@ -1,0 +1,25 @@
+[
+ {
+  "match": "\"repo\":\"api\"",
+  "response": {
+   "result": [
+    {
+     "name": "v4.12.0"
+    },
+    {
+     "name": "v4.11.2"
+    }
+   ]
+  }
+ },
+ {
+  "match": "\"repo\"",
+  "response": {
+   "result": [
+    {
+     "name": "v2.30.1"
+    }
+   ]
+  }
+ }
+]

@@ -1,0 +1,47 @@
+[
+ {
+  "match": "\"repo\":\"api\"",
+  "response": {
+   "result": [
+    {
+     "name": "main"
+    },
+    {
+     "name": "release/2026.11"
+    },
+    {
+     "name": "lemma/p7d2m4xa"
+    },
+    {
+     "name": "lemma/f4h1w9zs"
+    }
+   ]
+  }
+ },
+ {
+  "match": "\"repo\":\"web\"",
+  "response": {
+   "result": [
+    {
+     "name": "main"
+    },
+    {
+     "name": "next"
+    },
+    {
+     "name": "lemma/k3x9q2ma"
+    }
+   ]
+  }
+ },
+ {
+  "match": "\"repo\"",
+  "response": {
+   "result": [
+    {
+     "name": "main"
+    }
+   ]
+  }
+ }
+]

@@ -1,0 +1,10 @@
+{
+  // Every update of a team task; sprints_on_task looks at `changed` and
+  // follows status and assignee changes only (a `when` has no OR).
+  // `bulk_writes: each`: other plugins write tasks in bulk.
+  "name": "sprints-task-changed",
+  "schedule_type": "DATASTORE",
+  "config": { "table_name": "task", "operations": ["UPDATE"], "bulk_writes": "each" },
+  "workflow_name": "sprints-task-changed",
+  "is_active": true
+}

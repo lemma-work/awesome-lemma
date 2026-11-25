@@ -1,0 +1,34 @@
+{
+  // One watched repository. Team-wide, no RLS.
+  "name": "deps_repo",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    // owner/name, as GitHub has it.
+    { "name": "repo", "type": "TEXT", "required": true, "unique": true, "max_length": 200 },
+    { "name": "github_repo_id", "type": "INTEGER" },
+    { "name": "default_branch", "type": "TEXT", "max_length": 200 },
+    // The package managers found in it: pnpm, npm, yarn, uv, pip, poetry, actions.
+    { "name": "managers", "type": "JSON" },
+    { "name": "install_cmd", "type": "TEXT", "max_length": 400 },
+    { "name": "test_cmd", "type": "TEXT", "max_length": 400 },
+    { "name": "build_cmd", "type": "TEXT", "max_length": 400 },
+    //   new             not looked at yet
+    //   needs_confirm   the first run found the commands; a person confirms them
+    //   ok              installs and tests
+    //   private_registry  can't install: a private registry (read, not tested)
+    //   cant_install    the install fails for another reason (status_note)
+    //   unsupported     no manager v1 knows (Go, Cargo, Maven, Gradle)
+    { "name": "status", "type": "ENUM", "required": true, "default": "new",
+      "options": ["new", "needs_confirm", "ok", "private_registry", "cant_install", "unsupported"] },
+    { "name": "status_note", "type": "TEXT", "max_length": 400 },
+    { "name": "commands_confirmed_by", "type": "TEXT", "max_length": 200 },
+    // Its schedules, made by the app as the owner: name -> id.
+    { "name": "schedule_ids", "type": "JSON" },
+    { "name": "last_run_at", "type": "DATETIME" },
+    { "name": "last_run_note", "type": "TEXT", "max_length": 400 },
+    { "name": "active", "type": "BOOLEAN", "default": true }
+  ],
+  "config": {}
+}

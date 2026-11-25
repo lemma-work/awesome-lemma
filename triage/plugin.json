@@ -1,0 +1,10 @@
+{
+  // Triage carries Tasks inside its bundle, so one install into an empty
+  // Lemma brings both: an accepted item is a team task that a person or an
+  // agent takes. It uses Incidents, Coding agent, Release notes, Dependency
+  // updates and Sprints when they are installed, and never carries them.
+  // Read by _build/assemble.py, which merges Tasks from its own folder into
+  // install/triage/, the bundle that is installed.
+  "name": "triage",
+  "carries": ["tasks"]
+}

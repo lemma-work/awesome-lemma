@@ -1,0 +1,194 @@
+{
+ "//": "The pictures on Triage's page, taken from its Try it demo by `node _kit/bin/moments.mjs triage` into .lemma/moments/. Not captured yet.",
+ "captures": [
+  {
+   "name": "one-item",
+   "alt": "Four reports from Sentry, a form, Slack and email, merged into one item with how each was merged",
+   "route": "/i/48",
+   "viewport": [
+    1184,
+    900
+   ],
+   "clip": {
+    "selector": ".tr-main section:first-child",
+    "pad": 8
+   },
+   "steps": [
+    {
+     "wait": 1200
+    },
+    {
+     "mouse": [
+      4,
+      4
+     ]
+    }
+   ],
+   "phone": {
+    "viewport": [
+     390,
+     900
+    ],
+    "clip": {
+     "selector": ".tr-main section:first-child",
+     "pad": 6
+    }
+   }
+  },
+  {
+   "name": "by-people",
+   "alt": "The inbox sorted by people reached: 1,240 people and rising first, then 312, then two security alerts",
+   "route": "/",
+   "viewport": [
+    1184,
+    900
+   ],
+   "clip": {
+    "selector": ".tr-list",
+    "pad": 0
+   },
+   "steps": [
+    {
+     "wait": 1200
+    },
+    {
+     "mouse": [
+      4,
+      4
+     ]
+    }
+   ],
+   "phone": {
+    "viewport": [
+     390,
+     900
+    ],
+    "clip": {
+     "selector": ".tr-list",
+     "pad": 0
+    }
+   }
+  },
+  {
+   "name": "owner-then-1",
+   "alt": "A suggested owner with the reason, then pressing 1 makes an urgent task in Tasks",
+   "loop": true,
+   "cursor": true,
+   "route": "/",
+   "viewport": [
+    1440,
+    900
+   ],
+   "clip": {
+    "x": 0,
+    "y": 34,
+    "width": 1440,
+    "height": 820
+   },
+   "poster": 1.6,
+   "steps": [
+    {
+     "wait": 1400
+    },
+    {
+     "key": "1"
+    },
+    {
+     "wait": 2400
+    }
+   ]
+  },
+  {
+   "name": "security",
+   "alt": "A reachable lodash alert beside a development-only one the Lemma marked down",
+   "route": "/",
+   "viewport": [
+    1184,
+    900
+   ],
+   "clip": {
+    "selector": ".tr-list",
+    "pad": 0
+   },
+   "steps": [
+    {
+     "wait": 1200
+    },
+    {
+     "key": "j"
+    },
+    {
+     "key": "j"
+    },
+    {
+     "wait": 600
+    }
+   ]
+  },
+  {
+   "name": "to-an-agent",
+   "alt": "Give to Coding agent: the item is accepted and the task handed over",
+   "loop": true,
+   "cursor": true,
+   "route": "/i/48",
+   "viewport": [
+    1440,
+    900
+   ],
+   "clip": {
+    "x": 0,
+    "y": 34,
+    "width": 1440,
+    "height": 820
+   },
+   "poster": 1.6,
+   "steps": [
+    {
+     "wait": 1400
+    },
+    {
+     "key": "g"
+    },
+    {
+     "wait": 2400
+    }
+   ]
+  },
+  {
+   "name": "not-checked",
+   "alt": "What was checked, and what wasn't: Logs, not checked, because no logs source is connected",
+   "route": "/i/48",
+   "viewport": [
+    1184,
+    2000
+   ],
+   "clip": {
+    "selector": ".tr-main > section:nth-of-type(3)",
+    "pad": 8
+   },
+   "steps": [
+    {
+     "wait": 1200
+    }
+   ]
+  },
+  {
+   "name": "we-know",
+   "alt": "People outside: the report form, and the known issues it reads so a person sees we already know",
+   "route": "/doors",
+   "viewport": [
+    1184,
+    1200
+   ],
+   "clip": {
+    "selector": ".tr-doors > section:nth-of-type(3)",
+    "pad": 8
+   },
+   "steps": [
+    {
+     "wait": 1200
+    }
+   ]
+  }
+ ]
+}

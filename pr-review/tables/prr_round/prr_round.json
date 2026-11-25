@@ -1,0 +1,71 @@
+{
+  // One review round: one pull request read at one head commit. A new push
+  // is a new round; the newest finished one is what the pull request's
+  // verdict stands for. Team-wide, like the pull requests it reads.
+  //
+  // Kept small (a cell holds at most 256 KB, a row 1 MB): lists are capped
+  // and long text is cut when stored (prr_save_round).
+  "name": "prr_round",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "pull_request_id", "type": "UUID", "required": true },
+    { "name": "key", "type": "TEXT", "required": true, "max_length": 220 },
+    // The head commit read, the commit the previous finished round read
+    // (null on the first), and which round this is for the pull request.
+    { "name": "sha", "type": "TEXT", "required": true, "max_length": 64 },
+    { "name": "since_sha", "type": "TEXT", "max_length": 64 },
+    { "name": "seq", "type": "INTEGER", "default": 1 },
+    // queued, running, done, failed (did not finish: counts as not clean),
+    // superseded (a newer push came in first).
+    { "name": "status", "type": "ENUM", "required": true, "default": "queued",
+      "options": ["queued", "running", "done", "failed", "superseded"] },
+    { "name": "queued_at", "type": "DATETIME" },
+    { "name": "started_at", "type": "DATETIME" },
+    { "name": "finished_at", "type": "DATETIME" },
+    // The changed files at this commit: [{path, status, additions, deletions, previous}].
+    { "name": "files", "type": "JSON" },
+    // The lines this push touched since `since_sha`, per file: {path: [[start, end], ...]}
+    // in the new file's numbers; "*" for a whole file. Empty on a first round.
+    { "name": "touched", "type": "JSON" },
+    // What the reviewer said, as stored: a plain summary, the key changes
+    // ([{title, why, hunks: [{path, start, end}]}]), the lines nobody needs
+    // to read by kind ([{kind, files, lines, examples}]), and the hunks a
+    // person should read ([{path, start, end}]) with the count of their lines.
+    { "name": "summary", "type": "TEXT", "max_length": 4000 },
+    { "name": "key_changes", "type": "JSON" },
+    { "name": "mechanical", "type": "JSON" },
+    { "name": "lines_to_read", "type": "JSON" },
+    { "name": "lines_total", "type": "INTEGER" },
+    { "name": "lines_to_read_count", "type": "INTEGER" },
+    // One entry per rule in scope, decided by code from the reviewer's
+    // answer and the open findings: [{rule_id, text, state (passed, broken,
+    // not_checked), note, finding_ids}].
+    { "name": "ledger", "type": "JSON" },
+    // Found by code across open pull requests: [{pr, kind (same_number,
+    // same_files), detail, paths}].
+    { "name": "cross_pr", "type": "JSON" },
+    // What code did with the reviewer's findings: {new, kept, fixed,
+    // kept_dismissed, dropped_untouched, invalid}.
+    { "name": "counts", "type": "JSON" },
+    // The verdict code decided for this round, and the risk after it.
+    { "name": "verdict", "type": "ENUM", "options": ["clean", "changes", "needs_person"] },
+    { "name": "risk", "type": "ENUM", "options": ["low", "medium", "high"] },
+    { "name": "risk_reasons", "type": "JSON" },
+    // What was posted on GitHub for this commit, as the Lemma's bot:
+    // {check: state, check_run_id, approval: state, approval_id, comment:
+    // state, comment_id, review: state}. A state is ok, off, needs_platform,
+    // no_permission or failed:<why>.
+    { "name": "github", "type": "JSON" },
+    // The reviewer's conversation and the workflow run, and why it failed.
+    // Which run claimed it: two runs that start one round both write their
+    // own token, and the one that reads back someone else's stands down.
+    { "name": "claim", "type": "TEXT", "max_length": 64 },
+    { "name": "conversation_id", "type": "TEXT", "max_length": 64 },
+    { "name": "workflow_run_id", "type": "TEXT", "max_length": 64 },
+    { "name": "error", "type": "TEXT", "max_length": 2000 },
+    { "name": "sample", "type": "BOOLEAN", "default": false }
+  ],
+  "config": {}
+}

@@ -1,0 +1,72 @@
+{
+  "name": "Triage",
+  "line": "dev",
+  "position": 28,
+  "job": "Bugs, alerts and security warnings sorted by how far they reach, each with an owner",
+  "intro": "Reports come in from your app, your Lemma, Slack, GitHub, a report form, Sentry, PostHog and GitHub's security alerts. Each becomes one item, counted in people, with a suggested owner and the reason. One key decides it; everyone who asked is told when it's fixed.",
+  "does": [
+    "Three reports of one problem, from a form, Slack and an error tracker, become one item, ranked by the people it reaches.",
+    "A suggested owner with the reason: your rules, CODEOWNERS, the last change to the line, or whoever is on triage.",
+    "Accept makes a team task with the evidence; give it to an agent; decline tells the askers why."
+  ],
+  "jobs": [
+    "ENGINEERING",
+    "SUPPORT"
+  ],
+  "accounts": [
+    {
+      "any": [
+        "GitHub"
+      ],
+      "why": "One shared GitHub connection: issues, +1 comments and security alerts on the repositories you pick, CODEOWNERS and the last change to a file for owners, and a comment when it's filed and fixed."
+    },
+    {
+      "any": [
+        "Slack"
+      ],
+      "why": "Reads the channels you watch for reports, and replies in the thread when it's fixed. The same app as your Lemma's bot.",
+      "optional": true
+    },
+    {
+      "any": [
+        "Sentry",
+        "PostHog"
+      ],
+      "why": "Errors counted in people, read every 15 minutes; a Sentry issue is resolved when its task is done.",
+      "optional": true
+    }
+  ],
+  "setup": [
+    "Once for the whole Lemma: the repositories to watch, who's on triage, and any Slack channels, Sentry projects and PostHog project.",
+    "Or look around with a sample morning: a checkout crash reported four ways, a billing spike, two security alerts.",
+    "Turn on the report form and share its link, or put it in your product."
+  ],
+  "today": [
+    {
+      "verb": "decide",
+      "line": "An urgent report waiting for a decision, when you're on triage"
+    },
+    {
+      "verb": "answer",
+      "line": "Tell the people who used the form that it's fixed"
+    },
+    {
+      "verb": "do",
+      "line": "Accepted items, through Tasks"
+    }
+  ],
+  "pictures": [
+    {
+      "shot": "triage",
+      "caption": "The inbox, sorted by people reached"
+    },
+    {
+      "shot": "triage-case",
+      "caption": "One item: its reports, what was checked, reach"
+    },
+    {
+      "shot": "triage-doors",
+      "caption": "Every door a report comes through"
+    }
+  ]
+}

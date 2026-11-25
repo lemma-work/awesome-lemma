@@ -1,0 +1,33 @@
+{
+  "apps": [
+    {
+      "name": "pull-requests",
+      "label": "Pull requests",
+      "start": "/"
+    },
+    {
+      "name": "rules",
+      "label": "Rules",
+      "start": "/"
+    }
+  ],
+  "labels": {
+    "tasks": "Tasks"
+  },
+  "user": {
+    "id": "user-sample",
+    "email": "asha@acme.example",
+    "first_name": "Asha",
+    "last_name": "Rao",
+    "name": "Asha Rao",
+    "is_active": true,
+    "is_superuser": false,
+    "is_verified": true,
+    "created_at": "2026-01-01T00:00:00Z",
+    "updated_at": "2026-01-01T00:00:00Z"
+  },
+  "notes": {
+    "prr_read_rules": "In the demo the repositories aren't read again. In a Lemma it reads the rule files on each default branch and proposes what changed.",
+    "prr_sample_data": "In the demo the sample stays."
+  }
+}

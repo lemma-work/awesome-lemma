@@ -1,0 +1,14 @@
+{
+  // Every 15 minutes, on the bundled prr-sync TIME schedule: what a webhook
+  // missed, stuck rounds, and merges whose wait has passed.
+  "name": "prr-sync",
+  "description": "Every 15 minutes: catch what a webhook missed, fail rounds that never finished, and merge what has waited long enough.",
+  "start": { "type": "SCHEDULED", "config": { "schedule_type": "CRON" } },
+  "nodes": [
+    { "id": "sync", "type": "FUNCTION", "label": "Catch up",
+      "config": { "function_name": "prr_sync", "input_mapping": {} } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [ { "id": "e1", "source": "sync", "target": "end" } ],
+  "visibility": "POD"
+}

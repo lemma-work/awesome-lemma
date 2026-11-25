@@ -1,0 +1,30 @@
+{
+  "name": "prr_save_rules",
+  "description": "Keep the rules the scout proposed, checked by code: a rule from a file must quote it (its source becomes file:line where code found the words), one from review comments must quote two pull requests' comments word for word. Everything enters proposed unless set-up accepted the file rules.",
+  "type": "API",
+  "visibility": "POD",
+  "code": {
+    "$file": "code.py"
+  },
+  "permissions": {
+    "grants": [
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "prr_rule",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read",
+          "datastore.record.write"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "prr_settings",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read"
+        ]
+      }
+    ]
+  }
+}

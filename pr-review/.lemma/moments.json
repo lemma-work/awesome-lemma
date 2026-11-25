@@ -1,0 +1,277 @@
+{
+  "//": "The six pictures on PR review's page, taken from its Try it demo by `node _kit/bin/moments.mjs pr-review` into .lemma/moments/. listing.json names them by `name`. The demo's sample is .lemma/shots/fixtures.py; rules-found opens the Rules app from the demo's bar.",
+  "captures": [
+    {
+      "name": "rules-found",
+      "alt": "The Rules app: the rule files read from main (CONTRIBUTING.md, AGENTS.md, REVIEW.md, .cursor/BUGBOT.md), and each rule with where it came from, its severity and what reviews did with it",
+      "route": "/",
+      "viewport": [
+        1440,
+        1000
+      ],
+      "steps": [
+        {
+          "wait": 900
+        },
+        {
+          "click": "nav[aria-label='Apps in this demo'] a",
+          "text": "Rules"
+        },
+        {
+          "wait": 1600
+        },
+        {
+          "mouse": [
+            4,
+            4
+          ]
+        }
+      ],
+      "clip": {
+        "selector": ".rl-wrap",
+        "pad": 0,
+        "height": 640
+      },
+      "phone": {
+        "viewport": [
+          390,
+          844
+        ],
+        "clip": {
+          "selector": ".rl-wrap",
+          "pad": 0,
+          "height": 720
+        }
+      }
+    },
+    {
+      "name": "ledger",
+      "alt": "Rules checked on one pull request: 9 passed, 2 broken, 1 not checked, each rule with the line it broke on or why it couldn't be checked",
+      "route": "/pr/acme/api/1214",
+      "viewport": [
+        1440,
+        1100
+      ],
+      "steps": [
+        {
+          "wait": 1400
+        },
+        {
+          "mouse": [
+            4,
+            4
+          ]
+        }
+      ],
+      "clip": {
+        "selector": "#prr-ledger",
+        "pad": 12,
+        "height": 470
+      },
+      "phone": {
+        "viewport": [
+          390,
+          3000
+        ],
+        "steps": [
+          {
+            "wait": 1400
+          },
+          {
+            "mouse": [
+              4,
+              4
+            ]
+          }
+        ],
+        "clip": {
+          "selector": "#prr-ledger",
+          "pad": 8,
+          "height": 520
+        }
+      }
+    },
+    {
+      "name": "finding-on-line",
+      "alt": "A must-fix finding under line 82 of billing/queue.py: a retry can charge twice, the rule it breaks from CONTRIBUTING.md:42, the suggested change, and Fix it, Not worth fixing, The finding is wrong",
+      "loop": true,
+      "cursor": true,
+      "route": "/pr/acme/api/1214/files",
+      "viewport": [
+        1440,
+        1200
+      ],
+      "steps": [
+        {
+          "wait": 1400
+        },
+        {
+          "click": ".prr-fnd .c-btn",
+          "text": "Fix it"
+        },
+        {
+          "wait": 1800
+        }
+      ],
+      "clip": {
+        "selector": ".prr-file",
+        "pad": 0,
+        "height": 760
+      },
+      "poster": 0.5,
+      "phone": {
+        "viewport": [
+          390,
+          1700
+        ],
+        "loop": false,
+        "steps": [
+          {
+            "wait": 1400
+          },
+          {
+            "mouse": [
+              4,
+              4
+            ]
+          }
+        ],
+        "clip": {
+          "selector": ".prr-fnd",
+          "pad": 8,
+          "height": 640
+        }
+      }
+    },
+    {
+      "name": "second-push",
+      "alt": "Since round 1: a finding fixed in the commit that fixed it, a dismissed one that stays dismissed, and nothing new on lines the push didn't touch",
+      "route": "/pr/acme/api/1214",
+      "viewport": [
+        1440,
+        1500
+      ],
+      "steps": [
+        {
+          "wait": 1400
+        },
+        {
+          "mouse": [
+            4,
+            4
+          ]
+        }
+      ],
+      "clip": {
+        "selector": "#prr-since",
+        "pad": 12,
+        "height": 300
+      },
+      "phone": {
+        "viewport": [
+          390,
+          3600
+        ],
+        "steps": [
+          {
+            "wait": 1400
+          },
+          {
+            "mouse": [
+              4,
+              4
+            ]
+          }
+        ],
+        "clip": {
+          "selector": "#prr-since",
+          "pad": 8,
+          "height": 360
+        }
+      }
+    },
+    {
+      "name": "inbox",
+      "alt": "The inbox by who each pull request waits on: Needs your review, Ready for you to merge, Merging by itself with Hold, Returned to you, Waiting on others, Reviewing now",
+      "route": "/",
+      "viewport": [
+        1440,
+        1000
+      ],
+      "steps": [
+        {
+          "wait": 1400
+        },
+        {
+          "mouse": [
+            4,
+            4
+          ]
+        }
+      ],
+      "clip": {
+        "selector": ".prr-list",
+        "pad": 0,
+        "height": 760
+      },
+      "phone": {
+        "viewport": [
+          390,
+          844
+        ],
+        "clip": {
+          "selector": ".prr-list",
+          "pad": 0,
+          "height": 760
+        }
+      }
+    },
+    {
+      "name": "lemma-check",
+      "alt": "The Lemma check: posted on every pull request, required by branch protection on acme/api, and the merge box reading it beside GitHub's own checks",
+      "route": "/settings",
+      "viewport": [
+        1440,
+        1000
+      ],
+      "steps": [
+        {
+          "wait": 1400
+        },
+        {
+          "mouse": [
+            4,
+            4
+          ]
+        }
+      ],
+      "clip": {
+        "selector": "#prr-check",
+        "pad": 12,
+        "height": 260
+      },
+      "phone": {
+        "viewport": [
+          390,
+          1400
+        ],
+        "steps": [
+          {
+            "wait": 1400
+          },
+          {
+            "mouse": [
+              4,
+              4
+            ]
+          }
+        ],
+        "clip": {
+          "selector": "#prr-check",
+          "pad": 8,
+          "height": 420
+        }
+      }
+    }
+  ]
+}

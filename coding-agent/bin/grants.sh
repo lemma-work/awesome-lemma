@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+# Every function's description and grants, in one place. Regenerates
+# functions/<name>/<name>.json; never edit those by hand (bin/fnjson.py, as Incidents').
+#   table   read        table:rw  + write rows        table:rwd  + delete rows
+#   function:<name>     run it        agent:<name>        open and post into its conversations
+#   connector:<id>      use it        /folder:verbs       a folder
+# No function can be granted schedule.create, so each person's webhook and tick
+# schedules are made by the app as that person (bin/app-schedules.json).
+set -euo pipefail
+cd "$(dirname "$0")/.."
+f() { uv run --no-project python bin/fnjson.py "$@"; }
+f coding_start "Hand a coding task to an agent: title, brief and repo (owner/name); task_id to work an existing task; ref to start from a branch, tag, commit or pull/<n>/head; push_to to push to an existing pull request's branch; profile_id and model for the agent (default: the team's); keep_green. Opens the agent's conversation in its own branch and returns at once. Never merges." coding_settings coding_repo coding_session:rw coding_event:rw task:rw personal_task:rw needs_you:rw agent:coding_builder connector:github
+f coding_report "coding_builder reports on its session (session_id from the brief): progress, question (then stop), pr (pr_number, pr_url, branch), result, failed. Updates the board and the person's items in Today." coding_session:rw coding_event:rw task:rw personal_task:rw needs_you:rw connector:github
+f coding_on_github "GitHub's webhooks for the coding agent's pull requests (pull_request, check_run, check_suite, review comments, reviews) and labelled issues: events on the task, and one fix round per failure or review when the caller started the session and keep green is on." coding_settings coding_repo coding_session:rw coding_event:rw task:rw personal_task:rw needs_you:rw agent:coding_builder connector:github
+f coding_tick "Every 15 minutes, as each person: their live sessions' conversations (finished, failed, waiting on them), their open pull requests (merged, closed, conflicts, checks), and their items in Today." coding_settings coding_session:rw coding_event:rw task:rw personal_task:rw needs_you:rw agent:coding_builder connector:github
+f coding_needs_you "What in Coding agent needs the person, written to the shared needs_you list (Today reads it): a question to answer, failing checks, review comments or conflicts keep green couldn't settle, a Mac that is offline, a session that failed, a task with no repository. Resolves what no longer applies." coding_session task needs_you:rw
+f coding_on_task "A team task assigned to coding_builder (the coding-task-handed and coding-task-added schedules): starts a session in the repository its GitHub link names, or the only one enabled; otherwise asks the person which repository." coding_settings coding_repo coding_session:rw coding_event:rw task:rw personal_task:rw needs_you:rw agent:coding_builder connector:github
+f coding_ask_start "Ask coding_ask a question about a repository (question, repo, ref): saves the question for the team and opens the agent's read-only conversation at that commit. The answer arrives in coding_question." coding_settings coding_question:rw agent:coding_ask
+f coding_answer "coding_ask saves its answer to a question (question_id): the markdown with path:line citations, the commit it read (sha) and the ranges it read." coding_question:rw
+f coding_setup_save "Coding agent's set-up, once for the Lemma (safe to run again): the repositories the agent may work in, each with set-up commands and notes [{full_name, default_branch, setup, notes, enabled}], and the defaults (agent, model, keep green, tries, issue label). Writes the memory block." coding_settings:rw coding_repo:rw function:coding_memory
+f coding_memory "Tells this Lemma's agents that Coding agent is installed: its own block in /memory/AGENTS.md and its guide at /memory/plugins/coding-agent.md, leaving the team's notes alone. Set-up runs it; safe to run again. remove takes both out." /memory:read,write
+f coding_sample_data "load: made-up work in acme/web and acme/api to look around (tasks in every column of the board, a full activity timeline, two answered questions; no conversations). clear: removes only what the sample made." coding_settings:rw coding_session:rwd coding_event:rwd coding_question:rwd coding_sample_row:rwd task:rwd needs_you:rw

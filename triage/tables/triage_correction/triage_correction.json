@@ -1,0 +1,25 @@
+{
+  // A person overriding the Lemma: an owner changed, a merge split, a
+  // duplicate refused or made, a mark-down undone, a report's kind changed.
+  // The newest go with every Decisions call as examples (`evidence` as the
+  // call saw it, `answer` the person's), as Tasks' corrections do.
+  "name": "triage_correction",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "item_id", "type": "UUID" },
+    { "name": "report_id", "type": "UUID" },
+    { "name": "what", "type": "ENUM", "required": true,
+      "options": ["owner", "split", "duplicate", "duplicate_refused", "mark_down_undone", "marked_down", "kind"] },
+    // The Decisions question it corrects: "kind" or "match".
+    { "name": "question", "type": "TEXT", "max_length": 32 },
+    { "name": "from_value", "type": "TEXT", "max_length": 400 },
+    { "name": "to_value", "type": "TEXT", "max_length": 400 },
+    { "name": "evidence", "type": "TEXT", "max_length": 4000 },
+    { "name": "answer", "type": "TEXT", "max_length": 64 },
+    { "name": "by", "type": "USER" },
+    { "name": "at", "type": "DATETIME" }
+  ],
+  "config": {}
+}

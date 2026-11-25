@@ -1,0 +1,34 @@
+{
+  "name": "PR review",
+  "line": "dev",
+  "position": 27,
+  "job": "Every pull request read against your team's own rules before anyone reviews it",
+  "intro": "PR review reads the rules your team already wrote down, in AGENTS.md, CONTRIBUTING.md, REVIEW.md and the like, and proposes the ones your reviewers keep asking for. Every push gets a round: each rule passed, broken or not checked, and findings on their lines. Small clean changes can merge by themselves.",
+  "does": [
+    "A ledger on every push: each rule in scope passed, broken or not checked, and why. Never looked never looks like fine.",
+    "A finding is the same on every push: marked fixed in the commit that fixed it, and one you dismissed never comes back.",
+    "An inbox by who each pull request waits on, decided by code: your review, your merge, returned to you, merging by itself."
+  ],
+  "jobs": ["ENGINEERING"],
+  "accounts": [
+    { "any": ["GitHub"], "why": "One shared GitHub connection for the Lemma: the repositories it reads, and where the Lemma check goes." }
+  ],
+  "setup": [
+    "Connect GitHub and pick the repositories. PR review reads their rule files from the default branch and proposes rules from the last 60 merged pull requests' review comments; nothing proposed is used until someone accepts it.",
+    "Say who posts on GitHub (the Lemma's bot, or each reviewer as themselves), whether the Lemma check and comments go on, and the GitHub logins of your team.",
+    "Merging by itself starts off. Watch first records what would have merged; turn it on when the record looks right.",
+    "Or look around with a sample team first: acme/api and acme/web, ten pull requests, made-up people."
+  ],
+  "today": [
+    { "verb": "decide", "line": "Review acme/api#1203" },
+    { "verb": "decide", "line": "Merge acme/api#1210" }
+  ],
+  "pictures": [
+    { "shot": "rules-found", "caption": "Rules found in your files, each with its line" },
+    { "shot": "ledger", "caption": "Every rule passed, broken or not checked, and why" },
+    { "shot": "finding-on-line", "caption": "A finding on its line, naming the rule it breaks" },
+    { "shot": "second-push", "caption": "The next push: fixed, dismissed, nothing new" },
+    { "shot": "inbox", "caption": "The inbox, by who each pull request waits on" },
+    { "shot": "lemma-check", "caption": "One Lemma check on GitHub, a branch rule can require" }
+  ]
+}

@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# Every function's description and grants, in one place. Regenerates
+# functions/<name>/<name>.json; never edit those by hand (bin/fnjson.py, as Tasks').
+#   table   read        table:rw  + write rows        table:rwd  + delete rows
+#   function:<name>     run it        /folder:verbs   a folder
+set -euo pipefail
+cd "$(dirname "$0")/.."
+f() { uv run --no-project python bin/fnjson.py "$@"; }
+f deps_setup_save "Dependency updates' set-up: the repositories to watch, the day and time of the weekly batch (default Monday 06:00), the wait (3 days, 14 for a major), and commands a person confirmed. Whoever saves it first is the owner who decides. Writes the memory block. Never makes schedules: the app makes them as the person." deps_settings:rw deps_repo:rw needs_you:rw deps_update function:deps_memory
+f deps_record "The deps-updater agent's one writer: repository facts (managers, install, test and build commands, whether it installs), candidate updates (upserted by repo, ecosystem, package and version, with the Lemma's read, where the code uses it, what was tried, security reach, registry risk), the pull request it prepared or opened with its timeline steps and commits, and what the platform allowed. Applies ignores, keeps a person's choices, and writes the owner's held majors and risky releases to Today." deps_settings:rw deps_repo:rw deps_update:rw deps_batch:rw deps_ignore deps_rule needs_you:rw
+f deps_decide "A person's decision on an update: monday (add to the next batch), own (its own pull request), not_yet, let_through (a risky release), take_now, ignore (version_range such as 19.x, patches or an exact version; reason; all_repos), drop or put_back (in an open pull request), stop_ignoring (id is an ignore's), ask (id is a pull request's; text). Settles the item in Today." deps_settings deps_update:rw deps_batch:rw deps_ignore:rwd deps_repo needs_you:rw
+f deps_on_github "What GitHub says about a pull request the Lemma opened (the target of the pull_request, check_suite and pull_request_review WEBHOOK schedules): its state, head, checks and review; merged updates become merged, a pull request closed unmerged sends its updates back to the next batch." deps_repo deps_batch:rw deps_update:rw deps_settings
+f deps_needs_you "Writes the owner's items in Today again: one decide per major held for them and per release held as risky. Runs as the person; only the owner's own run writes." deps_settings deps_update needs_you:rw
+f deps_memory "Tells this Lemma's agents that Dependency updates is installed: its own block in /memory/AGENTS.md and its guide at /memory/plugins/dependency-updates.md, leaving the team's notes alone. Set-up runs it; safe to run again. remove takes both out." /memory:read,write
+f deps_sample_data "load: a made-up team's sample week (four repositories, Monday's batch, two security fixes, two majors waiting for you, a risky release, ignores) to look around with. clear: removes only what the sample made and closes its items in Today." deps_settings:rw deps_repo:rwd deps_update:rwd deps_batch:rwd deps_ignore:rwd deps_rule:rwd deps_sample_row:rwd needs_you:rw

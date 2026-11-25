@@ -1,0 +1,6 @@
+{
+  "name": "pull-requests",
+  "description": "Every pull request read against your team's own rules: an inbox grouped by who each one waits on, each pull request's files with findings under their lines and the rules it was checked against, and the settings for posting on GitHub and merging small clean changes by itself.",
+  "public_slug": "${prr_pull_requests_slug}",
+  "visibility": "POD"
+}

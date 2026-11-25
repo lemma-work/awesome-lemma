@@ -1,0 +1,68 @@
+{
+  "one-item": {
+    "kind": "still",
+    "width": 820,
+    "height": 390,
+    "alt": "Four reports from Sentry, a form, Slack and email, merged into one item with how each was merged",
+    "bleed": null,
+    "window": null,
+    "phone": {
+      "width": 374,
+      "height": 364,
+      "bleed": null
+    }
+  },
+  "by-people": {
+    "kind": "still",
+    "width": 710,
+    "height": 724,
+    "alt": "The inbox sorted by people reached: 1,240 people and rising first, then 312, then two security alerts",
+    "bleed": null,
+    "window": null,
+    "phone": {
+      "width": 390,
+      "height": 578,
+      "bleed": null
+    }
+  },
+  "owner-then-1": {
+    "kind": "loop",
+    "width": 1440,
+    "height": 820,
+    "alt": "A suggested owner with the reason, then pressing 1 makes an urgent task in Tasks",
+    "bleed": null,
+    "window": null
+  },
+  "security": {
+    "kind": "still",
+    "width": 710,
+    "height": 724,
+    "alt": "A reachable lodash alert beside a development-only one the Lemma marked down",
+    "bleed": null,
+    "window": null
+  },
+  "to-an-agent": {
+    "kind": "loop",
+    "width": 1440,
+    "height": 820,
+    "alt": "Give to Coding agent: the item is accepted and the task handed over",
+    "bleed": null,
+    "window": null
+  },
+  "not-checked": {
+    "kind": "still",
+    "width": 820,
+    "height": 415,
+    "alt": "What was checked, and what wasn't: Logs, not checked, because no logs source is connected",
+    "bleed": null,
+    "window": null
+  },
+  "we-know": {
+    "kind": "still",
+    "width": 1160,
+    "height": 376,
+    "alt": "People outside: the report form, and the known issues it reads so a person sees we already know",
+    "bleed": null,
+    "window": null
+  }
+}

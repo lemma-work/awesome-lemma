@@ -1,0 +1,6 @@
+{
+  "connector": "sentry",
+  "mode": "SHARED",
+  "required": false,
+  "purpose": "Unresolved issues in the projects you pick, read every 15 minutes, counted in people; an issue is resolved in Sentry when its task is done. Without it, errors are named as not checked."
+}

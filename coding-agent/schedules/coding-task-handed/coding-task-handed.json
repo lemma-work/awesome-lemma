@@ -1,0 +1,12 @@
+{
+  // A task row assigned to an agent (or another one): only a write that
+  // changed `assignee_agent`, never a status move or an edit. Starts
+  // coding-task-handed, which hands it over when the agent is coding_builder.
+  // `bulk_writes: each`: a bulk write skips a datastore trigger unless the
+  // schedule asks for each row.
+  "name": "coding-task-handed",
+  "schedule_type": "DATASTORE",
+  "config": { "table_name": "task", "operations": ["UPDATE"], "when": { "assignee_agent": { "changed": true } }, "bulk_writes": "each" },
+  "workflow_name": "coding-task-handed",
+  "is_active": true
+}

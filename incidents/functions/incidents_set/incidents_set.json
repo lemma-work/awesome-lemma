@@ -1,0 +1,62 @@
+{
+  "name": "incidents_set",
+  "description": "Change an incident's status (declared, investigating, fixing, monitoring), severity, lead (lead_me for 'I'm lead'), comms, responders, impact; mark its write-up reviewed; confirm a likely cause or say it is not it. Writes an event and keeps the header current. Resolve with incidents_resolve.",
+  "type": "API",
+  "visibility": "POD",
+  "code": {
+    "$file": "code.py"
+  },
+  "permissions": {
+    "grants": [
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "incidents_settings",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "incidents_incident",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read",
+          "datastore.record.write"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "incidents_event",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read",
+          "datastore.record.write"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "incidents_hypothesis",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read",
+          "datastore.record.write"
+        ]
+      },
+      {
+        "resource_type": "connector",
+        "resource_name": "slack",
+        "permission_ids": [
+          "connector.use"
+        ]
+      },
+      {
+        "resource_type": "function",
+        "resource_name": "incidents_needs_you",
+        "permission_ids": [
+          "function.execute"
+        ]
+      }
+    ]
+  }
+}

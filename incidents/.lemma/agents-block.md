@@ -1,0 +1,1 @@
+- Incidents is installed: `incidents_declare`, `incidents_set` for status, sev, `incidents_draft_update`. Guide: `/memory/plugins/incidents.md`.

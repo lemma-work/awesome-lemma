@@ -1,0 +1,18 @@
+{
+  // Started by the `coding-task-added` schedule: a new `task` row made for the
+  // coding agent (Triage's "hand to the coding agent", chat). One workflow per
+  // schedule. coding_on_task reads the fresh row and starts a session unless
+  // one is already live (the app's own New task writes its session first).
+  "name": "coding-task-added",
+  "description": "A team task was made for the coding agent: start a session on it.",
+  "max_concurrent_runs": 4,
+  "start": { "type": "DATASTORE_EVENT", "config": { "table_name": "task", "operations": ["INSERT"] } },
+  "nodes": [
+    { "id": "hand", "type": "FUNCTION", "label": "Hand it to the coding agent",
+      "config": { "function_name": "coding_on_task", "input_mapping": {
+        "task_id": { "type": "expression", "value": "start.metadata.record_id" },
+        "scope": { "type": "literal", "value": "team" } } } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [ { "id": "e1", "source": "hand", "target": "end" } ]
+}

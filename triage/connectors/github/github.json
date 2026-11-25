@@ -1,0 +1,6 @@
+{
+  "connector": "github",
+  "mode": "SHARED",
+  "required": false,
+  "purpose": "Issues and their comments on the repositories you watch, and Dependabot, code scanning and secret scanning alerts, become reports; CODEOWNERS and the last change to a file suggest an owner; Triage comments on an issue when it is filed and when it is fixed, and closes it only if you chose that."
+}

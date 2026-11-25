@@ -1,0 +1,24 @@
+{
+ "items": [
+  {
+   "pod_member_id": "member-sample",
+   "user_id": "user-sample",
+   "user_name": "Maya Wong",
+   "user_email": "maya@example.com",
+   "email": "maya@example.com",
+   "roles": [
+    "POD_ADMIN"
+   ]
+  },
+  {
+   "pod_member_id": "member-priya",
+   "user_id": "user-priya",
+   "user_name": "Priya Shah",
+   "user_email": "priya@example.com",
+   "email": "priya@example.com",
+   "roles": [
+    "POD_USER"
+   ]
+  }
+ ]
+}

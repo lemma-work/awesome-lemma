@@ -1,0 +1,25 @@
+{
+  // A GitHub Actions run finished. If it is the deploy workflow set-up named,
+  // and it succeeded, what it deployed is live: the note becomes ready.
+  "name": "release-notes-on-deploy",
+  "description": "A workflow run finished: if it is the team's deploy and it succeeded, mark what it deployed live and the note ready.",
+  "max_concurrent_runs": 1,
+  "start": { "type": "EVENT", "config": { "connector_id": "github", "connector_trigger_id": "github:http:workflow_run" } },
+  "nodes": [
+    { "id": "live", "type": "FUNCTION", "label": "Is it live?",
+      "config": { "function_name": "release_notes_on_live", "input_mapping": {
+        "event": { "type": "literal", "value": "workflow_run" },
+        "repo": { "type": "expression", "value": "start.payload.repository.full_name" },
+        "workflow_name": { "type": "expression", "value": "start.payload.workflow_run.name", "optional": true },
+        "conclusion": { "type": "expression", "value": "start.payload.workflow_run.conclusion", "optional": true },
+        "status": { "type": "expression", "value": "start.payload.workflow_run.status", "optional": true },
+        "head_sha": { "type": "expression", "value": "start.payload.workflow_run.head_sha", "optional": true },
+        "head_branch": { "type": "expression", "value": "start.payload.workflow_run.head_branch", "optional": true },
+        "run_number": { "type": "expression", "value": "start.payload.workflow_run.run_number", "optional": true },
+        "run_url": { "type": "expression", "value": "start.payload.workflow_run.html_url", "optional": true },
+        "at": { "type": "expression", "value": "start.payload.workflow_run.updated_at", "optional": true } } } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [ { "id": "e1", "source": "live", "target": "end" } ],
+  "visibility": "POD"
+}

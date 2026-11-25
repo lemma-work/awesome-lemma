@@ -1,0 +1,130 @@
+{
+  "//": "The pictures on Sprints' page on the website, taken from its Try it demo by `node _kit/bin/moments.mjs sprints` into .lemma/moments/. listing.json names them by `name`.",
+  "captures": [
+    {
+      "name": "scope",
+      "alt": "Sprint 47's scope graph: scope steps up twice and down once after the start, each step numbered and listed with what came in, from where, and who",
+      "route": "/",
+      "viewport": [
+        1184,
+        860
+      ],
+      "clip": {
+        "selector": ".sp-card",
+        "pad": 8
+      },
+      "steps": [
+        {
+          "wait": 1200
+        },
+        {
+          "mouse": [
+            4,
+            4
+          ]
+        }
+      ],
+      "phone": {
+        "viewport": [
+          390,
+          900
+        ],
+        "clip": {
+          "selector": ".sp-card",
+          "pad": 6
+        }
+      }
+    },
+    {
+      "name": "lanes",
+      "alt": "Planning Sprint 48: the Lemma's draft is used, and the urgent incident lands in the lane of the person with room, nobody over their capacity",
+      "loop": true,
+      "cursor": true,
+      "route": "/plan",
+      "viewport": [
+        1184,
+        900
+      ],
+      "clip": {
+        "x": 0,
+        "y": 34,
+        "width": 1184,
+        "height": 820
+      },
+      "poster": 2.8,
+      "steps": [
+        {
+          "wait": 1200
+        },
+        {
+          "click": ".sp-draft .c-btn",
+          "text": "Use the draft"
+        },
+        {
+          "wait": 2600
+        }
+      ]
+    },
+    {
+      "name": "decide",
+      "alt": "Closing Sprint 47: the Lemma's suggestion is taken for every unfinished task, and the task in its 3rd sprint is split instead",
+      "loop": true,
+      "cursor": true,
+      "route": "/close",
+      "viewport": [
+        1184,
+        900
+      ],
+      "clip": {
+        "x": 0,
+        "y": 34,
+        "width": 1184,
+        "height": 820
+      },
+      "poster": 3.4,
+      "steps": [
+        {
+          "wait": 1200
+        },
+        {
+          "click": ".c-btn",
+          "text": "Take the Lemma's suggestions"
+        },
+        {
+          "wait": 1200
+        },
+        {
+          "click": "[aria-label='What happens to #412'] button",
+          "text": "Split"
+        },
+        {
+          "wait": 2200
+        }
+      ]
+    },
+    {
+      "name": "summary",
+      "alt": "The summary drafted from the numbers: planned, added, taken out, done and not done, what slipped, what carried, who carried more than usual",
+      "route": "/close",
+      "viewport": [
+        1184,
+        900
+      ],
+      "clip": {
+        "selector": ".sp-doc",
+        "pad": 8
+      },
+      "steps": [
+        {
+          "wait": 1200
+        },
+        {
+          "mouse": [
+            4,
+            4
+          ]
+        }
+      ]
+    }
+  ]
+}

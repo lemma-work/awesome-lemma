@@ -1,0 +1,10 @@
+{
+  // Every 15 minutes: prr-sync (missed webhooks, stuck rounds, merges whose
+  // wait has passed). Runs as whoever installed the plugin, through the
+  // Lemma's shared GitHub connection; it does nothing until set-up is done.
+  "name": "prr-sync",
+  "schedule_type": "TIME",
+  "config": { "cron": "*/15 * * * *" },
+  "workflow_name": "prr-sync",
+  "is_active": true
+}

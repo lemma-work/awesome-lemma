@@ -23,11 +23,18 @@ first-class, so nothing here belongs to one source.
 | `personal_task` | a person's own private task: the same columns as `task` | as `task` |
 | `deal` | something the team is trying to win from another company, added by Deal tracker | `name`, `company_id`/`_name`/`_domain`, `people` (handles), `owner_user_id`, `stage`, `status` (open, won, lost), `amount`, `currency`, `close_date`, `next_step`, `source`, `source_id` |
 | `brand` | the team's brand, added by Brand kit; read by every plugin that makes something | `name`, `is_default`, `state` (new, reading, check, ready, archived), `colors` (each with its `role`), `fonts` (display, body, mono), `tokens`/`theme_css_path`, `logo_path`/`logos`, `guide_path`, `voice`, `site_url`, `source`, `source_id` |
+| `ask` | one person asking for one piece of work, and where they asked; added by Triage and Release notes | `work_source`/`work_id`, `task_id`, `handle_kind`, `handle`, `source`, `source_id`, `heard_by`, `conversation_id`, `state` (suggested, open, declined, shipped, told, dropped), `plugin` |
+| `repository` | a GitHub repository the team watches; added by PR review | `full_name`, `default_branch`, `review_mode` (off, once, every_push), `merge_mode` (off, watch, merge), `allow_auto_merge`, `merge_queue`, `required_check`, `required_approvals`, `source`, `source_id` (GitHub's repository id) |
+| `pull_request` | one pull request, as of its latest push; added by PR review | `key` (`owner/repo#n`), `repository_id`/`repo`, `number`, `title`, `author`, `author_kind` (member, agent, bot, outside), `state`, `head_sha`, `risk`, `waits_on`/`waits_for`, `review_state`, `verdict` (clean, changes, needs_person), `summary`, `linked_issues`, `merge_state`, `source`, `source_id` |
+| `away` | one person away for one day (or half of one); a stretch away is one row per day; added by Triage and Sprints | `member_id`, `name`, `day`, `part` (full, half); id `uuid5(AWAY_NS, "<member id or name>:<day>")` |
+| `product` | your product or a rival's, added by User feedback (yours) and Competitor watch (rivals) | `name`, `role` (ours, rival), `company_id`, `aliases`, `keywords`, `active` |
+| `feature` | one thing one of the team's products does or could do, in the team's words: what feedback files under; added by User feedback | `product_id` (always ours), `name`, `parent_id`, `aliases`, `state` (suggested, active, merged, archived), `merged_into`, `stage` (idea, planned, building, beta, live, declined), `owner_user_id`, `work_source`/`work_id`, `task_id` |
+| `feedback` | one thing one person said about one feature, word for word; added by User feedback, written too by User interviews, Early access, Competitor watch | `quote`, `point`, `product_id`, `feature_id`, `filed_by`, `kind`, `compared_with`, `sentiment`, `importance`, `handle_kind`/`handle`, `company_id`, `source`/`source_id`, `heard_by`, `is_public`, `said_at`, `state` (new, processed, set_aside), `plugin` |
 | `needs_you` | one thing that needs one member, from any plugin, for Today | `verb`, `title`, `why`, `quote`, `due_at`, `source_plugin`/`_table`/`_id`, `source_version`, `app`/`path`, `state`, `weight` |
 
 `conversation` to `meeting` and `personal_task` are per person (RLS): each
 member sees their own. `company`, `company_domain`, `project`, `task`,
-`deal` and `brand` are team-wide.
+`deal`, `brand`, `ask`, `away`, `repository`, `pull_request`, `product`, `feature` and `feedback` are team-wide.
 `company` and `company_domain` are team-wide: two members who both deal with
 Acme share one company, and Deal tracker hangs deals on it. Nothing anyone
 said lives there.
@@ -86,6 +93,41 @@ said lives there.
   the person's fixes are Brand kit's own (`brand_evidence`,
   `brand_correction`); a fixed colour stays fixed when the brand is read
   again.
+- **Who asked is the team's; what they said stays with whoever heard it.**
+  `ask` is one row per person, per place they asked, per piece of work, so
+  "six people asked" is six rows and each can be told where they asked. It
+  holds facts only, as `deal` does: the work (`work_source`/`work_id`, a
+  Triage item before there is a task, then `task_id` too), the person by
+  handle, where (`source`, `source_id` of the thread, `conversation_id`), who
+  heard it (`heard_by`) and how far it has got. The words stay in the
+  hearer's own `conversation`, and only their own run reads them to write
+  back (a `draft` there, through Mail). A row's id is
+  `uuid5(ASK_NS, "<handle_kind>:<handle>|<source>:<source_id>|<work_source>:<work_id>")`,
+  with `ASK_NS = 9972cf8e-4f42-4b98-86fc-fa5697c1f089`, from the values it
+  was first written with; merging a duplicate repoints the work and keeps the
+  id. Triage writes it at intake (each reporter: an issue's author and its
+  "me too"s, a Slack reporter; people an error tracker only counts are reach,
+  not askers). Release notes writes a link a person confirms (`suggested`
+  until they do). **One teller**: with Release notes installed (its
+  `release_note` table exists) it tells askers when the work ships and sets
+  `told`; without it Triage tells them when the task is done; Triage always
+  tells a `declined` ask why. Roadmap and User feedback read it.
+- **A pull request's facts are the team's; the review stays PR review's.**
+  `repository` and `pull_request` are written only by PR review and read by
+  the rest, and hold facts only, as `deal` does: where a pull request stands
+  (`state`, `head_sha`, `risk`, `checks`, `mergeable`), who it waits on and
+  for what (`waits_on` a member's user id, `nobody` or `author`;
+  `waits_for` review, merge, fix, round or nothing), what the latest round
+  decided (`review_state`, `verdict`: code decides it, never the model) and
+  a plain-language `summary`. The findings, rules, rounds and the merge log
+  are PR review's own (`prr_*`). A row's id is `uuid5(PRR_NS, key)` for a
+  pull request and `uuid5(PRR_NS, "repo:" + full_name.lower())` for a
+  repository, with `PRR_NS = 3f0b6c1e-8a2d-4e57-9c41-7d5e2a9b6f03`, so two
+  webhooks meeting a new pull request at once write one row. Release notes
+  reads `summary` and `linked_issues` of what merged; Dependency updates and
+  Coding agent read `review_state` and `verdict` by `key` before they call a
+  pull request done. `merge_state` `merged_by_itself` says nobody pressed
+  Merge.
 - **Categories are not shared yet.** `conversation.category` holds a key from
   the owner's own categories, which today are Mail's (`mail_category`). If
   Chat should sort into the same categories, move that table here.

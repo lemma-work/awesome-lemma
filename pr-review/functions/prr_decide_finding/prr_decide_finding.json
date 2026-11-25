@@ -1,0 +1,29 @@
+{
+  "name": "prr_decide_finding",
+  "description": "A person's call on a finding: not_worth_fixing (dismissed, never raised again), wrong (never raised again, counted against its rule) or reopen; then the pull request is settled again.",
+  "type": "API",
+  "visibility": "POD",
+  "code": {
+    "$file": "code.py"
+  },
+  "permissions": {
+    "grants": [
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "prr_finding",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read",
+          "datastore.record.write"
+        ]
+      },
+      {
+        "resource_type": "function",
+        "resource_name": "prr_settle",
+        "permission_ids": [
+          "function.execute"
+        ]
+      }
+    ]
+  }
+}

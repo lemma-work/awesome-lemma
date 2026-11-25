@@ -275,6 +275,7 @@ def tasks_on_task(ctx: FunctionContext, data: TasksOnTaskInput) -> TasksOnTaskRe
     began = time.monotonic()
     settings = (_rows(pod.query("SELECT * FROM tasks_settings ORDER BY created_at LIMIT 1")) or [{}])[0]
     me = settings.get("display_name") or (ctx.user_email or "").split("@")[0] or "the person"
+    allowed = settings.get("agents") if isinstance(settings.get("agents"), list) else [ASSISTANT]
 
     targets: list[tuple[str, dict]] = []
     if data.task_id:
@@ -303,6 +304,10 @@ def tasks_on_task(ctx: FunctionContext, data: TasksOnTaskInput) -> TasksOnTaskRe
     to_ask: list[tuple[str, dict]] = []
     for scope, task in targets:
         if task.get("assignee_kind") == "agent" and task.get("assignee_agent"):
+            # A named agent Tasks isn't allowed to hand work to (another plugin's,
+            # such as Coding agent's coding_builder) is left to whoever owns it.
+            if task["assignee_agent"] != ASSISTANT and task["assignee_agent"] not in allowed:
+                continue
             run = runs.get(task["id"])
             # A run of this agent that is going, or finished, is left alone;
             # a new agent, a run that failed or was stopped, or Start again

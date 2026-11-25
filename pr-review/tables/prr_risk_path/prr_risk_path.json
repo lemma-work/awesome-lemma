@@ -1,0 +1,21 @@
+{
+  // A risky path: a glob whose changes raise a pull request's risk, and who
+  // must review it. Team-wide.
+  "name": "prr_risk_path",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "glob", "type": "TEXT", "required": true, "max_length": 300 },
+    // null: every repository.
+    { "name": "repo", "type": "TEXT", "max_length": 200 },
+    { "name": "tier", "type": "ENUM", "required": true, "default": "high", "options": ["medium", "high"] },
+    { "name": "reason", "type": "TEXT", "max_length": 300 },
+    // Who must review it: a member, by user id and name.
+    { "name": "reviewer_user_id", "type": "USER" },
+    { "name": "reviewer_name", "type": "TEXT", "max_length": 200 },
+    { "name": "state", "type": "ENUM", "required": true, "default": "active", "options": ["proposed", "active"] },
+    { "name": "sample", "type": "BOOLEAN", "default": false }
+  ],
+  "config": {}
+}

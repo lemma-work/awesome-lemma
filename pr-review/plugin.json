@@ -1,0 +1,9 @@
+{
+  // PR review carries Tasks inside its bundle, so one install brings both:
+  // "Fix it" on a finding becomes a team `task` (source pr-review), which
+  // Coding agent picks up when it is installed and a person takes when it
+  // isn't. Read by _build/assemble.py, which merges Tasks from its own folder
+  // into install/pr-review/, the bundle that is installed.
+  "name": "pr-review",
+  "carries": ["tasks"]
+}

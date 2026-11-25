@@ -1,0 +1,1406 @@
+[
+ {
+  "match": "from deps_settings",
+  "response": {
+   "items": [
+    {
+     "id": "6d1c69af-bd0e-5d9f-a0d0-696087bad342",
+     "owner_user_id": "user-sample",
+     "owner_name": "Priya Shah",
+     "weekday": "mon",
+     "run_time": "06:00",
+     "timezone": "Europe/Berlin",
+     "wait_days": 3,
+     "wait_major_days": 14,
+     "hold_install_scripts": true,
+     "alerts": "osv",
+     "platform": {
+      "repository_schedule": {
+       "state": "no",
+       "at": "2026-11-23T05:00:00+00:00",
+       "note": "A time schedule can't start in a checkout yet; each run clones by hand."
+      },
+      "workflows": {
+       "state": "no",
+       "at": "2026-11-23T05:02:00+00:00",
+       "note": "The GitHub App can't push workflow files yet; Actions updates are listed to do by hand."
+      },
+      "alerts": {
+       "state": "no",
+       "at": "2026-11-25T06:01:00+00:00",
+       "note": "Dependabot alerts answered 403; security fixes come from OSV, daily."
+      },
+      "alert_trigger": {
+       "state": "no",
+       "at": "2026-11-23T05:00:00+00:00",
+       "note": "No Dependabot alert event yet; the daily run finds them."
+      },
+      "checks": {
+       "state": "no",
+       "at": "2026-11-23T05:13:00+00:00",
+       "note": "No check run; the pull request description says the same."
+      }
+     },
+     "setup_done_at": "2026-11-23T04:00:00+00:00",
+     "sample": false,
+     "created_at": "2026-09-24T05:00:00+00:00",
+     "updated_at": "2026-09-24T05:00:00+00:00"
+    }
+   ],
+   "total": 1
+  }
+ },
+ {
+  "match": "from deps_repo order by",
+  "response": {
+   "items": [
+    {
+     "id": "c2daf728-3f5d-512e-82d6-50207a9f27bd",
+     "repo": "northwind/web",
+     "github_repo_id": 70100001,
+     "default_branch": "main",
+     "managers": [
+      "pnpm"
+     ],
+     "install_cmd": "pnpm install --frozen-lockfile",
+     "test_cmd": "pnpm test",
+     "build_cmd": "pnpm build",
+     "status": "ok",
+     "commands_confirmed_by": "Priya Shah",
+     "last_run_at": "2026-11-24T06:04:00+00:00",
+     "last_run_note": "Security fix for next opened as #421",
+     "active": true,
+     "created_at": "2026-09-24T05:00:00+00:00",
+     "updated_at": "2026-09-24T05:00:00+00:00"
+    },
+    {
+     "id": "a319c39b-0ec7-5ffd-acaf-972b32dfea37",
+     "repo": "northwind/api",
+     "github_repo_id": 70100002,
+     "default_branch": "main",
+     "managers": [
+      "uv"
+     ],
+     "install_cmd": "uv sync --frozen",
+     "test_cmd": "uv run pytest",
+     "build_cmd": null,
+     "status": "ok",
+     "commands_confirmed_by": "Priya Shah",
+     "last_run_at": "2026-11-25T06:03:00+00:00",
+     "last_run_note": "Security fix for pyjwt opened as #77",
+     "active": true,
+     "created_at": "2026-09-24T05:00:00+00:00",
+     "updated_at": "2026-09-24T05:00:00+00:00"
+    },
+    {
+     "id": "837149f0-f654-5edb-9c6e-d155f1279d70",
+     "repo": "northwind/infra",
+     "github_repo_id": 70100003,
+     "default_branch": "main",
+     "managers": [
+      "actions"
+     ],
+     "install_cmd": null,
+     "test_cmd": null,
+     "build_cmd": null,
+     "status": "ok",
+     "status_note": "GitHub Actions only: checked by CI on the pull request.",
+     "commands_confirmed_by": "Priya Shah",
+     "last_run_at": "2026-11-23T05:02:00+00:00",
+     "last_run_note": "2 Actions updates to do by hand",
+     "active": true,
+     "created_at": "2026-09-24T05:00:00+00:00",
+     "updated_at": "2026-09-24T05:00:00+00:00"
+    },
+    {
+     "id": "255ba1ba-435e-5c33-89e2-e92ea2ae2331",
+     "repo": "northwind/mobile",
+     "github_repo_id": 70100004,
+     "default_branch": "main",
+     "managers": [
+      "npm"
+     ],
+     "install_cmd": "npm ci",
+     "test_cmd": "npm test",
+     "build_cmd": null,
+     "status": "private_registry",
+     "status_note": "Can't install: @northwind/ui comes from a private registry. Updates are read, not tested.",
+     "last_run_at": "2026-11-23T05:03:00+00:00",
+     "last_run_note": "1 update read, not tested",
+     "active": true,
+     "created_at": "2026-09-24T05:00:00+00:00",
+     "updated_at": "2026-09-24T05:00:00+00:00"
+    }
+   ],
+   "total": 4
+  }
+ },
+ {
+  "match": "from deps_update where state",
+  "response": {
+   "items": [
+    {
+     "id": "b593f32b-7d91-5ff3-8e04-4b03d60e9611",
+     "repo": "northwind/web",
+     "ecosystem": "npm",
+     "manager": "pnpm",
+     "package": "react-hook-form",
+     "from_version": "7.66.0",
+     "to_version": "7.66.1",
+     "bump": "patch",
+     "released_at": "2026-11-25T02:00:00+00:00",
+     "state": "waiting",
+     "tried": "none",
+     "changes": [
+      "Fixes a stale value in useFieldArray."
+     ],
+     "uses": [],
+     "touches": 0,
+     "downloads_week": 820000,
+     "why": "Out 7 hours",
+     "read_from": "GitHub releases",
+     "lemma_read": "One fix in field arrays.",
+     "created_at": "2026-11-25T10:00:00+00:00",
+     "updated_at": "2026-11-25T10:00:00+00:00"
+    },
+    {
+     "id": "87b6a7f9-356a-5475-86bf-c8b60014116e",
+     "repo": "northwind/web",
+     "ecosystem": "npm",
+     "manager": "pnpm",
+     "package": "color-convert",
+     "from_version": "3.1.0",
+     "to_version": "3.1.1",
+     "bump": "patch",
+     "released_at": "2026-11-25T00:00:00+00:00",
+     "state": "risky",
+     "tried": "none",
+     "changes": [
+      "No changelog entry.",
+      "Adds a postinstall script.",
+      "Published by a maintainer new to the package."
+     ],
+     "uses": [],
+     "touches": 0,
+     "downloads_week": 3000,
+     "why": "Adds a postinstall script; published 9 hours ago by a new maintainer",
+     "read_from": "npm registry",
+     "risk": {
+      "install_script": "postinstall",
+      "new_publisher": true,
+      "age_hours": 9,
+      "note": "Published by a maintainer new to the package; adds a postinstall script; no changelog entry."
+     },
+     "lemma_read": "A patch with no notes that adds an install script, from a new publisher, hours old. Held until a person lets it through.",
+     "created_at": "2026-11-25T08:00:00+00:00",
+     "updated_at": "2026-11-25T08:00:00+00:00"
+    },
+    {
+     "id": "e234f42d-da46-5d82-86a3-17dd61d9c756",
+     "repo": "northwind/web",
+     "ecosystem": "npm",
+     "manager": "pnpm",
+     "package": "typescript",
+     "from_version": "5.9.3",
+     "to_version": "5.9.4",
+     "bump": "patch",
+     "released_at": "2026-11-24T09:00:00+00:00",
+     "state": "waiting",
+     "tried": "none",
+     "changes": [
+      "Two fixes in type narrowing."
+     ],
+     "uses": [],
+     "touches": 0,
+     "downloads_week": 1100000,
+     "why": "Out 1 day",
+     "read_from": "GitHub releases",
+     "lemma_read": "Two fixes in type narrowing.",
+     "created_at": "2026-11-24T17:00:00+00:00",
+     "updated_at": "2026-11-24T17:00:00+00:00"
+    },
+    {
+     "id": "eaeebf7d-f360-5d3b-8aba-78b7a979aa06",
+     "repo": "northwind/api",
+     "ecosystem": "pypi",
+     "manager": "uv",
+     "package": "boto3",
+     "from_version": "1.40.61",
+     "to_version": "1.40.70",
+     "bump": "patch",
+     "released_at": "2026-11-24T09:00:00+00:00",
+     "state": "ignored",
+     "tried": "none",
+     "changes": [],
+     "uses": [],
+     "touches": 0,
+     "why": "Ignored: patches (Daily releases; take them monthly)",
+     "read_from": "Release notes",
+     "lemma_read": "New service endpoints only.",
+     "created_at": "2026-11-24T17:00:00+00:00",
+     "updated_at": "2026-11-24T17:00:00+00:00"
+    },
+    {
+     "id": "f8fe6866-b1c0-51c5-9acb-84431b3ce85e",
+     "repo": "northwind/api",
+     "ecosystem": "pypi",
+     "manager": "uv",
+     "package": "uvicorn",
+     "from_version": "0.38.0",
+     "to_version": "0.38.1",
+     "bump": "patch",
+     "released_at": "2026-11-23T09:00:00+00:00",
+     "state": "waiting",
+     "tried": "none",
+     "changes": [
+      "Fixes --reload on macOS."
+     ],
+     "uses": [],
+     "touches": 0,
+     "why": "Out 2 days",
+     "read_from": "Release notes",
+     "lemma_read": "One fix for reload on macOS.",
+     "created_at": "2026-11-23T17:00:00+00:00",
+     "updated_at": "2026-11-23T17:00:00+00:00"
+    },
+    {
+     "id": "bdc2c7f7-a1ab-5d59-a711-3a2213611f3d",
+     "repo": "northwind/web",
+     "ecosystem": "npm",
+     "manager": "pnpm",
+     "package": "next",
+     "from_version": "15.4.6",
+     "to_version": "15.4.8",
+     "bump": "patch",
+     "released_at": "2026-11-22T09:00:00+00:00",
+     "state": "opened",
+     "tried": "passed",
+     "changes": [
+      "Fixes a middleware matcher bypass (high)."
+     ],
+     "uses": [
+      {
+       "at": "middleware.ts:12",
+       "line": "export const config = { matcher: [\"/app/:path*\"] };"
+      }
+     ],
+     "touches": 3,
+     "batch_id": "fb05ca70-486d-511a-82d2-e92eee5423b0",
+     "pr_number": 421,
+     "downloads_week": 4200000,
+     "why": "Security fix, opened the same day",
+     "read_from": "OSV, the release notes",
+     "security": {
+      "ghsa": "GHSA-7m27-4f2p-q9h3",
+      "severity": "high",
+      "summary": "Middleware matcher bypass",
+      "source": "osv",
+      "reach": "yes",
+      "reach_note": "middleware.ts:12 uses the matcher the fix changes.",
+      "reach_at": "2026-11-24T06:01:00+00:00"
+     },
+     "lemma_read": "Your middleware uses the affected matcher, so this opened the same day, outside the wait.",
+     "commit_sha": "c4e81a7",
+     "created_at": "2026-11-22T17:00:00+00:00",
+     "updated_at": "2026-11-22T17:00:00+00:00"
+    },
+    {
+     "id": "efa40621-bd51-55b9-b32b-3ef91d88208a",
+     "repo": "northwind/web",
+     "ecosystem": "npm",
+     "manager": "pnpm",
+     "package": "@tanstack/react-query",
+     "from_version": "5.90.2",
+     "to_version": "5.90.5",
+     "bump": "patch",
+     "released_at": "2026-11-20T09:00:00+00:00",
+     "state": "ready",
+     "tried": "none",
+     "changes": [
+      "Two fixes in query cancellation."
+     ],
+     "uses": [],
+     "touches": 0,
+     "downloads_week": 1900000,
+     "why": "Out 5 days; joins Monday",
+     "read_from": "GitHub releases",
+     "lemma_read": "Fixes only.",
+     "created_at": "2026-11-20T17:00:00+00:00",
+     "updated_at": "2026-11-20T17:00:00+00:00"
+    },
+    {
+     "id": "db91a796-9646-57c2-8f5d-438850de4624",
+     "repo": "northwind/web",
+     "ecosystem": "npm",
+     "manager": "pnpm",
+     "package": "lucide-react",
+     "from_version": "0.544.0",
+     "to_version": "0.548.0",
+     "bump": "minor",
+     "released_at": "2026-11-19T09:00:00+00:00",
+     "state": "opened",
+     "tried": "passed",
+     "changes": [
+      "Twelve new icons."
+     ],
+     "uses": [],
+     "touches": 0,
+     "batch_id": "e13e08be-fe2a-5663-8dca-e14dde02ed70",
+     "pr_number": 418,
+     "downloads_week": 1600000,
+     "why": "New icons; none renamed",
+     "read_from": "GitHub releases",
+     "lemma_read": "New icons; none renamed or removed.",
+     "commit_sha": "3b8c0f2",
+     "created_at": "2026-11-19T17:00:00+00:00",
+     "updated_at": "2026-11-19T17:00:00+00:00"
+    },
+    {
+     "id": "8042b4d6-47e5-53f4-b654-f95bafc9e3a0",
+     "repo": "northwind/api",
+     "ecosystem": "pypi",
+     "manager": "uv",
+     "package": "httpx",
+     "from_version": "0.28.0",
+     "to_version": "0.28.1",
+     "bump": "patch",
+     "released_at": "2026-11-19T09:00:00+00:00",
+     "state": "ready",
+     "tried": "none",
+     "changes": [
+      "Fixes a proxy environment variable being read twice."
+     ],
+     "uses": [],
+     "touches": 0,
+     "why": "Out 6 days; joins Monday",
+     "read_from": "CHANGELOG.md",
+     "lemma_read": "One fix in proxy handling. You don't set a proxy.",
+     "created_at": "2026-11-19T17:00:00+00:00",
+     "updated_at": "2026-11-19T17:00:00+00:00"
+    },
+    {
+     "id": "399c027a-076f-5f59-a417-774373691140",
+     "repo": "northwind/mobile",
+     "ecosystem": "npm",
+     "manager": "npm",
+     "package": "react-native-svg",
+     "from_version": "15.12.1",
+     "to_version": "15.13.0",
+     "bump": "minor",
+     "released_at": "2026-11-18T09:00:00+00:00",
+     "state": "ready",
+     "tried": "none",
+     "changes": [
+      "Adds FeFlood and FeMerge filters."
+     ],
+     "uses": [],
+     "touches": 0,
+     "downloads_week": 1100000,
+     "why": "Read, not tested: northwind/mobile can't install (private registry)",
+     "read_from": "GitHub releases",
+     "lemma_read": "Adds filter elements; nothing removed. It can't be tested here, so the pull request will say so.",
+     "created_at": "2026-11-18T17:00:00+00:00",
+     "updated_at": "2026-11-18T17:00:00+00:00"
+    },
+    {
+     "id": "4abd6835-93ac-5cd3-a58c-b6e9f5740d2e",
+     "repo": "northwind/web",
+     "ecosystem": "npm",
+     "manager": "pnpm",
+     "package": "@vitejs/plugin-react",
+     "from_version": "5.0.2",
+     "to_version": "5.0.4",
+     "bump": "patch",
+     "released_at": "2026-11-17T09:00:00+00:00",
+     "state": "opened",
+     "tried": "passed",
+     "changes": [
+      "Fast Refresh fix for class components."
+     ],
+     "uses": [],
+     "touches": 0,
+     "batch_id": "e13e08be-fe2a-5663-8dca-e14dde02ed70",
+     "pr_number": 418,
+     "downloads_week": 2700000,
+     "why": "Fixes only",
+     "read_from": "GitHub releases",
+     "lemma_read": "Fixes only.",
+     "commit_sha": "d7a1e55",
+     "created_at": "2026-11-17T17:00:00+00:00",
+     "updated_at": "2026-11-17T17:00:00+00:00"
+    },
+    {
+     "id": "96f0b770-db4a-5cd4-ac72-f8f40413e969",
+     "repo": "northwind/web",
+     "ecosystem": "npm",
+     "manager": "pnpm",
+     "package": "zod",
+     "from_version": "3.24.4",
+     "to_version": "3.25.76",
+     "bump": "minor",
+     "released_at": "2026-11-16T09:00:00+00:00",
+     "state": "opened",
+     "tried": "fixed",
+     "changes": [
+      "parseAsync is deprecated in favour of safeParseAsync.",
+      "Faster object parsing."
+     ],
+     "uses": [
+      {
+       "at": "src/forms/schema.ts:18",
+       "line": "const result = await schema.parseAsync(input);"
+      }
+     ],
+     "touches": 1,
+     "batch_id": "e13e08be-fe2a-5663-8dca-e14dde02ed70",
+     "pr_number": 418,
+     "downloads_week": 9800000,
+     "tried_note": "Failed 2 tests, then passed after one fix",
+     "why": "Fixed in the batch: one call changed",
+     "read_from": "GitHub releases",
+     "lemma_read": "parseAsync is deprecated, and your test treats the warning as a failure. Switching the one call to safeParseAsync fixes it; that fix is its own commit.",
+     "commit_sha": "7be21d0",
+     "fix_sha": "a41c09e",
+     "created_at": "2026-11-16T17:00:00+00:00",
+     "updated_at": "2026-11-16T17:00:00+00:00"
+    },
+    {
+     "id": "5b17097e-0c76-5d17-b215-5dbaf2738512",
+     "repo": "northwind/api",
+     "ecosystem": "pypi",
+     "manager": "uv",
+     "package": "ruff",
+     "from_version": "0.14.0",
+     "to_version": "0.14.3",
+     "bump": "patch",
+     "released_at": "2026-11-16T09:00:00+00:00",
+     "state": "ready",
+     "tried": "none",
+     "changes": [
+      "Three new preview rules.",
+      "Faster import sorting."
+     ],
+     "uses": [],
+     "touches": 0,
+     "why": "Out 9 days; joins Monday",
+     "read_from": "GitHub releases",
+     "lemma_read": "New rules stay off: your configuration picks rule sets by name.",
+     "created_at": "2026-11-16T17:00:00+00:00",
+     "updated_at": "2026-11-16T17:00:00+00:00"
+    },
+    {
+     "id": "a6a02991-8cc4-5443-89d2-0afc0e4b385e",
+     "repo": "northwind/web",
+     "ecosystem": "npm",
+     "manager": "pnpm",
+     "package": "prettier",
+     "from_version": "3.6.2",
+     "to_version": "3.6.6",
+     "bump": "patch",
+     "released_at": "2026-11-15T09:00:00+00:00",
+     "state": "opened",
+     "tried": "passed",
+     "changes": [
+      "Fixes in Markdown and CSS formatting."
+     ],
+     "uses": [],
+     "touches": 0,
+     "batch_id": "e13e08be-fe2a-5663-8dca-e14dde02ed70",
+     "pr_number": 418,
+     "downloads_week": 3900000,
+     "why": "No formatting changes on your files",
+     "read_from": "CHANGELOG.md",
+     "lemma_read": "No formatting changes on your files: the Lemma ran it over the repository and nothing moved.",
+     "commit_sha": "9f3a2b1",
+     "created_at": "2026-11-15T17:00:00+00:00",
+     "updated_at": "2026-11-15T17:00:00+00:00"
+    },
+    {
+     "id": "bb1ba0e8-c35b-5ecb-ae9c-d44870e1729f",
+     "repo": "northwind/web",
+     "ecosystem": "npm",
+     "manager": "pnpm",
+     "package": "vite",
+     "from_version": "7.1.4",
+     "to_version": "7.1.9",
+     "bump": "patch",
+     "released_at": "2026-11-13T09:00:00+00:00",
+     "state": "opened",
+     "tried": "passed",
+     "changes": [
+      "Five fixes in dev-server reload and CSS ordering."
+     ],
+     "uses": [],
+     "touches": 0,
+     "batch_id": "e13e08be-fe2a-5663-8dca-e14dde02ed70",
+     "pr_number": 418,
+     "downloads_week": 14000000,
+     "why": "Fixes only",
+     "read_from": "CHANGELOG.md",
+     "lemma_read": "Fixes only. Nothing you configure changed.",
+     "commit_sha": "c0d93aa",
+     "created_at": "2026-11-13T17:00:00+00:00",
+     "updated_at": "2026-11-13T17:00:00+00:00"
+    },
+    {
+     "id": "bfe20ff3-7096-502d-bfc9-6de73ef97a6e",
+     "repo": "northwind/api",
+     "ecosystem": "pypi",
+     "manager": "uv",
+     "package": "fastapi",
+     "from_version": "0.118.0",
+     "to_version": "0.121.1",
+     "bump": "minor",
+     "released_at": "2026-11-12T09:00:00+00:00",
+     "state": "merged",
+     "tried": "passed",
+     "changes": [
+      "Adds a dependency caching option."
+     ],
+     "uses": [],
+     "touches": 0,
+     "batch_id": "c2bcafcd-da07-5c6c-bd08-e1f1bc98d450",
+     "pr_number": 75,
+     "why": "Merged in #75",
+     "read_from": "Release notes",
+     "lemma_read": "Adds a dependency caching option. No change needed.",
+     "commit_sha": "2c9e417",
+     "created_at": "2026-11-12T17:00:00+00:00",
+     "updated_at": "2026-11-12T17:00:00+00:00"
+    },
+    {
+     "id": "bd15f950-6934-5aeb-a699-b550210a0174",
+     "repo": "northwind/web",
+     "ecosystem": "npm",
+     "manager": "pnpm",
+     "package": "@types/node",
+     "from_version": "24.3.0",
+     "to_version": "24.6.2",
+     "bump": "minor",
+     "released_at": "2026-11-10T09:00:00+00:00",
+     "state": "opened",
+     "tried": "passed",
+     "changes": [
+      "Types for the Node 24.6 APIs."
+     ],
+     "uses": [],
+     "touches": 0,
+     "batch_id": "e13e08be-fe2a-5663-8dca-e14dde02ed70",
+     "pr_number": 418,
+     "downloads_week": 4100000,
+     "why": "Types only",
+     "read_from": "DefinitelyTyped",
+     "lemma_read": "Types only.",
+     "commit_sha": "51e0b7f",
+     "created_at": "2026-11-10T17:00:00+00:00",
+     "updated_at": "2026-11-10T17:00:00+00:00"
+    },
+    {
+     "id": "6e757144-734c-5033-b7eb-37ceda2459e3",
+     "repo": "northwind/infra",
+     "ecosystem": "actions",
+     "manager": "actions",
+     "package": "actions/cache",
+     "from_version": "4.2.3",
+     "to_version": "4.3.0",
+     "bump": "minor",
+     "released_at": "2026-11-09T09:00:00+00:00",
+     "state": "by_hand",
+     "tried": "none",
+     "changes": [
+      "Restores run in parallel.",
+      "Node 24 runtime."
+     ],
+     "uses": [
+      {
+       "at": ".github/workflows/ci.yml:22",
+       "line": "uses: actions/cache@v4.2.3"
+      }
+     ],
+     "touches": 1,
+     "why": "Do by hand: the Lemma's GitHub App can't push workflow files yet",
+     "read_from": "GitHub releases",
+     "lemma_read": "Faster restores; nothing to change in how you call it.",
+     "created_at": "2026-11-09T17:00:00+00:00",
+     "updated_at": "2026-11-09T17:00:00+00:00"
+    },
+    {
+     "id": "e10cb551-21bb-53d9-b03c-75806467a8e2",
+     "repo": "northwind/api",
+     "ecosystem": "pypi",
+     "manager": "uv",
+     "package": "sqlalchemy",
+     "from_version": "2.0.43",
+     "to_version": "2.0.44",
+     "bump": "patch",
+     "released_at": "2026-11-09T09:00:00+00:00",
+     "state": "merged",
+     "tried": "passed",
+     "changes": [
+      "Fixes in the asyncio dialects."
+     ],
+     "uses": [],
+     "touches": 0,
+     "batch_id": "c2bcafcd-da07-5c6c-bd08-e1f1bc98d450",
+     "pr_number": 75,
+     "why": "Merged in #75",
+     "read_from": "Changelog",
+     "lemma_read": "Fixes only.",
+     "commit_sha": "8b3d5e1",
+     "created_at": "2026-11-09T17:00:00+00:00",
+     "updated_at": "2026-11-09T17:00:00+00:00"
+    },
+    {
+     "id": "70539049-88cd-5b5d-872c-1e270dfef507",
+     "repo": "northwind/web",
+     "ecosystem": "npm",
+     "manager": "pnpm",
+     "package": "postcss",
+     "from_version": "8.5.6",
+     "to_version": "8.5.9",
+     "bump": "patch",
+     "released_at": "2026-11-05T09:00:00+00:00",
+     "state": "opened",
+     "tried": "passed",
+     "changes": [
+      "Two parser fixes."
+     ],
+     "uses": [],
+     "touches": 0,
+     "batch_id": "e13e08be-fe2a-5663-8dca-e14dde02ed70",
+     "pr_number": 418,
+     "downloads_week": 21000000,
+     "why": "Fixes only",
+     "read_from": "CHANGELOG.md",
+     "lemma_read": "Fixes only.",
+     "commit_sha": "0e6c14d",
+     "created_at": "2026-11-09T13:00:00+00:00",
+     "updated_at": "2026-11-09T13:00:00+00:00"
+    },
+    {
+     "id": "abb374fb-cf4b-542a-89ef-117d9477569d",
+     "repo": "northwind/web",
+     "ecosystem": "npm",
+     "manager": "pnpm",
+     "package": "eslint",
+     "from_version": "9.36.0",
+     "to_version": "9.38.0",
+     "bump": "minor",
+     "released_at": "2026-11-07T09:00:00+00:00",
+     "state": "dropped",
+     "tried": "passed",
+     "changes": [
+      "Two new rules, off by default.",
+      "Faster config loading."
+     ],
+     "uses": [],
+     "touches": 0,
+     "batch_id": "e13e08be-fe2a-5663-8dca-e14dde02ed70",
+     "pr_number": 418,
+     "downloads_week": 3000000,
+     "why": "Left for next week, at a person's ask on #418",
+     "read_from": "GitHub releases",
+     "lemma_read": "Two new rules, both off unless you turn them on.",
+     "commit_sha": "6d2f8e0",
+     "choice": "drop",
+     "decided_by": "tbecker",
+     "decided_at": "2026-11-23T08:40:00+00:00",
+     "created_at": "2026-11-09T13:00:00+00:00",
+     "updated_at": "2026-11-09T13:00:00+00:00"
+    },
+    {
+     "id": "8fce78ed-2115-5142-a818-3b33a997af96",
+     "repo": "northwind/infra",
+     "ecosystem": "actions",
+     "manager": "actions",
+     "package": "docker/build-push-action",
+     "from_version": "6.15.0",
+     "to_version": "6.18.0",
+     "bump": "minor",
+     "released_at": "2026-11-01T09:00:00+00:00",
+     "state": "by_hand",
+     "tried": "none",
+     "changes": [
+      "Build summaries in the job summary.",
+      "Fixes cache export on retries."
+     ],
+     "uses": [
+      {
+       "at": ".github/workflows/release.yml:41",
+       "line": "uses: docker/build-push-action@v6.15.0"
+      }
+     ],
+     "touches": 1,
+     "why": "Do by hand: the Lemma's GitHub App can't push workflow files yet",
+     "read_from": "GitHub releases",
+     "lemma_read": "Adds build summary options; your inputs are unchanged.",
+     "created_at": "2026-11-09T13:00:00+00:00",
+     "updated_at": "2026-11-09T13:00:00+00:00"
+    },
+    {
+     "id": "0b005f9a-395f-5d71-9e7d-e8a777b61e68",
+     "repo": "northwind/web",
+     "ecosystem": "npm",
+     "manager": "pnpm",
+     "package": "react-router",
+     "from_version": "6.30.1",
+     "to_version": "7.9.4",
+     "bump": "major",
+     "released_at": "2026-11-04T09:00:00+00:00",
+     "state": "needs_you",
+     "tried": "failed",
+     "changes": [
+      "Loaders and actions come from react-router, not react-router-dom.",
+      "json() and defer() are gone; return plain objects.",
+      "Needs Node 20 or later."
+     ],
+     "uses": [
+      {
+       "at": "src/routes.tsx:42",
+       "line": "import { json } from \"react-router-dom\";"
+      }
+     ],
+     "touches": 1,
+     "downloads_week": 2100000,
+     "tried_note": "Tried once on a branch: 2 tests failed on the json() import",
+     "why": "3 breaking changes; 1 touches you: src/routes.tsx:42",
+     "read_from": "GitHub releases, the upgrade guide",
+     "lemma_read": "One real change for you: the json() import in the routes file. The Lemma can make that change in the batch, as its own commit. Node is already 24 here.",
+     "created_at": "2026-11-09T13:00:00+00:00",
+     "updated_at": "2026-11-09T13:00:00+00:00"
+    },
+    {
+     "id": "25591c42-1410-5392-bed3-b1e1647d823a",
+     "repo": "northwind/web",
+     "ecosystem": "npm",
+     "manager": "pnpm",
+     "package": "tailwindcss",
+     "from_version": "3.4.17",
+     "to_version": "4.1.14",
+     "bump": "major",
+     "released_at": "2026-09-23T08:00:00+00:00",
+     "state": "needs_you",
+     "tried": "none",
+     "changes": [
+      "Configuration moves from tailwind.config.ts into CSS.",
+      "Some utilities are renamed."
+     ],
+     "uses": [
+      {
+       "at": "tailwind.config.ts:1",
+       "line": "export default { content: [\"./src/**/*.tsx\"] }"
+      },
+      {
+       "at": "src/styles/app.css:1",
+       "line": "@tailwind base;"
+      }
+     ],
+     "touches": 4,
+     "downloads_week": 6000000,
+     "why": "Config moves into CSS: tailwind.config.ts and 3 stylesheets",
+     "read_from": "The upgrade guide",
+     "lemma_read": "Worth its own pull request, with the official upgrade tool run first. Too big to slip into Monday.",
+     "created_at": "2026-11-09T13:00:00+00:00",
+     "updated_at": "2026-11-09T13:00:00+00:00"
+    },
+    {
+     "id": "d075776a-39e6-555e-822b-c537a9c49849",
+     "repo": "northwind/web",
+     "ecosystem": "npm",
+     "manager": "pnpm",
+     "package": "@types/react",
+     "from_version": "18.3.12",
+     "to_version": "19.2.2",
+     "bump": "major",
+     "released_at": "2026-10-22T08:00:00+00:00",
+     "state": "ignored",
+     "tried": "none",
+     "changes": [],
+     "uses": [],
+     "touches": 0,
+     "why": "Ignored: 19.x (Until the React 19 move)",
+     "read_from": "DefinitelyTyped",
+     "lemma_read": "Types for React 19.",
+     "created_at": "2026-11-09T13:00:00+00:00",
+     "updated_at": "2026-11-09T13:00:00+00:00"
+    },
+    {
+     "id": "9e8e95d5-03d4-59df-b254-5a1147c0a41b",
+     "repo": "northwind/api",
+     "ecosystem": "pypi",
+     "manager": "uv",
+     "package": "pyjwt",
+     "from_version": "2.9.0",
+     "to_version": "2.10.1",
+     "bump": "minor",
+     "released_at": "2026-10-26T09:00:00+00:00",
+     "state": "opened",
+     "tried": "passed",
+     "changes": [
+      "Rejects tokens signed with no algorithm unless asked."
+     ],
+     "uses": [
+      {
+       "at": "app/auth/tokens.py:31",
+       "line": "jwt.decode(token, key, algorithms=[\"HS256\"])"
+      }
+     ],
+     "touches": 2,
+     "batch_id": "cf72a125-47a6-5608-b5c7-da1dfbdc9884",
+     "pr_number": 77,
+     "why": "Security fix, opened the same day",
+     "read_from": "OSV",
+     "security": {
+      "ghsa": "GHSA-75c5-xw7c-p5pm",
+      "severity": "moderate",
+      "summary": "Tokens with no algorithm accepted",
+      "source": "osv",
+      "reach": "not_found",
+      "reach_note": "You only call jwt.decode with an algorithm list.",
+      "reach_at": "2026-11-25T06:02:00+00:00"
+     },
+     "lemma_read": "You always pass an algorithm list, so the attack path isn't reached. Opened anyway, the same day.",
+     "commit_sha": "17ab9e3",
+     "created_at": "2026-11-09T13:00:00+00:00",
+     "updated_at": "2026-11-09T13:00:00+00:00"
+    },
+    {
+     "id": "bffabcdc-7063-5464-8f9b-1bac5978191d",
+     "repo": "northwind/api",
+     "ecosystem": "pypi",
+     "manager": "uv",
+     "package": "pydantic",
+     "from_version": "2.11.9",
+     "to_version": "2.12.3",
+     "bump": "minor",
+     "released_at": "2026-11-03T09:00:00+00:00",
+     "state": "merged",
+     "tried": "passed",
+     "changes": [
+      "Python 3.14 support.",
+      "Deprecates a config key you don't use."
+     ],
+     "uses": [],
+     "touches": 0,
+     "batch_id": "c2bcafcd-da07-5c6c-bd08-e1f1bc98d450",
+     "pr_number": 75,
+     "why": "Merged in #75",
+     "read_from": "GitHub releases",
+     "lemma_read": "Python 3.14 support; one deprecation you don't hit.",
+     "commit_sha": "f04a6d3",
+     "created_at": "2026-11-09T13:00:00+00:00",
+     "updated_at": "2026-11-09T13:00:00+00:00"
+    }
+   ],
+   "total": 27
+  }
+ },
+ {
+  "match": "from deps_batch order by",
+  "response": {
+   "items": [
+    {
+     "id": "cf72a125-47a6-5608-b5c7-da1dfbdc9884",
+     "repo": "northwind/api",
+     "kind": "security",
+     "title": "Security: pyjwt 2.10.1 (GHSA-75c5-xw7c-p5pm, moderate)",
+     "week_of": "2026-11-23",
+     "branch": "lemma/security-pyjwt-2.10.1",
+     "base_branch": "main",
+     "pr_number": 77,
+     "pr_url": "https://github.com/northwind/api/pull/77",
+     "state": "open",
+     "head_sha": "d2c4b90",
+     "checks": "running",
+     "check_runs": [
+      {
+       "name": "test",
+       "state": "running"
+      },
+      {
+       "name": "lint",
+       "state": "passed"
+      }
+     ],
+     "review": "none",
+     "review_notes": 0,
+     "opened_at": "2026-11-25T06:03:00+00:00",
+     "commits": [
+      {
+       "package": "pyjwt",
+       "sha": "17ab9e3"
+      }
+     ],
+     "files": [
+      {
+       "path": "pyproject.toml",
+       "additions": 1,
+       "deletions": 1,
+       "kind": "manifest"
+      },
+      {
+       "path": "uv.lock",
+       "additions": 9,
+       "deletions": 9,
+       "kind": "lockfile"
+      }
+     ],
+     "steps": [
+      {
+       "at": "2026-11-25T06:00:00+00:00",
+       "kind": "start",
+       "text": "Daily security run. Cloned northwind/api by hand at main 90d4a7e: a time schedule can't start in a checkout yet.",
+       "ok": true
+      },
+      {
+       "at": "2026-11-25T06:01:00+00:00",
+       "kind": "security",
+       "text": "OSV lists GHSA-75c5-xw7c-p5pm (moderate) for pyjwt 2.9.0.",
+       "ok": true
+      },
+      {
+       "at": "2026-11-25T06:02:00+00:00",
+       "kind": "read",
+       "text": "Reach: not found. You only call jwt.decode with an algorithm list (app/auth/tokens.py:31). Opened anyway, the same day.",
+       "ok": true
+      },
+      {
+       "at": "2026-11-25T06:03:00+00:00",
+       "kind": "open",
+       "text": "Opened this pull request outside the batch and the wait. uv run pytest: 186 passed.",
+       "ok": true
+      }
+     ],
+     "created_at": "2026-11-25T06:03:00+00:00",
+     "updated_at": "2026-11-25T06:03:00+00:00"
+    },
+    {
+     "id": "fb05ca70-486d-511a-82d2-e92eee5423b0",
+     "repo": "northwind/web",
+     "kind": "security",
+     "title": "Security: next 15.4.8 (GHSA-7m27-4f2p-q9h3, high)",
+     "week_of": "2026-11-23",
+     "branch": "lemma/security-next-15.4.8",
+     "base_branch": "main",
+     "pr_number": 421,
+     "pr_url": "https://github.com/northwind/web/pull/421",
+     "state": "open",
+     "head_sha": "5a0f9d2",
+     "checks": "passed",
+     "check_runs": [
+      {
+       "name": "build",
+       "state": "passed"
+      },
+      {
+       "name": "test",
+       "state": "passed"
+      }
+     ],
+     "review": "none",
+     "review_notes": 0,
+     "opened_at": "2026-11-24T06:04:00+00:00",
+     "commits": [
+      {
+       "package": "next",
+       "sha": "c4e81a7"
+      }
+     ],
+     "files": [
+      {
+       "path": "package.json",
+       "additions": 1,
+       "deletions": 1,
+       "kind": "manifest"
+      },
+      {
+       "path": "pnpm-lock.yaml",
+       "additions": 24,
+       "deletions": 24,
+       "kind": "lockfile"
+      }
+     ],
+     "steps": [
+      {
+       "at": "2026-11-24T06:00:00+00:00",
+       "kind": "start",
+       "text": "Daily security run. Cloned northwind/web by hand at main 4f1c2e9: a time schedule can't start in a checkout yet.",
+       "ok": true
+      },
+      {
+       "at": "2026-11-24T06:01:00+00:00",
+       "kind": "security",
+       "text": "OSV lists GHSA-7m27-4f2p-q9h3 (high) for next 15.4.6. Dependabot alerts can't be read yet.",
+       "ok": true
+      },
+      {
+       "at": "2026-11-24T06:01:00+00:00",
+       "kind": "read",
+       "text": "Reached: yes. middleware.ts:12 uses the matcher the fix changes. The Lemma read the code; this is not a call graph.",
+       "ok": true
+      },
+      {
+       "at": "2026-11-24T06:02:00+00:00",
+       "kind": "install",
+       "text": "Installed next 15.4.8 with pnpm.",
+       "ok": true
+      },
+      {
+       "at": "2026-11-24T06:03:00+00:00",
+       "kind": "test",
+       "text": "pnpm test: 412 passed. pnpm build: passed.",
+       "ok": true
+      },
+      {
+       "at": "2026-11-24T06:04:00+00:00",
+       "kind": "open",
+       "text": "Opened this pull request the same day, outside the batch and the wait.",
+       "ok": true
+      },
+      {
+       "at": "2026-11-24T06:12:00+00:00",
+       "kind": "checks",
+       "text": "GitHub Actions: build and test passed.",
+       "ok": true
+      }
+     ],
+     "created_at": "2026-11-24T06:04:00+00:00",
+     "updated_at": "2026-11-24T06:04:00+00:00"
+    },
+    {
+     "id": "e13e08be-fe2a-5663-8dca-e14dde02ed70",
+     "repo": "northwind/web",
+     "kind": "batch",
+     "title": "Dependencies, week of 23 Nov",
+     "week_of": "2026-11-23",
+     "branch": "lemma/deps-2026-11-23",
+     "base_branch": "main",
+     "pr_number": 418,
+     "pr_url": "https://github.com/northwind/web/pull/418",
+     "state": "open",
+     "head_sha": "e93b1c4",
+     "checks": "passed",
+     "check_runs": [
+      {
+       "name": "build",
+       "state": "passed"
+      },
+      {
+       "name": "test",
+       "state": "passed"
+      },
+      {
+       "name": "lint",
+       "state": "passed"
+      },
+      {
+       "name": "e2e",
+       "state": "passed"
+      }
+     ],
+     "review": "approved",
+     "review_notes": 1,
+     "review_by": "tbecker",
+     "review_text": "The lockfile also moves 41 indirect packages; none of them add install scripts.",
+     "opened_at": "2026-11-23T05:13:00+00:00",
+     "commits": [
+      {
+       "package": "zod",
+       "sha": "7be21d0",
+       "fix": "a41c09e"
+      },
+      {
+       "package": "vite",
+       "sha": "c0d93aa"
+      },
+      {
+       "package": "@types/node",
+       "sha": "51e0b7f"
+      },
+      {
+       "package": "postcss",
+       "sha": "0e6c14d"
+      },
+      {
+       "package": "prettier",
+       "sha": "9f3a2b1"
+      },
+      {
+       "package": "@vitejs/plugin-react",
+       "sha": "d7a1e55"
+      },
+      {
+       "package": "lucide-react",
+       "sha": "3b8c0f2"
+      }
+     ],
+     "files": [
+      {
+       "path": "package.json",
+       "additions": 7,
+       "deletions": 7,
+       "kind": "manifest"
+      },
+      {
+       "path": "pnpm-lock.yaml",
+       "additions": 612,
+       "deletions": 592,
+       "kind": "lockfile"
+      },
+      {
+       "path": "src/forms/schema.ts",
+       "additions": 1,
+       "deletions": 1,
+       "kind": "fix",
+       "patch": "@@ src/forms/schema.ts:18 @@\n-  const result = await schema.parseAsync(input);\n+  const result = await schema.safeParseAsync(input);"
+      }
+     ],
+     "steps": [
+      {
+       "at": "2026-11-23T05:00:00+00:00",
+       "kind": "start",
+       "text": "Cloned northwind/web by hand at main 4f1c2e9: a time schedule can't start in a checkout yet.",
+       "ok": true
+      },
+      {
+       "at": "2026-11-23T05:01:00+00:00",
+       "kind": "read",
+       "text": "Read 11 changelogs. Held 3 out: two majors that need you, and one release that looks risky.",
+       "ok": true
+      },
+      {
+       "at": "2026-11-23T05:03:00+00:00",
+       "kind": "install",
+       "text": "Installed 8 updates with pnpm, one commit per update.",
+       "ok": true
+      },
+      {
+       "at": "2026-11-23T05:06:00+00:00",
+       "kind": "test",
+       "text": "pnpm test: 2 failed in src/forms/schema.test.ts.",
+       "ok": false
+      },
+      {
+       "at": "2026-11-23T05:07:00+00:00",
+       "kind": "halve",
+       "text": "Tried the updates in halves, 3 test runs: zod 3.25.76 alone fails both tests.",
+       "ok": true
+      },
+      {
+       "at": "2026-11-23T05:09:00+00:00",
+       "kind": "fix",
+       "text": "Fixed it: parseAsync to safeParseAsync in src/forms/schema.ts, commit a41c09e.",
+       "ok": true
+      },
+      {
+       "at": "2026-11-23T05:12:00+00:00",
+       "kind": "test",
+       "text": "pnpm test: 412 passed. pnpm build: passed.",
+       "ok": true
+      },
+      {
+       "at": "2026-11-23T05:13:00+00:00",
+       "kind": "open",
+       "text": "Opened this pull request as the Lemma's GitHub App, labelled dependencies. No check run: the App can't write checks yet, so the description says the same.",
+       "ok": true
+      },
+      {
+       "at": "2026-11-23T05:21:00+00:00",
+       "kind": "checks",
+       "text": "GitHub Actions: build, test, lint and e2e passed.",
+       "ok": true
+      },
+      {
+       "at": "2026-11-23T05:24:00+00:00",
+       "kind": "review",
+       "text": "Reviewed by tbecker: approved, 1 note.",
+       "ok": true
+      },
+      {
+       "at": "2026-11-23T08:40:00+00:00",
+       "kind": "comment",
+       "text": "tbecker commented \"@lemma leave eslint for next week\". Dropped its commit.",
+       "ok": true
+      },
+      {
+       "at": "2026-11-23T08:52:00+00:00",
+       "kind": "checks",
+       "text": "GitHub Actions: passed again with 7 updates.",
+       "ok": true
+      }
+     ],
+     "created_at": "2026-11-23T05:13:00+00:00",
+     "updated_at": "2026-11-23T05:13:00+00:00"
+    },
+    {
+     "id": "c2bcafcd-da07-5c6c-bd08-e1f1bc98d450",
+     "repo": "northwind/api",
+     "kind": "batch",
+     "title": "Dependencies, week of 23 Nov",
+     "week_of": "2026-11-23",
+     "branch": "lemma/deps-2026-11-23",
+     "base_branch": "main",
+     "pr_number": 75,
+     "pr_url": "https://github.com/northwind/api/pull/75",
+     "state": "merged",
+     "head_sha": "b71e0c2",
+     "checks": "passed",
+     "check_runs": [
+      {
+       "name": "test",
+       "state": "passed"
+      },
+      {
+       "name": "lint",
+       "state": "passed"
+      }
+     ],
+     "review": "approved",
+     "review_notes": 0,
+     "review_by": "aokafor",
+     "opened_at": "2026-11-23T05:05:00+00:00",
+     "merged_at": "2026-11-24T10:02:00+00:00",
+     "merged_by": "aokafor",
+     "commits": [
+      {
+       "package": "fastapi",
+       "sha": "2c9e417"
+      },
+      {
+       "package": "pydantic",
+       "sha": "f04a6d3"
+      },
+      {
+       "package": "sqlalchemy",
+       "sha": "8b3d5e1"
+      }
+     ],
+     "files": [
+      {
+       "path": "pyproject.toml",
+       "additions": 3,
+       "deletions": 3,
+       "kind": "manifest"
+      },
+      {
+       "path": "uv.lock",
+       "additions": 148,
+       "deletions": 141,
+       "kind": "lockfile"
+      }
+     ],
+     "steps": [
+      {
+       "at": "2026-11-23T05:00:00+00:00",
+       "kind": "start",
+       "text": "Cloned northwind/api by hand at main 90d4a7e: a time schedule can't start in a checkout yet.",
+       "ok": true
+      },
+      {
+       "at": "2026-11-23T05:01:00+00:00",
+       "kind": "read",
+       "text": "Read 4 changelogs. Left boto3 out: a rule takes it monthly.",
+       "ok": true
+      },
+      {
+       "at": "2026-11-23T05:02:00+00:00",
+       "kind": "install",
+       "text": "Installed 3 updates with uv, one commit per update.",
+       "ok": true
+      },
+      {
+       "at": "2026-11-23T05:04:00+00:00",
+       "kind": "test",
+       "text": "uv run pytest: 186 passed.",
+       "ok": true
+      },
+      {
+       "at": "2026-11-23T05:05:00+00:00",
+       "kind": "open",
+       "text": "Opened this pull request as the Lemma's GitHub App, labelled dependencies.",
+       "ok": true
+      },
+      {
+       "at": "2026-11-23T05:11:00+00:00",
+       "kind": "checks",
+       "text": "GitHub Actions: test and lint passed.",
+       "ok": true
+      },
+      {
+       "at": "2026-11-24T09:47:00+00:00",
+       "kind": "review",
+       "text": "Reviewed by aokafor: approved.",
+       "ok": true
+      },
+      {
+       "at": "2026-11-24T10:02:00+00:00",
+       "kind": "merge",
+       "text": "Merged by aokafor.",
+       "ok": true
+      }
+     ],
+     "created_at": "2026-11-23T05:05:00+00:00",
+     "updated_at": "2026-11-23T05:05:00+00:00"
+    }
+   ],
+   "total": 4
+  }
+ },
+ {
+  "match": "from deps_ignore order by",
+  "response": {
+   "items": [
+    {
+     "id": "cd6fd90c-21c7-574f-a24d-e1ca4e268125",
+     "repo": "northwind/web",
+     "package": "@types/react",
+     "version_range": "19.x",
+     "reason": "Until the React 19 move",
+     "by_kind": "person",
+     "by_name": "tbecker",
+     "created_at": "2026-11-03T09:12:00+00:00",
+     "updated_at": "2026-11-03T09:12:00+00:00"
+    },
+    {
+     "id": "6bd6ec3f-52b4-56f9-a875-cd120125ec7f",
+     "repo": "northwind/api",
+     "package": "boto3",
+     "version_range": "patches",
+     "reason": "Daily releases; take them monthly",
+     "by_kind": "rule",
+     "by_name": "Take boto3 monthly.",
+     "created_at": "2026-10-12T08:40:00+00:00",
+     "updated_at": "2026-10-12T08:40:00+00:00"
+    }
+   ],
+   "total": 2
+  }
+ },
+ {
+  "match": "from deps_rule order by",
+  "response": {
+   "items": [
+    {
+     "id": "9608e847-ecbe-5422-b788-a0d07ff5c5e7",
+     "text": "Take boto3 monthly.",
+     "by_name": "Priya Shah",
+     "active": true,
+     "created_at": "2026-10-12T08:40:00+00:00",
+     "updated_at": "2026-10-12T08:40:00+00:00"
+    }
+   ],
+   "total": 1
+  }
+ },
+ {
+  "match": "from deps_sample_row",
+  "response": {
+   "items": [
+    {
+     "n": 0
+    }
+   ],
+   "total": 1
+  }
+ }
+]

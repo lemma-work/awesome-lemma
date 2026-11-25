@@ -1,0 +1,9 @@
+{
+  // A Triage task's status changed in Tasks: only a write that changed
+  // `status` on a task whose source is triage.
+  "name": "triage-task-changed",
+  "schedule_type": "DATASTORE",
+  "config": { "table_name": "task", "operations": ["UPDATE"], "when": { "source": "triage", "status": { "changed": true } }, "bulk_writes": "each" },
+  "workflow_name": "triage-task-changed",
+  "is_active": true
+}

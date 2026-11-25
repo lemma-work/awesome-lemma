@@ -1,0 +1,8 @@
+{
+  // Sprints carries Tasks inside its bundle, so one install into an empty
+  // Lemma brings both: a sprint is made of the team's tasks.
+  // Read by _build/assemble.py, which merges Tasks from its own folder into
+  // install/sprints/, the bundle that is installed.
+  "name": "sprints",
+  "carries": ["tasks"]
+}

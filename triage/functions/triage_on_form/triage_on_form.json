@@ -1,0 +1,119 @@
+{
+  "name": "triage_on_form",
+  "description": "A visitor's answer to the report form (the triage-form-added trigger, with row_author): made a report from the contact the platform names, the email typed, or an unnamed visitor, with its page, version, browser and screenshot, and filed.",
+  "type": "API",
+  "visibility": "POD",
+  "code": {
+    "$file": "code.py"
+  },
+  "permissions": {
+    "grants": [
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "triage_settings",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "triage_report",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read",
+          "datastore.record.write"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "triage_item",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read",
+          "datastore.record.write"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "triage_event",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read",
+          "datastore.record.write"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "triage_rule",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "triage_correction",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "ask",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read",
+          "datastore.record.write"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "away",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read"
+        ]
+      },
+      {
+        "resource_type": "connector",
+        "resource_name": "github",
+        "permission_ids": [
+          "connector.use"
+        ]
+      },
+      {
+        "resource_type": "connector",
+        "resource_name": "slack",
+        "permission_ids": [
+          "connector.use"
+        ]
+      },
+      {
+        "resource_type": "workflow",
+        "resource_name": "triage-read",
+        "permission_ids": [
+          "workflow.read",
+          "workflow.execute"
+        ]
+      },
+      {
+        "resource_type": "function",
+        "resource_name": "triage_needs_you",
+        "permission_ids": [
+          "function.execute"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "triage_form",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read",
+          "datastore.record.write"
+        ]
+      }
+    ]
+  }
+}

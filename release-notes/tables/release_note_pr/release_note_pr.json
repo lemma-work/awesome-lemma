@@ -1,0 +1,36 @@
+{
+  // One merged pull request. id = uuid5(RN_NS, "<owner/repo>#<number>"), so
+  // a webhook and the nightly reconcile meeting the same merge write one row.
+  "name": "release_note_pr",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "repo", "type": "TEXT", "required": true, "max_length": 200 },
+    { "name": "number", "type": "INTEGER", "required": true },
+    { "name": "title", "type": "TEXT", "required": true, "max_length": 400 },
+    { "name": "author", "type": "TEXT", "max_length": 100 },
+    { "name": "url", "type": "TEXT", "max_length": 500 },
+    { "name": "merged_at", "type": "DATETIME" },
+    { "name": "merge_sha", "type": "TEXT", "max_length": 64 },
+    { "name": "labels", "type": "JSON" },
+    // The pull request's description, first part only, for the writer.
+    { "name": "body", "type": "TEXT", "max_length": 4000 },
+    { "name": "files", "type": "INTEGER" },
+    // What it changes for the people who use the product, in plain words
+    // (written with the note; the title until then).
+    { "name": "summary", "type": "TEXT", "max_length": 600 },
+    // feature, improvement, fix, breaking: in the note. routine (dependency
+    // bumps, CI, typos) and internal (refactors, tests, tooling): left out.
+    { "name": "kind", "type": "ENUM",
+      "options": ["feature", "improvement", "fix", "breaking", "routine", "internal"] },
+    // Issues it closes, "owner/repo#880", with each one's title.
+    { "name": "closes", "type": "JSON" },
+    { "name": "note_id", "type": "UUID" },
+    { "name": "live_at", "type": "DATETIME" },
+    // Why it is not in the note (routine, internal, a person said so), or empty.
+    { "name": "left_out", "type": "TEXT", "max_length": 200 },
+    { "name": "sample", "type": "BOOLEAN", "default": false }
+  ],
+  "config": {}
+}

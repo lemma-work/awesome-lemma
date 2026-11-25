@@ -1,0 +1,22 @@
+{
+  // One line of an item's Activity. The id is uuid5(TRIAGE_NS,
+  // "event:<item>:<kind>:<key>"), so a re-run never writes a line twice.
+  "name": "triage_event",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "item_id", "type": "UUID", "required": true },
+    { "name": "at", "type": "DATETIME", "required": true },
+    // Every option from the start: an import never changes an existing ENUM.
+    { "name": "kind", "type": "ENUM", "required": true,
+      "options": ["report", "merged", "split", "owner", "read", "escalated", "regressed", "marked_down", "back", "accepted",
+                  "declined", "duplicate", "snoozed", "told", "task", "agent", "declared", "known", "acked", "note"] },
+    // A member's id, or "lemma".
+    { "name": "actor", "type": "TEXT", "required": true, "max_length": 64 },
+    { "name": "actor_name", "type": "TEXT", "max_length": 200 },
+    { "name": "text", "type": "TEXT", "required": true, "max_length": 2000 },
+    { "name": "detail", "type": "JSON" }
+  ],
+  "config": {}
+}

@@ -1,0 +1,6 @@
+{
+  "connector": "github",
+  "mode": "SHARED",
+  "required": false,
+  "purpose": "Clones each repository you pick, pushes one branch per batch and opens its pull request as the Lemma's GitHub App, posts a check run when the App may, reads Dependabot alerts when it may, and hears pull requests, checks, reviews and @lemma comments. Merges only when a person presses Merge."
+}

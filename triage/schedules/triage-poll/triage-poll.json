@@ -1,0 +1,10 @@
+{
+  // Every 15 minutes: Sentry, PostHog, the watched Slack channels (until
+  // their trigger is live) and a GitHub catch-up. Runs as whoever installed
+  // Triage; it reads nothing until set-up is done.
+  "name": "triage-poll",
+  "schedule_type": "TIME",
+  "config": { "cron": "*/15 * * * *", "timezone": "UTC" },
+  "workflow_name": "triage-poll",
+  "is_active": true
+}

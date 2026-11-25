@@ -1,0 +1,6 @@
+#!/bin/bash
+# One SQL read against the bound Lemma, one JSON row per line.
+here="$(cd "$(dirname "$0")" && pwd)"
+"$here/lemma" --json query run "$1" 2>&1 | uv run --no-project python -c "import json,sys
+d=json.load(sys.stdin)
+[print(json.dumps(r, default=str, ensure_ascii=False)) for r in d.get('items',[])]"

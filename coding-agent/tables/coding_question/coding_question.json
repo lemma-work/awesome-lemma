@@ -1,0 +1,26 @@
+{
+  // One question about the code, and its answer as the agent saved it, so the
+  // team can read it (the conversation stays the asker's). Becomes a task with
+  // Make this a task.
+  "name": "coding_question",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "question", "type": "TEXT", "required": true, "max_length": 4000 },
+    { "name": "repo", "type": "TEXT", "required": true, "max_length": 200 },
+    { "name": "ref", "type": "TEXT", "max_length": 255 },
+    // The commit it read, so path:line links stay true.
+    { "name": "sha", "type": "TEXT", "max_length": 64 },
+    { "name": "conversation_id", "type": "TEXT", "max_length": 64 },
+    { "name": "state", "type": "ENUM", "required": true, "default": "asking", "options": ["asking", "answered", "failed"] },
+    { "name": "answer", "type": "TEXT", "max_length": 20000 },
+    // [{path, start, end}] it read.
+    { "name": "read", "type": "JSON" },
+    { "name": "task_id", "type": "UUID" },
+    { "name": "asked_by", "type": "USER" },
+    { "name": "asked_by_name", "type": "TEXT", "max_length": 200 },
+    { "name": "answered_at", "type": "DATETIME" }
+  ],
+  "config": {}
+}

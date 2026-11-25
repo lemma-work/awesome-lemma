@@ -1,0 +1,43 @@
+[
+ {
+  "match": "lemma/r2v8n5tc",
+  "response": {
+   "result": {
+    "ahead_by": 1,
+    "files": [
+     {
+      "filename": "web/charts/theme.ts",
+      "status": 14,
+      "additions": 9,
+      "deletions": 3,
+      "patch": "@@ -40,4 +40,4 @@\n   context line\n-  axisLabel: \"#333\",\n+  axisLabel: \"var(--chart-label)\",\n   context line\n"
+     }
+    ]
+   }
+  }
+ },
+ {
+  "match": "lemma/f4h1w9zs",
+  "response": {
+   "result": {
+    "ahead_by": 1,
+    "files": [
+     {
+      "filename": "api/jobs/enqueue.py",
+      "status": 18,
+      "additions": 14,
+      "deletions": 5,
+      "patch": "@@ -40,5 +40,5 @@\n   context line\n-    job = jobs.write(payload)\n-    job.idempotency_key = new_key()\n+    key = payload.get(\"idempotency_key\") or new_key()\n+    job = jobs.write({**payload, \"idempotency_key\": key})\n   context line\n"
+     },
+     {
+      "filename": "api/jobs/test_enqueue.py",
+      "status": 40,
+      "additions": 9,
+      "deletions": 0,
+      "patch": "@@ -40,3 +40,5 @@\n   context line\n+def test_requeue_keeps_the_key():\n+    ...\n   context line\n"
+     }
+    ]
+   }
+  }
+ }
+]

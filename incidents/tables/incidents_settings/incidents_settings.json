@@ -1,0 +1,40 @@
+{
+  // The Lemma's incident set-up: one row (id fixed by incidents_setup_save).
+  // Team-wide, no RLS: an incident is the team's.
+  "name": "incidents_settings",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    // The pod connector Slack runs through (its slug; "slack" unless the
+    // Lemma named it otherwise), and the Slack workspace (team id) it is in.
+    { "name": "slack_account", "type": "TEXT", "max_length": 120, "default": "slack" },
+    { "name": "slack_team_id", "type": "TEXT", "max_length": 32 },
+    // Where every incident is announced (#incidents): its id and name.
+    { "name": "announce_channel_id", "type": "TEXT", "max_length": 32 },
+    { "name": "announce_channel_name", "type": "TEXT", "max_length": 80 },
+    // An incident's channel is <prefix><number>-<slug>: #inc-14-checkout-502.
+    { "name": "channel_prefix", "type": "TEXT", "max_length": 20, "default": "inc-" },
+    // The repositories watched for what changed: [{repo: "owner/name",
+    // service: "checkout-api", deploy_workflow: "Deploy"}].
+    { "name": "repos", "type": "JSON" },
+    // Who gets each update by email: ["ops@company.example", ...].
+    { "name": "email_to", "type": "JSON" },
+    // Who those emails come from: an address on a domain the Lemma's mailbox
+    // (Resend) has verified, as "Incidents <incidents@company.example>".
+    // Without one, updates go to Slack only.
+    { "name": "email_from", "type": "TEXT", "max_length": 200 },
+    // The team's severity words, most severe first: [{key: "sev1", word:
+    // "Critical", update_every_min: 30}, ...]. Default SEV1 to SEV3.
+    { "name": "severities", "type": "JSON" },
+    { "name": "setup_done_at", "type": "DATETIME" },
+    { "name": "setup_by", "type": "USER" },
+    // The sample incidents are loaded.
+    { "name": "sample", "type": "BOOLEAN", "default": false },
+    // The schedules the app made as the person who set it up: the 15-minute
+    // tick and one per GitHub event ({name: id}). A schedule runs as its maker.
+    { "name": "schedules", "type": "JSON" },
+    { "name": "schedule_user_id", "type": "USER" }
+  ],
+  "config": {}
+}

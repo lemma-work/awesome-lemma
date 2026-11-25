@@ -1,0 +1,14 @@
+{
+  // One rule in words ("Take boto3 monthly"). The agent reads every active
+  // rule at the start of each run. Team-wide, no RLS.
+  "name": "deps_rule",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "text", "type": "TEXT", "required": true, "max_length": 400 },
+    { "name": "by_name", "type": "TEXT", "max_length": 200 },
+    { "name": "active", "type": "BOOLEAN", "default": true }
+  ],
+  "config": {}
+}

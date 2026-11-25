@@ -1,0 +1,1347 @@
+[
+ {
+  "match": "from incidents_settings",
+  "response": {
+   "items": [
+    {
+     "id": "c8c006a8-9ec5-5649-a286-253e00bd3389",
+     "slack_account": "slack",
+     "slack_team_id": "T0SAMPLE",
+     "announce_channel_id": "C0INCIDENTS",
+     "announce_channel_name": "incidents",
+     "channel_prefix": "inc-",
+     "repos": [
+      {
+       "repo": "shop/checkout-api",
+       "service": "checkout-api",
+       "deploy_workflow": "Deploy"
+      },
+      {
+       "repo": "shop/search-api",
+       "service": "search-api",
+       "deploy_workflow": "Deploy"
+      }
+     ],
+     "email_to": [
+      "support@company.example",
+      "cx@company.example",
+      "finance@company.example"
+     ],
+     "severities": [
+      {
+       "key": "sev1",
+       "word": "Critical",
+       "update_every_min": 30
+      },
+      {
+       "key": "sev2",
+       "word": "Major",
+       "update_every_min": 30
+      },
+      {
+       "key": "sev3",
+       "word": "Minor",
+       "update_every_min": 60
+      }
+     ],
+     "setup_done_at": "2026-10-01T09:00:00+00:00",
+     "setup_by": "user-sample",
+     "sample": false,
+     "schedules": {},
+     "created_at": "2026-10-01T09:00:00+00:00"
+    }
+   ],
+   "total": 1
+  }
+ },
+ {
+  "match": "from incidents_incident order by",
+  "response": {
+   "items": [
+    {
+     "id": "bcd93022-cd07-5a13-b51c-3685f849b6cb",
+     "number": 14,
+     "title": "Checkout returns 502 for card payments in the EU",
+     "severity": "sev2",
+     "status": "investigating",
+     "lead_user_id": "user-sample",
+     "lead_name": "Mara Lind",
+     "comms_user_id": null,
+     "comms_name": "Ines Ruiz",
+     "responders": [
+      {
+       "user_id": null,
+       "name": "Theo Park",
+       "email": "theo@company.example"
+      },
+      {
+       "user_id": "user-sample",
+       "name": "Mara Lind",
+       "email": null
+      },
+      {
+       "user_id": null,
+       "name": "Ines Ruiz",
+       "email": "ines@company.example"
+      }
+     ],
+     "service": "checkout-api",
+     "impact": "EU card payments",
+     "people_affected": 1240,
+     "people_source": "Sentry users",
+     "started_at": "2026-11-25T14:02:00+00:00",
+     "started_source": "first error",
+     "noticed_at": "2026-11-25T14:02:00+00:00",
+     "noticed_source": "Triage",
+     "declared_at": "2026-11-25T14:03:00+00:00",
+     "declared_by": "Mara Lind",
+     "channel_id": "C0SAMPLE14",
+     "channel_name": "inc-14-checkout-502",
+     "header_ts": null,
+     "channel_connected": true,
+     "source": "triage",
+     "source_id": "TRI-482",
+     "source_url": "https://triage.example/TRI-482",
+     "source_label": "TRI-482 TimeoutError in eu/client.ts",
+     "summary": "Card payments routed to the EU provider fail with a 502 since 14:02. About 1,240 people have hit it. Non-EU cards and wallets work. Theo is reverting the 13:58 timeout change; the revert's checks are running.",
+     "summary_at": "2026-11-25T14:36:00+00:00",
+     "gathered_to_ts": null,
+     "gathered_at": "2026-11-25T14:36:00+00:00",
+     "update_due_at": "2026-11-25T14:45:00+00:00",
+     "writeup_state": "none",
+     "followups": [],
+     "created_at": "2026-11-25T14:03:00+00:00",
+     "channel_schedule_id": "demo"
+    },
+    {
+     "id": "bc835be6-ec99-54c5-a9cc-a39157c36ce4",
+     "number": 13,
+     "title": "Search results stale",
+     "severity": "sev3",
+     "status": "resolved",
+     "lead_user_id": "user-sample",
+     "lead_name": "Mara Lind",
+     "comms_name": "Jun Oda",
+     "responders": [
+      {
+       "user_id": "user-sample",
+       "name": "Mara Lind",
+       "email": null
+      },
+      {
+       "user_id": null,
+       "name": "Jun Oda",
+       "email": "jun@company.example"
+      },
+      {
+       "user_id": null,
+       "name": "Theo Park",
+       "email": "theo@company.example"
+      }
+     ],
+     "service": "search-api",
+     "impact": "Product search showed yesterday's prices",
+     "people_affected": null,
+     "people_source": null,
+     "started_at": "2026-11-19T10:50:00+00:00",
+     "started_source": "first report",
+     "noticed_at": "2026-11-19T11:04:00+00:00",
+     "noticed_source": "Slack",
+     "declared_at": "2026-11-19T11:06:00+00:00",
+     "declared_by": "Mara Lind",
+     "resolved_at": "2026-11-19T13:00:00+00:00",
+     "channel_id": "C0SAMPLE13",
+     "channel_name": "inc-13-search-stale",
+     "channel_connected": true,
+     "source": "slack",
+     "summary": "Resolved: the search index rebuilt; results are current.",
+     "summary_at": "2026-11-19T12:58:00+00:00",
+     "writeup_state": "to_review",
+     "writeup_path": "/incidents/INC-13.md",
+     "writeup_at": "2026-11-19T13:10:00+00:00",
+     "writeup": {
+      "title": "Search showed stale prices for two hours",
+      "drafted_at": "2026-11-19T13:10:00+00:00",
+      "sections": [
+       {
+        "key": "summary",
+        "heading": "Summary",
+        "items": [
+         {
+          "key": "summary.0",
+          "kind": "p",
+          "text": "A change merged that morning cached search responses for 24 hours.",
+          "cites": [
+           "220613f8-8ca6-5014-bc04-2399a7524793"
+          ]
+         },
+         {
+          "key": "summary.1",
+          "kind": "p",
+          "text": "The cache key left out the price index, so sale prices in search stayed a day old.",
+          "cites": [
+           "c4219ed1-4494-53ba-aff5-a3e1bdf31b00"
+          ]
+         },
+         {
+          "key": "summary.2",
+          "kind": "p",
+          "text": "A fix keyed the cache on the price index and the index was rebuilt.",
+          "cites": [
+           "2330c914-7b9f-5031-847e-ab7e935917e1",
+           "cea14999-cda8-556f-9637-7ff20d17ddfc"
+          ]
+         }
+        ]
+       },
+       {
+        "key": "impact",
+        "heading": "Impact",
+        "items": [
+         {
+          "key": "impact.0",
+          "kind": "p",
+          "text": "Search showed yesterday's prices on sale items for about two hours.",
+          "cites": [
+           "48455df1-fb1f-5870-b060-2bf8bdbcd123",
+           "cea14999-cda8-556f-9637-7ff20d17ddfc"
+          ]
+         },
+         {
+          "key": "impact.1",
+          "kind": "p",
+          "text": "Most customers who saw a stale price did not complete the order.",
+          "cites": []
+         }
+        ]
+       },
+       {
+        "key": "why",
+        "heading": "Why it happened",
+        "items": [
+         {
+          "key": "why.0",
+          "kind": "p",
+          "text": "The cache key was built from the query alone; the price index was not part of it.",
+          "cites": [
+           "c4219ed1-4494-53ba-aff5-a3e1bdf31b00"
+          ]
+         }
+        ]
+       },
+       {
+        "key": "went",
+        "heading": "What went well, what didn't",
+        "items": [
+         {
+          "key": "went.0",
+          "kind": "li",
+          "text": "The cause was found 25 minutes after declaring, from the merge in the hour before.",
+          "cites": [
+           "75d72462-a793-5221-b0f3-00ed1bf7629b",
+           "c4219ed1-4494-53ba-aff5-a3e1bdf31b00"
+          ]
+         },
+         {
+          "key": "went.1",
+          "kind": "li",
+          "text": "A customer noticed before anyone on the team did.",
+          "cites": [
+           "48455df1-fb1f-5870-b060-2bf8bdbcd123"
+          ]
+         }
+        ]
+       }
+      ],
+      "timeline": [
+       {
+        "at": "2026-11-19T10:15:00+00:00",
+        "text": "#2270 merged",
+        "cites": [
+         "220613f8-8ca6-5014-bc04-2399a7524793"
+        ]
+       },
+       {
+        "at": "2026-11-19T11:04:00+00:00",
+        "text": "Reported by a customer through support",
+        "cites": [
+         "48455df1-fb1f-5870-b060-2bf8bdbcd123"
+        ]
+       },
+       {
+        "at": "2026-11-19T11:06:00+00:00",
+        "text": "Mara declared INC-13, SEV3",
+        "cites": [
+         "75d72462-a793-5221-b0f3-00ed1bf7629b"
+        ]
+       },
+       {
+        "at": "2026-11-19T11:31:00+00:00",
+        "text": "Cause found: the cache key",
+        "cites": [
+         "c4219ed1-4494-53ba-aff5-a3e1bdf31b00"
+        ]
+       },
+       {
+        "at": "2026-11-19T12:32:00+00:00",
+        "text": "#2277 merged",
+        "cites": [
+         "2330c914-7b9f-5031-847e-ab7e935917e1"
+        ]
+       },
+       {
+        "at": "2026-11-19T12:58:00+00:00",
+        "text": "Index rebuilt; prices right",
+        "cites": [
+         "cea14999-cda8-556f-9637-7ff20d17ddfc"
+        ]
+       }
+      ],
+      "built_from": {
+       "messages": 3,
+       "pinned": 1,
+       "changes": 2,
+       "deploys": 0,
+       "triage": 0,
+       "channel": "inc-13-search-stale"
+      },
+      "not_used": [
+       "the call: no transcript connected",
+       "metrics: not connected"
+      ]
+     },
+     "followups": [
+      {
+       "key": "fu13a",
+       "title": "Review cache keys in every service that caches prices",
+       "why": "The same mistake could be anywhere a response is cached.",
+       "owner_name": null,
+       "state": "proposed",
+       "task_id": null
+      }
+     ],
+     "created_at": "2026-11-19T11:06:00+00:00",
+     "channel_schedule_id": "demo"
+    },
+    {
+     "id": "a4355021-ee74-503e-84ca-1e57e39e102b",
+     "number": 12,
+     "title": "Login emails delayed",
+     "severity": "sev3",
+     "status": "resolved",
+     "lead_user_id": null,
+     "lead_name": "Theo Park",
+     "comms_name": null,
+     "responders": [
+      {
+       "user_id": null,
+       "name": "Theo Park",
+       "email": "theo@company.example"
+      },
+      {
+       "user_id": null,
+       "name": "Ines Ruiz",
+       "email": "ines@company.example"
+      }
+     ],
+     "service": "auth",
+     "impact": "Sign-in links arrived late",
+     "started_at": "2026-11-11T09:02:00+00:00",
+     "noticed_at": "2026-11-11T09:06:00+00:00",
+     "noticed_source": "Slack",
+     "declared_at": "2026-11-11T09:07:00+00:00",
+     "declared_by": "Theo Park",
+     "resolved_at": "2026-11-11T09:24:00+00:00",
+     "channel_name": "inc-12-login-emails",
+     "source": "app",
+     "writeup_state": "reviewed",
+     "reviewed_by": "Theo Park",
+     "writeup_path": "/incidents/INC-12.md",
+     "writeup_at": "2026-11-11T09:32:00+00:00",
+     "summary": "Resolved: the email queue drained.",
+     "writeup": {
+      "title": "Sign-in emails arrived late for 22 minutes",
+      "drafted_at": "2026-11-11T09:32:00+00:00",
+      "sections": [
+       {
+        "key": "summary",
+        "heading": "Summary",
+        "items": [
+         {
+          "key": "summary.0",
+          "kind": "p",
+          "text": "The email worker stopped on one bounced address and sign-in links queued behind it.",
+          "cites": [
+           "dfa55606-3a2c-52f0-a70f-f7660485ef60"
+          ]
+         },
+         {
+          "key": "summary.1",
+          "kind": "p",
+          "text": "A restart drained the queue.",
+          "cites": [
+           "dfa55606-3a2c-52f0-a70f-f7660485ef60",
+           "c85357a2-f639-5820-95e7-cd6a0e63df79"
+          ]
+         }
+        ]
+       }
+      ],
+      "timeline": [
+       {
+        "at": "2026-11-11T09:06:00+00:00",
+        "text": "Customers report slow links",
+        "cites": [
+         "2991e3fe-3e96-5ec3-b0e1-0e6a0fbf84f1"
+        ]
+       },
+       {
+        "at": "2026-11-11T09:24:00+00:00",
+        "text": "Queue empty",
+        "cites": [
+         "c85357a2-f639-5820-95e7-cd6a0e63df79"
+        ]
+       }
+      ],
+      "built_from": {
+       "messages": 3,
+       "pinned": 0,
+       "changes": 0,
+       "deploys": 0,
+       "triage": 0,
+       "channel": "inc-12-login-emails"
+      },
+      "not_used": []
+     },
+     "created_at": "2026-11-11T09:07:00+00:00",
+     "channel_schedule_id": "demo",
+     "channel_connected": true
+    },
+    {
+     "id": "b38e8ebd-c1f1-573a-8211-87e50a10ba98",
+     "number": 11,
+     "title": "Webhooks retried twice",
+     "severity": "sev2",
+     "status": "resolved",
+     "lead_user_id": null,
+     "lead_name": "Ines Ruiz",
+     "comms_name": "Theo Park",
+     "responders": [
+      {
+       "user_id": null,
+       "name": "Ines Ruiz",
+       "email": "ines@company.example"
+      },
+      {
+       "user_id": null,
+       "name": "Theo Park",
+       "email": "theo@company.example"
+      },
+      {
+       "user_id": null,
+       "name": "Jun Oda",
+       "email": "jun@company.example"
+      }
+     ],
+     "service": "webhooks",
+     "impact": "Partners received some order events twice",
+     "started_at": "2026-10-30T12:02:00+00:00",
+     "noticed_at": "2026-10-30T12:11:00+00:00",
+     "noticed_source": "Slack",
+     "declared_at": "2026-10-30T12:12:00+00:00",
+     "declared_by": "Ines Ruiz",
+     "resolved_at": "2026-10-30T13:06:00+00:00",
+     "channel_name": "inc-11-webhooks-twice",
+     "source": "app",
+     "writeup_state": "reviewed",
+     "reviewed_by": "Ines Ruiz",
+     "writeup_path": "/incidents/INC-11.md",
+     "writeup_at": "2026-10-30T13:22:00+00:00",
+     "summary": "Resolved: retries wait for the first attempt's timeout.",
+     "writeup": {
+      "title": "Order webhooks were sent twice for an hour",
+      "drafted_at": "2026-10-30T13:22:00+00:00",
+      "sections": [
+       {
+        "key": "summary",
+        "heading": "Summary",
+        "items": [
+         {
+          "key": "summary.0",
+          "kind": "p",
+          "text": "Webhook retries fired before a slow partner's first answer, so both deliveries landed.",
+          "cites": [
+           "e7047fb2-1c92-5307-9be2-b0cc49daa888",
+           "929cce6a-91a3-5c01-a925-a5b2464762f4"
+          ]
+         },
+         {
+          "key": "summary.1",
+          "kind": "p",
+          "text": "Retries now wait for the first attempt's timeout.",
+          "cites": [
+           "ffac6eb5-358a-54dd-b383-f060eb801516"
+          ]
+         }
+        ]
+       }
+      ],
+      "timeline": [
+       {
+        "at": "2026-10-30T12:11:00+00:00",
+        "text": "A partner reports doubles",
+        "cites": [
+         "e7047fb2-1c92-5307-9be2-b0cc49daa888"
+        ]
+       },
+       {
+        "at": "2026-10-30T13:06:00+00:00",
+        "text": "Fixed",
+        "cites": [
+         "ffac6eb5-358a-54dd-b383-f060eb801516"
+        ]
+       }
+      ],
+      "built_from": {
+       "messages": 3,
+       "pinned": 0,
+       "changes": 0,
+       "deploys": 0,
+       "triage": 0,
+       "channel": "inc-11-webhooks-twice"
+      },
+      "not_used": []
+     },
+     "created_at": "2026-10-30T12:12:00+00:00",
+     "channel_schedule_id": "demo",
+     "channel_connected": true
+    }
+   ],
+   "total": 4
+  }
+ },
+ {
+  "match": "from incidents_event order by",
+  "response": {
+   "items": [
+    {
+     "id": "c568cecb-17d2-5912-a0fd-9cc9caa832a4",
+     "incident_id": "bcd93022-cd07-5a13-b51c-3685f849b6cb",
+     "at": "2026-11-25T13:40:00+00:00",
+     "kind": "change",
+     "source": "github",
+     "source_id": "eeba8692-5b90-5767-be2c-5fd68d1bc481",
+     "actor": "GitHub",
+     "text": "#2288 merged by Jun Oda: Checkout copy",
+     "url": "https://github.example/shop/checkout-api/pull/2288",
+     "starred": false,
+     "detail": {
+      "ref": "#2288",
+      "kind": "merge",
+      "change_id": "eeba8692-5b90-5767-be2c-5fd68d1bc481"
+     }
+    },
+    {
+     "id": "2ea1485d-a610-5110-8393-42e96f153122",
+     "incident_id": "bcd93022-cd07-5a13-b51c-3685f849b6cb",
+     "at": "2026-11-25T13:58:00+00:00",
+     "kind": "change",
+     "source": "github",
+     "source_id": "efb1c511-7a3a-5f90-9340-04f779cb61b1",
+     "actor": "GitHub",
+     "text": "#2291 merged by Theo Park: EU timeout 10 s → 1 s",
+     "url": "https://github.example/shop/checkout-api/pull/2291",
+     "starred": false,
+     "detail": {
+      "ref": "#2291",
+      "kind": "merge",
+      "change_id": "efb1c511-7a3a-5f90-9340-04f779cb61b1"
+     }
+    },
+    {
+     "id": "56725595-022d-5234-8608-4a298e9ed0a6",
+     "incident_id": "bcd93022-cd07-5a13-b51c-3685f849b6cb",
+     "at": "2026-11-25T14:01:00+00:00",
+     "kind": "deploy",
+     "source": "github",
+     "source_id": "27d1adf0-4839-52db-9100-512d38741887",
+     "actor": "GitHub",
+     "text": "Deploy workflow for checkout-api succeeded",
+     "url": "https://github.example/shop/checkout-api/actions/runs/812",
+     "starred": false,
+     "detail": {
+      "ref": "Deploy #812",
+      "kind": "deploy",
+      "outcome": "success",
+      "via": "workflow_run",
+      "change_id": "27d1adf0-4839-52db-9100-512d38741887"
+     }
+    },
+    {
+     "id": "a3353ced-24cf-5374-995e-68f34e43e9f2",
+     "incident_id": "bcd93022-cd07-5a13-b51c-3685f849b6cb",
+     "at": "2026-11-25T14:02:00+00:00",
+     "kind": "triage",
+     "source": "triage",
+     "source_id": "TRI-482:0",
+     "actor": "Triage",
+     "text": "TimeoutError escalating: 1,240 users in 9 min",
+     "url": "https://triage.example/TRI-482",
+     "starred": false,
+     "detail": {
+      "users": 1240,
+      "label": "TRI-482"
+     }
+    },
+    {
+     "id": "e6397f79-5f7e-5db7-8bd2-6d56cbb4d8af",
+     "incident_id": "bcd93022-cd07-5a13-b51c-3685f849b6cb",
+     "at": "2026-11-25T14:03:00+00:00",
+     "kind": "declared",
+     "source": "triage",
+     "source_id": "declared:14",
+     "actor": "Mara Lind",
+     "text": "Declared by Mara from Triage item TRI-482 · SEV2",
+     "url": "https://triage.example/TRI-482",
+     "starred": false,
+     "detail": {
+      "severity": "sev2",
+      "source": "triage",
+      "label": "TRI-482"
+     }
+    },
+    {
+     "id": "5cd996e1-8f89-545d-acb8-ef40f81cf1e9",
+     "incident_id": "bcd93022-cd07-5a13-b51c-3685f849b6cb",
+     "at": "2026-11-25T14:04:00+00:00",
+     "kind": "lemma",
+     "source": "lemma",
+     "source_id": "opened:C0SAMPLE14",
+     "actor": "Lemma",
+     "text": "Opened #inc-14-checkout-502 and invited Mara, Theo, Ines",
+     "url": null,
+     "starred": false,
+     "detail": null
+    },
+    {
+     "id": "80c759fb-dd25-581a-ac7e-b9380961265d",
+     "incident_id": "bcd93022-cd07-5a13-b51c-3685f849b6cb",
+     "at": "2026-11-25T14:05:00+00:00",
+     "kind": "message",
+     "source": "slack",
+     "source_id": "s14-1",
+     "actor": "Mara Lind",
+     "text": "Looking. Theo, you merged into payments this morning?",
+     "url": "https://company.slack.example/archives/C0SAMPLE14/p1",
+     "starred": false,
+     "detail": null
+    },
+    {
+     "id": "ee898047-c66c-5533-b396-bbf8f38a98c1",
+     "incident_id": "bcd93022-cd07-5a13-b51c-3685f849b6cb",
+     "at": "2026-11-25T14:07:00+00:00",
+     "kind": "message",
+     "source": "slack",
+     "source_id": "s14-2",
+     "actor": "Theo Park",
+     "text": "yes, #2291, the EU timeout. checking the client now",
+     "url": "https://company.slack.example/archives/C0SAMPLE14/p2",
+     "starred": false,
+     "detail": null
+    },
+    {
+     "id": "a827fb0a-736e-5900-85aa-a451c21a54ae",
+     "incident_id": "bcd93022-cd07-5a13-b51c-3685f849b6cb",
+     "at": "2026-11-25T14:09:00+00:00",
+     "kind": "message",
+     "source": "slack",
+     "source_id": "s14-3",
+     "actor": "Ines Ruiz",
+     "text": "only EU cards failing, wallets fine",
+     "url": "https://company.slack.example/archives/C0SAMPLE14/p3",
+     "starred": true,
+     "detail": null
+    },
+    {
+     "id": "4c2be3ba-32a9-5fcd-bea9-d5fecb0f9b04",
+     "incident_id": "bcd93022-cd07-5a13-b51c-3685f849b6cb",
+     "at": "2026-11-25T14:10:00+00:00",
+     "kind": "message",
+     "source": "slack",
+     "source_id": "s14-4",
+     "actor": "Ines Ruiz",
+     "text": "support has a macro out for EU customers: try a wallet for now",
+     "url": "https://company.slack.example/archives/C0SAMPLE14/p4",
+     "starred": false,
+     "detail": null
+    },
+    {
+     "id": "3442a36d-45f1-5b72-8c48-b1556c366a95",
+     "incident_id": "bcd93022-cd07-5a13-b51c-3685f849b6cb",
+     "at": "2026-11-25T14:12:00+00:00",
+     "kind": "lemma",
+     "source": "lemma",
+     "source_id": "hypothesis:14",
+     "actor": "Lemma",
+     "text": "Posted a likely cause: PR #2291",
+     "url": null,
+     "starred": false,
+     "detail": null
+    },
+    {
+     "id": "29988300-a7f7-5c33-a14c-8da0c9e11411",
+     "incident_id": "bcd93022-cd07-5a13-b51c-3685f849b6cb",
+     "at": "2026-11-25T14:15:00+00:00",
+     "kind": "update",
+     "source": "app",
+     "source_id": "update:14-1",
+     "actor": "Mara Lind",
+     "text": "Update sent by Mara to #incidents and 3 people",
+     "url": null,
+     "starred": false,
+     "detail": null
+    },
+    {
+     "id": "2b06413f-2102-52ca-82b1-da7745132bed",
+     "incident_id": "bcd93022-cd07-5a13-b51c-3685f849b6cb",
+     "at": "2026-11-25T14:18:00+00:00",
+     "kind": "message",
+     "source": "slack",
+     "source_id": "s14-5",
+     "actor": "Mara Lind",
+     "text": "Theo, can you try 10 s in staging before we revert?",
+     "url": "https://company.slack.example/archives/C0SAMPLE14/p5",
+     "starred": false,
+     "detail": null
+    },
+    {
+     "id": "5e8b8c81-130f-58ee-981c-3a08bf43ed39",
+     "incident_id": "bcd93022-cd07-5a13-b51c-3685f849b6cb",
+     "at": "2026-11-25T14:22:00+00:00",
+     "kind": "message",
+     "source": "slack",
+     "source_id": "s14-6",
+     "actor": "Theo Park",
+     "text": "confirmed in staging, 1 s is too short for their 3-D Secure step. Reverting.",
+     "url": "https://company.slack.example/archives/C0SAMPLE14/p6",
+     "starred": true,
+     "detail": null
+    },
+    {
+     "id": "2693cf47-cd39-50d6-8ee5-9dd8efddf4d0",
+     "incident_id": "bcd93022-cd07-5a13-b51c-3685f849b6cb",
+     "at": "2026-11-25T14:24:00+00:00",
+     "kind": "role",
+     "source": "app",
+     "source_id": "task:revert14",
+     "actor": "Theo Park",
+     "text": "Theo handed the revert to the Lemma's assistant",
+     "url": null,
+     "starred": false,
+     "detail": null
+    },
+    {
+     "id": "18b9de89-dc2d-5b87-b58a-e289a9c1cabd",
+     "incident_id": "bcd93022-cd07-5a13-b51c-3685f849b6cb",
+     "at": "2026-11-25T14:31:00+00:00",
+     "kind": "lemma",
+     "source": "lemma",
+     "source_id": "pr:2294",
+     "actor": "Lemma",
+     "text": "Opened #2294 Revert EU timeout, asked by Theo",
+     "url": "https://github.example/shop/checkout-api/pull/2294",
+     "starred": false,
+     "detail": null
+    },
+    {
+     "id": "b0cc52d5-c074-50cf-895e-4f51f1cb4ac4",
+     "incident_id": "bcd93022-cd07-5a13-b51c-3685f849b6cb",
+     "at": "2026-11-25T14:34:00+00:00",
+     "kind": "change",
+     "source": "github",
+     "source_id": "checks:2294",
+     "actor": "GitHub",
+     "text": "Checks running on #2294 Revert EU timeout",
+     "url": "https://github.example/shop/checkout-api/pull/2294/checks",
+     "starred": false,
+     "detail": {
+      "ref": "#2294"
+     }
+    },
+    {
+     "id": "220613f8-8ca6-5014-bc04-2399a7524793",
+     "incident_id": "bc835be6-ec99-54c5-a9cc-a39157c36ce4",
+     "at": "2026-11-19T10:15:00+00:00",
+     "kind": "change",
+     "source": "github",
+     "source_id": "e6a18674-1d8a-5dbd-8ae1-cba513dc79d4",
+     "actor": "GitHub",
+     "text": "#2270 merged by Jun Oda: Cache search responses for 24 h",
+     "url": "https://github.example/shop/checkout-api/pull/2270",
+     "starred": false,
+     "detail": {
+      "ref": "#2270",
+      "kind": "merge"
+     }
+    },
+    {
+     "id": "48455df1-fb1f-5870-b060-2bf8bdbcd123",
+     "incident_id": "bc835be6-ec99-54c5-a9cc-a39157c36ce4",
+     "at": "2026-11-19T11:04:00+00:00",
+     "kind": "message",
+     "source": "slack",
+     "source_id": "s13-1",
+     "actor": "Ines Ruiz",
+     "text": "a customer says search shows yesterday's prices on sale items",
+     "url": "https://company.slack.example/archives/C0SAMPLE13/p1",
+     "starred": false,
+     "detail": null
+    },
+    {
+     "id": "75d72462-a793-5221-b0f3-00ed1bf7629b",
+     "incident_id": "bc835be6-ec99-54c5-a9cc-a39157c36ce4",
+     "at": "2026-11-19T11:06:00+00:00",
+     "kind": "declared",
+     "source": "slack",
+     "source_id": "declared:13",
+     "actor": "Mara Lind",
+     "text": "Declared by Mara in Slack · SEV3",
+     "url": null,
+     "starred": false,
+     "detail": null
+    },
+    {
+     "id": "c4219ed1-4494-53ba-aff5-a3e1bdf31b00",
+     "incident_id": "bc835be6-ec99-54c5-a9cc-a39157c36ce4",
+     "at": "2026-11-19T11:31:00+00:00",
+     "kind": "message",
+     "source": "slack",
+     "source_id": "s13-2",
+     "actor": "Jun Oda",
+     "text": "it's my cache change, #2270. the price index isn't part of the cache key",
+     "url": "https://company.slack.example/archives/C0SAMPLE13/p2",
+     "starred": true,
+     "detail": null
+    },
+    {
+     "id": "91a1e4c3-89fb-5c4a-9f84-4e0c6963052f",
+     "incident_id": "bc835be6-ec99-54c5-a9cc-a39157c36ce4",
+     "at": "2026-11-19T11:37:00+00:00",
+     "kind": "update",
+     "source": "app",
+     "source_id": "update:13-1",
+     "actor": "Mara Lind",
+     "text": "Update sent by Mara to #incidents",
+     "url": null,
+     "starred": false,
+     "detail": null
+    },
+    {
+     "id": "2330c914-7b9f-5031-847e-ab7e935917e1",
+     "incident_id": "bc835be6-ec99-54c5-a9cc-a39157c36ce4",
+     "at": "2026-11-19T12:32:00+00:00",
+     "kind": "change",
+     "source": "github",
+     "source_id": "pr:2277",
+     "actor": "GitHub",
+     "text": "#2277 merged by Jun Oda: Key the search cache on the price index",
+     "url": "https://github.example/shop/checkout-api/pull/2277",
+     "starred": false,
+     "detail": {
+      "ref": "#2277",
+      "kind": "merge"
+     }
+    },
+    {
+     "id": "cea14999-cda8-556f-9637-7ff20d17ddfc",
+     "incident_id": "bc835be6-ec99-54c5-a9cc-a39157c36ce4",
+     "at": "2026-11-19T12:58:00+00:00",
+     "kind": "message",
+     "source": "slack",
+     "source_id": "s13-3",
+     "actor": "Theo Park",
+     "text": "index rebuilt, sale prices are right again",
+     "url": "https://company.slack.example/archives/C0SAMPLE13/p3",
+     "starred": false,
+     "detail": null
+    },
+    {
+     "id": "cc6adb96-1d6b-51c1-a5f9-8732a21a2d75",
+     "incident_id": "bc835be6-ec99-54c5-a9cc-a39157c36ce4",
+     "at": "2026-11-19T13:00:00+00:00",
+     "kind": "status",
+     "source": "app",
+     "source_id": "resolved:13",
+     "actor": "Mara Lind",
+     "text": "Resolved by Mara",
+     "url": null,
+     "starred": false,
+     "detail": null
+    },
+    {
+     "id": "2991e3fe-3e96-5ec3-b0e1-0e6a0fbf84f1",
+     "incident_id": "a4355021-ee74-503e-84ca-1e57e39e102b",
+     "at": "2026-11-11T09:06:00+00:00",
+     "kind": "message",
+     "source": "slack",
+     "source_id": "s12-1",
+     "actor": "Ines Ruiz",
+     "text": "two customers say the sign-in link took 10 minutes",
+     "url": null,
+     "starred": false,
+     "detail": null
+    },
+    {
+     "id": "dfa55606-3a2c-52f0-a70f-f7660485ef60",
+     "incident_id": "a4355021-ee74-503e-84ca-1e57e39e102b",
+     "at": "2026-11-11T09:14:00+00:00",
+     "kind": "message",
+     "source": "slack",
+     "source_id": "s12-2",
+     "actor": "Theo Park",
+     "text": "the email worker was stuck on one bounced address; restarted it",
+     "url": null,
+     "starred": false,
+     "detail": null
+    },
+    {
+     "id": "c85357a2-f639-5820-95e7-cd6a0e63df79",
+     "incident_id": "a4355021-ee74-503e-84ca-1e57e39e102b",
+     "at": "2026-11-11T09:24:00+00:00",
+     "kind": "message",
+     "source": "slack",
+     "source_id": "s12-3",
+     "actor": "Theo Park",
+     "text": "queue is empty, links arrive in seconds",
+     "url": null,
+     "starred": false,
+     "detail": null
+    },
+    {
+     "id": "e7047fb2-1c92-5307-9be2-b0cc49daa888",
+     "incident_id": "b38e8ebd-c1f1-573a-8211-87e50a10ba98",
+     "at": "2026-10-30T12:11:00+00:00",
+     "kind": "message",
+     "source": "slack",
+     "source_id": "s11-1",
+     "actor": "Jun Oda",
+     "text": "a partner sees every order.created twice since this morning",
+     "url": null,
+     "starred": false,
+     "detail": null
+    },
+    {
+     "id": "929cce6a-91a3-5c01-a925-a5b2464762f4",
+     "incident_id": "b38e8ebd-c1f1-573a-8211-87e50a10ba98",
+     "at": "2026-10-30T12:32:00+00:00",
+     "kind": "message",
+     "source": "slack",
+     "source_id": "s11-2",
+     "actor": "Theo Park",
+     "text": "retry fires at 5 s but the partner answers in 7 s, so both land",
+     "url": null,
+     "starred": false,
+     "detail": null
+    },
+    {
+     "id": "ffac6eb5-358a-54dd-b383-f060eb801516",
+     "incident_id": "b38e8ebd-c1f1-573a-8211-87e50a10ba98",
+     "at": "2026-10-30T13:06:00+00:00",
+     "kind": "message",
+     "source": "slack",
+     "source_id": "s11-3",
+     "actor": "Ines Ruiz",
+     "text": "retry now waits for the 10 s timeout; no doubles since",
+     "url": null,
+     "starred": false,
+     "detail": null
+    }
+   ],
+   "total": 31
+  }
+ },
+ {
+  "match": "from incidents_hypothesis order by",
+  "response": {
+   "items": [
+    {
+     "id": "f52398cb-4d07-54aa-994f-1601e577f31e",
+     "incident_id": "bcd93022-cd07-5a13-b51c-3685f849b6cb",
+     "confidence": "likely",
+     "agree": 3,
+     "signs": 4,
+     "text": "The 13:58 change to payments/eu/client.ts cut the EU provider's timeout from 10 s to 1 s. The provider answers in about 1.4 s, so every EU card payment times out.",
+     "evidence": [
+      {
+       "text": "PR #2291 merged 13:58 by Theo Park: EU timeout 10 s → 1 s",
+       "event_id": "2ea1485d-a610-5110-8393-42e96f153122",
+       "url": "https://github.example/shop/checkout-api/pull/2291",
+       "source": "github"
+      },
+      {
+       "text": "Deploy workflow for checkout-api finished 14:01",
+       "event_id": "56725595-022d-5234-8608-4a298e9ed0a6",
+       "url": "https://github.example/shop/checkout-api/actions/runs/812",
+       "source": "deploy"
+      },
+      {
+       "text": "Sentry: TimeoutError in eu/client.ts, first seen 14:02 · 1,240 users",
+       "event_id": "a3353ced-24cf-5374-995e-68f34e43e9f2",
+       "url": "https://triage.example/TRI-482",
+       "source": "sentry"
+      },
+      {
+       "text": "Ines, 14:09: \"only EU cards failing, wallets fine\"",
+       "event_id": "a827fb0a-736e-5900-85aa-a451c21a54ae",
+       "url": null,
+       "source": "slack"
+      }
+     ],
+     "ruled_out": [
+      {
+       "text": "Database: no failover or slow queries in the window"
+      },
+      {
+       "text": "PR #2288, merged 13:40: copy changes only"
+      }
+     ],
+     "not_checked": [
+      {
+       "text": "Metrics: Datadog isn't connected",
+       "source": "mcp"
+      },
+      {
+       "text": "The provider's own status: no source",
+       "source": null
+      }
+     ],
+     "state": "open",
+     "posted_ts": null,
+     "posted_at": "2026-11-25T14:12:00+00:00",
+     "created_at": "2026-11-25T14:12:00+00:00"
+    }
+   ],
+   "total": 1
+  }
+ },
+ {
+  "match": "from incidents_update order by",
+  "response": {
+   "items": [
+    {
+     "id": "97613478-e14e-5857-8bf7-32c22f56bce2",
+     "incident_id": "bcd93022-cd07-5a13-b51c-3685f849b6cb",
+     "state": "sent",
+     "drafted_at": "2026-11-25T14:14:00+00:00",
+     "sent_at": "2026-11-25T14:15:00+00:00",
+     "sent_by": "Mara Lind",
+     "recipients": {
+      "channel": true,
+      "announce": true,
+      "email": [
+       "support@company.example",
+       "cx@company.example",
+       "finance@company.example"
+      ]
+     },
+     "delivery": {
+      "channel": "sent",
+      "announce": "sent",
+      "email": "sent"
+     },
+     "body": "Card payments in the EU are failing since 14:02 UTC. We are looking into it with the payments team. Other payment methods work. Next update by 14:45 UTC.",
+     "created_at": "2026-11-25T14:14:00+00:00"
+    },
+    {
+     "id": "463a2447-7811-523d-96fd-cb1f0b909867",
+     "incident_id": "bcd93022-cd07-5a13-b51c-3685f849b6cb",
+     "state": "draft",
+     "drafted_at": "2026-11-25T14:38:00+00:00",
+     "recipients": {
+      "channel": true,
+      "announce": true,
+      "email": [
+       "support@company.example",
+       "cx@company.example",
+       "finance@company.example"
+      ]
+     },
+     "body": "Card payments in the EU are failing since 14:02 UTC. We found the cause, a configuration change, and are rolling it back now. Other payment methods work. Next update by 15:00 UTC.",
+     "created_at": "2026-11-25T14:38:00+00:00"
+    }
+   ],
+   "total": 2
+  }
+ },
+ {
+  "match": "from incidents_flag order by",
+  "response": {
+   "items": [
+    {
+     "id": "4d58d488-9a85-5d54-b481-fa733caddf9b",
+     "incident_id": "bc835be6-ec99-54c5-a9cc-a39157c36ce4",
+     "section": "impact",
+     "claim": "Most customers who saw a stale price did not complete the order.",
+     "reason": "No event is cited for this claim, and none gives how many orders were completed.",
+     "offer": "Rewrite it from the events, or keep it.",
+     "state": "open",
+     "created_at": "2026-11-25T14:02:00+00:00"
+    }
+   ],
+   "total": 1
+  }
+ },
+ {
+  "match": "from incidents_change order by",
+  "response": {
+   "items": [
+    {
+     "id": "eeba8692-5b90-5767-be2c-5fd68d1bc481",
+     "repo": "shop/checkout-api",
+     "kind": "merge",
+     "ref": "#2288",
+     "title": "Checkout copy",
+     "author": "Jun Oda",
+     "at": "2026-11-25T13:40:00+00:00",
+     "url": "https://github.example/shop/checkout-api/pull/2288",
+     "files": [
+      "web/checkout/copy.ts"
+     ],
+     "outcome": null,
+     "created_at": "2026-11-25T13:40:00+00:00"
+    },
+    {
+     "id": "efb1c511-7a3a-5f90-9340-04f779cb61b1",
+     "repo": "shop/checkout-api",
+     "kind": "merge",
+     "ref": "#2291",
+     "title": "EU timeout 10 s → 1 s",
+     "author": "Theo Park",
+     "at": "2026-11-25T13:58:00+00:00",
+     "url": "https://github.example/shop/checkout-api/pull/2291",
+     "files": [
+      "payments/eu/client.ts"
+     ],
+     "outcome": null,
+     "created_at": "2026-11-25T13:58:00+00:00"
+    },
+    {
+     "id": "27d1adf0-4839-52db-9100-512d38741887",
+     "repo": "shop/checkout-api",
+     "kind": "deploy",
+     "ref": "Deploy #812",
+     "title": "Deploy on main",
+     "author": "Theo Park",
+     "at": "2026-11-25T14:01:00+00:00",
+     "url": "https://github.example/shop/checkout-api/actions/runs/812",
+     "files": [],
+     "outcome": "success",
+     "created_at": "2026-11-25T14:01:00+00:00"
+    },
+    {
+     "id": "e6a18674-1d8a-5dbd-8ae1-cba513dc79d4",
+     "repo": "shop/checkout-api",
+     "kind": "merge",
+     "ref": "#2270",
+     "title": "Cache search responses for 24 h",
+     "author": "Jun Oda",
+     "at": "2026-11-19T10:15:00+00:00",
+     "url": "https://github.example/shop/checkout-api/pull/2270",
+     "files": [
+      "search/cache.ts"
+     ],
+     "outcome": null,
+     "created_at": "2026-11-19T10:15:00+00:00"
+    }
+   ],
+   "total": 4
+  }
+ },
+ {
+  "match": "from task where source = 'incidents'",
+  "response": {
+   "items": [
+    {
+     "id": "3ae970d6-8268-5f65-b784-c776fefcc307",
+     "title": "Revert #2291 (INC-14)",
+     "status": "in_progress",
+     "priority": "high",
+     "description": "Open a pull request that reverts #2291; ask the incident's lead before merging it.\n\nFrom INC-14: Checkout returns 502 for card payments in the EU",
+     "assignee_kind": "agent",
+     "assignee_agent": "pod_default",
+     "assignee_user_id": null,
+     "assignee_name": null,
+     "owner_user_id": "user-sample",
+     "owner_name": "Mara Lind",
+     "source": "incidents",
+     "source_id": "bcd93022-cd07-5a13-b51c-3685f849b6cb",
+     "source_url": "/i/14",
+     "quote": "Open a pull request that reverts #2291; ask the incident's lead before merging it.",
+     "done_at": null,
+     "number": 431,
+     "created_at": "2026-11-25T14:23:00+00:00",
+     "updated_at": "2026-11-25T14:24:00+00:00"
+    },
+    {
+     "id": "957ad51b-2e36-5506-82a6-1a1d71bc574e",
+     "title": "Put the price index in the search cache key",
+     "status": "done",
+     "priority": "medium",
+     "description": "The cache key left out the price index.\n\nFrom INC-13: Search results stale",
+     "assignee_kind": "person",
+     "assignee_agent": null,
+     "assignee_user_id": null,
+     "assignee_name": "Jun Oda",
+     "owner_user_id": "user-sample",
+     "owner_name": "Mara Lind",
+     "source": "incidents",
+     "source_id": "bc835be6-ec99-54c5-a9cc-a39157c36ce4",
+     "source_url": "/i/13",
+     "quote": "The cache key left out the price index.",
+     "done_at": "2026-11-19T12:32:00+00:00",
+     "number": 432,
+     "created_at": "2026-11-19T12:31:00+00:00",
+     "updated_at": "2026-11-19T12:32:00+00:00"
+    },
+    {
+     "id": "7805c46e-797d-584b-a70f-6e67c2dd6137",
+     "title": "Alert when search results are older than the price index",
+     "status": "todo",
+     "priority": "medium",
+     "description": "From INC-13: Search results stale",
+     "assignee_kind": "person",
+     "assignee_agent": null,
+     "assignee_user_id": null,
+     "assignee_name": "Theo Park",
+     "owner_user_id": "user-sample",
+     "owner_name": "Mara Lind",
+     "source": "incidents",
+     "source_id": "bc835be6-ec99-54c5-a9cc-a39157c36ce4",
+     "source_url": "/i/13",
+     "quote": null,
+     "done_at": null,
+     "number": 433,
+     "created_at": "2026-11-19T13:09:00+00:00",
+     "updated_at": "2026-11-19T13:10:00+00:00"
+    },
+    {
+     "id": "a0404cf2-5d0b-5cbb-becb-da23481fa160",
+     "title": "Skip a bounced address instead of retrying it",
+     "status": "done",
+     "priority": "medium",
+     "description": "From INC-12: Login emails delayed",
+     "assignee_kind": "person",
+     "assignee_agent": null,
+     "assignee_user_id": null,
+     "assignee_name": "Theo Park",
+     "owner_user_id": "user-sample",
+     "owner_name": "Mara Lind",
+     "source": "incidents",
+     "source_id": "a4355021-ee74-503e-84ca-1e57e39e102b",
+     "source_url": "/i/12",
+     "quote": null,
+     "done_at": "2026-11-11T10:02:00+00:00",
+     "number": 434,
+     "created_at": "2026-11-11T10:01:00+00:00",
+     "updated_at": "2026-11-11T10:02:00+00:00"
+    },
+    {
+     "id": "fd6013ac-e87a-536a-be31-08184c8ca04d",
+     "title": "Alert when the email queue is older than 2 minutes",
+     "status": "todo",
+     "priority": "medium",
+     "description": "From INC-12: Login emails delayed",
+     "assignee_kind": "person",
+     "assignee_agent": null,
+     "assignee_user_id": null,
+     "assignee_name": "Ines Ruiz",
+     "owner_user_id": "user-sample",
+     "owner_name": "Mara Lind",
+     "source": "incidents",
+     "source_id": "a4355021-ee74-503e-84ca-1e57e39e102b",
+     "source_url": "/i/12",
+     "quote": null,
+     "done_at": null,
+     "number": 435,
+     "created_at": "2026-11-11T10:01:00+00:00",
+     "updated_at": "2026-11-11T10:02:00+00:00"
+    },
+    {
+     "id": "21e17221-d1fd-56c8-ac05-07d0592664d1",
+     "title": "Retry only after the first attempt times out",
+     "status": "done",
+     "priority": "medium",
+     "description": "From INC-11: Webhooks retried twice",
+     "assignee_kind": "person",
+     "assignee_agent": null,
+     "assignee_user_id": null,
+     "assignee_name": "Theo Park",
+     "owner_user_id": "user-sample",
+     "owner_name": "Mara Lind",
+     "source": "incidents",
+     "source_id": "b38e8ebd-c1f1-573a-8211-87e50a10ba98",
+     "source_url": "/i/11",
+     "quote": null,
+     "done_at": "2026-10-30T15:22:00+00:00",
+     "number": 436,
+     "created_at": "2026-10-30T15:21:00+00:00",
+     "updated_at": "2026-10-30T15:22:00+00:00"
+    },
+    {
+     "id": "0098d53f-7be9-58c0-acc7-fd9535c6d253",
+     "title": "Send an idempotency key with every webhook",
+     "status": "done",
+     "priority": "medium",
+     "description": "From INC-11: Webhooks retried twice",
+     "assignee_kind": "person",
+     "assignee_agent": null,
+     "assignee_user_id": null,
+     "assignee_name": "Jun Oda",
+     "owner_user_id": "user-sample",
+     "owner_name": "Mara Lind",
+     "source": "incidents",
+     "source_id": "b38e8ebd-c1f1-573a-8211-87e50a10ba98",
+     "source_url": "/i/11",
+     "quote": null,
+     "done_at": "2026-10-30T15:22:00+00:00",
+     "number": 437,
+     "created_at": "2026-10-30T15:21:00+00:00",
+     "updated_at": "2026-10-30T15:22:00+00:00"
+    },
+    {
+     "id": "a5360205-08a1-5daa-84c8-178ec78dc037",
+     "title": "Tell partners how to drop duplicate deliveries",
+     "status": "done",
+     "priority": "medium",
+     "description": "From INC-11: Webhooks retried twice",
+     "assignee_kind": "person",
+     "assignee_agent": null,
+     "assignee_user_id": null,
+     "assignee_name": "Ines Ruiz",
+     "owner_user_id": "user-sample",
+     "owner_name": "Mara Lind",
+     "source": "incidents",
+     "source_id": "b38e8ebd-c1f1-573a-8211-87e50a10ba98",
+     "source_url": "/i/11",
+     "quote": null,
+     "done_at": "2026-10-30T15:22:00+00:00",
+     "number": 438,
+     "created_at": "2026-10-30T15:21:00+00:00",
+     "updated_at": "2026-10-30T15:22:00+00:00"
+    }
+   ],
+   "total": 8
+  }
+ },
+ {
+  "match": "from incidents_sample_row",
+  "response": {
+   "items": [
+    {
+     "n": 0
+    }
+   ],
+   "total": 1
+  }
+ }
+]

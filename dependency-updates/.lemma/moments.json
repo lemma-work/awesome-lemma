@@ -1,0 +1,52 @@
+{
+  "//": "The pictures on Dependency updates' page on the website, taken from its Try it demo by `node _kit/bin/moments.mjs dependency-updates` into .lemma/moments/. listing.json names them by `name`.",
+  "captures": [
+    {
+      "name": "batch",
+      "alt": "Monday's batch pull request for northwind/web: open, 4 of 4 checks passing, approved with 1 note, 7 updates and 1 fix by the Lemma, with its checks, review and what was held out beside it",
+      "route": "/b/e13e08be-fe2a-5663-8dca-e14dde02ed70",
+      "viewport": [1184, 900],
+      "clip": { "x": 0, "y": 34, "width": 1184, "height": 820 },
+      "steps": [{ "wait": 1200 }, { "mouse": [4, 4] }],
+      "phone": { "viewport": [390, 900], "clip": { "selector": ".c-record-head", "pad": 6 } }
+    },
+    {
+      "name": "major",
+      "alt": "react-router 6.30.1 to 7.9.4 held for a person: what changed, the one line in src/routes.tsx that uses it, the Lemma's read, and Add to Monday, Its own PR or Not yet",
+      "route": "/u/0b005f9a-395f-5d71-9e7d-e8a777b61e68",
+      "viewport": [1184, 900],
+      "clip": { "selector": ".c-sheet__panel" },
+      "steps": [{ "wait": 1200 }, { "mouse": [4, 4] }],
+      "phone": { "viewport": [390, 900], "clip": { "selector": ".c-sheet__panel" } }
+    },
+    {
+      "name": "halving",
+      "alt": "How the batch was checked: the test failure, the updates tried in halves until zod alone failed, the Lemma's one-line fix as its own commit, then tests, checks and the review passing",
+      "route": "/b/e13e08be-fe2a-5663-8dca-e14dde02ed70",
+      "viewport": [1184, 900],
+      "clip": { "selector": ".dp-timeline", "pad": 8 },
+      "steps": [{ "wait": 1200 }, { "mouse": [4, 4] }],
+      "phone": { "viewport": [390, 1200], "clip": { "selector": ".dp-timeline", "pad": 6 } }
+    },
+    {
+      "name": "security",
+      "alt": "Two security fixes opened the same day, outside the batch: next 15.4.8 (high), where the code reaches the vulnerable matcher, and pyjwt 2.10.1 (moderate), where it doesn't",
+      "route": "/",
+      "viewport": [1184, 900],
+      "clip": { "selector": "section[aria-labelledby='s-sec']", "pad": 8 },
+      "steps": [{ "wait": 1200 }, { "mouse": [4, 4] }]
+    },
+    {
+      "name": "risky",
+      "alt": "color-convert 3.1.1 held as risky: hours old, from a new maintainer, adding a postinstall script; a person lets it through",
+      "loop": true,
+      "cursor": true,
+      "route": "/",
+      "viewport": [1184, 900],
+      "before": [{ "wait": 1000 }, { "scroll": "#root", "to": "section[aria-labelledby='s-risk']", "ms": 10 }],
+      "clip": { "selector": ".dp-pair", "pad": 8 },
+      "poster": 0.4,
+      "steps": [{ "wait": 900 }, { "click": ".dp-risk .c-btn", "text": "Let it through" }, { "wait": 2200 }]
+    }
+  ]
+}

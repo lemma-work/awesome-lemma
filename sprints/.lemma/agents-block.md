@@ -1,0 +1,1 @@
+- Sprints is installed: the team's sprints over its tasks. Add a task to the sprint with `sprints_add`; guide: `/memory/plugins/sprints.md`.

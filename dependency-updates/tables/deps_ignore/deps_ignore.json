@@ -1,0 +1,20 @@
+{
+  // One ignore: a package (in one repository, or all) left out for a range
+  // of versions, with who and why. Team-wide, no RLS.
+  "name": "deps_ignore",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    // owner/name, or empty for every repository.
+    { "name": "repo", "type": "TEXT", "max_length": 200 },
+    { "name": "package", "type": "TEXT", "required": true, "max_length": 214 },
+    // "19.x" (a major), "3.25.x", "patches" (every patch), "all", or an exact version.
+    { "name": "version_range", "type": "TEXT", "required": true, "max_length": 64 },
+    { "name": "reason", "type": "TEXT", "max_length": 300 },
+    // A person pressed Ignore or Not yet, or the Lemma read it from a rule.
+    { "name": "by_kind", "type": "ENUM", "required": true, "default": "person", "options": ["person", "rule"] },
+    { "name": "by_name", "type": "TEXT", "max_length": 200 }
+  ],
+  "config": {}
+}

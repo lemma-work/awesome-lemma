@@ -1,0 +1,44 @@
+{
+  // One sprint. Sprint 1 opens on the next start day; each started sprint
+  // opens the next one for planning, and closing one carries its unfinished
+  // work into the next. Team-wide, no RLS.
+  "name": "sprints_sprint",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "number", "type": "INTEGER", "required": true, "unique": true },
+    // The first day, and the last working day before the next sprint starts.
+    { "name": "starts_on", "type": "DATE", "required": true },
+    { "name": "ends_on", "type": "DATE", "required": true },
+    //   planned   being planned; nothing frozen yet
+    //   running   started: what was in it then is frozen as "in at start"
+    //   closing   its last day came: the close is prepared, waiting on the lead
+    //   closed    closed: stats, summary and /sprints/<n>.md written
+    { "name": "state", "type": "ENUM", "required": true, "default": "planned",
+      "options": ["planned", "running", "closing", "closed"] },
+    { "name": "started_at", "type": "DATETIME" },
+    { "name": "closed_at", "type": "DATETIME" },
+    // Frozen at start: per person {key, name, user_id, usual, history, days,
+    // present_days, away, cap} and per agent {agent, tasks}; `capacity_total`
+    // is the sum of people's caps (agents never count in it). Null usual means
+    // no history: "no capacity yet".
+    { "name": "capacity", "type": "JSON" },
+    { "name": "capacity_total", "type": "FLOAT" },
+    // Written at close: planned, added, removed, done, not_done, carried,
+    // split, backlog, dropped, each {points, tasks}; done_of_plan; by_person
+    // {key: {name, points, tasks}}; agents {agent: tasks}; slipped_twice.
+    { "name": "stats", "type": "JSON" },
+    // Markdown, drafted from the numbers at close and editable; and where it
+    // was saved (/sprints/<n>.md).
+    { "name": "summary", "type": "TEXT", "max_length": 20000 },
+    { "name": "summary_path", "type": "TEXT", "max_length": 400 },
+    // The summary draft: which statements were picked (keys), and whether a
+    // person has edited the text since.
+    { "name": "summary_draft", "type": "JSON" },
+    { "name": "summary_edited", "type": "BOOLEAN", "default": false },
+    // Set by the sample.
+    { "name": "sample", "type": "BOOLEAN", "default": false }
+  ],
+  "config": {}
+}

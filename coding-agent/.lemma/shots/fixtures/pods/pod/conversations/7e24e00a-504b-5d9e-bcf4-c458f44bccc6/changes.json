@@ -1,0 +1,40 @@
+{
+ "state": "ready",
+ "branch": "lemma/k3x9q2ma",
+ "base_ref": "main",
+ "ahead": 2,
+ "files": [
+  {
+   "path": "web/reports/export.ts",
+   "old_path": null,
+   "status": "modified",
+   "additions": 112,
+   "deletions": 52,
+   "binary": false
+  },
+  {
+   "path": "api/reports/rows.py",
+   "old_path": null,
+   "status": "modified",
+   "additions": 30,
+   "deletions": 9,
+   "binary": false
+  },
+  {
+   "path": "web/reports/export.test.ts",
+   "old_path": null,
+   "status": "modified",
+   "additions": 2,
+   "deletions": 1,
+   "binary": false
+  }
+ ],
+ "totals": {
+  "files": 3,
+  "additions": 144,
+  "deletions": 62
+ },
+ "uncommitted": true,
+ "patch": "diff --git a/web/reports/export.ts b/web/reports/export.ts\nindex 1a2b3c4..5d6e7f8 100644\n--- a/web/reports/export.ts\n+++ b/web/reports/export.ts\n@@ -31,8 +31,12 @@\n   context line\n-export async function buildCsv(report: Report): Promise<string> {\n-  const rows = await fetchRows(report.id);\n-  const lines = rows.map((row) => toLine(report.columns, row));\n-  return [header(report.columns), ...lines].join(\"\\n\");\n-}\n+export async function* streamCsv(report: Report, pageSize = 1000): AsyncGenerator<string> {\n+  yield header(report.columns) + \"\\n\";\n+  for (let cursor: string | null = null; ; ) {\n+    const page = await fetchRows(report.id, { cursor, limit: pageSize });\n+    for (const row of page.rows) yield toLine(report.columns, row) + \"\\n\";\n+    if (!page.next) return;\n+    cursor = page.next;\n+  }\n+}\n   context line\ndiff --git a/api/reports/rows.py b/api/reports/rows.py\nindex 1a2b3c4..5d6e7f8 100644\n--- a/api/reports/rows.py\n+++ b/api/reports/rows.py\n@@ -58,5 +58,6 @@\n   context line\n-def rows(report_id: str):\n-    return list(db.report_rows(report_id))\n+def rows(report_id: str, cursor: str | None = None, limit: int = 1000):\n+    page = db.report_rows(report_id, after=cursor, limit=limit + 1)\n+    return {\"rows\": page[:limit], \"next\": page[limit - 1].id if len(page) > limit else None}\n   context line\ndiff --git a/web/reports/export.test.ts b/web/reports/export.test.ts\nindex 1a2b3c4..5d6e7f8 100644\n--- a/web/reports/export.test.ts\n+++ b/web/reports/export.test.ts\n@@ -12,4 +12,5 @@\n   context line\n-  expect(chunks).toHaveLength(1);\n+  expect(chunks.length).toBeGreaterThan(1);\n+  expect(chunks.join(\"\")).toMatchSnapshot();\n   context line\n",
+ "truncated": false
+}

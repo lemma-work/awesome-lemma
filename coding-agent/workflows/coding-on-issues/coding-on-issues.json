@@ -1,0 +1,24 @@
+{
+  // GitHub's issues webhook. GitHub routes by installation, not by repository,
+  // so coding_on_github keeps only what concerns the coding agent's sessions.
+  // The app makes one WEBHOOK schedule per member at set-up (and again on open
+  // when one is missing), as that member: `coding-on-issues-<first 8 of the user id>`,
+  // config {source: "github", event: "issues"} (bin/app-schedules.json). A
+  // schedule runs as its maker, so each member's run writes the events and only
+  // the session's starter's own run does the fixing.
+  "name": "coding-on-issues",
+  "description": "An issue labelled for the coding agent in an enabled repository: a session starts on it.",
+  "max_concurrent_runs": 4,
+  "start": { "type": "EVENT", "config": {
+    "connector_id": "github",
+    "connector_trigger_id": "github:http:issues"
+  } },
+  "nodes": [
+    { "id": "read", "type": "FUNCTION", "label": "Read it for the coding agent",
+      "config": { "function_name": "coding_on_github", "input_mapping": {
+        "event": { "type": "literal", "value": "issues" },
+        "payload": { "type": "expression", "value": "start.payload" } } } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [ { "id": "e1", "source": "read", "target": "end" } ]
+}

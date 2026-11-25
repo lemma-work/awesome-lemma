@@ -1,0 +1,27 @@
+{
+  "name": "release_notes_setup_options",
+  "description": "What set-up can offer: the repositories the shared GitHub connection can see, one repository's workflows, and the Slack channels; says plainly when a connection is missing.",
+  "type": "API",
+  "visibility": "POD",
+  "code": {
+    "$file": "code.py"
+  },
+  "permissions": {
+    "grants": [
+      {
+        "resource_type": "connector",
+        "resource_name": "github",
+        "permission_ids": [
+          "connector.use"
+        ]
+      },
+      {
+        "resource_type": "connector",
+        "resource_name": "slack",
+        "permission_ids": [
+          "connector.use"
+        ]
+      }
+    ]
+  }
+}

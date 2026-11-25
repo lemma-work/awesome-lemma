@@ -1,0 +1,38 @@
+{
+  "name": "coding_ask_start",
+  "description": "Ask coding_ask a question about a repository (question, repo, ref): saves the question for the team and opens the agent's read-only conversation at that commit. The answer arrives in coding_question.",
+  "type": "API",
+  "visibility": "POD",
+  "code": {
+    "$file": "code.py"
+  },
+  "permissions": {
+    "grants": [
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "coding_settings",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "coding_question",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read",
+          "datastore.record.write"
+        ]
+      },
+      {
+        "resource_type": "agent",
+        "resource_name": "coding_ask",
+        "permission_ids": [
+          "agent.read",
+          "agent.execute"
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,1 @@
+- Release notes is installed: notes from what merged, and replies to who asked. Guide: `/memory/plugins/release-notes.md`.

@@ -1,0 +1,6 @@
+{
+  "name": "triage",
+  "description": "The team's triage: bugs, alerts and security warnings sorted by how far they reach, each with a suggested owner and the reason; one key per decision; the case file for each item; every door reports come through, and the report form.",
+  "public_slug": "${triage_slug}",
+  "visibility": "POD"
+}

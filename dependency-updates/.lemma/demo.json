@@ -1,0 +1,28 @@
+{
+  "anchor": "2026-11-25T09:00:00Z",
+  "zone": "Europe/Berlin",
+  "apps": [
+    {
+      "name": "dependencies",
+      "label": "Dependencies",
+      "start": "/"
+    }
+  ],
+  "user": {
+    "id": "user-sample",
+    "email": "priya@northwind.example",
+    "first_name": "Priya",
+    "last_name": "Shah",
+    "name": "Priya Shah",
+    "is_active": true,
+    "is_superuser": false,
+    "is_verified": true,
+    "created_at": "2026-01-01T00:00:00Z",
+    "updated_at": "2026-01-01T00:00:00Z"
+  },
+  "notes": {
+    "deps_setup_save": "In the demo the set-up isn't saved.",
+    "deps_sample_data": "In the demo the sample stays.",
+    "deps_needs_you": ""
+  }
+}

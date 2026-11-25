@@ -1,0 +1,42 @@
+{
+  // Dependency updates' set-up: one row (id fixed by deps_setup_save). One
+  // cadence per Lemma. Team-wide, no RLS.
+  "name": "deps_settings",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    // Who set it up: the person who decides. Their "decide" items go to
+    // Today, and the schedules run as them.
+    { "name": "owner_user_id", "type": "USER" },
+    { "name": "owner_name", "type": "TEXT", "max_length": 200 },
+    // When the weekly batch opens: a weekday and a local time ("06:00").
+    { "name": "weekday", "type": "ENUM", "required": true, "default": "mon",
+      "options": ["mon", "tue", "wed", "thu", "fri", "sat", "sun"] },
+    { "name": "run_time", "type": "TEXT", "max_length": 5, "default": "06:00" },
+    { "name": "timezone", "type": "TEXT", "max_length": 64, "default": "UTC" },
+    // How long a release waits before it joins a batch; a major waits longer.
+    { "name": "wait_days", "type": "INTEGER", "required": true, "default": 3 },
+    { "name": "wait_major_days", "type": "INTEGER", "required": true, "default": 14 },
+    // Hold a release that adds an install script (preinstall, install, postinstall).
+    { "name": "hold_install_scripts", "type": "BOOLEAN", "default": true },
+    // Where security fixes come from: GitHub's Dependabot alerts, or OSV and
+    // npm audit / pip-audit from the sandbox. Found at run time (a 403 on
+    // the alerts means osv), never a setting.
+    { "name": "alerts", "type": "ENUM", "default": "osv", "options": ["github", "osv"] },
+    // What the platform allowed when last tried, each
+    // {state: yes|no|unknown, note, at}: repository_schedule (a time
+    // schedule that starts in a checkout), workflows (pushing
+    // .github/workflows), alerts (Dependabot alerts), alert_trigger (the
+    // dependabot_alert event), checks (posting a check run).
+    { "name": "platform", "type": "JSON" },
+    { "name": "setup_done_at", "type": "DATETIME" },
+    // The sample week is loaded.
+    { "name": "sample", "type": "BOOLEAN", "default": false },
+    // The schedules the app made as the owner that are not per repository
+    // (name -> id), and whose they are.
+    { "name": "schedule_ids", "type": "JSON" },
+    { "name": "schedule_user_id", "type": "USER" }
+  ],
+  "config": {}
+}

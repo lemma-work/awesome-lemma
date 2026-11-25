@@ -1,0 +1,44 @@
+{
+  // One pull request the Lemma opened: the week's batch for a repository, a
+  // security fix, or one update on its own. Team-wide, no RLS. Its id is
+  // uuid5(DEPS_NS, "repo|branch").
+  "name": "deps_batch",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "repo", "type": "TEXT", "required": true, "max_length": 200 },
+    { "name": "kind", "type": "ENUM", "required": true, "default": "batch", "options": ["batch", "security", "own"] },
+    { "name": "title", "type": "TEXT", "max_length": 300 },
+    { "name": "week_of", "type": "DATE" },
+    { "name": "branch", "type": "TEXT", "required": true, "max_length": 200 },
+    { "name": "base_branch", "type": "TEXT", "max_length": 200 },
+    { "name": "pr_number", "type": "INTEGER" },
+    { "name": "pr_url", "type": "TEXT", "max_length": 400 },
+    { "name": "state", "type": "ENUM", "required": true, "default": "preparing",
+      "options": ["preparing", "open", "merged", "closed", "failed"] },
+    { "name": "head_sha", "type": "TEXT", "max_length": 64 },
+    // The checks on its head: running, passed, failed, none.
+    { "name": "checks", "type": "ENUM", "default": "none", "options": ["running", "passed", "failed", "none"] },
+    // Each check: [{name, state (running|passed|failed|skipped)}].
+    { "name": "check_runs", "type": "JSON" },
+    { "name": "review", "type": "ENUM", "default": "none", "options": ["approved", "changes", "commented", "none"] },
+    { "name": "review_notes", "type": "INTEGER", "default": 0 },
+    { "name": "review_by", "type": "TEXT", "max_length": 200 },
+    // The review's own words, first 600 characters.
+    { "name": "review_text", "type": "TEXT", "max_length": 600 },
+    // How it was checked: [{at, kind, text, ok}], in order. kind: start,
+    // read, hold, install, test, halve, fix, build, push, open, checks,
+    // review, comment, drop, merge, note.
+    { "name": "steps", "type": "JSON" },
+    // One commit per update, and its fix: [{update_id, package, sha, fix}].
+    { "name": "commits", "type": "JSON" },
+    // The files it changes: [{path, additions, deletions, kind (manifest|lockfile|fix|workflow), patch}].
+    { "name": "files", "type": "JSON" },
+    { "name": "conversation_id", "type": "UUID" },
+    { "name": "opened_at", "type": "DATETIME" },
+    { "name": "merged_at", "type": "DATETIME" },
+    { "name": "merged_by", "type": "TEXT", "max_length": 200 }
+  ],
+  "config": {}
+}

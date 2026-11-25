@@ -1,0 +1,1 @@
+- Triage is installed: file a bug or alert with `triage_report_add` (quote, link); `triage_lookup` for what's known. Guide: `/memory/plugins/triage.md`.

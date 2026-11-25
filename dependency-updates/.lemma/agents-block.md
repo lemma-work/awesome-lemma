@@ -1,0 +1,1 @@
+- Dependency updates: weekly dependency PRs. Hold or ignore: `deps_decide`; guide `/memory/plugins/dependency-updates.md`.

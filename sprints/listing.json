@@ -1,0 +1,29 @@
+{
+  "name": "Sprints",
+  "line": "dev",
+  "position": 33,
+  "job": "Sprints with real capacity, carry-over and an honest summary",
+  "intro": "Sprints runs your team's sprints over the tasks you already keep. Each person's capacity comes from what they really finished, work that came in after the start stays apart, and the close ends in a summary that names every task.",
+  "does": [
+    "Capacity per person from their last three sprints, less the days they're off; agents counted in tasks.",
+    "A scope graph that steps when work comes in after the start, and says from where.",
+    "A close that asks about every unfinished task, then drafts a summary from the numbers."
+  ],
+  "jobs": ["ENGINEERING", "PROJECT_MANAGEMENT"],
+  "accounts": [],
+  "setup": [
+    "Once for the whole Lemma: sprint length, start day, time zone, points or a task count, and who plans and closes.",
+    "Or look around with a sample sprint: a made-up team's last seven sprints.",
+    "Plan the first sprint from the team's tasks, with estimates and days off, then start it."
+  ],
+  "today": [
+    { "verb": "decide", "line": "Close the sprint, on its last day" },
+    { "verb": "decide", "line": "Plan the next sprint, two days before it starts" },
+    { "verb": "decide", "line": "Urgent work that came in mid-sprint: pull it in?" }
+  ],
+  "pictures": [
+    { "shot": "sprints", "caption": "The running sprint: scope, steps and capacity" },
+    { "shot": "sprints-plan", "caption": "Planning against each person's real capacity" },
+    { "shot": "sprints-close", "caption": "A choice for every unfinished task, and a summary" }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "name": "coding_answer",
+  "description": "coding_ask saves its answer to a question (question_id): the markdown with path:line citations, the commit it read (sha) and the ranges it read.",
+  "type": "API",
+  "visibility": "POD",
+  "code": {
+    "$file": "code.py"
+  },
+  "permissions": {
+    "grants": [
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "coding_question",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read",
+          "datastore.record.write"
+        ]
+      }
+    ]
+  }
+}

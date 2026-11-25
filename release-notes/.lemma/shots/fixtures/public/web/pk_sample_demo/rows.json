@@ -1,0 +1,118 @@
+{
+ "table": "release_note_page",
+ "columns": [],
+ "rows": [
+  {
+   "id": "1d20d155-a2f4-5c91-bd22-852802765793",
+   "created_at": "2026-11-24T19:19:22.633470+00:00",
+   "updated_at": "2026-11-24T19:19:22.633470+00:00",
+   "published_on": "2026-11-24",
+   "version": "v2.14",
+   "title": "Export any report, and large files that don't stall",
+   "lines": [
+    {
+     "text": "Open a report and choose Export. You get exactly the rows and columns you see, with your filters applied.",
+     "asked": 6,
+     "title": "Export any report to CSV",
+     "section": "lead"
+    },
+    {
+     "text": "Reports over 10,000 rows now download as they're built, so a big export starts in seconds instead of timing out.",
+     "asked": 3,
+     "title": "Large exports no longer stall",
+     "section": "lead"
+    },
+    {
+     "text": "Billing webhooks retry on their own, so a slow payment provider no longer loses an event.",
+     "asked": 0,
+     "title": null,
+     "section": "improved"
+    },
+    {
+     "text": "Report filters remember the last date range you picked.",
+     "asked": 2,
+     "title": null,
+     "section": "improved"
+    },
+    {
+     "text": "Invoices that failed to sync during a provider outage now sync once it's back.",
+     "asked": 0,
+     "title": null,
+     "section": "fixed"
+    },
+    {
+     "text": "Chart labels are readable in dark mode.",
+     "asked": 1,
+     "title": null,
+     "section": "fixed"
+    },
+    {
+     "text": "The date picker no longer jumps a month when you open it on the 31st.",
+     "asked": 2,
+     "title": null,
+     "section": "fixed"
+    }
+   ],
+   "need": "API tokens made before October 1 stop working on December 15. Make a new one in Settings, then API.",
+   "asked_total": 14,
+   "product": "Fernway",
+   "brand": null,
+   "sample": true
+  },
+  {
+   "id": "9010e633-0c38-50c1-86f6-36a937fb86ec",
+   "created_at": "2026-11-24T19:20:04.950923+00:00",
+   "updated_at": "2026-11-24T19:20:04.950923+00:00",
+   "published_on": "2026-11-10",
+   "version": "v2.13",
+   "title": "Share a report with a link",
+   "lines": [
+    {
+     "text": "Anyone with the link sees the report as it is now, read only. Turn the link off from the report's Share menu.",
+     "asked": 3,
+     "title": "Share a report with a link",
+     "section": "lead"
+    },
+    {
+     "text": "Customer names with an apostrophe no longer break search.",
+     "asked": 0,
+     "title": null,
+     "section": "fixed"
+    }
+   ],
+   "need": null,
+   "asked_total": 3,
+   "product": "Fernway",
+   "brand": null,
+   "sample": true
+  },
+  {
+   "id": "95b8c248-334c-5271-ae70-727945bb6401",
+   "created_at": "2026-11-24T19:20:04.950923+00:00",
+   "updated_at": "2026-11-24T19:20:04.950923+00:00",
+   "published_on": "2026-10-27",
+   "version": "v2.12",
+   "title": "Faster invoice list on large accounts",
+   "lines": [
+    {
+     "text": "The invoice list opens in under a second on accounts with thousands of invoices.",
+     "asked": 0,
+     "title": "Faster invoice list on large accounts",
+     "section": "lead"
+    },
+    {
+     "text": "Tax totals round the same way on the invoice and the summary.",
+     "asked": 0,
+     "title": null,
+     "section": "fixed"
+    }
+   ],
+   "need": null,
+   "asked_total": 0,
+   "product": "Fernway",
+   "brand": null,
+   "sample": true
+  }
+ ],
+ "truncated": false
+}

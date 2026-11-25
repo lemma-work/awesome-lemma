@@ -1,0 +1,17 @@
+{
+  // Each member's own trigger on `release_note` (rows: OWNER_READABLE, where
+  // state changed): ready puts "v2.14 notes are ready" in a publisher's Today;
+  // published looks through their own conversations for people who asked.
+  "name": "release-notes-on-note",
+  "description": "A note became ready or was published: your Today, and anyone in your own mail who asked for what shipped.",
+  "max_concurrent_runs": 1,
+  "start": { "type": "DATASTORE_EVENT", "config": { "table_name": "release_note", "operations": ["UPDATE"] } },
+  "nodes": [
+    { "id": "note", "type": "FUNCTION", "label": "Your part",
+      "config": { "function_name": "release_notes_on_note", "input_mapping": {
+        "note_id": { "type": "expression", "value": "start.metadata.record_id" } } } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [ { "id": "e1", "source": "note", "target": "end" } ],
+  "visibility": "POD"
+}
