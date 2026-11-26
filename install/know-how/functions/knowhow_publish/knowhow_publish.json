@@ -1,0 +1,55 @@
+{
+  "name": "knowhow_publish",
+  "description": "Copy live public pages into the shared article table, or take out any that may no longer be there (article_id for one page; empty for all).",
+  "type": "API",
+  "visibility": "POD",
+  "code": {
+    "$file": "code.py"
+  },
+  "permissions": {
+    "grants": [
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "knowhow_settings",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "knowhow_topic",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "knowhow_article",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read",
+          "datastore.record.write"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "article",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read",
+          "datastore.record.write",
+          "datastore.record.delete"
+        ]
+      },
+      {
+        "resource_type": "folder",
+        "resource_name": "/know-how",
+        "permission_ids": [
+          "folder.read"
+        ]
+      }
+    ]
+  }
+}

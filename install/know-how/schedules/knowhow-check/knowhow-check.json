@@ -1,0 +1,10 @@
+{
+  // Every day at 00:15: pages past their check date, public answers out of
+  // the customer answers on their due day, may-disagree, uses. Runs as
+  // whoever installed Know-how.
+  "name": "knowhow-check",
+  "schedule_type": "TIME",
+  "config": { "cron": "15 0 * * *", "timezone": "UTC" },
+  "workflow_name": "knowhow-check",
+  "is_active": true
+}

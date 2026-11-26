@@ -1,0 +1,22 @@
+{
+  // One line of a page's or a question's Activity. The id is
+  // uuid5(subject, kind, key), so a line is written once. Team-wide, no RLS.
+  "name": "knowhow_event",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "subject_kind", "type": "ENUM", "required": true, "options": ["question", "article", "walk"] },
+    { "name": "subject_id", "type": "UUID", "required": true },
+    { "name": "kind", "type": "ENUM", "required": true,
+      "options": ["asked", "routed", "replied", "drafted", "saved", "told", "checked", "edited", "published", "unpublished",
+                  "retired", "walk_started", "walk_done", "stuck", "covered", "set_aside", "changed", "assigned", "found"] },
+    // A member's id, or "lemma".
+    { "name": "actor", "type": "TEXT", "max_length": 64 },
+    { "name": "actor_name", "type": "TEXT", "max_length": 200 },
+    { "name": "text", "type": "TEXT", "max_length": 2000 },
+    { "name": "at", "type": "DATETIME" },
+    { "name": "sample", "type": "BOOLEAN", "default": false }
+  ],
+  "config": {}
+}

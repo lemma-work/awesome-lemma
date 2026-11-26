@@ -90,6 +90,7 @@ GROUPS = {
     "project": "projects",
     "deal": "deals",
     "brand": "brand",
+    "article": "articles",
 }
 DAY_TABLE = "needs_you"
 
@@ -104,6 +105,7 @@ TABLES = {
     "projects": ("Projects", "A team project and the tasks in it"),
     "deals": ("Deals", "Something the team is trying to win, with its stage"),
     "brand": ("Brand", "Your colours, type, logos and voice"),
+    "articles": ("Customer answers", "Checked answers customers may read, never past their check date"),
 }
 
 # The landing page's shape: how many of each part, and one-glance headlines.
@@ -151,7 +153,7 @@ def makers() -> dict[str, str]:
             continue
         if name not in GROUPS:
             raise CatalogError(f"_contract/tables/{path.name}: a shared table the site has no word for; add it to GROUPS")
-        said = re.search(r"first written by ([A-Z][\w ]*?)[.,]", path.read_text())
+        said = re.search(r"first written by ([A-Z][\w -]*?)\s*[.,(]", path.read_text())
         if said and GROUPS[name] not in found:
             found[GROUPS[name]] = said.group(1).strip()
     missing = sorted(set(GROUPS.values()) - set(found))

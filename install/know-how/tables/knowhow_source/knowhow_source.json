@@ -1,0 +1,26 @@
+{
+  // Something Know-how learns from: uploaded files, a Drive folder, a
+  // website, a file shared in Teams. Team-wide, no RLS.
+  "name": "knowhow_source",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "kind", "type": "ENUM", "required": true, "default": "upload", "options": ["upload", "drive_folder", "website", "teams_file"] },
+    { "name": "name", "type": "TEXT", "max_length": 300 },
+    { "name": "path", "type": "TEXT", "max_length": 500 },
+    { "name": "url", "type": "TEXT", "max_length": 1000 },
+    { "name": "drive_id", "type": "TEXT", "max_length": 200 },
+    { "name": "account_id", "type": "TEXT", "max_length": 100 },
+    { "name": "last_read_at", "type": "DATETIME" },
+    { "name": "files_seen", "type": "INTEGER", "default": 0 },
+    { "name": "drafted", "type": "INTEGER", "default": 0 },
+    // Files that can't be searched, and why: [{name, path, why, sheet_page}].
+    { "name": "unreadable", "type": "JSON" },
+    // {path: hash} of what was read, so a re-read takes only what changed.
+    { "name": "seen", "type": "JSON" },
+    { "name": "note", "type": "TEXT", "max_length": 1000 },
+    { "name": "sample", "type": "BOOLEAN", "default": false }
+  ],
+  "config": {}
+}

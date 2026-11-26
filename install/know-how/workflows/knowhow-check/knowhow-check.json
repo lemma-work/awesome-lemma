@@ -1,0 +1,10 @@
+{
+  "name": "knowhow-check",
+  "description": "Know-how's daily upkeep: check dates, the customer answers, pages that may disagree, uses.",
+  "start": { "type": "SCHEDULED", "config": { "schedule_type": "CRON" } },
+  "nodes": [
+    { "id": "run", "type": "FUNCTION", "label": "Run", "config": { "function_name": "knowhow_check", "input_mapping": {} } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [ { "id": "e1", "source": "run", "target": "end" } ]
+}

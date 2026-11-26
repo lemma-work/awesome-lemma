@@ -1,0 +1,50 @@
+{
+  // One question someone asked, and how it went. Team-wide, no RLS: the
+  // owner sees the words and the count. On a sensitive topic the asker is
+  // never kept here (their link is knowhow_my_question, theirs alone).
+  "name": "knowhow_question",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "text", "type": "TEXT", "required": true, "max_length": 2000 },
+    { "name": "asked_by_kind", "type": "ENUM", "default": "member", "options": ["member", "contact", "unknown"] },
+    { "name": "asked_by_member", "type": "USER" },
+    { "name": "asked_by_contact", "type": "UUID" },
+    { "name": "asked_by_name", "type": "TEXT", "max_length": 200 },
+    { "name": "where_source", "type": "ENUM", "default": "app", "options": ["teams", "slack", "email", "web", "app"] },
+    // "#sales-desk", "chat with Wren", "support mailbox".
+    { "name": "where_place", "type": "TEXT", "max_length": 200 },
+    { "name": "conversation_id", "type": "TEXT", "max_length": 100 },
+    { "name": "channel_id", "type": "TEXT", "max_length": 100 },
+    { "name": "topic_id", "type": "UUID" },
+    { "name": "article_id", "type": "UUID" },
+    // answered: from a page in date. late: from a page past its check date.
+    // partly: a passage in a file, no page. missed: nothing. passed_on: a
+    // customer handed to a person. wrong: the asker said the answer was wrong.
+    { "name": "outcome", "type": "ENUM", "required": true, "default": "missed",
+      "options": ["answered", "late", "partly", "missed", "passed_on", "wrong"] },
+    { "name": "confidence", "type": "FLOAT" },
+    { "name": "owner_member_id", "type": "USER" },
+    // new -> asked (the owner was asked) -> drafted -> saved; or covered (by
+    // another page), set_aside.
+    { "name": "state", "type": "ENUM", "required": true, "default": "new",
+      "options": ["new", "asked", "drafted", "saved", "covered", "set_aside"] },
+    // The first asking of the same question; `times` counts on the first only.
+    { "name": "same_as", "type": "UUID" },
+    { "name": "times", "type": "INTEGER", "default": 1 },
+    // Passages found in files with no page: [{path, page, text}].
+    { "name": "found", "type": "JSON" },
+    // What's next, in words: "Draft ready for Priya", "Files can't be read".
+    { "name": "next_note", "type": "TEXT", "max_length": 300 },
+    { "name": "draft_article_id", "type": "UUID" },
+    { "name": "sensitive", "type": "BOOLEAN", "default": false },
+    { "name": "walk_id", "type": "UUID" },
+    { "name": "walk_step", "type": "INTEGER" },
+    { "name": "asked_at", "type": "DATETIME" },
+    { "name": "answered_at", "type": "DATETIME" },
+    { "name": "told_at", "type": "DATETIME" },
+    { "name": "sample", "type": "BOOLEAN", "default": false }
+  ],
+  "config": {}
+}

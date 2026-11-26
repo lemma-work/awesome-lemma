@@ -1,0 +1,17 @@
+{
+  // The asker of a question on a sensitive topic, so they can be told when
+  // it has an answer, while the topic's owner sees only the words and the
+  // count. Row-level security: each row is its asker's own. The platform
+  // lets a Lemma's admins read every row of an RLS table; the README says so.
+  "name": "knowhow_my_question",
+  "primary_key_column": "id",
+  "enable_rls": true,
+  "visibility": "POD",
+  "columns": [
+    { "name": "question_id", "type": "UUID", "required": true },
+    { "name": "where_source", "type": "TEXT", "max_length": 20 },
+    { "name": "channel_id", "type": "TEXT", "max_length": 100 },
+    { "name": "told_at", "type": "DATETIME" }
+  ],
+  "config": {}
+}

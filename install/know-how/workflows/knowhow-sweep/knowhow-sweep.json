@@ -1,0 +1,22 @@
+{
+  // The daily safety net for a miss nobody logged, as whoever ran set-up
+  // (the app makes the knowhow-sweep schedule as them). A function can't be
+  // granted channel.read, so the Lemma's assistant reads the chats in an AGENT
+  // step, as that person, and hands question-like lines to knowhow_sweep.
+  "name": "knowhow-sweep",
+  "description": "The daily safety net: questions in the last day's chats that the Lemma didn't log.",
+  "start": { "type": "SCHEDULED", "config": { "schedule_type": "CRON" } },
+  "nodes": [
+    { "id": "brief", "type": "FUNCTION", "label": "What to look for",
+      "config": { "function_name": "knowhow_sweep", "input_mapping": { "mode": { "type": "literal", "value": "brief" } } } },
+    { "id": "look", "type": "AGENT", "label": "Read the last day's chats",
+      "config": { "agent_name": "pod_default",
+        "instructions": "You are running Know-how's daily sweep, unattended: nobody is in this conversation, so never call ask_user, request_approval or channel_post, and never write to anyone. Search the lines from the last 24 hours in the group chats and customers' channels you can see (never another member's private chat) for people asking a question about the team's work in one of the topics in the brief. Skip lines already logged, small talk, and the Lemma's own lines. Then call the function knowhow_sweep once with mode log and lines: [{text (word for word), message_id, channel_id, source (teams, slack, email or web), place (the chat's name), sender_name, sender_kind (member or contact)}]. At most 25 lines. End with one line: how many you passed on.",
+        "input_mapping": { "brief": { "type": "expression", "value": "brief.brief" } } } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [
+    { "id": "e1", "source": "brief", "target": "look" },
+    { "id": "e2", "source": "look", "target": "end" }
+  ]
+}

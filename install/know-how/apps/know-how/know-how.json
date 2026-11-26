@@ -1,0 +1,6 @@
+{
+  "name": "know-how",
+  "description": "The team's know-how: every question asked this month and what answered it, the library of pages with owners and check dates, and each procedure as a playbook walked one step at a time.",
+  "public_slug": "${knowhow_slug}",
+  "visibility": "POD"
+}

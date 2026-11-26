@@ -1,0 +1,6 @@
+{
+  "connector": "googledrive",
+  "mode": "SHARED",
+  "required": false,
+  "purpose": "Reads the Google Drive folders you pick at set-up, so the reader can draft pages from them, and reads them again each week. Never writes to Drive."
+}

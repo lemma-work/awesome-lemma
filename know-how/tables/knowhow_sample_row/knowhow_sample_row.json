@@ -1,0 +1,14 @@
+{
+  // Every row and file the sample made, so clearing it removes only those.
+  "name": "knowhow_sample_row",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "table_name", "type": "TEXT", "required": true, "max_length": 64 },
+    { "name": "row_id", "type": "TEXT", "required": true, "max_length": 100 },
+    // A sample page's file, deleted on clear.
+    { "name": "path", "type": "TEXT", "max_length": 500 }
+  ],
+  "config": {}
+}

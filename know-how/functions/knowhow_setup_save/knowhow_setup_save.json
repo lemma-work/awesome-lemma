@@ -1,0 +1,29 @@
+{
+  "name": "knowhow_setup_save",
+  "description": "Keep Know-how's set-up (only the fields given): places, audiences, approver, check interval, time zone, what the app made; done finishes set-up and writes the memory block. Safe to run again.",
+  "type": "API",
+  "visibility": "POD",
+  "code": {
+    "$file": "code.py"
+  },
+  "permissions": {
+    "grants": [
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "knowhow_settings",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read",
+          "datastore.record.write"
+        ]
+      },
+      {
+        "resource_type": "function",
+        "resource_name": "knowhow_memory",
+        "permission_ids": [
+          "function.execute"
+        ]
+      }
+    ]
+  }
+}

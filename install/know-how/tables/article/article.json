@@ -1,0 +1,61 @@
+{
+  // The published copy of one answer that customers or the public may read:
+  // a help center draws it, every outsider run (a customer on email, a
+  // visitor's chat) reads it, and a support inbox cites it. One row per
+  // answer, in the team's own words, never past its check date.
+  //
+  // Public (no RLS): a Public table answers anyone, and audience can't be set
+  // per row, so only answers meant for the public live here. Answers for
+  // signed-in customers only stay in the writing plugin's own table and reach
+  // a contact through a function opened to contacts. The bundle declares it
+  // POD; the writing plugin's set-up marks it Public, as the person, when the
+  // team turns customers or the public on.
+  //
+  // Never past its date: a row leaves at the start of its `good_until` day.
+  // An outsider run can't be told to skip old rows, so old rows must not be
+  // here.
+  //
+  // Found by id: uuid5(ARTICLE_NS, "<source_plugin>:<source_id>"), with
+  // ARTICLE_NS = 60a094a9-68d4-4995-8508-e9a616fcd38c, so two writers meeting
+  // one answer write one row.
+  //
+  // Shared definition (plugins/_contract), first written by Know-how (a live
+  // public page, copied on every save, check and retire). Support inbox and
+  // Help center will read and write it too. Carried unchanged by every plugin
+  // that uses it; _contract/lint.py fails on any difference.
+  "name": "article",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "title", "type": "TEXT", "required": true, "max_length": 300 },
+    // Unique among articles: the last part of a help page's address.
+    { "name": "slug", "type": "TEXT", "required": true, "max_length": 200 },
+    // One or two sentences, for a list or a search result.
+    { "name": "summary", "type": "TEXT", "max_length": 300 },
+    // The answer itself, as Markdown. Procedures keep their steps as
+    // `### 1. Title` headings.
+    { "name": "body_md", "type": "TEXT", "max_length": 20000 },
+    // The team's own topic name ("Drivers and wiring").
+    { "name": "topic", "type": "TEXT", "max_length": 200 },
+    { "name": "kind", "type": "ENUM", "required": true, "default": "answer", "options": ["answer", "procedure", "policy"] },
+    // A language tag ("en", "de"); empty means the team's own language.
+    { "name": "language", "type": "TEXT", "max_length": 16 },
+    // Who last checked it, and when, as said on the page: "checked by Ines
+    // Moreau on 2 Nov". A name, never an id: outsiders read this.
+    { "name": "checked_at", "type": "DATETIME" },
+    { "name": "checked_by_name", "type": "TEXT", "max_length": 200 },
+    // The last day it may be read: it leaves at the start of this day.
+    { "name": "good_until", "type": "DATE", "required": true },
+    { "name": "updated_at", "type": "DATETIME" },
+    // Other articles' slugs worth reading next.
+    { "name": "related", "type": "JSON" },
+    // The help page's path, once a help center draws it; empty until then.
+    { "name": "help_path", "type": "TEXT", "max_length": 400 },
+    // Who wrote the row and from which of its own rows (Know-how: the page's
+    // knowhow_article id).
+    { "name": "source_plugin", "type": "TEXT", "required": true, "max_length": 32 },
+    { "name": "source_id", "type": "TEXT", "required": true, "max_length": 200 }
+  ],
+  "config": {}
+}

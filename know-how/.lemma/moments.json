@@ -1,0 +1,30 @@
+{
+ "//": "The pictures on Know-how's page, taken from its Try it demo by `node _kit/bin/moments.mjs know-how` into .lemma/moments/. The six moments from the market note.",
+ "captures": [
+  { "name": "checked-by", "alt": "A Teams answer from the Lemma that ends with which page it came from, and who checked it when",
+    "route": "/", "viewport": [1184, 900], "steps": [{ "wait": 1400 }, { "mouse": [4, 4] }],
+    "clip": { "selector": ".kh-chat", "nth": 0, "pad": 8 },
+    "phone": { "viewport": [390, 900], "clip": { "selector": ".kh-q", "nth": 0, "pad": 6 } } },
+  { "name": "stale-held-back", "alt": "A page past its check date: the team still gets it with a warning, a customer is passed to a person",
+    "route": "/q/ce60e5a1-55c2-5ce8-a2cf-136a8d71fd1e", "viewport": [1184, 900], "steps": [{ "wait": 1800 }, { "mouse": [4, 4] }],
+    "clip": { "selector": ".kh-block--late", "pad": 8 } },
+  { "name": "miss-to-answer", "alt": "Four people asked about custom colours; the owner's reply comes back as a draft, saved as the answer in one press",
+    "loop": true, "cursor": true, "route": "/q/f09d6c21-9f0f-5765-9d75-6e7876d6e3e7", "viewport": [1184, 900],
+    "before": [{ "wait": 1800 }], "steps": [{ "wait": 900 }, { "click": ".kh-block--draft .c-btn--primary" }, { "wait": 2200 }],
+    "clip": { "selector": ".kh-detail", "pad": 0, "height": 760 }, "poster": 0.5 },
+  { "name": "going-stale", "alt": "Going stale: pages past their check date, a customer answer about to leave, and one that may disagree with a new datasheet",
+    "route": "/library", "viewport": [1184, 900], "steps": [{ "wait": 1400 }, { "mouse": [4, 4] }],
+    "clip": { "selector": ".kh-lib-cards", "pad": 8 },
+    "phone": { "viewport": [390, 900], "clip": { "selector": ".kh-lib-cards", "pad": 6, "height": 820 } } },
+  { "name": "proposed-step", "alt": "A question asked twice mid-walk becomes a proposed change to step 2, drafted from the owner's reply",
+    "route": "/p/8759ad0a-8b80-51e3-9028-355cfa6b710e", "viewport": [1184, 900], "steps": [{ "wait": 1800 }, { "mouse": [4, 4] }],
+    "clip": { "selector": ".kh-step", "nth": 1, "pad": 8 } },
+  { "name": "walk", "alt": "Walking a procedure one step at a time: Done, I'm stuck, Stop",
+    "loop": true, "cursor": true, "route": "/p/8759ad0a-8b80-51e3-9028-355cfa6b710e/walk", "viewport": [1184, 900],
+    "before": [{ "wait": 1400 }], "steps": [{ "click": ".kh-walk__start .c-btn--primary" }, { "wait": 1400 }, { "click": ".kh-walk__acts .c-btn--primary" }, { "wait": 1400 }, { "click": ".kh-walk__acts .c-btn--primary" }, { "wait": 1400 }],
+    "clip": { "selector": ".kh-walk", "pad": 8, "height": 560 }, "poster": 2.5 },
+  { "name": "one-answer-two-places", "alt": "One answer serves the team's chat and a customer's Slack Connect, each told where it came from",
+    "route": "/", "viewport": [1184, 900], "steps": [{ "wait": 1400 }, { "mouse": [4, 4] }],
+    "clip": { "selector": ".kh-chat", "nth": 1, "pad": 8 } }
+ ]
+}

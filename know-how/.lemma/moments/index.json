@@ -1,0 +1,68 @@
+{
+  "checked-by": {
+    "kind": "still",
+    "width": 435,
+    "height": 199,
+    "alt": "A Teams answer from the Lemma that ends with which page it came from, and who checked it when",
+    "bleed": null,
+    "window": null,
+    "phone": {
+      "width": 374,
+      "height": 93,
+      "bleed": null
+    }
+  },
+  "stale-held-back": {
+    "kind": "still",
+    "width": 435,
+    "height": 367,
+    "alt": "A page past its check date: the team still gets it with a warning, a customer is passed to a person",
+    "bleed": null,
+    "window": null
+  },
+  "miss-to-answer": {
+    "kind": "loop",
+    "width": 460,
+    "height": 760,
+    "alt": "Four people asked about custom colours; the owner's reply comes back as a draft, saved as the answer in one press",
+    "bleed": null,
+    "window": null
+  },
+  "going-stale": {
+    "kind": "still",
+    "width": 886,
+    "height": 414,
+    "alt": "Going stale: pages past their check date, a customer answer about to leave, and one that may disagree with a new datasheet",
+    "bleed": null,
+    "window": null,
+    "phone": {
+      "width": 374,
+      "height": 727,
+      "bleed": null
+    }
+  },
+  "proposed-step": {
+    "kind": "still",
+    "width": 816,
+    "height": 267,
+    "alt": "A question asked twice mid-walk becomes a proposed change to step 2, drafted from the owner's reply",
+    "bleed": null,
+    "window": null
+  },
+  "walk": {
+    "kind": "loop",
+    "width": 736,
+    "height": 283,
+    "alt": "Walking a procedure one step at a time: Done, I'm stuck, Stop",
+    "bleed": null,
+    "window": null
+  },
+  "one-answer-two-places": {
+    "kind": "still",
+    "width": 435,
+    "height": 245,
+    "alt": "One answer serves the team's chat and a customer's Slack Connect, each told where it came from",
+    "bleed": null,
+    "window": null
+  }
+}

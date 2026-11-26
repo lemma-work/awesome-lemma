@@ -1,0 +1,32 @@
+{
+  // One person's set-up, on their first open: how they want to be asked
+  // about a miss, and when they'd like checks. The app shows the topics they
+  // own and the procedures assigned to them beside the form, then makes their
+  // own knowhow-mine-<id> schedule as them.
+  "name": "knowhow-me",
+  "description": "One person's Know-how set-up: how to ask them about a question nobody answered, and when they'd like checks.",
+  "start": { "type": "MANUAL" },
+  "nodes": [
+    { "id": "me", "type": "FORM", "label": "How should Know-how reach you?",
+      "config": { "input_schema": {
+        "type": "object",
+        "properties": {
+          "ask_by": { "type": "string", "enum": ["teams", "today"], "title": "When nobody's answer fits a question in your topic" },
+          "check_rhythm": { "type": "string", "enum": ["daily", "weekly"], "title": "When you'd like checks" },
+          "check_day": { "type": "integer", "minimum": 0, "maximum": 6, "title": "Day, for weekly" }
+        },
+        "required": ["ask_by"]
+      } } },
+    { "id": "save", "type": "FUNCTION", "label": "Keep it",
+      "config": { "function_name": "knowhow_me_save", "input_mapping": {
+        "ask_by": { "type": "expression", "value": "me.ask_by" },
+        "check_rhythm": { "type": "expression", "value": "me.check_rhythm", "optional": true },
+        "check_day": { "type": "expression", "value": "me.check_day", "optional": true },
+        "done": { "type": "literal", "value": true } } } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [
+    { "id": "e1", "source": "me", "target": "save" },
+    { "id": "e2", "source": "save", "target": "end" }
+  ]
+}

@@ -1,0 +1,86 @@
+{
+  "name": "knowhow_from_thread",
+  "description": "Make a draft procedure (or answer) from a thread when someone says 'make this a procedure' (thread: its text, link, where, title, kind). Read the Teams or Slack thread first and pass its text.",
+  "type": "API",
+  "visibility": "POD",
+  "code": {
+    "$file": "code.py"
+  },
+  "permissions": {
+    "grants": [
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "knowhow_settings",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "knowhow_topic",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "knowhow_person",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "knowhow_correction",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "knowhow_article",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read",
+          "datastore.record.write"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "knowhow_question",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "knowhow_event",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read",
+          "datastore.record.write"
+        ]
+      },
+      {
+        "resource_type": "folder",
+        "resource_name": "/know-how",
+        "permission_ids": [
+          "folder.read",
+          "folder.write"
+        ]
+      },
+      {
+        "resource_type": "function",
+        "resource_name": "knowhow_draft",
+        "permission_ids": [
+          "function.execute"
+        ]
+      }
+    ]
+  }
+}

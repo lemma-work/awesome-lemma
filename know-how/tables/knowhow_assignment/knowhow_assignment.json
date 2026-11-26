@@ -1,0 +1,22 @@
+{
+  // One procedure assigned to one person (by name, or by role resolved to
+  // members when assigned). Team-wide, no RLS.
+  "name": "knowhow_assignment",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "article_id", "type": "UUID", "required": true },
+    { "name": "member_id", "type": "USER" },
+    { "name": "member_name", "type": "TEXT", "max_length": 200 },
+    { "name": "role", "type": "TEXT", "max_length": 100 },
+    { "name": "assigned_by", "type": "USER" },
+    { "name": "assigned_by_name", "type": "TEXT", "max_length": 200 },
+    { "name": "assigned_at", "type": "DATETIME" },
+    { "name": "due_on", "type": "DATE" },
+    { "name": "walk_id", "type": "UUID" },
+    { "name": "state", "type": "ENUM", "required": true, "default": "assigned", "options": ["assigned", "walking", "done"] },
+    { "name": "sample", "type": "BOOLEAN", "default": false }
+  ],
+  "config": {}
+}

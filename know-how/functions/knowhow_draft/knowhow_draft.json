@@ -1,0 +1,97 @@
+{
+  "name": "knowhow_draft",
+  "description": "Turn an owner's reply into a draft page they save in one step (question_ids, reply word for word, reply_who, reply_where). With body_md it's saved as written; without, the writer drafts it from the reply and the questions. With article_id and step (a question asked mid-walk) it becomes a proposed change to that step. Call it when the owner's reply comes back.",
+  "type": "API",
+  "visibility": "POD",
+  "code": {
+    "$file": "code.py"
+  },
+  "permissions": {
+    "grants": [
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "knowhow_settings",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "knowhow_topic",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "knowhow_person",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "knowhow_correction",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "knowhow_article",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read",
+          "datastore.record.write"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "knowhow_question",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read",
+          "datastore.record.write"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "knowhow_change",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read",
+          "datastore.record.write"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "knowhow_event",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read",
+          "datastore.record.write"
+        ]
+      },
+      {
+        "resource_type": "folder",
+        "resource_name": "/know-how",
+        "permission_ids": [
+          "folder.read",
+          "folder.write"
+        ]
+      },
+      {
+        "resource_type": "workflow",
+        "resource_name": "knowhow-draft",
+        "permission_ids": [
+          "workflow.read",
+          "workflow.execute"
+        ]
+      }
+    ]
+  }
+}

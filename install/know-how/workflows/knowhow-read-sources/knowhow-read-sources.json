@@ -1,0 +1,29 @@
+{
+  // Read the sources again: new or changed uploads, the website, Drive
+  // folders. Started from the Library ("Read again") and on Mondays by
+  // knowhow_check. The reader's drafts go straight under existing topics.
+  "name": "knowhow-read-sources",
+  "description": "Read Know-how's sources again and draft pages from what's new.",
+  "start": { "type": "MANUAL" },
+  "nodes": [
+    { "id": "read", "type": "FUNCTION", "label": "What's new",
+      "config": { "function_name": "knowhow_read_source", "input_mapping": {} } },
+    { "id": "anything", "type": "DECISION", "label": "Anything to read?",
+      "config": { "rules": [ { "condition": "read.nothing == `true`", "next_node_id": "end" } ] } },
+    { "id": "reader", "type": "AGENT", "label": "Read it and propose",
+      "config": { "agent_name": "knowhow_reader", "input_mapping": {
+        "context": { "type": "expression", "value": "read.context" } } } },
+    { "id": "keep", "type": "FUNCTION", "label": "Keep the proposals",
+      "config": { "function_name": "knowhow_reader_save", "input_mapping": {
+        "result": { "type": "expression", "value": "reader" },
+        "source_ids": { "type": "expression", "value": "read.source_ids", "optional": true } } } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [
+    { "id": "e1", "source": "read", "target": "anything" },
+    { "id": "e2", "source": "anything", "target": "reader", "label": "something to read (the default: listed first)" },
+    { "id": "e3", "source": "anything", "target": "end", "label": "nothing new" },
+    { "id": "e4", "source": "reader", "target": "keep" },
+    { "id": "e5", "source": "keep", "target": "end" }
+  ]
+}

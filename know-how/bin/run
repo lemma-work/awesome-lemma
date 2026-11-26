@@ -1,0 +1,14 @@
+#!/bin/bash
+# Run one Know-how function on the bound Lemma and print its output (or its error).
+#   bin/run knowhow_answer '{"question": "..."}'
+here="$(cd "$(dirname "$0")" && pwd)"
+"$here/lemma" --json functions run "$1" -d "${2:-{\}}" 2>&1 | uv run --no-project python -c "import json,sys
+raw=sys.stdin.read()
+try:
+    d=json.loads(raw)
+except ValueError:
+    print(raw); sys.exit(1)
+out=d.get('output_data') or d.get('output') or d
+err=d.get('error') or d.get('error_message')
+print(json.dumps(out, indent=1, default=str, ensure_ascii=False)[:${KH_MAX:-6000}])
+if err: print('ERROR:', json.dumps(err, default=str)[:3000])"

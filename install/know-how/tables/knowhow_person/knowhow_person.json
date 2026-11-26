@@ -1,0 +1,21 @@
+{
+  // One member's Know-how preferences, from their first open (knowhow-me).
+  // Team-wide, no RLS: whoever routes a miss needs to know how to ask.
+  "name": "knowhow_person",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "member_id", "type": "USER", "required": true },
+    { "name": "name", "type": "TEXT", "max_length": 200 },
+    // How they want to be asked about a miss: a Teams message from the Lemma,
+    // or Today only.
+    { "name": "ask_by", "type": "ENUM", "default": "teams", "options": ["teams", "today"] },
+    { "name": "check_rhythm", "type": "ENUM", "default": "daily", "options": ["daily", "weekly"] },
+    // 0 = Monday ... 6 = Sunday, for weekly checks.
+    { "name": "check_day", "type": "INTEGER", "default": 0 },
+    { "name": "me_done_at", "type": "DATETIME" },
+    { "name": "schedule_name", "type": "TEXT", "max_length": 100 }
+  ],
+  "config": {}
+}

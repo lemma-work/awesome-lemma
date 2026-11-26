@@ -1,0 +1,35 @@
+{
+  "anchor": "2026-11-25T13:30:00Z",
+  "zone": "Europe/London",
+  "apps": [
+    {
+      "name": "know-how",
+      "label": "Know-how",
+      "start": "/"
+    }
+  ],
+  "user": {
+    "id": "user-sample",
+    "email": "priya@fernlow.example",
+    "first_name": "Priya",
+    "last_name": "Raman",
+    "name": "Priya Raman",
+    "is_active": true,
+    "is_superuser": false,
+    "is_verified": true,
+    "created_at": "2026-01-01T00:00:00Z",
+    "updated_at": "2026-01-01T00:00:00Z"
+  },
+  "notes": {
+    "knowhow_sample_data": "In the demo the sample stays.",
+    "knowhow_setup_save": "In the demo the set-up isn't saved.",
+    "knowhow_mine": "",
+    "knowhow_tell": "",
+    "knowhow-read-sources": "In the demo nothing is read: in a Lemma, the reader drafts pages from new or changed files, your website and Drive folders.",
+    "knowhow_assign": "In the demo nobody is assigned: in a Lemma, each person gets “Walk …” in Today."
+  },
+  "connections": {
+    "slack": { "state": "ready", "as": "Fernlow" },
+    "googledrive": { "state": "ready", "as": "priya@fernlow.example" }
+  }
+}

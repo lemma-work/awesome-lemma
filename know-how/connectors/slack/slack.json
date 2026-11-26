@@ -1,0 +1,6 @@
+{
+  "connector": "slack",
+  "mode": "SHARED",
+  "required": false,
+  "purpose": "Listens in the Slack channels you choose for questions and for a teammate's answer in the thread, which becomes a draft page. The same Slack app as the Lemma's bot."
+}

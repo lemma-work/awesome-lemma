@@ -1,0 +1,41 @@
+{
+  // knowhow_writer drafts one page (or a step's text) from an owner's reply
+  // or a found passage. Started by knowhow_draft, which submits the brief at
+  // once with everything the writer needs, so the run never waits on a
+  // person; knowhow_draft then saves what it wrote as a draft.
+  "name": "knowhow-draft",
+  "description": "The Lemma drafts a Know-how page from an owner's reply, for them to save.",
+  "run_title": ["brief.ids"],
+  "start": { "type": "MANUAL" },
+  "nodes": [
+    { "id": "brief", "type": "FORM", "label": "What to draft from",
+      "config": { "input_schema": {
+        "type": "object",
+        "properties": {
+          "context": { "type": "string" }, "ids": { "type": "string" }, "article_id": { "type": "string" },
+          "step": { "type": "string" }, "reply": { "type": "string" }, "reply_who": { "type": "string" },
+          "reply_where": { "type": "string" }, "topic_id": { "type": "string" }
+        },
+        "required": ["context"]
+      } } },
+    { "id": "write", "type": "AGENT", "label": "Draft it",
+      "config": { "agent_name": "knowhow_writer", "input_mapping": {
+        "context": { "type": "expression", "value": "brief.context" } } } },
+    { "id": "save", "type": "FUNCTION", "label": "Save the draft",
+      "config": { "function_name": "knowhow_draft", "input_mapping": {
+        "ids": { "type": "expression", "value": "brief.ids", "optional": true },
+        "article_id": { "type": "expression", "value": "brief.article_id", "optional": true },
+        "step": { "type": "expression", "value": "brief.step", "optional": true },
+        "reply": { "type": "expression", "value": "brief.reply", "optional": true },
+        "reply_who": { "type": "expression", "value": "brief.reply_who", "optional": true },
+        "reply_where": { "type": "expression", "value": "brief.reply_where", "optional": true },
+        "topic_id": { "type": "expression", "value": "brief.topic_id", "optional": true },
+        "result": { "type": "expression", "value": "write" } } } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [
+    { "id": "e1", "source": "brief", "target": "write" },
+    { "id": "e2", "source": "write", "target": "save" },
+    { "id": "e3", "source": "save", "target": "end" }
+  ]
+}

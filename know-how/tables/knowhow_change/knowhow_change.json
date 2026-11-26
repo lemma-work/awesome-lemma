@@ -1,0 +1,24 @@
+{
+  // A proposed change to a page: a step to add from a question asked
+  // mid-walk, an edit from an owner's reply, or "may disagree" when the page
+  // or its source file changed. Team-wide, no RLS.
+  "name": "knowhow_change",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "article_id", "type": "UUID", "required": true },
+    { "name": "kind", "type": "ENUM", "required": true, "default": "add_to_step", "options": ["add_to_step", "new_step", "edit", "may_disagree"] },
+    { "name": "step", "type": "INTEGER" },
+    { "name": "text", "type": "TEXT", "max_length": 8000 },
+    // {quote, who, where, when}; for may_disagree {page_text, source_text, changed_at, why}.
+    { "name": "evidence", "type": "JSON" },
+    { "name": "question_ids", "type": "JSON" },
+    { "name": "source_path", "type": "TEXT", "max_length": 500 },
+    { "name": "state", "type": "ENUM", "required": true, "default": "proposed", "options": ["proposed", "added", "declined"] },
+    { "name": "decided_by", "type": "USER" },
+    { "name": "decided_at", "type": "DATETIME" },
+    { "name": "sample", "type": "BOOLEAN", "default": false }
+  ],
+  "config": {}
+}

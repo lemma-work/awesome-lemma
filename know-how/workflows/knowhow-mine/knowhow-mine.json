@@ -1,0 +1,10 @@
+{
+  "name": "knowhow-mine",
+  "description": "What in Know-how needs one person, in Today, every 15 minutes (one schedule per person, made by the app on their first open).",
+  "start": { "type": "SCHEDULED", "config": { "schedule_type": "CRON" } },
+  "nodes": [
+    { "id": "run", "type": "FUNCTION", "label": "Run", "config": { "function_name": "knowhow_mine", "input_mapping": {} } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [ { "id": "e1", "source": "run", "target": "end" } ]
+}

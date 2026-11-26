@@ -1,0 +1,24 @@
+{
+  // One person going through one procedure, one step at a time, in chat or
+  // in the app. Team-wide, no RLS.
+  "name": "knowhow_walk",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "article_id", "type": "UUID", "required": true },
+    { "name": "who_kind", "type": "ENUM", "default": "member", "options": ["member", "contact"] },
+    { "name": "who_member", "type": "USER" },
+    { "name": "who_name", "type": "TEXT", "max_length": 200 },
+    { "name": "where_source", "type": "ENUM", "default": "app", "options": ["teams", "slack", "email", "web", "app"] },
+    { "name": "channel_id", "type": "TEXT", "max_length": 100 },
+    { "name": "step", "type": "INTEGER", "default": 1 },
+    { "name": "steps_total", "type": "INTEGER", "default": 0 },
+    { "name": "state", "type": "ENUM", "required": true, "default": "walking", "options": ["walking", "stuck", "stopped", "done"] },
+    { "name": "started_at", "type": "DATETIME" },
+    { "name": "done_at", "type": "DATETIME" },
+    { "name": "assignment_id", "type": "UUID" },
+    { "name": "sample", "type": "BOOLEAN", "default": false }
+  ],
+  "config": {}
+}

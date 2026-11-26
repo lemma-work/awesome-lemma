@@ -1,0 +1,47 @@
+{
+  "name": "knowhow_setup_apply",
+  "description": "Set-up's 'Who knows what?': write the topics (owner, backup, check interval, who may see it, sensitive), make their folders, and file the reader's drafts under them. Safe to run again.",
+  "type": "API",
+  "visibility": "POD",
+  "code": {
+    "$file": "code.py"
+  },
+  "permissions": {
+    "grants": [
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "knowhow_settings",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "knowhow_topic",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read",
+          "datastore.record.write"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "knowhow_article",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read",
+          "datastore.record.write"
+        ]
+      },
+      {
+        "resource_type": "folder",
+        "resource_name": "/know-how",
+        "permission_ids": [
+          "folder.read",
+          "folder.write"
+        ]
+      }
+    ]
+  }
+}

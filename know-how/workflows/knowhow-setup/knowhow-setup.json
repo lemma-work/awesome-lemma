@@ -1,0 +1,127 @@
+{
+  // The team's set-up, once, started by the app the first time anyone opens
+  // it. The app is the screen for each form. Every step after the first can
+  // be skipped (submitted empty) and done later from the Library.
+  //
+  //   sources    where the know-how lives: uploads (saved to /know-how/_inbox
+  //              by the app), a website, Drive folders; or the sample
+  //   read       what's new, ready for the reader (sheets become table pages)
+  //   reader     knowhow_reader proposes topics, drafts, procedures
+  //   keep       drafts written, topics kept for the next form
+  //   owners     "Who knows what?": each topic's owner, backup, check
+  //              interval, who may see it, sensitive
+  //   apply      topics and folders made, drafts filed under them
+  //   places     where people ask (Teams, Slack channels, mailbox, web chat)
+  //   audiences  customers, public, who approves for customers
+  //   save       the set-up row; done
+  //   memory     the memory block and guide, last, so nothing waits on it
+  //
+  // What only a person can do (Public, contact functions, a restricted
+  // folder, schedules) the app does as them once the run is done.
+  "name": "knowhow-setup",
+  "description": "Set up Know-how for the team: where the know-how lives, the reader's proposals, who owns what, where people ask, and who may see what.",
+  "run_title": ["sources.choice"],
+  "start": { "type": "MANUAL" },
+  "nodes": [
+    { "id": "sources", "type": "FORM", "label": "Where does your know-how live now?",
+      "config": { "input_schema": {
+        "type": "object",
+        "properties": {
+          "choice": { "type": "string", "enum": ["sources", "sample"], "title": "Read our sources, or look around with a sample" },
+          "website": { "type": "string", "title": "Your website's address" },
+          "drive_folders": { "type": "array", "title": "Google Drive folders", "items": { "type": "object", "properties": {
+            "id": { "type": "string" }, "name": { "type": "string" }, "account_id": { "type": "string" } } } },
+          "note": { "type": "string", "title": "Anything else about where it lives", "maxLength": 2000 }
+        },
+        "required": ["choice"]
+      } } },
+    { "id": "route", "type": "DECISION", "label": "Sources or the sample?",
+      "config": { "rules": [ { "condition": "sources.choice == 'sample'", "next_node_id": "sample" } ] } },
+    { "id": "read", "type": "FUNCTION", "label": "What's there to read",
+      "config": { "function_name": "knowhow_read_source", "input_mapping": {
+        "website": { "type": "expression", "value": "sources.website", "optional": true },
+        "drive_folders": { "type": "expression", "value": "sources.drive_folders", "optional": true },
+        "note": { "type": "expression", "value": "sources.note", "optional": true } } } },
+    { "id": "anything", "type": "DECISION", "label": "Anything to read?",
+      "config": { "rules": [ { "condition": "read.nothing == `true`", "next_node_id": "owners" } ] } },
+    { "id": "reader", "type": "AGENT", "label": "Read it and propose",
+      "config": { "agent_name": "knowhow_reader", "input_mapping": {
+        "context": { "type": "expression", "value": "read.context" } } } },
+    { "id": "keep", "type": "FUNCTION", "label": "Keep the proposals",
+      "config": { "function_name": "knowhow_reader_save", "input_mapping": {
+        "result": { "type": "expression", "value": "reader" },
+        "source_ids": { "type": "expression", "value": "read.source_ids", "optional": true } } } },
+    { "id": "owners", "type": "FORM", "label": "Who knows what?",
+      "config": { "input_schema": {
+        "type": "object",
+        "properties": {
+          "topics": { "type": "array", "title": "Topics", "items": { "type": "object", "properties": {
+            "name": { "type": "string", "maxLength": 200 }, "proposed_name": { "type": "string" },
+            "owner_member_id": { "type": "string" }, "owner_name": { "type": "string" },
+            "backup_member_id": { "type": "string" }, "backup_name": { "type": "string" },
+            "check_days": { "type": "integer" },
+            "audience_default": { "type": "string", "enum": ["team", "restricted", "customers", "public"] },
+            "restricted_role": { "type": "string" }, "sensitive": { "type": "boolean" },
+            "keep": { "type": "boolean" }, "merge_into": { "type": "string" } } } }
+        }
+      } } },
+    { "id": "apply", "type": "FUNCTION", "label": "Make the topics",
+      "config": { "function_name": "knowhow_setup_apply", "input_mapping": {
+        "topics": { "type": "expression", "value": "owners.topics", "optional": true } } } },
+    { "id": "places", "type": "FORM", "label": "Where do people ask?",
+      "config": { "input_schema": {
+        "type": "object",
+        "properties": {
+          "teams": { "type": "boolean", "title": "Teams" },
+          "slack_channels": { "type": "array", "title": "Slack channels to watch", "items": { "type": "object", "properties": {
+            "id": { "type": "string" }, "name": { "type": "string" } } } },
+          "mailbox": { "type": "boolean", "title": "The Lemma's mailbox, for customers" },
+          "web_chat": { "type": "boolean", "title": "Web chat, for customers" }
+        }
+      } } },
+    { "id": "audiences", "type": "FORM", "label": "Who may see what?",
+      "config": { "input_schema": {
+        "type": "object",
+        "properties": {
+          "customers": { "type": "boolean", "title": "Customers" },
+          "public": { "type": "boolean", "title": "The public" },
+          "approver_rule": { "type": "string", "enum": ["owner", "member"], "title": "Who approves an answer for customers" },
+          "approver_member_id": { "type": "string" },
+          "timezone": { "type": "string" }
+        }
+      } } },
+    { "id": "save", "type": "FUNCTION", "label": "Keep the set-up",
+      "config": { "function_name": "knowhow_setup_save", "input_mapping": {
+        "places": { "type": "expression", "value": "places", "optional": true },
+        "audiences": { "type": "expression", "value": "audiences", "optional": true },
+        "approver_rule": { "type": "expression", "value": "audiences.approver_rule", "optional": true },
+        "approver_member_id": { "type": "expression", "value": "audiences.approver_member_id", "optional": true },
+        "timezone": { "type": "expression", "value": "audiences.timezone", "optional": true },
+        "sources_note": { "type": "expression", "value": "sources.note", "optional": true },
+        "done": { "type": "literal", "value": true },
+        "write_memory": { "type": "literal", "value": false } } } },
+    { "id": "memory", "type": "FUNCTION", "label": "Tell the Lemma's agents",
+      "config": { "function_name": "knowhow_memory", "input_mapping": {} } },
+    { "id": "sample", "type": "FUNCTION", "label": "Load the sample",
+      "config": { "function_name": "knowhow_sample_data", "input_mapping": {
+        "mode": { "type": "literal", "value": "load" } } } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [
+    { "id": "e1", "source": "sources", "target": "route" },
+    { "id": "e2", "source": "route", "target": "read", "label": "our sources (the default: listed first)" },
+    { "id": "e3", "source": "route", "target": "sample", "label": "the sample" },
+    { "id": "e4", "source": "read", "target": "anything" },
+    { "id": "e5", "source": "anything", "target": "reader", "label": "something to read (the default: listed first)" },
+    { "id": "e6", "source": "anything", "target": "owners", "label": "nothing new" },
+    { "id": "e7", "source": "reader", "target": "keep" },
+    { "id": "e8", "source": "keep", "target": "owners" },
+    { "id": "e9", "source": "owners", "target": "apply" },
+    { "id": "e10", "source": "apply", "target": "places" },
+    { "id": "e11", "source": "places", "target": "audiences" },
+    { "id": "e12", "source": "audiences", "target": "save" },
+    { "id": "e13", "source": "save", "target": "memory" },
+    { "id": "e14", "source": "memory", "target": "end" },
+    { "id": "e15", "source": "sample", "target": "end" }
+  ]
+}

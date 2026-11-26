@@ -1,0 +1,70 @@
+{
+  "name": "Know-how",
+  "line": "support",
+  "position": 14,
+  "job": "Your procedures, written once, answering questions and walking people through each step",
+  "intro": "Each answer and procedure is a page with an owner and a check date. Your Lemma answers from them in Teams, Slack, its mailbox and web chat, saying which page and who checked it when. A question it can't answer goes to the owner, and their reply becomes the answer.",
+  "does": [
+    "Every answer ends with one line: which page, and who checked it when. Past its check date, the team gets a warning and customers get nothing.",
+    "A question nobody's page answers goes to the topic's owner. Their reply comes back as a draft they save in one press, and the next person is answered.",
+    "Procedures are walked one step at a time in chat, and a question asked mid-walk becomes a proposed change to that step."
+  ],
+  "jobs": [
+    "SUPPORT",
+    "OPERATIONS",
+    "SALES"
+  ],
+  "accounts": [
+    {
+      "any": [
+        "Microsoft Teams",
+        "Slack"
+      ],
+      "why": "Your Lemma's own Teams or Slack connection: people ask where they already work, and owners are asked there. Know-how listens in the Slack channels you choose."
+    },
+    {
+      "any": [
+        "Google Drive"
+      ],
+      "why": "Reads the Drive folders you pick, so first pages are drafted from them, and reads them again each week.",
+      "optional": true
+    }
+  ],
+  "setup": [
+    "Once for the team: upload your handbooks, add your website or Drive folders, and the Lemma proposes topics and first pages from them.",
+    "Say who owns each topic, which ones are sensitive or for a restricted group, and whether customers may read answers.",
+    "Or look around with a sample Wednesday at a made-up lighting company: twenty pages, 48 questions, a playbook."
+  ],
+  "today": [
+    {
+      "verb": "answer",
+      "line": "A question in your topic that no page answers yet"
+    },
+    {
+      "verb": "decide",
+      "line": "Save the answer drafted from your reply, or a proposed change"
+    },
+    {
+      "verb": "do",
+      "line": "Your pages past their check date, and procedures to walk"
+    }
+  ],
+  "pictures": [
+    {
+      "shot": "know-how",
+      "caption": "Every question, and what answered it"
+    },
+    {
+      "shot": "know-how-question",
+      "caption": "A miss, with a draft from the owner's reply"
+    },
+    {
+      "shot": "know-how-library",
+      "caption": "Every page with its owner and next check"
+    },
+    {
+      "shot": "know-how-playbook",
+      "caption": "A procedure, and where people stop"
+    }
+  ]
+}

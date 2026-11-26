@@ -30,6 +30,7 @@ with a demo you can try in a browser with no account.
 | **Release notes** | Notes written from what merged, and word to everyone who asked for it | [`release-notes/`](release-notes/) |
 | **Dependency updates** | Dependency updates batched, checked and opened as one pull request | [`dependency-updates/`](dependency-updates/) |
 | **Coding agent** | An issue turned into a pull request by an agent, and questions about your code answered | [`coding-agent/`](coding-agent/) |
+| **Know-how** | Your procedures, written once, answering questions and walking people through each step | [`know-how/`](know-how/) |
 
 Each line is the plugin's own, from its `listing.json`. Its README says how
 it works, what was measured and what was not verified.

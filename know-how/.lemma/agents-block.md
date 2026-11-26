@@ -1,0 +1,1 @@
+- Know-how: team answers and procedures. Answer via `knowhow_answer`, say its source; walk steps: `knowhow_walk`. `/memory/plugins/know-how.md`

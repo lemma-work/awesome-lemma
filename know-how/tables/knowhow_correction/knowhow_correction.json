@@ -1,0 +1,21 @@
+{
+  // A person overriding the Lemma: a topic changed, a repeat split, "covered
+  // by" another page, a may-disagree dismissed. Sent with each Decisions call
+  // as examples, as Tasks does. Team-wide, no RLS.
+  "name": "knowhow_correction",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "what", "type": "ENUM", "required": true, "options": ["topic", "repeat", "covered_by", "may_disagree", "answer"] },
+    { "name": "from_value", "type": "TEXT", "max_length": 300 },
+    { "name": "to_value", "type": "TEXT", "max_length": 300 },
+    // The words the Lemma read, so the example stands on its own.
+    { "name": "evidence", "type": "TEXT", "max_length": 2000 },
+    { "name": "question_id", "type": "UUID" },
+    { "name": "article_id", "type": "UUID" },
+    { "name": "by", "type": "USER" },
+    { "name": "at", "type": "DATETIME" }
+  ],
+  "config": {}
+}

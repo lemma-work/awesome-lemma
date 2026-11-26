@@ -1,0 +1,19 @@
+{
+  // A message in a Slack channel (lemma-platform#1245's channel trigger).
+  // One knowhow-slack-<id> schedule per person who turned watched channels
+  // on, made by the app; knowhow_on_slack keeps only the watched channels.
+  "name": "knowhow-slack",
+  "description": "A message in a watched Slack channel: a question is logged; a reply that answers a waiting question becomes a draft.",
+  "max_concurrent_runs": 4,
+  "start": { "type": "EVENT", "config": {
+    "connector_id": "slack",
+    "connector_trigger_id": "slack:http:slack_channel_message"
+  } },
+  "nodes": [
+    { "id": "read", "type": "FUNCTION", "label": "A question, or an answer?",
+      "config": { "function_name": "knowhow_on_slack", "input_mapping": {
+        "payload": { "type": "expression", "value": "start.payload" } } } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [ { "id": "e1", "source": "read", "target": "end" } ]
+}

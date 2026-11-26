@@ -1,0 +1,8 @@
+{
+  // Know-how carries no other plugin: one install into an empty Lemma brings
+  // everything it needs. It carries the shared `needs_you` list and adds the
+  // shared `article` table, which Support inbox and Help center will read.
+  // Read by _build/assemble.py.
+  "name": "know-how",
+  "carries": []
+}

@@ -1,0 +1,25 @@
+{
+  "name": "knowhow_writer",
+  "description": "Drafts one Know-how page (or the text for one step) from an owner's reply or a found passage, in the askers' words. Never adds a step, number or fact the reply or passage doesn't give; says what's missing instead.",
+  "instruction": { "$file": "instruction.md" },
+  "toolsets": [],
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "context": { "type": "string", "description": "From knowhow_draft: the questions in the askers' words, the owner's reply or a found passage, the topic's other page titles, and for a step change the page's current text." }
+    },
+    "required": ["context"]
+  },
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "title": { "type": "string", "description": "Short, as someone would look for it." },
+      "kind": { "type": "string", "enum": ["answer", "procedure", "policy"] },
+      "asks": { "type": "array", "items": { "type": "string" }, "description": "The ways people asked it, cleaned up a little, plus one or two more." },
+      "body_md": { "type": "string", "description": "The page in Markdown (steps as `### n. Title`), or for a step change only the text to add to that step." },
+      "missing": { "type": "array", "items": { "type": "string" }, "description": "What the reply didn't say that the askers need, as short questions for the owner." }
+    },
+    "required": ["title", "kind", "body_md", "missing"]
+  },
+  "permissions": { "grants": [] }
+}

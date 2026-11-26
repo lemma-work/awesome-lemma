@@ -1,0 +1,50 @@
+{
+  "name": "knowhow_reader",
+  "description": "Reads a team's documents and website and proposes its know-how: topics, a first answer page for each clear question, the procedures it found, and files it couldn't read. Never invents a fact; every line of a draft comes from a quoted passage.",
+  "instruction": { "$file": "instruction.md" },
+  "toolsets": ["POD", "WEB_SEARCH"],
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "context": { "type": "string", "description": "From knowhow_read_source: the files' text (each headed with its path), the website to read, and the team's topics so far." }
+    },
+    "required": ["context"]
+  },
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "topics": { "type": "array", "description": "Areas of know-how, in the team's own words (\"Drivers and wiring\"). Five to ten for a small company.", "items": { "type": "object", "properties": {
+        "name": { "type": "string" },
+        "why": { "type": "string", "description": "One line: what it covers, from the documents." },
+        "owner": { "type": "string", "description": "A person a document names as owning it, or empty." },
+        "hr": { "type": "boolean", "description": "Leave, pay, health or other personal matters." }
+      }, "required": ["name", "why"] } },
+      "drafts": { "type": "array", "description": "One answer or policy page per clear question the documents answer.", "items": { "type": "object", "properties": {
+        "kind": { "type": "string", "enum": ["answer", "policy"] },
+        "title": { "type": "string", "description": "Short, as a person would look for it: \"Lead times\", \"Warranty\"." },
+        "topic": { "type": "string", "description": "One of your topics' names." },
+        "asks": { "type": "array", "items": { "type": "string" }, "description": "Two or three ways people would ask it." },
+        "body_md": { "type": "string", "description": "The answer in Markdown, short, every fact from the source." },
+        "source_path": { "type": "string", "description": "The file's path (or the web page's address) it came from." },
+        "page": { "type": "integer", "description": "The page number, when there is one." },
+        "quote": { "type": "string", "description": "The passage it rests on, word for word." }
+      }, "required": ["title", "topic", "body_md", "source_path", "quote"] } },
+      "procedures": { "type": "array", "description": "Numbered steps found in a document, as a procedure page.", "items": { "type": "object", "properties": {
+        "title": { "type": "string" },
+        "topic": { "type": "string" },
+        "asks": { "type": "array", "items": { "type": "string" } },
+        "body_md": { "type": "string", "description": "Each step as `### 1. Title`, an optional first line `Who: <role>`, then the step's text." },
+        "source_path": { "type": "string" },
+        "page": { "type": "integer" },
+        "quote": { "type": "string" }
+      }, "required": ["title", "topic", "body_md", "source_path"] } },
+      "unreadable": { "type": "array", "items": { "type": "object", "properties": {
+        "name": { "type": "string" }, "why": { "type": "string" } }, "required": ["name", "why"] } }
+    },
+    "required": ["topics", "drafts", "procedures", "unreadable"]
+  },
+  "permissions": { "grants": [
+    { "resource_type": "folder", "resource_name": "/know-how", "permission_ids": ["folder.read"] },
+    { "resource_type": "datastore_table", "resource_name": "knowhow_topic", "permission_ids": ["datastore.table.read", "datastore.record.read"] }
+  ]}
+}

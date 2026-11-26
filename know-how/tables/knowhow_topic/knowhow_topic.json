@@ -1,0 +1,28 @@
+{
+  // One area of know-how ("Drivers and wiring"), with its folder, owner,
+  // backup and check interval. Team-wide, no RLS.
+  "name": "knowhow_topic",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "name", "type": "TEXT", "required": true, "max_length": 200 },
+    { "name": "slug", "type": "TEXT", "required": true, "max_length": 80, "unique": true },
+    // /know-how/<slug>/
+    { "name": "folder_path", "type": "TEXT", "required": true, "max_length": 300 },
+    { "name": "owner_member_id", "type": "USER" },
+    { "name": "owner_name", "type": "TEXT", "max_length": 200 },
+    { "name": "backup_member_id", "type": "USER" },
+    { "name": "backup_name", "type": "TEXT", "max_length": 200 },
+    { "name": "check_days", "type": "INTEGER", "default": 90 },
+    // Who sees a new page here by default.
+    { "name": "audience_default", "type": "ENUM", "default": "team", "options": ["team", "restricted", "customers", "public"] },
+    // For a restricted topic: the Lemma role whose members may read its folder.
+    { "name": "restricted_role", "type": "TEXT", "max_length": 100 },
+    // Leave, pay, health: who asked is never kept or repeated.
+    { "name": "sensitive", "type": "BOOLEAN", "default": false },
+    { "name": "position", "type": "INTEGER", "default": 0 },
+    { "name": "sample", "type": "BOOLEAN", "default": false }
+  ],
+  "config": {}
+}

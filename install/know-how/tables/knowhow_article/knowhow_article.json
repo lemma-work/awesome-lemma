@@ -1,0 +1,68 @@
+{
+  // One page: an answer, a procedure, a policy, or a table page made from a
+  // spreadsheet. The page itself is a Markdown file at `path`, the only
+  // source of truth; this row is its mark (owner, check date, state), found
+  // by path, since a file takes no plugin metadata. Team-wide, no RLS.
+  "name": "knowhow_article",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    // sheet: a Markdown table page made from a CSV or xlsx file beside it,
+    // marked "made from <file>" and made again when the file changes.
+    { "name": "kind", "type": "ENUM", "required": true, "default": "answer", "options": ["answer", "procedure", "policy", "sheet"] },
+    { "name": "title", "type": "TEXT", "required": true, "max_length": 300 },
+    // Other ways people put it: ["what's the lead time on profiles"].
+    { "name": "asks", "type": "JSON" },
+    { "name": "path", "type": "TEXT", "required": true, "max_length": 500 },
+    { "name": "topic_id", "type": "UUID" },
+    { "name": "owner_member_id", "type": "USER" },
+    { "name": "owner_name", "type": "TEXT", "max_length": 200 },
+    { "name": "audience", "type": "ENUM", "default": "team", "options": ["team", "restricted", "customers", "public"] },
+    // draft: not answered from yet. live: in date. due: past its check date
+    // (the team still gets it, with a warning; customers never do).
+    // may_disagree: its file or source changed and may contradict it.
+    { "name": "state", "type": "ENUM", "required": true, "default": "draft", "options": ["draft", "live", "due", "may_disagree", "retired"] },
+    { "name": "checked_at", "type": "DATETIME" },
+    { "name": "checked_by", "type": "USER" },
+    { "name": "checked_by_name", "type": "TEXT", "max_length": 200 },
+    // The check date: on this day it is past its check date, and a customer
+    // answer leaves the customer answers at its start.
+    { "name": "due_on", "type": "DATE" },
+    // The text as last checked (files keep no history), its hash, and the
+    // hash last seen by the nightly check (so an unchanged file isn't read
+    // twice).
+    { "name": "checked_hash", "type": "TEXT", "max_length": 64 },
+    { "name": "checked_text", "type": "TEXT", "max_length": 20000 },
+    { "name": "seen_hash", "type": "TEXT", "max_length": 64 },
+    // A procedure's steps as parsed from its `### n. Title` headings:
+    // [{n, anchor, title, who, body, reached, asked}]; re-read on every change.
+    { "name": "steps", "type": "JSON" },
+    { "name": "source", "type": "ENUM", "default": "manual",
+      "options": ["file", "drive", "website", "teams_file", "thread", "reply", "manual", "sample"] },
+    { "name": "source_id", "type": "TEXT", "max_length": 400 },
+    // The file it was drafted from (a datasheet, a handbook), and its hash
+    // when last checked: a changed source may disagree with the page.
+    { "name": "source_path", "type": "TEXT", "max_length": 500 },
+    { "name": "source_hash", "type": "TEXT", "max_length": 64 },
+    // Where it came from, in words: the reply or thread it was drafted from.
+    { "name": "quote", "type": "TEXT", "max_length": 4000 },
+    { "name": "quote_who", "type": "TEXT", "max_length": 200 },
+    { "name": "quote_where", "type": "TEXT", "max_length": 200 },
+    { "name": "uses_30d", "type": "INTEGER", "default": 0 },
+    { "name": "misses_30d", "type": "INTEGER", "default": 0 },
+    { "name": "walks_30d", "type": "INTEGER", "default": 0 },
+    { "name": "finished_30d", "type": "INTEGER", "default": 0 },
+    { "name": "last_used_at", "type": "DATETIME" },
+    // Approved for customers by (name) and when; published to `article` when.
+    { "name": "approved_at", "type": "DATETIME" },
+    { "name": "approved_by_name", "type": "TEXT", "max_length": 200 },
+    { "name": "published_at", "type": "DATETIME" },
+    // The shared `article` row's id while it is published.
+    { "name": "article_id", "type": "UUID" },
+    // What the writer couldn't find in the reply: shown as "[ask Priya]".
+    { "name": "missing", "type": "JSON" },
+    { "name": "sample", "type": "BOOLEAN", "default": false }
+  ],
+  "config": {}
+}

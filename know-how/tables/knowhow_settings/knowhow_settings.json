@@ -1,0 +1,42 @@
+{
+  // Know-how's set-up: one row for the team, written by knowhow_setup_save
+  // (and set-up's other steps). Team-wide, no RLS.
+  "name": "knowhow_settings",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    // Where people ask: {teams: bool, slack_channels: [{id, name}], slack_team_id,
+    // mailbox: bool, web_chat: bool}.
+    { "name": "places", "type": "JSON" },
+    // Who may read beyond the team: {customers: bool, public: bool}.
+    { "name": "audiences", "type": "JSON" },
+    // Who approves an answer for customers: the topic's owner, or one member.
+    { "name": "approver_rule", "type": "ENUM", "default": "owner", "options": ["owner", "member"] },
+    { "name": "approver_member_id", "type": "USER" },
+    { "name": "default_check_days", "type": "INTEGER", "default": 90 },
+    // How far ahead an owner is warned before a customer answer leaves.
+    { "name": "customer_lead_days", "type": "INTEGER", "default": 14 },
+    // Whoever ran set-up: the sweep runs as them.
+    { "name": "sweep_member_id", "type": "USER" },
+    // What the app made as a person: {schedule name: id}, and table and
+    // function changes ({article_public: true, contact_functions: [...]}).
+    { "name": "schedules", "type": "JSON" },
+    { "name": "made", "type": "JSON" },
+    // Set-up's first form and the reader's proposals, kept between steps.
+    { "name": "sources_note", "type": "TEXT", "max_length": 2000 },
+    { "name": "proposals", "type": "JSON" },
+    { "name": "setup_run_id", "type": "TEXT", "max_length": 64 },
+    { "name": "setup_done_at", "type": "DATETIME" },
+    // The Lemma's time zone for "today" (check dates, the 00:15 check).
+    { "name": "timezone", "type": "TEXT", "max_length": 64 },
+    // Nothing is posted outside the Lemma while on (always on for the sample):
+    // what would have been sent is written down instead.
+    { "name": "quiet", "type": "BOOLEAN", "default": false },
+    { "name": "sample", "type": "BOOLEAN", "default": false },
+    // When knowhow_check last ran, and what it found, in words.
+    { "name": "checked_at", "type": "DATETIME" },
+    { "name": "check_note", "type": "TEXT", "max_length": 2000 }
+  ],
+  "config": {}
+}
