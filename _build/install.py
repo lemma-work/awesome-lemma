@@ -166,8 +166,17 @@ def main() -> int:
     for name, spec in (plan.get("variables") or {}).items() if isinstance(plan.get("variables"), dict) else []:
         if name not in variables and isinstance(spec, dict) and spec.get("default") is not None:
             variables[name] = spec["default"]
-    body = {"variables": variables, "confirm_destructive": False}
-    print(f"apply with variables {variables}")
+    # The same connector choices the "Add to your Lemma" page makes: where the
+    # organization has no installation of a connector and you may create one,
+    # create Lemma's own (`page_defaults` in the platform's plugin_install.py).
+    connectors = {
+        c["slug"]: {"create_installation": True}
+        for c in plan.get("connectors") or []
+        if c.get("auth_config_id") is None and c.get("can_create_installation")
+        and c.get("status") not in ("EXISTS", "CONFLICT")
+    }
+    body = {"variables": variables, "connectors": connectors, "confirm_destructive": False}
+    print(f"apply with variables {variables}" + (f", installing {sorted(connectors)}" if connectors else ""))
     call("POST", f"/pods/{args.pod}/bundle/imports/{import_id}/apply", auth, body)
     done = wait(args.pod, import_id, auth, {"COMPLETED", "FAILED", "ERROR", "PARTIALLY_APPLIED", "EXPIRED", "CANCELLED"})
     (out / f"{args.plugin}-{args.pod[:8]}-applied.json").write_text(json.dumps(done, indent=1))
