@@ -122,8 +122,8 @@
     "apps/incidents/incidents.json": "1986134279dc0142438f6d3c69f8587669677cdb511439539e499473ebc00d99",
     "apps/incidents/source/.gitignore": "004929f15e2f811a7dac2bbc448e9b633991e21e4d1d579ff4666915ddae1243",
     "apps/incidents/source/index.html": "9d98833ccc2b501ee8be27d36cd7f07689233913d72278ad46e87b2003e8f3b5",
-    "apps/incidents/source/package-lock.json": "fbe786bde4033460386c53206211a56e030fe5a9ad21de0609aae5f28dd7d6c6",
-    "apps/incidents/source/package.json": "87f39c7c30db0b73484e9c8fc828af326117e70dd68aaa6b851d5c6ba1a6d36e",
+    "apps/incidents/source/package-lock.json": "589851dac15dff20ea2b9e2c3e8cf89ad7c96b99216c667b93fa888f5dcb129d",
+    "apps/incidents/source/package.json": "66fe29935c1628628435e6ff3d5c9227085b89dc44b2d253f77b5e9e14dc4143",
     "apps/incidents/source/pnpm-workspace.yaml": "9c4e1837b7df3c50bd17368aa2f2fec6c514b34e03414574a056ee797c7137fd",
     "apps/incidents/source/src/App.tsx": "fc0ba74b057832fe748a7a1f7a25c69183d95981a279339265ebaf05abb25b56",
     "apps/incidents/source/src/Declare.tsx": "17a24307e2a85a12ceebaed70893cec7c1ed3a5e738f80875cc771a380659f05",
@@ -140,13 +140,13 @@
     "apps/incidents/source/src/vite-env.d.ts": "65996936fbb042915f7b74a200fcdde7e410f32a669b1ab9597cfaa4b0faddb5",
     "apps/incidents/source/src/wire.ts": "e49c42a0e7cd061b54fb164d8b61c11a2ba92c8f2700846e366e83abf69170ae",
     "apps/incidents/source/tsconfig.json": "062dcc7e2090e113eab412fed9afd1df973cc92be64c6a9f1caca9bfe42fbe57",
-    "apps/incidents/source/vendor/lemma-plugins-kit-0.1.0-8b4994dd.tgz": "2407b74238de12116628a44e0437f8d012f19607e474f51e45f64145cbc41cdf",
+    "apps/incidents/source/vendor/lemma-plugins-kit-0.1.0-eef82e10.tgz": "4c5a882252fcf32f235d5abfd2b31337cebbe1795e6338fa5221d8584adb542f",
     "apps/incidents/source/vendor/lemma-sdk-0.10.1.tgz": "fae311df7451ae288f82ffa1244ba3e312ea91bb629e174251df15ffbcded67b",
     "apps/incidents/source/vite.config.ts": "cf3f1fad214f15e74aae28d4af7cc7d4bd29fe6610d05be56a74a71250c3e357",
     "apps/tasks/source/.gitignore": "004929f15e2f811a7dac2bbc448e9b633991e21e4d1d579ff4666915ddae1243",
     "apps/tasks/source/index.html": "a1fe1d315a2f39c9969c1f8257838b30c8d7c05c3d3d3c9677fca7ba715e9122",
-    "apps/tasks/source/package-lock.json": "542fae1b272e1eb062ccc40f258c7f967d427da4e6dac83a6f5c210f197d7351",
-    "apps/tasks/source/package.json": "e9427cdb55cc93d6df2b106b352c99d47d8156eb9f331c1a3b7af31e64d526c9",
+    "apps/tasks/source/package-lock.json": "ce4a74e4707adfd830970c97a108fcaca6ecafaed7845297dbc1f83175fb4ac0",
+    "apps/tasks/source/package.json": "f56d56a1a2f2171b4b861e0a75efb6d03df92b9cc7af4f6d5478fbe8b43993fa",
     "apps/tasks/source/pnpm-workspace.yaml": "9c4e1837b7df3c50bd17368aa2f2fec6c514b34e03414574a056ee797c7137fd",
     "apps/tasks/source/src/App.tsx": "de42b566c64e243c91fd5720f8f2b8643ac01163d88644e859d515cb5470cd40",
     "apps/tasks/source/src/List.tsx": "fbb1cbc1948470fedcfc49dad3e552a0229a210442a1aec20d0b8ec3dc277fdd",
@@ -168,7 +168,7 @@
     "apps/tasks/source/src/types.ts": "612710a764f28f984dbc6e30b4dbf956a5e89c61107e2bb2ef3db8b28a091738",
     "apps/tasks/source/src/vite-env.d.ts": "65996936fbb042915f7b74a200fcdde7e410f32a669b1ab9597cfaa4b0faddb5",
     "apps/tasks/source/tsconfig.json": "062dcc7e2090e113eab412fed9afd1df973cc92be64c6a9f1caca9bfe42fbe57",
-    "apps/tasks/source/vendor/lemma-plugins-kit-0.1.0-8b4994dd.tgz": "2407b74238de12116628a44e0437f8d012f19607e474f51e45f64145cbc41cdf",
+    "apps/tasks/source/vendor/lemma-plugins-kit-0.1.0-eef82e10.tgz": "4c5a882252fcf32f235d5abfd2b31337cebbe1795e6338fa5221d8584adb542f",
     "apps/tasks/source/vendor/lemma-sdk-0.10.1.tgz": "fae311df7451ae288f82ffa1244ba3e312ea91bb629e174251df15ffbcded67b",
     "apps/tasks/source/vite.config.ts": "cf3f1fad214f15e74aae28d4af7cc7d4bd29fe6610d05be56a74a71250c3e357",
     "apps/tasks/tasks.json": "f76ea1383b4157a88d5fc2a40da11608f3f29e8bc9b8eb69eebd600c9fc7f530",
@@ -287,5 +287,5 @@
     "workflows/tasks-team-added/tasks-team-added.json": "8d438d9a726d68647ecc84fb068634c91820ac3556096094826814e109e83d4a",
     "workflows/tasks-team-handed/tasks-team-handed.json": "9873093a94aab2d092a05b020053405329aa76cb5bfd6a8ea09b88abd6946bcc"
   },
-  "hash": "50da689c76f2527b481155553e06c49c6dca557c2ffbd8ea7ce2a85cf93095a0"
+  "hash": "a0cd990db8f150b6f5fd646d561e48099e59da45c9493b1fa1df36f409472756"
 }

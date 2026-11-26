@@ -331,7 +331,22 @@ function decide(spec: Required<Pick<ConnectionSpec, "connector" | "slug" | "mode
   // A first connect adds the organization's install, for someone who may.
   const mayConnect = f.orgInstall !== "none" || f.canInstall !== false;
 
-  if (spec.mode === "shared") {
+  // The Lemma's own connector says how it runs; what the plugin asked for is
+  // only a default until one is declared. Connecting can declare it per member,
+  // and an admin can switch it, so trusting the plugin's word strands people
+  // on a "share it" step a working connection never needs.
+  const declaredMode = f.declared ? f.connector?.mode : undefined;
+  if (declaredMode === "APP") {
+    // The organization's GitHub App, on the repositories it was given: nobody's account.
+    if (f.connector?.status === "READY" && f.connector.can_use !== false) {
+      return { kind: "ready", as: "the Lemma's GitHub App", mine: false, canChange: f.canManage === true };
+    }
+    if (f.connector?.can_use === false) return ask("access");
+    return mayConnect ? { kind: "connect" } : ask("install_org");
+  }
+  const mode: ConnectMode = declaredMode === "PER_MEMBER" ? "per_member" : declaredMode === "SHARED" ? "shared" : spec.mode;
+
+  if (mode === "shared") {
     const shared = f.connector?.status === "READY" ? f.connector.shared_account : null;
     if (shared) {
       const mineShared = !!f.me && shared.owner_user_id === f.me;

@@ -44,8 +44,8 @@
     "apps/decks/decks.json": "251950ceb25a11888e42a73ef4f3ef0092cf12c6da7e4cd55d6e6496099018a2",
     "apps/decks/source/.gitignore": "004929f15e2f811a7dac2bbc448e9b633991e21e4d1d579ff4666915ddae1243",
     "apps/decks/source/index.html": "ac9f28fda6333256cf749eb1de3846df3a10c5b347d640dd683f5b9ec179ca81",
-    "apps/decks/source/package-lock.json": "d29b781904ce4f33717da7fac88dba213fa9712025cb3e46b7a01f0b65520ac6",
-    "apps/decks/source/package.json": "71511f7ef51d050f12ba5e758737f851feb601cf460cee61fcf4a5e400260ec9",
+    "apps/decks/source/package-lock.json": "af2c43b4b96690b569c628a0e9b5ed94a27a3901f24e7166e0a15a0ac2321da1",
+    "apps/decks/source/package.json": "f7ece7fa9a098ff149a472a049e450c24625ea1921dbf96df68cc15cd97c1058",
     "apps/decks/source/pnpm-workspace.yaml": "9c4e1837b7df3c50bd17368aa2f2fec6c514b34e03414574a056ee797c7137fd",
     "apps/decks/source/src/App.tsx": "21c686a5c1b0b076f1355908adbd6885c1fe6282c16403510ab22f6bb7c30f52",
     "apps/decks/source/src/Ask.tsx": "2b92758fae39897b44fc77df3e042cbace62a16d932f9418488fcb6c8612ad63",
@@ -70,7 +70,7 @@
     "apps/decks/source/src/types.ts": "b51fe27e0064de62200740923657910f1a51110714fec9a142bca5dbff91d3bc",
     "apps/decks/source/src/vite-env.d.ts": "65996936fbb042915f7b74a200fcdde7e410f32a669b1ab9597cfaa4b0faddb5",
     "apps/decks/source/tsconfig.json": "062dcc7e2090e113eab412fed9afd1df973cc92be64c6a9f1caca9bfe42fbe57",
-    "apps/decks/source/vendor/lemma-plugins-kit-0.1.0-8b4994dd.tgz": "2407b74238de12116628a44e0437f8d012f19607e474f51e45f64145cbc41cdf",
+    "apps/decks/source/vendor/lemma-plugins-kit-0.1.0-eef82e10.tgz": "4c5a882252fcf32f235d5abfd2b31337cebbe1795e6338fa5221d8584adb542f",
     "apps/decks/source/vendor/lemma-sdk-0.10.1.tgz": "fae311df7451ae288f82ffa1244ba3e312ea91bb629e174251df15ffbcded67b",
     "apps/decks/source/vite.config.ts": "cf3f1fad214f15e74aae28d4af7cc7d4bd29fe6610d05be56a74a71250c3e357",
     "files/brand/.folder.json": "381e7ea841fab68c4c46ef4557629b083bb76e9a4c29a13876e20a628fe6abd6",
@@ -112,5 +112,5 @@
     "workflows/decks-setup/decks-setup.json": "899a9507aef1d1a0232e64cc44482c484086ed144c9fd541c677abb266967ac8",
     "workflows/decks-work/decks-work.json": "eb1e54115177f734a74df9c7fb7291bb11811d04defc918e75d1b3eaa7922943"
   },
-  "hash": "e0c31dfc8a139adaeda241cf2b74e6578cd50c62aea35be88d1f0e39eff7ee41"
+  "hash": "b3fddc890c6c18a9de174236fd35692c4fac62c6810acb82bfd423cd17c23e74"
 }

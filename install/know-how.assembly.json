@@ -68,8 +68,8 @@
     "apps/know-how/know-how.json": "30546ed30e1b16ce388becfaba66cfa86e6b14dd0e2f942d3fd028b542438d4e",
     "apps/know-how/source/.gitignore": "004929f15e2f811a7dac2bbc448e9b633991e21e4d1d579ff4666915ddae1243",
     "apps/know-how/source/index.html": "6abc20e5a3a1a7e585b488f0eafeb1867cf9114d3374fb193f0ed163515adc86",
-    "apps/know-how/source/package-lock.json": "0684a05d6201294d66542c1ad103c5b91374c189eda737b90911f3687b5a7932",
-    "apps/know-how/source/package.json": "5ce87bad8ae30d9bcfc3b2319db2b47be069a4e0d988cd31476e16e0604af46d",
+    "apps/know-how/source/package-lock.json": "0967433f8f9974b37b2fd204df92c4e9dd382d91df71b296c6e478b9aab3eddb",
+    "apps/know-how/source/package.json": "99e4b0ae5f202b3ab9c977b375cf1464c855c877a7671fdd20542cf600b64496",
     "apps/know-how/source/pnpm-workspace.yaml": "9c4e1837b7df3c50bd17368aa2f2fec6c514b34e03414574a056ee797c7137fd",
     "apps/know-how/source/src/Answers.tsx": "2664065bfe1dfe728a372d2da430222947947b9f38f456d90d88f3dba85038d3",
     "apps/know-how/source/src/App.tsx": "988f19ce27bbcb47af9e0033b8fa643f0f843a56f1bb9bc0356e3a34ce27f4d8",
@@ -88,7 +88,7 @@
     "apps/know-how/source/src/vite-env.d.ts": "65996936fbb042915f7b74a200fcdde7e410f32a669b1ab9597cfaa4b0faddb5",
     "apps/know-how/source/src/wire.ts": "ab2df00e84b3fa344a44fc41286f3cac0e4e2b25fc3e6f6dd519ef00ee807350",
     "apps/know-how/source/tsconfig.json": "062dcc7e2090e113eab412fed9afd1df973cc92be64c6a9f1caca9bfe42fbe57",
-    "apps/know-how/source/vendor/lemma-plugins-kit-0.1.0-8b4994dd.tgz": "2407b74238de12116628a44e0437f8d012f19607e474f51e45f64145cbc41cdf",
+    "apps/know-how/source/vendor/lemma-plugins-kit-0.1.0-eef82e10.tgz": "4c5a882252fcf32f235d5abfd2b31337cebbe1795e6338fa5221d8584adb542f",
     "apps/know-how/source/vendor/lemma-sdk-0.10.1.tgz": "fae311df7451ae288f82ffa1244ba3e312ea91bb629e174251df15ffbcded67b",
     "apps/know-how/source/vite.config.ts": "cf3f1fad214f15e74aae28d4af7cc7d4bd29fe6610d05be56a74a71250c3e357",
     "connectors/googledrive/googledrive.json": "c4afe91ab11bc93ffd5ef9c982df9f1e1c9e863fd067d4f1445e412be123e54b",
@@ -165,5 +165,5 @@
     "workflows/knowhow-slack/knowhow-slack.json": "b3faf5073fa48c5a8a74891cc45d8c59ef070192183d70671ca1a2e14dec7fc8",
     "workflows/knowhow-sweep/knowhow-sweep.json": "1758263dfba52ebd0e11dd086dfdc187f98dc7d398afd816e4cd7e1c8cffaab2"
   },
-  "hash": "42c8125e4a1c53fa1390f8a9658ee0cb6f9f7389121c8a2cff74e5057f8e46b2"
+  "hash": "3303c1c328ec129a7d2a66b3180d6bcd6000b290ac18ef9b732ed4d60d891f4a"
 }

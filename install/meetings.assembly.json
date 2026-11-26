@@ -62,8 +62,8 @@
     "apps/meetings/meetings.json": "fb9e019a11b18a0cde82b97080697a791d601ba0773676ab5b30094d1e2a2e5c",
     "apps/meetings/source/.gitignore": "004929f15e2f811a7dac2bbc448e9b633991e21e4d1d579ff4666915ddae1243",
     "apps/meetings/source/index.html": "3fe439816bf4fc63d5ec805ce6ba5058bd66fd84a338dfea959fc5d83ecd13d1",
-    "apps/meetings/source/package-lock.json": "47751340f262b55a5caaf986b8e56fa2a2f064c9cab89c0d57fbe0b3daf053db",
-    "apps/meetings/source/package.json": "cd5406b3786b9d544f92a5d0b320653ebac1489d2382641e3e1fba78e5fc2e62",
+    "apps/meetings/source/package-lock.json": "39bfd77221a4540008f237cb9c0bf8b4359ba311dcf0ea33c294ebfcebdbf3c8",
+    "apps/meetings/source/package.json": "1b3aa7f7601471950e810e1d0a8faedb7351893bff648e5c0a4d2414860816d7",
     "apps/meetings/source/pnpm-workspace.yaml": "9c4e1837b7df3c50bd17368aa2f2fec6c514b34e03414574a056ee797c7137fd",
     "apps/meetings/source/src/App.tsx": "a0cdd6b7c87917767b3f83a731a70413e93946d60b101652a338757e27c0145d",
     "apps/meetings/source/src/MeetingPage.tsx": "398d344d0cdcb58342a9061895d7d5870c6b940659317b16ed85a73a72954f04",
@@ -81,7 +81,7 @@
     "apps/meetings/source/src/types.ts": "4b4d9b840cb5028892f914f6efe68b88caccf5ea148dc6328345273c5887d82b",
     "apps/meetings/source/src/vite-env.d.ts": "65996936fbb042915f7b74a200fcdde7e410f32a669b1ab9597cfaa4b0faddb5",
     "apps/meetings/source/tsconfig.json": "062dcc7e2090e113eab412fed9afd1df973cc92be64c6a9f1caca9bfe42fbe57",
-    "apps/meetings/source/vendor/lemma-plugins-kit-0.1.0-8b4994dd.tgz": "2407b74238de12116628a44e0437f8d012f19607e474f51e45f64145cbc41cdf",
+    "apps/meetings/source/vendor/lemma-plugins-kit-0.1.0-eef82e10.tgz": "4c5a882252fcf32f235d5abfd2b31337cebbe1795e6338fa5221d8584adb542f",
     "apps/meetings/source/vendor/lemma-sdk-0.10.1.tgz": "fae311df7451ae288f82ffa1244ba3e312ea91bb629e174251df15ffbcded67b",
     "apps/meetings/source/vite.config.ts": "cf3f1fad214f15e74aae28d4af7cc7d4bd29fe6610d05be56a74a71250c3e357",
     "connectors/google_calendar/google_calendar.json": "35c990ea90f3fdd5b1d12162cc367f79c49ce0a5ca73bbb3441b8bd5b8191b90",
@@ -140,5 +140,5 @@
     "workflows/meetings-setup/meetings-setup.json": "e8e5ae72de531b8e2313a9f8f11a2c350c5fa846ee25e5d4ae4816ccf8c5c39d",
     "workflows/meetings-sweep/meetings-sweep.json": "5db3cb5fd958a3518db4461a6d5293ce7180246c03aa0f81fcaf38f5ed0786fc"
   },
-  "hash": "526663f7766c5b2ad0493c590acb2a8dfa01d4df5be44ea81abb530de1b417f7"
+  "hash": "703b05d94820880085cf35e9d514d982c912c1c1f070ac9fa4de19d5ab68e03f"
 }

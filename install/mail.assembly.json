@@ -94,8 +94,8 @@
     "apps/inbox/inbox.json": "b8ba8e51ad2eaadc7e68f5e49cb4be2bd57c7258b2e62e2ff4ec7e8e19310152",
     "apps/inbox/source/.gitignore": "004929f15e2f811a7dac2bbc448e9b633991e21e4d1d579ff4666915ddae1243",
     "apps/inbox/source/index.html": "ef39d8ddba5a8398aba3054c5b0f4fa5fa9235f58b80f38aae8a4507aab88bf8",
-    "apps/inbox/source/package-lock.json": "84b34206ab9c827f6bcbff44ff0f636fd0a19c15d72fb427c85fb8366a31994f",
-    "apps/inbox/source/package.json": "77782fd742d469de0c38b44bd0ff9a83e4bb052ff7e652b85c433d2645f01a6d",
+    "apps/inbox/source/package-lock.json": "ddacc307e4ccc39d1f9610c2848cbac41c0a73bf8a5d7c20c02c3c3301ebfe38",
+    "apps/inbox/source/package.json": "38121bc187fcd8adf2af261c49389fb19fb378bcb10eca80901b56d015c9c825",
     "apps/inbox/source/pnpm-workspace.yaml": "9c4e1837b7df3c50bd17368aa2f2fec6c514b34e03414574a056ee797c7137fd",
     "apps/inbox/source/src/App.tsx": "ed889a9e4b144576fbadc4ec576e928695e6ed9d908ed3784617ecdf4ea952e0",
     "apps/inbox/source/src/List.tsx": "011c9f5e1b13561ad2f083d33a506a97b5aa57fdae5eaf234a3b996021a15d36",
@@ -115,7 +115,7 @@
     "apps/inbox/source/src/types.ts": "4438a4f72d2bfc3068db42954fa13688341693095f175204c5f538850a2d6a5a",
     "apps/inbox/source/src/vite-env.d.ts": "65996936fbb042915f7b74a200fcdde7e410f32a669b1ab9597cfaa4b0faddb5",
     "apps/inbox/source/tsconfig.json": "062dcc7e2090e113eab412fed9afd1df973cc92be64c6a9f1caca9bfe42fbe57",
-    "apps/inbox/source/vendor/lemma-plugins-kit-0.1.0-8b4994dd.tgz": "2407b74238de12116628a44e0437f8d012f19607e474f51e45f64145cbc41cdf",
+    "apps/inbox/source/vendor/lemma-plugins-kit-0.1.0-eef82e10.tgz": "4c5a882252fcf32f235d5abfd2b31337cebbe1795e6338fa5221d8584adb542f",
     "apps/inbox/source/vendor/lemma-sdk-0.10.1.tgz": "fae311df7451ae288f82ffa1244ba3e312ea91bb629e174251df15ffbcded67b",
     "apps/inbox/source/vite.config.ts": "cf3f1fad214f15e74aae28d4af7cc7d4bd29fe6610d05be56a74a71250c3e357",
     "connectors/gmail/gmail.json": "edf4cae68e91a4996cb9a952b1e3156f94e8a2bde0ba2302268edcbeaefb172b",
@@ -217,5 +217,5 @@
     "workflows/mail-sweep/mail-sweep.json": "bfc934a63df80368bc7f435a8c28f25b367d4e0afbfce6107c9880a88f9d7215",
     "workflows/mail-write-draft/mail-write-draft.json": "202007728133b746914deed3017fb7c1153a80c01f76909ef544ff95747826cc"
   },
-  "hash": "264519081a7081ce152ec44e4a00c92a0cae57fb69dce9fe2740f9303d6ca9e0"
+  "hash": "5bb992f4883ac222c9ab7324b9215c3eae9b2a218782c80ce1047cf70abf0236"
 }

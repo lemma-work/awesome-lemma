@@ -35,8 +35,8 @@
     "apps/dependencies/dependencies.json": "1f8e133298e5f1f2a01167924b99d5f9c2ce1495d21c319d630ffefc335fc5fe",
     "apps/dependencies/source/.gitignore": "004929f15e2f811a7dac2bbc448e9b633991e21e4d1d579ff4666915ddae1243",
     "apps/dependencies/source/index.html": "10d7ad5fda0a3a851079ef1dc296f373007a9d886d23fec060df648a609836bf",
-    "apps/dependencies/source/package-lock.json": "e8d4aa516b832695ac67bd9309b9a3882ba066e9382e69edc60b56ed3ad37951",
-    "apps/dependencies/source/package.json": "50d1db50ebc748e3d4ac3af5e9d72d1a31f8c7d90440023c73662aa5c51f9bf0",
+    "apps/dependencies/source/package-lock.json": "ceea9953c6b3b8623d8631c00f4ca15d256cf545887ee950b265d97a3636c17b",
+    "apps/dependencies/source/package.json": "56bedbd5f56a76bc33e9ecaac1499e7d101fc298036c57bcfb29d632d28fa5e5",
     "apps/dependencies/source/pnpm-workspace.yaml": "9c4e1837b7df3c50bd17368aa2f2fec6c514b34e03414574a056ee797c7137fd",
     "apps/dependencies/source/src/App.tsx": "97e6e002d40a879771814cdf21b0d12872f278b10c79d36ed1fb07cea8273d5e",
     "apps/dependencies/source/src/Batch.tsx": "a352ea6465a9b9ccfbe129d610be772c6faa0aee5e50b01217ea40a508f92501",
@@ -53,7 +53,7 @@
     "apps/dependencies/source/src/types.ts": "ada40cab0dcbf8a6798d1a76d7a9fb7ffaa68e0982248ca8b8a5b64260d8872e",
     "apps/dependencies/source/src/vite-env.d.ts": "65996936fbb042915f7b74a200fcdde7e410f32a669b1ab9597cfaa4b0faddb5",
     "apps/dependencies/source/tsconfig.json": "062dcc7e2090e113eab412fed9afd1df973cc92be64c6a9f1caca9bfe42fbe57",
-    "apps/dependencies/source/vendor/lemma-plugins-kit-0.1.0-8b4994dd.tgz": "2407b74238de12116628a44e0437f8d012f19607e474f51e45f64145cbc41cdf",
+    "apps/dependencies/source/vendor/lemma-plugins-kit-0.1.0-eef82e10.tgz": "4c5a882252fcf32f235d5abfd2b31337cebbe1795e6338fa5221d8584adb542f",
     "apps/dependencies/source/vendor/lemma-sdk-0.10.1.tgz": "fae311df7451ae288f82ffa1244ba3e312ea91bb629e174251df15ffbcded67b",
     "apps/dependencies/source/vite.config.ts": "cf3f1fad214f15e74aae28d4af7cc7d4bd29fe6610d05be56a74a71250c3e357",
     "connectors/github/github.json": "3b4abf2e1fad480167cc5e1b4bd7bcafef7698c7f94a68de6c26611520892453",
@@ -85,5 +85,5 @@
     "workflows/deps-on-pull-request/deps-on-pull-request.json": "6811edc165f2c8e6a14bb9eb81e086c5145b26759df47d494d8622d2a1e16826",
     "workflows/deps-on-review/deps-on-review.json": "01875346a632f7ddb776ab0a13563ec43023790fdc147a60454767e3caf2f95b"
   },
-  "hash": "1be95429f3b763cd8ddca5d852dd6b823565d4b6a8e096f0390193c404f5139f"
+  "hash": "216ba63866d9d827ff4aeaee871ec51ed129cbe1cb8c484c0d82f89db47b9259"
 }
