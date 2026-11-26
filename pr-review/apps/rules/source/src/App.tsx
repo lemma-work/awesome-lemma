@@ -8,7 +8,7 @@ import { useEffect, useMemo, useState } from "react";
 import { BookOpen, Check, FilePen, ListChecks, Plus, RefreshCw, Sparkles, X } from "lucide-react";
 import {
   Button, DEMO, DataProvider, Empty, Evidence, Field, Header, Pill, SearchField, Segmented, Sheet, Skeleton, canOpenApps, client, create, cx,
-  go, items, openApp, plural, runFunction, update, usePath, useData, useRows, useToast, whoAmI, type Loaders, type Tone,
+  errorText, go, items, openApp, plural, runFunction, update, usePath, useData, useRows, useToast, whoAmI, type Loaders, type Tone,
 } from "@lemma-plugins/kit";
 import type { FindingLite, Repository, RoundLite, Rule, RuleState, Severity } from "./types";
 
@@ -127,7 +127,7 @@ function Rules() {
       await update("prr_rule", rule.id, { state, decided_by: me?.id || null, decided_at: new Date().toISOString() });
       toast(done);
     } catch (e) {
-      toast(`Couldn't change it: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't change it: ${errorText(e)}`);
     }
   };
 
@@ -138,7 +138,7 @@ function Rules() {
       toast(out?.message || "Reading the rule files again. New and changed rules come in as proposed.");
       void reload();
     } catch (e) {
-      toast(`Couldn't start: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't start: ${errorText(e)}`);
     } finally {
       setBusy(null);
     }
@@ -150,7 +150,7 @@ function Rules() {
       const out = await runFunction<{ message?: string; url?: string }>(WRITE_BACK, {});
       toast(out?.message || "Writing REVIEW.md: a pull request with the active rules opens on each repository.");
     } catch (e) {
-      toast(`Couldn't start: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't start: ${errorText(e)}`);
     } finally {
       setBusy(null);
     }
@@ -334,7 +334,7 @@ function RuleSheet({ rule, rec, repos, who, onClose, onSet }: {
       toast("Saved. The next round checks it as written.");
       onClose();
     } catch (e) {
-      toast(`Couldn't save: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't save: ${errorText(e)}`);
     } finally {
       setBusy(false);
     }
@@ -412,7 +412,7 @@ function AddRule({ open, onClose, repos, me }: { open: boolean; onClose: () => v
       setScope("");
       onClose();
     } catch (e) {
-      toast(`Couldn't add it: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't add it: ${errorText(e)}`);
     } finally {
       setBusy(false);
     }

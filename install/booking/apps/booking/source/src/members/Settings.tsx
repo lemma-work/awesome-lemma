@@ -4,11 +4,11 @@
 
 import { useEffect, useState } from "react";
 import { ArrowLeft, CalendarDays, Clock, Link2, Power, Video } from "lucide-react";
-import { Button, Card, Header, Switch, go, openApp, runFunction, update, useToast } from "@lemma-plugins/kit";
+import { Button, Card, Connect, Header, Switch, go, openApp, runFunction, update, useToast, errorText } from "@lemma-plugins/kit";
 import { DAY_NAMES, length } from "../time";
 import { PROVIDER_LABEL, useBooking } from "./data";
 import { appOrigin, onSample, turnOff, turnOn } from "./turnOn";
-import { addressOf, useMailAccounts } from "./Setup";
+import { MAIL_PURPOSE, addressOf, useMailAccounts } from "./Setup";
 
 export function Settings() {
   const { settings, page, calendars, reload } = useBooking();
@@ -24,13 +24,16 @@ export function Settings() {
       video: settings.video || "none", chat: page.chat !== false, calendars: settings.calendars || [], event_calendar: settings.event_calendar,
     });
   }, [settings, page]);
+  // Read again once a mailbox is connected below.
+  const [again, setAgain] = useState(0);
+  const mail = useMailAccounts(again);
   if (!settings || !page) return null;
   const set = (k: string, value: unknown) => setV({ ...v, [k]: value });
   const days = (v.days as number[]) || [];
   const cals = (v.calendars as string[]) || [];
   const eventCal = calendars.find((c) => c.id === v.event_calendar);
   const videos = eventCal?.provider === "outlook" ? ["teams", "none"] : ["google_meet", "none"];
-  const mail = useMailAccounts();
+  const mailConnector = eventCal?.provider === "outlook" ? "outlook" : "gmail";
   const senders = (mail || []).filter((a) => (eventCal?.provider === "outlook" ? a.connector_id === "outlook" : a.connector_id === "gmail"));
   const sender = String(v.mail_account_id ?? settings?.mail_account_id ?? "");
   const held = onSample(settings, calendars);
@@ -48,7 +51,7 @@ export function Settings() {
         : slots.errors?.length ? `Saved, but ${slots.errors[0]}` : `Saved. ${slots.open} open times.`);
       await reload();
     } catch (e) {
-      toast(`Couldn't save: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't save: ${errorText(e)}`);
     } finally {
       setBusy("");
     }
@@ -158,10 +161,13 @@ export function Settings() {
                   <option value="">Don't email; the page tells them</option>
                 </select>
                 <span className="c-field__hint">
-                  {senders.length ? "Your own mailbox, through its connector." : `Connect ${eventCal?.provider === "outlook" ? "Outlook" : "Gmail"} in this Lemma to email them too.`}
+                  {senders.length ? "From your own mailbox." : `Connect your ${eventCal?.provider === "outlook" ? "Outlook" : "Gmail"} below to email them too.`}
                 </span>
               </label>
             )}
+            {eventCal && eventCal.provider !== "sample" ? (
+              <Connect connector={mailConnector} mode="per_member" purpose={MAIL_PURPOSE[mailConnector]} quiet onReady={() => setAgain((n) => n + 1)} />
+            ) : null}
           </div>
         </Card>
 

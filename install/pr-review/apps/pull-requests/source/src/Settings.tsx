@@ -5,11 +5,10 @@
 
 import { useEffect, useState, type ReactNode } from "react";
 import { ArrowLeft, Check, Clock, ExternalLink, Plus, SlidersHorizontal, Trash2, X } from "lucide-react";
-import { Button, Card, Header, Pill, Switch, client, create, cx, plural, update, useToast } from "@lemma-plugins/kit";
+import { Button, Card, Connect, Header, Pill, Switch, client, create, cx, plural, update, useToast } from "@lemma-plugins/kit";
 import { act, errText, postWord, usePrr, useWho, WEEK, type Prr } from "./data";
-import { githubSays, myRepos, needsGithub } from "./github";
-import { ConnectGithub } from "./marks";
-import { to } from "./route";
+import { MY_GITHUB, SHARED_GITHUB } from "./marks";
+import { to, useRoute } from "./route";
 import type { MergeMode, MergePolicy, ReviewMode, Settings as SettingsRow } from "./types";
 
 const MERGE_DEFAULTS: Required<Pick<MergePolicy, "paths" | "max_lines" | "max_files" | "wait_minutes" | "how">> = {
@@ -139,7 +138,8 @@ export function Settings() {
   const { canAdmin } = useWho();
   const { busy, setSettings, setRepo } = useSave();
   const s = prr.settings;
-  const [section, setSection] = useState<string>("github");
+  const route = useRoute();
+  const [section, setSection] = useState<string>(route.page === "settings" && route.sub === "connection" ? "connection" : "github");
   const locked = !canAdmin;
   const jump = (id: string) => {
     setSection(id);
@@ -148,6 +148,10 @@ export function Settings() {
   };
   const checks = postWord(prr.platform?.checks);
   const app = postWord(prr.platform?.app);
+  // Sent here to connect your own GitHub: open on that section.
+  useEffect(() => {
+    if (section === "connection") window.setTimeout(() => document.getElementById("s-connection")?.scrollIntoView({ block: "start" }), 80);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className="c-app">
@@ -168,7 +172,7 @@ export function Settings() {
               note={<>Posts by itself after each review round: the check, and the review when someone sends one back. Works with nobody signed in.{app === "needs_platform" ? " It needs the platform update before it can post; until then nothing posts as the bot." : ""}</>} />
             <Opt name="who" checked={s?.posts_as !== "bot"} disabled={locked} onChange={() => void setSettings("who", { posts_as: "reviewer" }, "Each reviewer posts as themselves from now on.")}
               title="Each reviewer, as themselves"
-              note="Nothing posts until a reviewer presses Send back or Approve, and then it is their name on GitHub, through their own GitHub connection: each reviewer connects it once. GitHub never lets the author approve their own pull request." />
+              note="Nothing posts until a reviewer presses Send back or Approve, and then it is their name on GitHub, through their own GitHub connection: each reviewer connects it once, under Connection below. GitHub never lets the author approve their own pull request." />
           </Sec>
 
           <Sec id="prr-check" title="The Lemma check">
@@ -341,23 +345,20 @@ function People({ locked }: { locked: boolean }) {
 }
 
 function Connection() {
-  const [state, setState] = useState<"checking" | "ok" | "missing" | string>("checking");
-  const [n, setN] = useState(0);
-  useEffect(() => {
-    let alive = true;
-    myRepos()
-      .then((r) => { if (alive) { setState("ok"); setN(r.length); } })
-      .catch((e) => alive && setState(needsGithub(e) ? "missing" : githubSays(e)));
-    return () => { alive = false; };
-  }, []);
   return (
     <section className="prr-sec">
       <h2>Connection</h2>
       <div className="c-card">
-        {state === "checking" ? <SetRow title={<span className="c-muted">Asking GitHub…</span>} />
-          : state === "ok" ? <SetRow title={<span className="c-row"><Check size={14} className="prr-ok" aria-hidden="true" />GitHub is connected for you</span>} note={`You can see ${plural(n, "repository", "repositories")}. Reviews and merges you press post under your own account.`} />
-          : state === "missing" ? <div className="prr-pad-s"><ConnectGithub compact /></div>
-          : <SetRow title={<span className="c-row"><X size={14} className="prr-bad" aria-hidden="true" />GitHub didn't answer</span>} note={state} />}
+        <div className="prr-conn">
+          <div>The Lemma's GitHub</div>
+          <div className="c-faint prr-meta">Shared by everyone here: what it reads, and what the Lemma's bot posts.</div>
+          <Connect {...SHARED_GITHUB} />
+        </div>
+        <div className="prr-conn">
+          <div>Your own GitHub</div>
+          <div className="c-faint prr-meta">Only for what you press in your own name: send back as you, approve, merge.</div>
+          <Connect {...MY_GITHUB} />
+        </div>
       </div>
     </section>
   );

@@ -4,7 +4,7 @@
 
 import { useEffect, useRef, type ReactNode } from "react";
 import { RefreshCw, Settings as Cog, Users } from "lucide-react";
-import { AskButton, Banner, Button, Header, runFunction, startWorkflow, useToast } from "@lemma-plugins/kit";
+import { AskButton, Banner, Button, Header, runFunction, startWorkflow, useToast, errorText } from "@lemma-plugins/kit";
 import { usePeople } from "./data";
 import { PeopleList, TeamList, UnsureList } from "./List";
 import { PersonPage, TeamPersonPage } from "./PersonPage";
@@ -77,7 +77,7 @@ function ListFrame({ children }: { children: ReactNode }) {
       await startWorkflow("people-refresh");
       toast("Counting again, and reading anyone new.");
     } catch (e) {
-      toast(`Couldn't start it: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't start it: ${errorText(e)}`);
     }
   };
   return (

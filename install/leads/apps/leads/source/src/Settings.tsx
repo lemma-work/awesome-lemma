@@ -3,7 +3,7 @@
 
 import { useEffect, useState } from "react";
 import { Clock, FlaskConical, Gauge, Linkedin, RefreshCw, ScanSearch, Users } from "lucide-react";
-import { Button, Card, Header, Switch, client, create, cx, day, plural, runFunction, update, useToast, whoAmI } from "@lemma-plugins/kit";
+import { Button, Card, Header, Switch, client, create, cx, day, plural, runFunction, update, useToast, whoAmI, errorText } from "@lemma-plugins/kit";
 import { startSetup, turnOn } from "./App";
 import { PROFILE_ID, useLeads } from "./data";
 import { to } from "./route";
@@ -48,7 +48,7 @@ export function SettingsPage() {
       await reload();
       if (said) toast(said);
     } catch (e) {
-      toast(`Couldn't do that: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't do that: ${errorText(e)}`);
     } finally {
       setBusy("");
       setProgress("");

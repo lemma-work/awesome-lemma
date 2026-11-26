@@ -9,7 +9,8 @@
 //
 //   demo-data.js      window.__LEMMA_DEMO__: the fixtures the site pictures
 //                     were taken on (.lemma/shots/fixtures/), and the plugin's
-//                     .lemma/demo.json (apps, start path, notes, anchor date)
+//                     .lemma/demo.json (apps, start path, notes, anchor date,
+//                     connections: slug -> {state, as} for the Connect piece)
 //   demo-handlers.js  the plugin's .lemma/demo.js, if it has one: what its
 //                     functions and workflows do to the in-memory sample
 //   ../fonts/         Inter and any Google face the sample names, so the page
@@ -256,6 +257,7 @@ async function buildPlugin(plugin) {
       notes: config.notes || {},
       labels: appLabels(),
       user: config.user,
+      connections: config.connections || {},
       fonts: Object.fromEntries(Object.entries(fontMap).map(([k, v]) => [k, up + v])),
       fixtures,
       files,

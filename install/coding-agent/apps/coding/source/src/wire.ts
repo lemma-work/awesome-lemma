@@ -10,7 +10,7 @@
 // fires for every event: the functions write events idempotently and only
 // the session's starter's run fixes anything.
 
-import { DEMO, client, items } from "@lemma-plugins/kit";
+import { DEMO, client, items, errorText } from "@lemma-plugins/kit";
 
 interface Body {
   name: string;
@@ -66,7 +66,7 @@ export async function ensureSchedules(userId: string): Promise<{ made: number; p
   try {
     have = await mine();
   } catch (e) {
-    return { made: 0, problems: [`your schedules couldn't be read (${e instanceof Error ? e.message : e})`] };
+    return { made: 0, problems: [`your schedules couldn't be read (${errorText(e)})`] };
   }
   let made = 0;
   const problems: string[] = [];
@@ -76,7 +76,7 @@ export async function ensureSchedules(userId: string): Promise<{ made: number; p
       await client.schedules.create(body as never);
       made += 1;
     } catch (e) {
-      problems.push(`${words} (${e instanceof Error ? e.message : e})`);
+      problems.push(`${words} (${errorText(e)})`);
     }
   }
   return { made, problems };

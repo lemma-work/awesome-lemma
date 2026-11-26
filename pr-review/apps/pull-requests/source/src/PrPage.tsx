@@ -9,14 +9,14 @@ import {
   ArrowLeft, CircleAlert, ExternalLink, FileText, GitMerge, Hand, Sparkles, UserRound,
 } from "lucide-react";
 import {
-  Avatar, Button, Card, Empty, Header, Menu, agoText, go, MenuItem, MenuLabel, Pill, Skeleton, ago, canOpenApps, cx, day, openApp, plural, update, useToast,
+  Avatar, Button, Card, Empty, Header, Menu, agoText, errorText, go, MenuItem, MenuLabel, Pill, Skeleton, ago, canOpenApps, cx, day, openApp, plural, update, useToast,
 } from "@lemma-plugins/kit";
 import { approveAsMe, mergeAsMe, sendBackAsMe } from "./actions";
 import { FileDiff, FindingCard } from "./Code";
 import { act, errText, postWord, useWho, whoIs, usePrr, type Prr } from "./data";
-import { filesOf, mergeBlock, needsGithub, pullOf, summarize, type GhFile, type GhPull } from "./github";
+import { filesOf, mergeBlock, needsGithub, needsMyGithub, pullOf, summarize, type GhFile, type GhPull } from "./github";
 import { itselfText } from "./Inbox";
-import { ConnectGithub, LedgerLine, StatePill, VerdictPill, short, tally, tallyText, useChecks } from "./marks";
+import { LedgerLine, MyGithubStep, SharedGithubStep, StatePill, VerdictPill, short, tally, tallyText, useChecks, useSharedGithub } from "./marks";
 import { prPath, to, type PrTab } from "./route";
 import type { Finding, PullRequest, Round } from "./types";
 
@@ -56,6 +56,9 @@ export function PrPage({ repo, number, tab, path }: { repo: string; number: numb
   const pr = prr.prs.find((p) => prr.repoOf(p) === repo && p.number === number);
   const gh = useGithub(pr, repo);
   const checks = useChecks(repo, pr?.head_sha, !!pr && pr.state === "open");
+  // Files and checks read through the Lemma's GitHub: when it isn't connected,
+  // its next step once at the top, and both read again when it is.
+  const github = useSharedGithub(needsGithub(gh.filesErr) ? gh.filesErr : needsGithub(checks.err) ? checks.err : null, gh.refresh);
 
   if (!prr.loaded) {
     return (
@@ -154,6 +157,7 @@ export function PrPage({ repo, number, tab, path }: { repo: string; number: numb
           Round {latest.seq} didn't finish{latest.error ? `: ${latest.error}` : ""}. A review that didn't finish never counts as clean.
         </div>
       ) : null}
+      <SharedGithubStep c={github} className="prr-connect-in" />
 
       {tab === "files" ? (
         <FilesTab pr={pr} prr={prr} round={latest} findings={findings} gh={gh} focus={path || null} side={<Side pr={pr} prr={prr} round={latest} rounds={rounds} findings={findings} open={open} gh={gh} checks={checks} mine={mine} onTab={toTab} />} />
@@ -231,7 +235,7 @@ function FilesTab({ pr, prr, round, findings, gh, focus, side }: { pr: PullReque
         {!gh.files && !gh.filesErr ? (
           Array.from({ length: 7 }).map((_, i) => <div key={i} className="c-skel" style={{ height: 14, margin: "8px 8px", width: `${55 + ((i * 13) % 35)}%` }} />)
         ) : gh.filesErr ? (
-          <div className="c-faint prr-meta prr-pad-s">{missing ? "Connect GitHub to see the files." : "GitHub didn't send the files."}</div>
+          <div className="c-faint prr-meta prr-pad-s">{missing ? errorText(gh.filesErr, "github") : "GitHub didn't send the files."}</div>
         ) : (
           <>
             <div className="prr-tree__label">Worth reading · {plural(worth.length, "file")}, {lines(worth)} lines</div>
@@ -261,7 +265,7 @@ function FilesTab({ pr, prr, round, findings, gh, focus, side }: { pr: PullReque
         {fileless.length ? <div className="prr-notes prr-notes--flat">{fileless.map((f) => <FindingCard key={f.id} f={f} prr={prr} />)}</div> : null}
         {gh.filesErr ? (
           <>
-            {missing ? <ConnectGithub /> : <div className="prr-strip prr-strip--warn">GitHub didn't send the diff: {errText(gh.filesErr)}</div>}
+            {missing ? <div className="prr-strip">{errorText(gh.filesErr, "github")} The diff shows here once it is.</div> : <div className="prr-strip prr-strip--warn">GitHub didn't send the diff: {errText(gh.filesErr)}</div>}
             {shownFindings.filter((f) => f.path).length ? (
               <div className="prr-notes prr-notes--flat">
                 {shownFindings.filter((f) => f.path).map((f) => <FindingCard key={f.id} f={f} prr={prr} onJump={() => undefined} />)}
@@ -464,6 +468,8 @@ function MergeBox({ pr, prr, round, open, gh, checks, mine }: {
   const [as, setAs] = useState<"bot" | "me">(settings?.posts_as === "reviewer" ? "me" : "bot");
   const [busy, setBusy] = useState<string | null>(null);
   const [refusal, setRefusal] = useState<string | null>(null);
+  // Pressed something that posts as you, without your own GitHub: connecting it is the next step.
+  const [needMine, setNeedMine] = useState<unknown>(null);
   const t = tally(round?.ledger);
   const check = lemmaCheck(round, t, prr);
   const botBlocked = !!prr.botBlocked || postWord(round?.github?.review) === "needs_platform";
@@ -480,9 +486,11 @@ function MergeBox({ pr, prr, round, open, gh, checks, mine }: {
     try {
       const msg = await fn();
       if (msg) toast(msg);
+      setNeedMine(null);
       gh.refresh();
     } catch (e) {
-      setRefusal(errText(e));
+      if (needsMyGithub(e)) setNeedMine(e);
+      else setRefusal(errText(e));
     } finally {
       setBusy(null);
     }
@@ -513,7 +521,7 @@ function MergeBox({ pr, prr, round, open, gh, checks, mine }: {
       <div className="prr-sb">
         <div className="prr-srow">
           {checks.err ? (
-            needsGithub(checks.err) ? <span className="c-muted prr-meta">Connect GitHub to see its checks.</span> : <span className="c-muted prr-meta">GitHub didn't answer for checks.</span>
+            needsGithub(checks.err) ? <span className="c-muted prr-meta">{errorText(checks.err, "github")}</span> : <span className="c-muted prr-meta">GitHub didn't answer for checks.</span>
           ) : !ci ? (
             <span className="c-skel" style={{ width: 120, height: 20, borderRadius: 999 }} />
           ) : ci.state === "failing" ? (
@@ -575,6 +583,9 @@ function MergeBox({ pr, prr, round, open, gh, checks, mine }: {
           </Button>
         </div>
         {refusal ? <div className="prr-refusal" role="alert"><CircleAlert size={14} aria-hidden="true" /> GitHub said: {refusal}</div> : null}
+        {needMine ? (
+          <MyGithubStep error={needMine} onBack={() => { setNeedMine(null); toast("Your GitHub is connected. Press it again to post as you."); }} />
+        ) : null}
         <div className="c-faint prr-meta">
           {ruleBlock || ghBlock || (mine ? "Approve is hidden: GitHub never lets the author approve their own pull request." : "Approve and Merge wait until no rule is broken. Both post as you.")}
         </div>

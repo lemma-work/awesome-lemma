@@ -9,7 +9,8 @@ import {
 } from "@lemma-plugins/kit";
 import { mergeAsMe } from "./actions";
 import { SECTIONS, WEEK, act, errText, postWord, usePrr, useWho, whoIs, type Prr, type Section } from "./data";
-import { ChecksPill, ConnectGithub, FindingsPill, RulesBar, short, useChecks, useGithubMissing } from "./marks";
+import { needsMyGithub } from "./github";
+import { ChecksPill, FindingsPill, RulesBar, SharedGithubStep, short, useChecks, useGithubMissing, useSharedGithub } from "./marks";
 import { prPath, to, type View } from "./route";
 import type { PullRequest } from "./types";
 
@@ -44,7 +45,7 @@ export function Inbox({ view }: { view: View }) {
   const [q, setQ] = useState("");
   const [showMerged, setShowMerged] = useState(view === "merged");
   const [cursor, setCursor] = useState(0);
-  const missing = useGithubMissing();
+  const github = useSharedGithub(useGithubMissing());
   const toast = useToast();
 
   const match = (pr: PullRequest) => {
@@ -123,7 +124,7 @@ export function Inbox({ view }: { view: View }) {
 
       <div className="prr-inbox">
         <div className="prr-list" ref={list}>
-          {missing ? <div className="prr-pad"><ConnectGithub /></div> : null}
+          <SharedGithubStep c={github} className="prr-connect-in" />
           {!prr.loaded ? (
             <div className="prr-pad"><Skeleton rows={8} /></div>
           ) : !flat.length && !(view === "inbox" && mergedWeek.length) ? (
@@ -189,7 +190,7 @@ export function Inbox({ view }: { view: View }) {
 }
 
 function Row({ pr, section, on, i, prr, meId, people, toast }: {
-  pr: PullRequest; section: Section; on: boolean; i: number; prr: Prr; meId?: string; people: { user_id: string; name: string; email: string }[]; toast: (t: string) => void;
+  pr: PullRequest; section: Section; on: boolean; i: number; prr: Prr; meId?: string; people: { user_id: string; name: string; email: string }[]; toast: ReturnType<typeof useToast>;
 }) {
   const repo = prr.repoOf(pr);
   const round = prr.latest(pr);
@@ -221,7 +222,8 @@ function Row({ pr, section, on, i, prr, meId, people, toast }: {
       toast(`Merged ${pr.key} as you.`);
       void prr.reload("prs");
     } catch (e) {
-      toast(`GitHub didn't merge it: ${errText(e)}`);
+      if (needsMyGithub(e)) toast(`${errText(e)} Merging here posts as you, through your own GitHub.`, { action: { label: "Connect it", run: () => to.settings("connection") } });
+      else toast(`GitHub didn't merge it: ${errText(e)}`);
     } finally {
       setBusy(false);
     }

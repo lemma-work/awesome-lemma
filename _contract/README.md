@@ -343,6 +343,18 @@ promise was made either way, worded for any source. The caller adds the
 category question from the owner's categories. Code embeds the object verbatim
 between `# contract:conversation-read` and `# end contract`.
 
+`questions/feedback-read.json` is what any plugin asks to read feedback out of
+a passage (a thread, a meeting's transcript or notes, a public post, an
+interview, a form answer), so User feedback, User interviews, Early access and
+Competitor watch classify the same way. Three steps, each a Decisions call:
+`gate` (is anything here about a product?), `sentences` (which of the
+numbered sentences are feedback: the quote is word for word because the
+caller numbers the sentences in code and Decisions only picks), then
+`questions` once per sentence (product, feature from a shortlist the caller
+adds, kind, sentiment, importance, rivals named). The caller fills the option
+lists and placeholders as its `about` says, and embeds the object between
+`# contract:feedback-read` and `# end contract`.
+
 ## The rules, enforced by `lint.py`
 
 Run from the repository root: `uv run --no-project python _contract/lint.py` (`--fix`

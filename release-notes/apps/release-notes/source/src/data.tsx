@@ -10,7 +10,7 @@
 // out, and a suggested link confirmed are one row each, written here.
 
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
-import { client, items, q, runFunction, sql, update, useData, useRows, whoAmI, type Loaders } from "@lemma-plugins/kit";
+import { client, items, q, runFunction, sql, update, useData, useRows, whoAmI, type Loaders, errorText } from "@lemma-plugins/kit";
 import type { Ask, Draft, Line, Member, Note, Pr, Reply, Settings } from "./types";
 
 export const LOADERS: Loaders = {
@@ -144,6 +144,55 @@ export async function call(name: string, input: Record<string, unknown>): Promis
   return ((await runFunction<Out>(name, input)) as Out) || {};
 }
 
+/* ---------- what a function said about GitHub or Slack ---------- */
+
+// Publish and send run in functions, which say what failed in their own words
+// (the platform's error text, codes and slugs included). A connection failure
+// in them is said plainly here, and handed to <Connect error> as its next step.
+const CONNECTION_CODES = /\b(CONNECTION_REQUIRED|REAUTH_REQUIRED|CONNECTOR_NEEDS_ACCOUNT|POD_CONNECTOR_NOT_FOUND|CONNECTOR_UNAVAILABLE|CONNECTION_REQUIRES_PERSON|CONNECTOR_NOT_INSTALLED|CONNECTOR_ACCESS_DENIED|CONNECTOR_USE_REFUSED)\b/;
+
+/** The connection failure a function's words name, as `errorText` and `<Connect error>` read it; null when none. */
+export function connectionFailure(text: string | null | undefined): { code: string } | null {
+  const m = text ? CONNECTION_CODES.exec(text) : null;
+  return m ? { code: m[1] } : null;
+}
+
+/** A function's words said to a person: a connection failure in words, anything else as it is. */
+export function plain(text: string, connector?: string): string {
+  const failure = connectionFailure(text);
+  return failure ? errorText(failure, connector) : errorText(new Error(text));
+}
+
+type Sent = Note["sent"][number];
+const SENT_TO: Record<string, string> = { github: "GitHub release", slack: "Slack", page: "Changelog page" };
+
+/** One place a note went, or didn't. */
+export function sentText(s: Sent): string {
+  if (s.ok !== false) return s.text;
+  const failure = connectionFailure(s.text);
+  return failure ? `${SENT_TO[s.to] || s.to}: ${errorText(failure, s.to === "page" ? undefined : s.to)}` : plain(s.text);
+}
+
+/** What Publish says when it's done, with any connection failure said plainly. */
+export function publishText(out: Out): string {
+  const message = String(out.message || "Published.");
+  const bad = (Array.isArray(out.sent) ? (out.sent as Sent[]) : []).filter((s) => s.ok === false);
+  if (!bad.some((s) => connectionFailure(s.text))) return plain(message);
+  const failed = bad.map(sentText).join("; ").replace(/\.$/, "");
+  if (!out.published) return `Nothing was published: ${failed}.`;
+  return plain(message.replace(/Not done: [\s\S]*?\.(?= \d+ ask)/, `Not done: ${failed}.`));
+}
+
+/** The connectors a publish failed to reach for want of a connection. */
+export function publishProblems(out: Out): Record<string, { code: string }> {
+  const found: Record<string, { code: string }> = {};
+  for (const s of Array.isArray(out.sent) ? (out.sent as Sent[]) : []) {
+    const failure = s.ok === false ? connectionFailure(s.text) : null;
+    if (failure && (s.to === "github" || s.to === "slack")) found[s.to] = failure;
+  }
+  return found;
+}
+
 export async function redraft(noteId: string): Promise<void> {
   await client.request("POST", `/pods/${client.podId}/workflows/release-notes-redraft/runs`, {
     body: { about: { table: "release_note", record_id: noteId } },
@@ -227,7 +276,7 @@ export async function ensureMine(me: NonNullable<Who["me"]>): Promise<string | n
       const found = items<{ id: string; name: string }>(await client.schedules.list({ name: w.name, limit: 5 } as never)).find((x) => x.name === w.name);
       if (!found) await client.schedules.create({ name: w.name, schedule_type: "DATASTORE", workflow_name: w.workflow_name, config: w.config } as never);
     } catch (e) {
-      problems.push(`${w.workflow_name} (${e instanceof Error ? e.message : e})`);
+      problems.push(`${w.workflow_name} (${errorText(e)})`);
     }
   }
   return problems.length ? `Couldn't make your own triggers: ${problems.join("; ")}` : null;
@@ -274,7 +323,7 @@ export async function ensureTeamSchedules(settings: Settings, me: NonNullable<Wh
       said.push(`${w.title}: on.`);
     } catch (e) {
       ok = false;
-      said.push(`${w.title}: ${e instanceof Error ? e.message : String(e)}`);
+      said.push(`${w.title}: ${errorText(e)}`);
     }
   }
   await update("release_note_settings", settings.id, { schedules: made, schedule_user_id: me.id }).catch(() => undefined);

@@ -7,8 +7,8 @@
 // week's cost (when the server can say) and the person's Mac.
 
 import { useEffect, useMemo, useState } from "react";
-import { BookMarked, Check, ChevronDown, Cloud, GitBranch, GitPullRequest, Inbox, Laptop, Tag } from "lucide-react";
-import { Button, Menu, MenuLabel, Pill, Spinner, cx, plural, useToast } from "@lemma-plugins/kit";
+import { BookMarked, Check, ChevronDown, Cloud, GitBranch, GitPullRequest, Github, Inbox, Laptop, Tag } from "lucide-react";
+import { Button, Connect, Menu, MenuLabel, Pill, Spinner, cx, isConnectionProblem, plural, useToast, errorText } from "@lemma-plugins/kit";
 import { startWork, useCoding, useWorld, type Card } from "./data";
 import { AgentMenu, ModelMenu, statusWord } from "./pickers";
 import { Mono, PriorityPill, sourceWord } from "./marks";
@@ -19,14 +19,21 @@ import { to } from "./route";
 
 type RepoChoice = { full_name: string; default_branch: string | null; enabled: boolean };
 
-let listed: Promise<RepoChoice[]> | null = null;
-/** The repositories a conversation can be opened in, as GitHub's installation covers them for this person. */
-function listRepos(): Promise<RepoChoice[]> {
-  if (!listed) {
+type Listing = { repos: RepoChoice[]; error: unknown };
+let listed: Promise<Listing> | null = null;
+/** The repositories a conversation can be opened in, as the Lemma's GitHub connection covers them. A failure isn't kept, so the next look asks again. */
+function listRepos(again = false): Promise<Listing> {
+  if (!listed || again) {
     listed = client.conversations.repositories()
-      .then((r) => ((r as unknown as { items?: { full_name: string; default_branch?: string | null }[] }).items || [])
-        .map((x) => ({ full_name: x.full_name, default_branch: x.default_branch || null, enabled: false })))
-      .catch(() => []);
+      .then((r) => ({
+        repos: ((r as unknown as { items?: { full_name: string; default_branch?: string | null }[] }).items || [])
+          .map((x) => ({ full_name: x.full_name, default_branch: x.default_branch || null, enabled: false })),
+        error: null,
+      }))
+      .catch((error: unknown) => {
+        listed = null;
+        return { repos: [], error };
+      });
   }
   return listed;
 }
@@ -45,12 +52,12 @@ export function NewTask({ from }: { from: { question?: string; task?: string } }
   const [ownBranch, setOwnBranch] = useState(true);
   const [keepGreen, setKeepGreen] = useState(settings?.keep_green ?? true);
   const [listedRepos, setListedRepos] = useState<RepoChoice[] | null>(null);
+  const [repoError, setRepoError] = useState<unknown>(null);
   const [refs, setRefs] = useState<RefChoice[] | null>(null);
   const [busy, setBusy] = useState(false);
 
-  useEffect(() => {
-    void listRepos().then(setListedRepos);
-  }, []);
+  const relist = (again = false) => void listRepos(again).then((l) => { setListedRepos(l.repos); setRepoError(l.error); });
+  useEffect(() => relist(), []); // eslint-disable-line react-hooks/exhaustive-deps
   const repos = useMemo(() => {
     const mineRepos: RepoChoice[] = data.repos.filter((r) => r.enabled).map((r) => ({ full_name: r.full_name, default_branch: r.default_branch, enabled: true }));
     const rest = (listedRepos || []).filter((r) => !mineRepos.some((m) => m.full_name === r.full_name));
@@ -128,7 +135,7 @@ export function NewTask({ from }: { from: { question?: string; task?: string } }
       if (out.task_id) to.task(String(out.task_id));
       else to.board();
     } catch (e) {
-      toast(`Couldn't start: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't start: ${errorText(e)}`);
     } finally {
       setBusy(false);
     }
@@ -143,6 +150,10 @@ export function NewTask({ from }: { from: { question?: string; task?: string } }
     <div className="cd-new">
       <main className="cd-new__main">
         <h1 className="cd-h1">New task</h1>
+        {repoError && isConnectionProblem(repoError) ? (
+          <Connect connector="github" slug="github" mode="shared" quiet error={repoError} onReady={() => relist(true)}
+            purpose="The agent works in your repositories through this Lemma's GitHub connection: it checks them out, pushes its branch and opens the pull request." />
+        ) : null}
         <div className="cd-composer">
           <label className="c-sr" htmlFor="cd-task">What should the agent do</label>
           <textarea id="cd-task" className="cd-composer__in" value={text} onChange={(e) => setText(e.target.value)} rows={4}
@@ -162,7 +173,10 @@ export function NewTask({ from }: { from: { question?: string; task?: string } }
                   {repos.filter((r) => r.enabled).map((r) => <RepoItem key={r.full_name} r={r} on={r.full_name === repo} pick={() => { setRepo(r.full_name); setRef(null); close(); }} />)}
                   {repos.some((r) => !r.enabled) ? <MenuLabel>Others GitHub lets you open</MenuLabel> : null}
                   {repos.filter((r) => !r.enabled).map((r) => <RepoItem key={r.full_name} r={r} on={r.full_name === repo} pick={() => { setRepo(r.full_name); setRef(null); close(); }} />)}
-                  {!repos.length ? <MenuLabel>{listedRepos ? "No repositories: connect GitHub in set-up." : "Reading your repositories…"}</MenuLabel> : null}
+                  {!repos.length ? <MenuLabel>{listedRepos ? (repoError ? "No repositories: GitHub isn't connected yet." : "No repositories yet.") : "Reading your repositories…"}</MenuLabel> : null}
+                  {listedRepos && !repos.length ? (
+                    <button type="button" className="c-menu__item" onClick={() => { close(); to.setup(); }}><Github aria-hidden="true" />{repoError ? "Connect GitHub in set-up" : "Repositories in set-up"}</button>
+                  ) : null}
                 </div>
               )}
             </Menu>

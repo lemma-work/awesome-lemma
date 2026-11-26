@@ -5,7 +5,7 @@
 import { useEffect, useState } from "react";
 import { ArrowRight, CalendarClock, CalendarDays, MoonStar, RefreshCw, Sparkles, TrendingUp } from "lucide-react";
 import {
-  Button, Card, Empty, Logo, Pill, Skeleton, agoText, client, day, money, moneyShort, plural, runFunction, useToast,
+  Button, Card, Empty, Logo, Pill, Skeleton, agoText, client, day, money, moneyShort, plural, runFunction, useToast, errorText,
 } from "@lemma-plugins/kit";
 import { scheduleReview, useDeals } from "./data";
 import { fieldWord, valueText } from "./marks";
@@ -30,7 +30,7 @@ export function ReviewPage() {
       const out = await runFunction<{ counts: ReviewCounts }>("deals_review", { mode: "count" });
       setLive(out.counts);
     } catch (e) {
-      setFailed(e instanceof Error ? e.message : String(e));
+      setFailed(errorText(e));
     }
   };
   useEffect(() => {
@@ -51,7 +51,7 @@ export function ReviewPage() {
       window.setTimeout(() => void reload("reviews"), 20000);
       window.setTimeout(() => void reload("reviews"), 45000);
     } catch (e) {
-      toast(`Couldn't start it: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't start it: ${errorText(e)}`);
     } finally {
       setWriting(false);
     }

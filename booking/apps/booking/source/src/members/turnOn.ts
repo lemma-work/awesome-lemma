@@ -17,7 +17,7 @@
 //            with no invite (booking_confirm declines them too). Everything
 //            above still runs, so a sample booking goes through it all
 
-import { client, q, runFunction, update, whoAmI } from "@lemma-plugins/kit";
+import { client, errorText, q, runFunction, update, whoAmI } from "@lemma-plugins/kit";
 import type { Calendar, Page, Settings } from "./data";
 
 export const OPEN_COLUMNS = ["page_id", "starts_at", "name", "email", "about", "zone", "ref"];
@@ -56,7 +56,7 @@ const pod = () => client.podId as string;
 function why(e: unknown): string {
   const err = e as { status?: number; statusCode?: number; message?: string; body?: { message?: string } };
   const status = err?.status || err?.statusCode;
-  const text = err?.body?.message || err?.message || String(e);
+  const text = errorText(err?.body?.message ? { ...err, message: err.body.message } : e);
   if (status === 403) return `Lemma refused it (${text}). Turning a page on needs edit access in this Lemma; ask whoever runs it.`;
   return text;
 }

@@ -14,7 +14,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Check, ClipboardPaste, KanbanSquare, Search, Sparkles, Users } from "lucide-react";
 import {
-  Button, Card, Pill, Switch, client, cx, money, openApp, plural, runFunction, update, useToast,
+  Button, Card, Pill, Switch, client, cx, money, openApp, plural, runFunction, update, useToast, errorText,
 } from "@lemma-plugins/kit";
 import { useDeals } from "./data";
 import { ProposalCard } from "./Proposal";
@@ -118,7 +118,7 @@ export function Setup() {
       await client.workflows.runs.submitForm(run.id, { node_id: nodeId, inputs } as never);
       await poll();
     } catch (e) {
-      toast(`Couldn't keep that: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't keep that: ${errorText(e)}`);
       throw e;
     }
   };
@@ -233,7 +233,7 @@ function Existing({ team, by, submit }: { team: boolean; by: string | null; subm
     try {
       setPreview(await runFunction("deals_sheet", { text, mode: "preview" }));
     } catch (e) {
-      toast(`Couldn't read it: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't read it: ${errorText(e)}`);
     } finally {
       setReading(false);
     }

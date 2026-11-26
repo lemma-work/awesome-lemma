@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { ArrowLeft, BookOpen, CircleCheck, CircleX, ExternalLink } from "lucide-react";
-import { Button, Card, Empty, Pill, day, plural } from "@lemma-plugins/kit";
-import { asksFor, useRN, useWho } from "./data";
+import { Button, Card, Connect, Empty, Pill, day, plural } from "@lemma-plugins/kit";
+import { asksFor, connectionFailure, sentText, useRN, useWho } from "./data";
 import { PagePreview } from "./Desk";
 import { to } from "./route";
 import { Top } from "./Top";
@@ -78,10 +78,16 @@ export function PublishedNote({ id }: { id: string }) {
               {note.sent.length ? note.sent.map((s) => (
                 <div key={s.to} className="rn-dest">
                   {s.ok ? <CircleCheck size={14} aria-hidden="true" className="rn-ok" /> : <CircleX size={14} aria-hidden="true" className="rn-bad" />}
-                  <span className="c-grow"><span className="rn-dest__t">{s.text}</span><span className="rn-meta">{s.ok ? "Done" : "Didn't go"}{s.at ? `, ${day(s.at)}` : ""}</span></span>
+                  <span className="c-grow"><span className="rn-dest__t">{sentText(s)}</span><span className="rn-meta">{s.ok ? "Done" : "Didn't go"}{s.at ? `, ${day(s.at)}` : ""}</span></span>
                   {s.url ? <a className="c-btn c-btn--sm c-btn--ghost" href={s.url} target="_blank" rel="noreferrer"><ExternalLink size={13} aria-hidden="true" />Open</a> : null}
                 </div>
               )) : <p className="rn-pad rn-meta">Nothing recorded.</p>}
+              {note.sent.filter((s) => !s.ok && (s.to === "github" || s.to === "slack") && connectionFailure(s.text)).map((s) => (
+                <div key={`connect-${s.to}`} className="rn-pad">
+                  <Connect quiet connector={s.to} slug={s.to} mode="shared" error={connectionFailure(s.text)}
+                    purpose={s.to === "github" ? "Connect GitHub, then publish the note again from the desk to put it on the release." : "Connect Slack, then publish the note again from the desk to post it."} />
+                </div>
+              ))}
             </Card>
             <Card title="Who asked">
               <p className="c-muted">{plural(people.size, "person", "people")} asked for what's in it; {told} told so far.</p>

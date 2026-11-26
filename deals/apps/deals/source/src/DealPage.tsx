@@ -12,8 +12,7 @@ import {
   MessageSquarePlus, MoreHorizontal, NotebookPen, Sparkles, Trash2, User, Users, Video,
 } from "lucide-react";
 import {
-  AskButton, Avatar, Button, Card, Empty, Header, Logo, Menu, MenuItem, Pill, Sheet, Skeleton, agoText, client, day, due,
-  money, nameOf, openApp, q, sql, useToast,
+  AskButton, Avatar, Button, Card, Empty, Header, Logo, Menu, MenuItem, Pill, Sheet, Skeleton, agoText, client, day, due, money, nameOf, openApp, q, sql, useToast, errorText,
 } from "@lemma-plugins/kit";
 import { save, useDeals } from "./data";
 import { StagePill, fieldWord, sourceWord, valueText } from "./marks";
@@ -99,7 +98,7 @@ export function DealPage({ id }: { id: string }) {
       void load();
       if (said && out.changed?.length) toast(said);
     } catch (e) {
-      toast(`Couldn't save: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't save: ${errorText(e)}`);
     }
   };
   const addNote = async () => {
@@ -110,7 +109,7 @@ export function DealPage({ id }: { id: string }) {
       setNote("");
       await load();
     } catch (e) {
-      toast(`Couldn't add the note: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't add the note: ${errorText(e)}`);
     } finally {
       setBusy(false);
     }
@@ -122,7 +121,7 @@ export function DealPage({ id }: { id: string }) {
       await reload("deals");
       to.board();
     } catch (e) {
-      toast(`Couldn't delete it: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't delete it: ${errorText(e)}`);
     }
   };
   const openPerson = (handle: string | null) => {
@@ -388,7 +387,7 @@ function TaskSheet({ deal, onClose, onMade }: { deal: Deal; onClose: () => void;
       onMade();
       onClose();
     } catch (e) {
-      toast(`Couldn't make the task: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't make the task: ${errorText(e)}`);
     } finally {
       setBusy(false);
     }

@@ -63,6 +63,15 @@ that does not start with "_"):
    local env files) -- except each app's own prebuilt dist.zip, which must be
    there and stamped with the digest of the app's source, so an install
    deploys it instead of building. Regenerate with `_build/assemble.py --install`.
+11. Apps connect their own accounts (`_kit/src/connect.tsx`). No app copy
+   sends anyone to the Lemma's connector pages ("the Lemma's connectors",
+   "Connectors page", "connect … and come back"); no app does the connecting
+   by hand (connect and install requests, sharing an account, binding an
+   installation) instead of the kit's `<Connect>`/`useConnection`; and no
+   caught error from a connector call reaches the screen as its own text:
+   a catch around code that calls `client.connectors` (directly, or through a
+   function of the app that does) uses `errorText`/`connectionProblem`, never
+   `e.message`, `String(e)` or `${e}`.
 
 It prints every problem it finds, not just the first, then any warnings.
 """
@@ -374,6 +383,93 @@ def memory_problems(plugin: Path, fix: bool) -> tuple[list[str], list[str]]:
     return problems, warnings
 
 
+# 11: apps connect their own accounts, and never show a connector's raw error.
+SEND_AWAY = [
+    re.compile(r"\bLemma['’]s connectors?\b", re.I),
+    re.compile(r"\bconnectors? page\b", re.I),
+    re.compile(r"\b(?:in|on|from) (?:the )?connectors\b", re.I),
+]
+COME_BACK = re.compile(r"\bcome back\b", re.I)
+BY_HAND = re.compile(r"\b(createConnectRequest|createInstallRequest|bindAccountInstallation|shareAs|pod\.accounts\.add)\s*\(")
+FUNC = re.compile(r"(?:^|\n)\s*(?:export\s+)?(?:async\s+)?function\s+(\w+)\s*\(|(?:^|\n)\s*(?:export\s+)?const\s+(\w+)\s*=\s*(?:async\s*)?(?:\([^)]*\)|\w+)\s*=>")
+
+
+def _braced(text: str, start: int) -> int:
+    """The index just past the block whose `{` is at or after `start`."""
+    i = text.find("{", start)
+    if i < 0:
+        return len(text)
+    depth = 0
+    quote = None
+    while i < len(text):
+        ch = text[i]
+        if quote:
+            if ch == "\\":
+                i += 2
+                continue
+            if ch == quote:
+                quote = None
+            elif quote == "`" and ch == "$" and text[i + 1:i + 2] == "{":
+                depth += 1
+                i += 1
+        elif ch in "'\"`":
+            quote = ch
+        elif ch == "{":
+            depth += 1
+        elif ch == "}":
+            depth -= 1
+            if depth == 0:
+                return i + 1
+        i += 1
+    return len(text)
+
+
+def _code_lines(text: str):
+    for n, line in enumerate(text.splitlines(), 1):
+        bare = line.strip()
+        if bare.startswith(("//", "*", "/*")):
+            continue
+        yield n, line
+
+
+def connect_problems(plugin: Path) -> list[str]:
+    found: list[str] = []
+    for src in sorted((plugin / "apps").glob("*/source/src")) if (plugin / "apps").is_dir() else []:
+        files = {f: f.read_text() for f in sorted(src.rglob("*.ts*")) if "node_modules" not in f.parts}
+        # Functions of this app that reach a connector, and those that call them.
+        reach: set[str] = set()
+        bodies: dict[str, str] = {}
+        for text in files.values():
+            for m in FUNC.finditer(text):
+                name = m.group(1) or m.group(2)
+                bodies[name] = text[m.end():_braced(text, m.end())]
+        for _ in range(3):
+            for name, body in bodies.items():
+                if "connectors." in body or any(re.search(rf"\b{re.escape(r)}\(", body) for r in reach):
+                    reach.add(name)
+        for f, text in files.items():
+            where = f"{plugin.name}: {f.relative_to(plugin)}"
+            for n, line in _code_lines(text):
+                if any(p.search(line) for p in SEND_AWAY) or (COME_BACK.search(line) and re.search(r"connect", line, re.I)):
+                    found.append(f"{where}:{n} sends people to the Lemma's connectors; put the kit's <Connect> here instead")
+                if BY_HAND.search(line):
+                    found.append(f"{where}:{n} connects by hand ({BY_HAND.search(line).group(1)}); use the kit's <Connect>/useConnection")
+            for m in re.finditer(r"\btry\s*\{", text):
+                end = _braced(text, m.start())
+                body = text[m.start():end]
+                catch = re.match(r"\s*catch\s*\((\w+)[^)]*\)\s*", text[end:])
+                if not catch:
+                    continue
+                if "connectors." not in body and not any(re.search(rf"\b{re.escape(r)}\(", body) for r in reach):
+                    continue
+                var = catch.group(1)
+                handler = text[end + catch.end():_braced(text, end + catch.end())]
+                if re.search(rf"\b{var}\.message\b|String\({var}\)|\$\{{{var}\}}", handler):
+                    line = text[:end].count("\n") + 1
+                    found.append(f"{where}:{line} shows a connector call's raw error; say it with errorText({var}) or connectionProblem({var})")
+    return found
+
+
 def main() -> int:
     fix = "--fix" in sys.argv[1:]
     if not CONTRACT.is_dir():
@@ -491,6 +587,9 @@ def main() -> int:
                 problems.append(f"{label}: uses {vendored.name}, which _kit/dist/ does not have (re-pack or re-vendor)")
             elif sha(vendored) != sha(packed):
                 problems.append(f"{label}: {vendored.name} differs from _kit/dist/{vendored.name} (run _kit/bin/vendor.sh)")
+
+        # 11: apps connect their own accounts.
+        problems += connect_problems(plugin)
 
         # 8: a memory block.
         found, warned = memory_problems(plugin, fix)

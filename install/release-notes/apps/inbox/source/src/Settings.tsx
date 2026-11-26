@@ -4,8 +4,9 @@
 import { useEffect, useMemo, useState } from "react";
 import { Mail, PenLine, Plus, RotateCcw, Settings as Cog, Sparkles, Trash2 } from "lucide-react";
 import {
-  Banner, Button, Card, Field, Header, Pill, Segmented, Sheet, Switch, client, create, items, runFunction, startWorkflow, update, useToast, whoAmI,
+  Banner, Button, Card, Connections, Field, Header, Pill, Segmented, Sheet, Switch, client, create, items, runFunction, startWorkflow, update, useToast, whoAmI, errorText,
 } from "@lemma-plugins/kit";
+import { PURPOSE, stoppedText, type Provider } from "./connection";
 import { useMail } from "./data";
 import { to } from "./route";
 import type { Category, Mailbox, Settings } from "./types";
@@ -72,7 +73,7 @@ function Categories() {
       toast(`Sorting ${out.queued} recent conversations again into your categories.`);
       setChanged(false);
     } catch (e) {
-      toast(`Couldn’t start: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn’t start: ${errorText(e)}`);
     } finally {
       setBusy(false);
     }
@@ -236,6 +237,9 @@ function Mailboxes() {
   const real = mailboxes.filter((m) => m.account_id !== "sample");
   const sample = mailboxes.filter((m) => m.account_id === "sample");
   const items_ = useMemo(() => plan(mailboxes, settings, userId), [mailboxes, settings, userId]);
+  // Each provider a mailbox reads through: nothing while it's signed in, the
+  // next step (reconnect, ask an admin) when it isn't.
+  const providers = [...new Set(real.map((m) => m.provider))].filter((p): p is Provider => p === "gmail" || p === "outlook");
 
   useEffect(() => {
     void whoAmI().then((me) => setUserId(me?.id || ""));
@@ -260,7 +264,7 @@ function Mailboxes() {
         await update("mail_settings", settings.id, { schedules: { ...(settings.schedules || {}), [item.name]: row.id }, turned_on_at: settings.turned_on_at || new Date().toISOString() });
       }
     } catch (e) {
-      toast(`Couldn’t ${on ? "turn on" : "pause"}: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn’t ${on ? "turn on" : "pause"}: ${errorText(e)}`);
     } finally {
       setBusy("");
     }
@@ -274,7 +278,7 @@ function Mailboxes() {
       await reload();
       to.list("needs");
     } catch (e) {
-      toast(`Couldn’t clear the sample: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn’t clear the sample: ${errorText(e)}`);
     } finally {
       setBusy("");
       setConfirm(false);
@@ -283,13 +287,16 @@ function Mailboxes() {
 
   return (
     <>
+      {providers.length ? (
+        <Connections quiet items={providers.map((p) => ({ connector: p, mode: "per_member" as const, purpose: PURPOSE[p] }))} />
+      ) : null}
       <Card title="Mailboxes" icon={Mail} flush>
         <div className="c-list">
           {mailboxes.map((m) => (
             <div key={m.id} className="c-li">
               <div className="c-li__main">
                 <div>{m.account_id === "sample" ? "Sample mailbox" : m.email}</div>
-                <div className="c-li__sub">{m.account_id === "sample" ? "Made-up mail at .example addresses. Nothing can be sent from it." : `${m.provider === "gmail" ? "Gmail" : "Outlook"} · ${m.state === "live" ? "reading new mail" : m.state}${m.last_error ? ` · ${m.last_error}` : ""}`}</div>
+                <div className="c-li__sub">{m.account_id === "sample" ? "Made-up mail at .example addresses. Nothing can be sent from it." : `${m.provider === "gmail" ? "Gmail" : "Outlook"} · ${m.state === "live" ? "reading new mail" : m.state}${m.last_error ? ` · ${stoppedText(m.last_error, m.provider)}` : ""}`}</div>
               </div>
               <Pill tone={m.last_error ? "danger" : m.state === "live" ? "success" : "plain"}>{m.last_error ? "Stopped" : m.state === "live" ? "Live" : m.state === "backfilling" ? "Reading" : m.state}</Pill>
             </div>

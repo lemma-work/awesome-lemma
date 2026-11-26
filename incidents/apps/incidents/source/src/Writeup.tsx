@@ -5,10 +5,11 @@
 
 import { useState } from "react";
 import { Check, ExternalLink, FileText, GitMerge, Hash, Inbox, MessageSquare, MinusCircle, Plus, Sparkles, X } from "lucide-react";
-import { Button, Empty, Pill, Spinner, openApp, update, useToast } from "@lemma-plugins/kit";
+import { Button, Empty, Pill, Spinner, openApp, update, useToast, errorText } from "@lemma-plugins/kit";
 import { call, setIncident, useIncidents, useWho } from "./data";
 import { Ai, Gap, SevPill, Who, hhmm, num, span, startOf } from "./marks";
 import type { Flag, IncEvent, Incident, Writeup } from "./types";
+import { said } from "./wire";
 
 function citeLabel(e: IncEvent): string {
   const d = (e.detail || {}) as { ref?: string; label?: string };
@@ -48,14 +49,14 @@ export function WriteupTab({ inc }: { inc: Incident }) {
     );
   }
 
-  const run = async (key: string, fn: () => Promise<unknown>, said?: string) => {
+  const run = async (key: string, fn: () => Promise<unknown>, done?: string) => {
     setBusy(key);
     try {
       const out = (await fn()) as { message?: string } | undefined;
-      toast(String(out?.message || said || "Done."));
+      toast(said(out?.message || done || "Done."));
       await d.reload();
     } catch (e) {
-      toast(`Couldn't: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't: ${errorText(e)}`);
     } finally {
       setBusy("");
     }
@@ -178,10 +179,10 @@ function Followups({ inc }: { inc: Incident }) {
     setBusy(key);
     try {
       const out = await call("incidents_followup", { incident: inc.id, ...input });
-      toast(String(out.message || "Done."));
+      toast(said(out.message || "Done."));
       await d.reload();
     } catch (e) {
-      toast(`Couldn't: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't: ${errorText(e)}`);
     } finally {
       setBusy("");
     }

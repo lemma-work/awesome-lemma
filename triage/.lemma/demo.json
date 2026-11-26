@@ -33,5 +33,23 @@
     "triage_away": "In the demo nobody's days change.",
     "triage_needs_you": "",
     "triage_poll": "In the demo nothing is read: in a Lemma, Sentry, PostHog, Slack and GitHub are read every 15 minutes."
+  },
+  "connections": {
+    "github": {
+      "state": "ready",
+      "as": "acme"
+    },
+    "slack": {
+      "state": "ready",
+      "as": "Acme"
+    },
+    "sentry": {
+      "state": "ready",
+      "as": "acme"
+    },
+    "posthog": {
+      "state": "ready",
+      "as": "Acme"
+    }
   }
 }

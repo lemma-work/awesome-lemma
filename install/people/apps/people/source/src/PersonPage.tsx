@@ -9,8 +9,7 @@ import {
   Plus, Reply, Sparkles, StickyNote, Trash2, Users, UserX,
 } from "lucide-react";
 import {
-  AskButton, Avatar, Button, Card, Empty, Evidence, Header, Menu, MenuItem, MenuLabel, Notice, Pill, Rel, Skeleton, Spinner,
-  agoText, create, day, due, firstName, nameOf, openApp, plural, q, runFunction, sql, update, useToast, when,
+  AskButton, Avatar, Button, Card, Empty, Evidence, Header, Menu, MenuItem, MenuLabel, Notice, Pill, Rel, Skeleton, Spinner, agoText, create, day, due, firstName, nameOf, openApp, plural, q, runFunction, sql, update, useToast, when, errorText,
 } from "@lemma-plugins/kit";
 import { memberName, usePeople } from "./data";
 import { KIND_HINT, KIND_ICON, KIND_LABEL, KindPill, WARMTH, WarmthPill, gapText, lastWords } from "./marks";
@@ -76,7 +75,7 @@ function usePerson(id: string) {
       ]);
       setData({ person, handles, convs, meets, facts, earlier });
     } catch (e) {
-      setError(e instanceof Error ? e.message : String(e));
+      setError(errorText(e));
     }
   }, [id]);
   return { data, load, error };
@@ -125,7 +124,7 @@ export function PersonPage({ id }: { id: string }) {
       await reload("people");
       await load();
     } catch (e) {
-      toast(`Couldn't change that: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't change that: ${errorText(e)}`);
     } finally {
       setBusy("");
     }
@@ -463,7 +462,7 @@ export function TeamPersonPage({ handle }: { handle: string }) {
       await reload("people");
       if (out.person_id) to.person(out.person_id);
     } catch (e) {
-      toast(`Couldn't add them: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't add them: ${errorText(e)}`);
     } finally {
       setBusy(false);
     }

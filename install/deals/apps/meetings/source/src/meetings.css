@@ -17,6 +17,7 @@
 .mt-rail li.is-done .mt-rail__dot { background: var(--c-subtle); color: var(--c-muted); }
 .mt-connect { padding: 12px 14px 14px; border-top: 1px solid var(--c-border); display: grid; gap: 10px; }
 .mt-connect .c-setup__row { margin-top: 0; }
+.mt-connect-piece { margin-top: 12px; }
 .mt-or { display: flex; align-items: center; gap: 10px; margin: 18px 0; color: var(--c-faint); font-size: 12px; }
 .mt-or::before, .mt-or::after { content: ""; flex: 1; height: 1px; background: var(--c-border); }
 .mt-sample {

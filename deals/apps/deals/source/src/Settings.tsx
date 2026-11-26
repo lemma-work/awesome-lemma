@@ -3,7 +3,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { ArrowDown, ArrowUp, Database, Ear, KanbanSquare, Plus, Trash2 } from "lucide-react";
-import { Button, Card, Switch, runFunction, update, useToast } from "@lemma-plugins/kit";
+import { Button, Card, Switch, runFunction, update, useToast, errorText } from "@lemma-plugins/kit";
 import { browserZone, scheduleReview, useDeals } from "./data";
 import type { StageKind } from "./types";
 
@@ -88,7 +88,7 @@ export function SettingsPage() {
       seeded.current = false;
       toast(`Saved: ${out.message || "stages and currency"}.`);
     } catch (e) {
-      toast(`Couldn't save: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't save: ${errorText(e)}`);
     } finally {
       setBusy(null);
     }
@@ -101,7 +101,7 @@ export function SettingsPage() {
       await reload("settings");
       toast("The weekly review moved.");
     } catch (e) {
-      toast(`Couldn't move it: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't move it: ${errorText(e)}`);
     }
   };
   const sampleDo = async (mode: "load" | "clear") => {
@@ -112,7 +112,7 @@ export function SettingsPage() {
       void runFunction("deals_needs_you", {}).catch(() => undefined);
       toast(out.message || "Done.");
     } catch (e) {
-      toast(`Couldn't: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't: ${errorText(e)}`);
     } finally {
       setBusy(null);
     }

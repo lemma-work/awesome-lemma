@@ -4,7 +4,7 @@
 
 import { useMemo, useState, type ReactNode } from "react";
 import { CircleAlert, Clock, EyeOff, GitPullRequest, Package, Play, Settings as Cog, ShieldAlert, TriangleAlert } from "lucide-react";
-import { Button, Card, Empty, Header, Pill, SearchField, Segmented, Toolbar, useToast } from "@lemma-plugins/kit";
+import { Button, Card, Empty, Header, Pill, SearchField, Segmented, Toolbar, useToast, errorText } from "@lemma-plugins/kit";
 import { decide, openNow, useDeps, useMe } from "./data";
 import { Bump, Change, Mono, Reach, Read, RepoPill, Severity, StatePill, Tried } from "./marks";
 import { WEEKDAY_LONG, age, counted, joins, lastBatch, nextBatch, outFor, plural, repoReady, short, week } from "./model";
@@ -32,7 +32,7 @@ export function Week({ open }: { open?: string }) {
       const msg = await openNow(targets);
       if (msg) toast(msg);
     } catch (e) {
-      toast(`Couldn't start it: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't start it: ${errorText(e)}`);
     } finally {
       setBusy(false);
     }
@@ -223,7 +223,7 @@ export function Decide({ u, compact = true }: { u: Update; compact?: boolean }) 
     try {
       toast(await decide(u.id, action, extra));
     } catch (e) {
-      toast(`Couldn't do that: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't do that: ${errorText(e)}`);
     } finally {
       setBusy(null);
     }

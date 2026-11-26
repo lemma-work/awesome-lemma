@@ -3,10 +3,10 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { ArrowLeft, BookOpen, FlaskConical, GitPullRequest, Lock } from "lucide-react";
-import { Button, Face, Header, SearchField, Spinner, canOpenApps, openApp, plural, q as query, useToast } from "@lemma-plugins/kit";
+import { Button, Connect, Face, Header, SearchField, Spinner, canOpenApps, openApp, plural, q as query, useToast } from "@lemma-plugins/kit";
 import { act, ensureMine, ensureTeamSchedules, errText, usePrr, useWho } from "./data";
 import { githubSays, myRepos, needsGithub, type GhRepo } from "./github";
-import { ConnectGithub } from "./marks";
+import { SHARED_GITHUB } from "./marks";
 import { to } from "./route";
 
 export const RULE_FILES = ["AGENTS.md", "CLAUDE.md", "REVIEW.md", "CONTRIBUTING.md", ".github/copilot-instructions.md", ".github/instructions/*.instructions.md", ".cursor/BUGBOT.md"];
@@ -16,23 +16,28 @@ export function Setup() {
   const { canAdmin, me } = useWho();
   const toast = useToast();
   const [repos, setRepos] = useState<GhRepo[] | null>(null);
-  const [problem, setProblem] = useState<"missing" | string | null>(null);
+  // GitHub's answer when it refused; a missing connection is kept whole, for the Connect above.
+  const [problem, setProblem] = useState<{ missing: unknown } | string | null>(null);
   const [picked, setPicked] = useState<Set<string>>(() => new Set(prr.repos.map((r) => r.full_name)));
   const [q, setQ] = useState("");
   const [busy, setBusy] = useState<string | null>(null);
+  // Counts up each time the repositories should be read: once GitHub reads
+  // connected, and on Try again. Nothing is read before it is.
   const [tick, setTick] = useState(0);
   const again = !!prr.settings?.setup_done_at;
 
   useEffect(() => {
+    if (!tick) return;
     let alive = true;
     setProblem(null);
     myRepos()
       .then((list) => alive && setRepos(list))
-      .catch((e) => alive && setProblem(needsGithub(e) ? "missing" : githubSays(e)));
+      .catch((e) => alive && setProblem(needsGithub(e) ? { missing: e } : githubSays(e)));
     return () => {
       alive = false;
     };
   }, [tick]);
+  const missing = problem && typeof problem === "object" ? problem.missing : null;
 
   const shown = useMemo(() => (repos || []).filter((r) => !q || r.full_name.toLowerCase().includes(q.toLowerCase())).slice(0, 60), [repos, q]);
 
@@ -88,19 +93,18 @@ export function Setup() {
           Pick the repositories. It reads the rule files on each one's default branch, splits them into checkable rules, and proposes more from the review comments on your last merged pull requests. Then every push gets a review round: each rule passed, broken, or not checked and why.
         </p>
 
+        <Connect {...SHARED_GITHUB} className="prr-setup__card" error={missing} onReady={() => setTick((t) => t + 1)} />
+
         <div className="c-card prr-setup__card">
           <div className="c-card__head"><h2><GitPullRequest size={15} aria-hidden="true" />Repositories</h2><span className="c-grow" />{repos ? <span className="c-faint prr-meta">{picked.size} picked</span> : null}</div>
-          {problem === "missing" ? (
-            <div className="prr-pad-s">
-              <ConnectGithub />
-              <div className="c-setup__row"><Button size="sm" onClick={() => setTick((t) => t + 1)}>I've connected it</Button></div>
-            </div>
-          ) : problem ? (
+          {missing || !tick ? (
+            <div className="prr-pad-s c-muted">The repositories show here once GitHub is connected above.</div>
+          ) : typeof problem === "string" ? (
             <div className="prr-pad-s c-muted">GitHub didn't answer: {problem} <Button size="sm" onClick={() => setTick((t) => t + 1)}>Try again</Button></div>
           ) : !repos ? (
-            <div className="prr-pad-s c-row c-muted"><Spinner /> Asking GitHub which repositories you can see…</div>
+            <div className="prr-pad-s c-row c-muted"><Spinner /> Asking GitHub which repositories this Lemma can see…</div>
           ) : !repos.length ? (
-            <div className="prr-pad-s c-muted">Your GitHub account can't see any repository. Install the Lemma's GitHub App on your organization, then try again.</div>
+            <div className="prr-pad-s c-muted">GitHub shows this Lemma no repository yet: the Lemma's GitHub app isn't on any. Add it to the repositories to review on GitHub, then <button type="button" className="prr-link" onClick={() => setTick((t) => t + 1)}>look again</button>.</div>
           ) : (
             <>
               {repos.length > 8 ? <div className="prr-pad-s"><SearchField value={q} onChange={setQ} placeholder="Find a repository" /></div> : null}
@@ -119,7 +123,7 @@ export function Setup() {
         </div>
 
         <div className="c-setup__row">
-          <Button variant="primary" icon={BookOpen} busy={busy === "start"} disabled={!picked.size || !canAdmin} onClick={() => void start()}>
+          <Button variant={repos ? "primary" : "default"} icon={BookOpen} busy={busy === "start"} disabled={!repos || !picked.size || !canAdmin} onClick={() => void start()}>
             {again ? "Save and read the rules again" : `Read the rules in ${picked.size ? plural(picked.size, "repository", "repositories") : "them"}`}
           </Button>
           {!again ? <Button icon={FlaskConical} busy={busy === "sample"} onClick={() => void sample()}>Look around with a sample</Button> : null}

@@ -13,7 +13,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { CalendarClock, Check, CircleHelp, Inbox, Plus, Trash2, Undo2, UserPlus, Users, X } from "lucide-react";
 import {
-  Avatar, Button, Card, Face, Pill, Spinner, client, cx, nameOf, openApp, plural, runFunction, update, useToast,
+  Avatar, Button, Card, Face, Pill, Spinner, client, cx, nameOf, openApp, plural, runFunction, update, useToast, errorText,
 } from "@lemma-plugins/kit";
 import { usePeople } from "./data";
 import { KIND_HINT, KIND_LABEL, KindPill } from "./marks";
@@ -182,7 +182,7 @@ function Categories({ run }: { run: Run }) {
     try {
       await client.workflows.runs.submitForm(run.id, { node_id: "categories", inputs: { categories: [...on] } } as never);
     } catch (e) {
-      toast(`Couldn't keep that: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't keep that: ${errorText(e)}`);
       setBusy(false);
     }
   };
@@ -242,7 +242,7 @@ function Domains({ run }: { run: Run }) {
     try {
       await client.workflows.runs.submitForm(run.id, { node_id: "domains", inputs: { own_domains: domains } } as never);
     } catch (e) {
-      toast(`Couldn't keep that: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't keep that: ${errorText(e)}`);
       setBusy(false);
     }
   };
@@ -327,7 +327,7 @@ function Review({ run }: { run: Run }) {
       toast(out.message);
       await reload("people");
     } catch (e) {
-      toast(`Couldn't change that: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't change that: ${errorText(e)}`);
     } finally {
       setBusy("");
     }
@@ -337,7 +337,7 @@ function Review({ run }: { run: Run }) {
     try {
       await client.workflows.runs.submitForm(run.id, { node_id: "review", inputs: { looked: true } } as never);
     } catch (e) {
-      toast(`Couldn't finish: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't finish: ${errorText(e)}`);
       setBusy("");
     }
   };

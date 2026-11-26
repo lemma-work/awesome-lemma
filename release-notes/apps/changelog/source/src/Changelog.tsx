@@ -4,6 +4,7 @@
 // own; nothing is made up. Who asked is a count, never a name.
 
 import { useEffect, useState, type CSSProperties } from "react";
+import { errorText } from "@lemma-plugins/kit";
 
 interface Line { section: "lead" | "improved" | "fixed" | "need"; title?: string | null; text: string; asked?: number }
 interface Page {
@@ -97,7 +98,7 @@ export function Changelog() {
         return r.json() as Promise<{ rows: Page[]; truncated?: boolean }>;
       })
       .then((r) => setStatus({ kind: "ok", pages: (r.rows || []).slice().sort((a, b) => String(b.published_on).localeCompare(String(a.published_on))), truncated: !!r.truncated }))
-      .catch((e) => setStatus({ kind: "error", text: e instanceof Error ? e.message : String(e) }));
+      .catch((e) => setStatus({ kind: "error", text: errorText(e) }));
   }, []);
 
   const pages = status.kind === "ok" ? status.pages : [];

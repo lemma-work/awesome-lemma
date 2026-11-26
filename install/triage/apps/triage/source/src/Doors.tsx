@@ -2,16 +2,18 @@
 // its state in words, what it watches, this week's count, how it answers the
 // reporter, and its set-up. The report form's row gives the hosted link and
 // the snippets for a help page and inside a product; known issues are edited
-// here.
+// here. A door that reads through a connector shows that connector's
+// Connect under its row whenever it isn't connected, and its edit sheet
+// starts with it.
 
 import { useEffect, useMemo, useState } from "react";
 import { Copy, ExternalLink, Pencil } from "lucide-react";
-import { Button, DEMO, Field, Pill, Sheet, Switch, runFunction, useToast, type Tone } from "@lemma-plugins/kit";
+import { Button, Connect, DEMO, Field, Pill, Sheet, Switch, runFunction, useConnection, useToast, type Tone } from "@lemma-plugins/kit";
 import { nowMs, useTriage, useWho, type Data } from "./data";
-import { doorStates, type DoorState } from "./doorstate";
+import { connectSpec, doorStates, type ConnectedDoor, type DoorState } from "./doorstate";
 import { Chip, Gap } from "./marks";
 import type { Door, Settings } from "./types";
-import { FORM_COLUMNS, ensureSchedules, turnOffForm, turnOnForm, why, type Step } from "./wire";
+import { FORM_COLUMNS, ensureSchedules, noteProblem, turnOffForm, turnOnForm, why, type Step } from "./wire";
 
 const ACK_WORDS: Record<string, string> = { off: "Off", got_it: "“Got it”", got_it_known: "“Got it”, and what is known when it matches" };
 const TONE: Record<string, Tone> = { ok: "success", warn: "warning", off: "plain", bad: "danger" };
@@ -40,6 +42,18 @@ interface Row {
   ack: string;
   action?: { label: string; run: () => void };
   fixed?: { state: string; tone: Tone; tag?: string };
+  /** The connector the door reads through: its Connect shows under the row until it is connected. */
+  connect?: ConnectedDoor;
+}
+
+/** A door's connector, under its row, only while it needs something done. */
+function DoorConnect({ door, s }: { door: ConnectedDoor; s: Settings }) {
+  const spec = connectSpec(door, s);
+  const c = useConnection(spec);
+  const raw = s.status?.[door]?.state === "failed" ? s.status[door].note : null;
+  const error = useMemo(() => noteProblem(raw), [raw]);
+  if (c.state.kind === "loading" || (c.ready && !error)) return null;
+  return <div className="tr-door__connect"><Connect {...spec} connection={c} error={error} quiet primary={false} /></div>;
 }
 
 function weekCount(d: Data, doors: Door[], now: number, extra?: (r: { via: string | null }) => boolean): number {
@@ -72,10 +86,10 @@ export function Doors() {
         ack: "Always: replies with the number and what is known", state: states.get("assistant") },
       { key: "slack", name: "Watched Slack channels", desc: "Every new message is read; only real reports are filed. Questions and chatter are left alone.",
         watch: (s.slack.channels || []).map((c) => `#${c.name}`), note: slackAll.length ? `${slackLeft} of ${slackAll.length} messages this week were questions or chatter, left alone` : null,
-        count: String(weekCount(d, ["slack"], now)), ack: ACK_WORDS[s.ack.slack] || "Off", state: states.get("slack"), action: { label: "Edit", run: () => setEdit("slack") } },
+        count: String(weekCount(d, ["slack"], now)), ack: ACK_WORDS[s.ack.slack] || "Off", state: states.get("slack"), action: { label: "Edit", run: () => setEdit("slack") }, connect: "slack" },
       { key: "github", name: "GitHub issues", desc: "Issues opened or reopened. A repo's issue form is read field by field; a “+1” comment adds the person as someone who asked.",
         watch: s.repos.map((r) => r.full_name), count: String(weekCount(d, ["github"], now)), ack: `${ACK_WORDS[s.ack.github] || "Off"}${s.ack.github !== "off" ? ", as a comment" : ""}`,
-        state: states.get("github"), action: { label: "Edit", run: () => setEdit("github") } },
+        state: states.get("github"), action: { label: "Edit", run: () => setEdit("github") }, connect: "github" },
     ] },
     { name: "People outside", sub: "customers and users, with no account in your Lemma", rows: [
       { key: "form", name: "Report form", desc: "One form, three places: a link Lemma hosts, your help page, or inside your product, where a signed-in user is known by name and account.",
@@ -90,9 +104,9 @@ export function Doors() {
     ] },
     { name: "Machines", sub: "errors and alerts, counted in people where they can be", rows: [
       { key: "sentry", name: "Sentry", desc: "Unresolved issues: people, events, escalating, regressed.", watch: s.sentry.projects || (s.sentry.org ? [s.sentry.org] : []),
-        note: states.get("sentry")?.note, count: String(weekCount(d, ["sentry"], now)), ack: "Resolves in Sentry when fixed", state: states.get("sentry"), action: { label: "Edit", run: () => setEdit("sentry") } },
+        note: states.get("sentry")?.note, count: String(weekCount(d, ["sentry"], now)), ack: "Resolves in Sentry when fixed", state: states.get("sentry"), action: { label: "Edit", run: () => setEdit("sentry") }, connect: "sentry" },
       { key: "posthog", name: "PostHog", desc: "Error tracking issues: people and sessions.", watch: s.posthog.project_id ? [`project ${s.posthog.project_id}`] : [],
-        note: states.get("posthog")?.note, count: String(weekCount(d, ["posthog"], now)), ack: "—", state: states.get("posthog"), action: { label: "Edit", run: () => setEdit("posthog") } },
+        note: states.get("posthog")?.note, count: String(weekCount(d, ["posthog"], now)), ack: "—", state: states.get("posthog"), action: { label: "Edit", run: () => setEdit("posthog") }, connect: "posthog" },
       { key: "dependabot", name: "Dependabot", desc: "New, reopened and reintroduced alerts, with scope and reachability.", watch: s.repos.map((r) => r.full_name),
         note: states.get("dependabot")?.tone === "warn" ? states.get("dependabot")?.note : null, count: String(weekCount(d, ["dependabot"], now)), ack: "—", state: states.get("dependabot") },
       { key: "code_scanning", name: "Code and secret scanning", desc: "New and reopened alerts from code scanning and secret scanning.", watch: s.repos.map((r) => r.full_name),
@@ -127,6 +141,7 @@ export function Doors() {
                   <div className="tr-r tr-num"><span className="tr-phone-label">This week </span>{r.count}</div>
                   <div className="tr-small tr-muted"><span className="tr-phone-label">Answers: </span>{r.ack}</div>
                   <div>{r.action ? <Button size="sm" onClick={r.action.run}>{r.action.label}</Button> : null}</div>
+                  {r.connect ? <DoorConnect door={r.connect} s={s} /> : null}
                 </div>
               );
             })}
@@ -198,6 +213,7 @@ function DoorSheet({ which, s, onClose }: { which: string | null; s: Settings; o
   return (
     <Sheet open title={{ github: "GitHub", slack: "Watched Slack channels", sentry: "Sentry", posthog: "PostHog" }[which] || "Door"} onClose={onClose}
       footer={<Button variant="primary" busy={busy} onClick={() => void save()}>Save</Button>}>
+      {which === "github" || which === "slack" || which === "sentry" || which === "posthog" ? <Connect {...connectSpec(which, s)} primary={false} /> : null}
       {which === "github" ? (
         <>
           <Field label="Repositories" hint="owner/name, one a line. Issues, comments and security alerts on these become reports."><textarea className="c-textarea" rows={4} value={text} onChange={(e) => setText(e.target.value)} placeholder="acme/web" /></Field>
@@ -208,7 +224,6 @@ function DoorSheet({ which, s, onClose }: { which: string | null; s: Settings; o
       {which === "slack" ? (
         <>
           <Field label="Channels" hint="The channel id and its name, one a line: C0123ABC support. The Lemma's bot must be in each."><textarea className="c-textarea" rows={4} value={text} onChange={(e) => setText(e.target.value)} placeholder="C0123ABC support" /></Field>
-          <Field label="Slack connector" hint="The Lemma's Slack connection, usually slack."><input className="c-input" value={a} onChange={(e) => setA(e.target.value)} /></Field>
           <Field label="Workspace id (team id)"><input className="c-input" value={b} onChange={(e) => setB(e.target.value)} placeholder="T0123ABC" /></Field>
           {ackField}
           <Gap>Read every 15 minutes until Slack's channel trigger is live (lemma-platform#1245)</Gap>
@@ -216,7 +231,6 @@ function DoorSheet({ which, s, onClose }: { which: string | null; s: Settings; o
       ) : null}
       {which === "sentry" ? (
         <>
-          <Field label="Sentry connector"><input className="c-input" value={a} onChange={(e) => setA(e.target.value)} /></Field>
           <Field label="Organization slug"><input className="c-input" value={b} onChange={(e) => setB(e.target.value)} placeholder="acme" /></Field>
           <Field label="Projects" hint="Slugs, one a line; empty for every project."><textarea className="c-textarea" rows={3} value={text} onChange={(e) => setText(e.target.value)} /></Field>
           <Gap>No Sentry trigger: read every 15 minutes</Gap>
@@ -224,7 +238,6 @@ function DoorSheet({ which, s, onClose }: { which: string | null; s: Settings; o
       ) : null}
       {which === "posthog" ? (
         <>
-          <Field label="PostHog connector" hint="The Lemma's connection to PostHog's MCP server."><input className="c-input" value={a} onChange={(e) => setA(e.target.value)} /></Field>
           <Field label="Connected account id" hint="When the Lemma has more than one MCP account."><input className="c-input" value={b} onChange={(e) => setB(e.target.value)} /></Field>
           <Field label="Project id"><input className="c-input" value={c} onChange={(e) => setC(e.target.value)} /></Field>
           <Gap>No trigger: read over MCP every 15 minutes</Gap>

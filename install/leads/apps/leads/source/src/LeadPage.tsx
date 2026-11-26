@@ -9,8 +9,7 @@ import {
   Sparkles, ThumbsDown, ThumbsUp, Undo2, UserRound, Users,
 } from "lucide-react";
 import {
-  Avatar, Button, Card, Empty, Header, Logo, Markdown, Menu, MenuItem, MenuLabel, Notice, Pill, Rel, Skeleton, Spinner,
-  agoText, day, firstName, nameOf, openApp, q, runFunction, sql, useToast, when,
+  Avatar, Button, Card, Empty, Header, Logo, Markdown, Menu, MenuItem, MenuLabel, Notice, Pill, Rel, Skeleton, Spinner, agoText, day, firstName, nameOf, openApp, q, runFunction, sql, useToast, when, errorText,
 } from "@lemma-plugins/kit";
 import { useLeads } from "./data";
 import { FactRow, FitMark, KIND_LABEL, KindPill, Source, StatePill, host, notFoundText } from "./marks";
@@ -101,7 +100,7 @@ export function LeadPage({ id }: { id: string }) {
       await reload("leads");
       await load();
     } catch (e) {
-      toast(`Couldn't do that: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't do that: ${errorText(e)}`);
     } finally {
       setBusy("");
     }

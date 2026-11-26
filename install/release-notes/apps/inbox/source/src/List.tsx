@@ -5,7 +5,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { AlarmClock, Archive, CheckCheck, CircleHelp, FolderInput, Inbox as InboxIcon, Loader2, Paperclip, PenLine, X } from "lucide-react";
-import { Avatar, Button, Empty, Menu, MenuItem, MenuLabel, SearchField, Segmented, Skeleton, cx, nameOf, useToast } from "@lemma-plugins/kit";
+import { Avatar, Button, Empty, Menu, MenuItem, MenuLabel, SearchField, Segmented, Skeleton, cx, nameOf, useToast, errorText } from "@lemma-plugins/kit";
 import { ACTIVE, useAct, useMail } from "./data";
 import { Reader } from "./Reader";
 import { to, type View } from "./route";
@@ -132,7 +132,7 @@ export function List({ view, id }: { view: View; id?: string }) {
 
   const done = useCallback((ids: string[]) => {
     if (!ids.length) return;
-    void act(ids, "done").catch((e: unknown) => toast(`Couldn’t mark done: ${e instanceof Error ? e.message : e}`));
+    void act(ids, "done").catch((e: unknown) => toast(`Couldn’t mark done: ${errorText(e)}`));
     toast(ids.length === 1 ? "Marked done" : `${ids.length} marked done`, { action: { label: "Undo", run: () => void act(ids, "restore") } });
     leave(ids);
   }, [act, toast, leave]);

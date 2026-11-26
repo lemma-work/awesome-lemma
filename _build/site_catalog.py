@@ -90,6 +90,13 @@ GROUPS = {
     "project": "projects",
     "deal": "deals",
     "brand": "brand",
+    "ask": "asks",
+    "away": "away",
+    "product": "feedback",
+    "feature": "feedback",
+    "feedback": "feedback",
+    "repository": "code",
+    "pull_request": "code",
     "form": "forms",
     "form_answer": "forms",
     "article": "articles",
@@ -107,7 +114,11 @@ TABLES = {
     "projects": ("Projects", "A team project and the tasks in it"),
     "deals": ("Deals", "Something the team is trying to win, with its stage"),
     "brand": ("Brand", "Your colours, type, logos and voice"),
+    "asks": ("Requests", "One person asking for a piece of work, so they hear when it ships"),
+    "away": ("Who's away", "A day someone is off, so plans fit who is here"),
+    "feedback": ("Feedback", "What people said about each feature, word for word"),
     "articles": ("Customer answers", "Checked answers customers may read, never past their check date"),
+    "code": ("Pull requests", "Each watched repository and where every pull request stands"),
     "forms": ("Form answers", "Every answer to the team's forms, and where each one went"),
 }
 
@@ -444,9 +455,13 @@ def build(site: Path) -> dict:
             "install": f"/import/github/{INSTALL_REPO}?path=install/{folder.name}",
         })
 
+    # A shared table first written by a plugin that is only planned (User
+    # feedback's tables, say) is read by built plugins already: they list it
+    # under what they read, and no built plugin is named as making it.
+    planned_names = {item["name"] for item in planned}
     for group, maker in owners.items():
-        if maker not in folder_of_name:
-            raise CatalogError(f"{group} is first written by {maker!r}, which is not a built plugin")
+        if maker not in folder_of_name and maker not in planned_names:
+            raise CatalogError(f"{group} is first written by {maker!r}, which is neither built nor planned")
 
     known = {p["slug"] for p in built}
     later = []

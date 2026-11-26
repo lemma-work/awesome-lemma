@@ -4,7 +4,7 @@
 
 import { useState } from "react";
 import { ArrowLeft, CalendarCheck, ExternalLink, Mail, Sparkles, Video } from "lucide-react";
-import { Avatar, Button, Card, Empty, Header, Markdown, Pill, agoText, go, openApp, runFunction, update, useToast } from "@lemma-plugins/kit";
+import { Avatar, Button, Card, Empty, Header, Markdown, Pill, agoText, go, openApp, runFunction, update, useToast, errorText } from "@lemma-plugins/kit";
 import { clock, place, span } from "../time";
 import { KINDS, KIND_LABEL, answerOf, useBooking, type Kind, type Request } from "./data";
 import { BriefMark, KindMark } from "./Home";
@@ -43,7 +43,7 @@ export function Booking({ id }: { id: string }) {
       toast(`Kept as ${KIND_LABEL[k].toLowerCase()}. Meetings learns from it.`);
       await reload();
     } catch (e) {
-      toast(`Couldn't keep it: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't keep it: ${errorText(e)}`);
     } finally {
       setBusy("");
     }

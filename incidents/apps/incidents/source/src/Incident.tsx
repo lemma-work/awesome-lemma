@@ -1,20 +1,23 @@
 // One incident, as a record: the header with its facts and status steps, then
 // two tabs. "Incident" (the canvas's A): Now, the most likely cause, the
 // drafted update, and the timeline; properties beside. "Write-up": the
-// document drafted on resolve (Writeup.tsx), in the same layout.
+// document drafted on resolve (Writeup.tsx), in the same layout. A source
+// the Lemma couldn't check for want of its connector shows that connector's
+// Connect under "Not checked"; the update card shows Slack's and Resend's
+// when they aren't connected, or when sending found them not connected.
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   Check, Clock, Code, ExternalLink, Hash, MinusCircle, Phone, RefreshCw, Send, XCircle,
 } from "lucide-react";
-import { Button, DEMO, Empty, Menu, MenuItem, MenuLabel, Pill, Segmented, Spinner, openApp, useToast } from "@lemma-plugins/kit";
+import { Button, DEMO, Empty, Menu, MenuItem, MenuLabel, Pill, Segmented, Spinner, openApp, useToast, errorText } from "@lemma-plugins/kit";
 import { call, nowMs, setIncident, useIncidents, useWho, type Data } from "./data";
 import {
-  Ai, Gap, GitMerge, Inbox, Rocket, STATUS, STATUS_WORDS, SevPill, SourceIcon, StatusPill, Who, WithCode, eventIcon, hhmm, num,
-  sevOf, span, startOf,
+  Ai, Gap, GitMerge, Inbox, NeedsConnect, Rocket, STATUS, STATUS_WORDS, SevPill, SourceIcon, StatusPill, Who, WithCode, eventIcon, hhmm,
+  isConnector, num, sevOf, span, startOf, type ConnectorKey,
 } from "./marks";
 import { to } from "./route";
-import { unwireIncident, wireIncident } from "./wire";
+import { problemIn, said, unwireIncident, wireIncident } from "./wire";
 import { WriteupTab } from "./Writeup";
 import type { Hypothesis, IncEvent, Incident, Update } from "./types";
 
@@ -154,10 +157,10 @@ function CauseCard({ inc, hyp, events, d }: { inc: Incident; hyp: Hypothesis | u
     setBusy(key);
     try {
       const out = await fn();
-      toast(String(out.message || "Done."));
+      toast(said(out.message || "Done."));
       await d.reload();
     } catch (e) {
-      toast(`Couldn't: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't: ${errorText(e)}`);
     } finally {
       setBusy("");
     }
@@ -209,6 +212,9 @@ function CauseCard({ inc, hyp, events, d }: { inc: Incident; hyp: Hypothesis | u
           {hyp.not_checked.length ? hyp.not_checked.map((r, i) => (
             <div key={i} className="in-evi in-evi--plain"><MinusCircle aria-hidden="true" /><span>{r.text}</span></div>
           )) : <p className="c-faint in-small">Every source it needed was connected.</p>}
+          {inc.status !== "resolved" ? [...new Set(hyp.not_checked.map((r) => r.source).filter(isConnector))].map((key) => (
+            <NeedsConnect key={key} connector={key} settings={d.settings} />
+          )) : null}
         </div>
       </div>
       {inc.status !== "resolved" ? (
@@ -253,15 +259,24 @@ function UpdateCard({ inc, updates, d }: { inc: Incident; updates: Update[]; d: 
   const last = updates.filter((u) => u.state === "sent").sort((a, b) => (b.sent_at || "").localeCompare(a.sent_at || ""))[0];
   const isLead = !inc.lead_user_id || inc.lead_user_id === me?.id;
   const emails = d.settings?.email_to?.length || 0;
+  const [failed, setFailed] = useState<Partial<Record<ConnectorKey, unknown>>>({});
   const send = async () => {
     setBusy("send");
     try {
       const out = await call("incidents_send_update", { incident: inc.id, update_id: draft?.id, body: editing ? text : null });
-      toast(String(out.message || "Sent."));
+      // Each place it didn't reach for want of a connection: Slack (the channels) or Resend (email).
+      const delivery = (out.delivery || {}) as Record<string, string>;
+      const missed: Partial<Record<ConnectorKey, unknown>> = {};
+      for (const [where, how] of Object.entries(delivery)) {
+        const e = problemIn(how);
+        if (e) missed[where === "email" ? "resend" : "slack"] = e;
+      }
+      setFailed(missed);
+      toast(said(out.message || "Sent.", Object.keys(missed)[0]));
       setEditing(false);
       await d.reload();
     } catch (e) {
-      toast(`Couldn't send: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't send: ${errorText(e, "slack")}`);
     } finally {
       setBusy("");
     }
@@ -270,10 +285,10 @@ function UpdateCard({ inc, updates, d }: { inc: Incident; updates: Update[]; d: 
     setBusy("draft");
     try {
       const out = await call("incidents_draft_update", { incident: inc.id });
-      toast(String(out.message || "Drafted."));
+      toast(said(out.message || "Drafted."));
       await d.reload();
     } catch (e) {
-      toast(`Couldn't draft: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't draft: ${errorText(e)}`);
     } finally {
       setBusy("");
     }
@@ -313,6 +328,10 @@ function UpdateCard({ inc, updates, d }: { inc: Incident; updates: Update[]; d: 
           <Button busy={busy === "draft"} onClick={() => void draftOne()}>Draft one now</Button>
         </div>
       )}
+      <NeedsConnect connector="slack" settings={d.settings} error={failed.slack}
+        lead={`Updates go to the incident's channel and #${d.settings?.announce_channel_name || "incidents"} through Slack. Without it, nothing is posted.`} />
+      {emails ? <NeedsConnect connector="resend" settings={d.settings} error={failed.resend}
+        lead={`Emails each update to the ${emails === 1 ? "person" : `${emails} people`} in set-up. Without it, updates go to Slack only.`} /> : null}
     </section>
   );
 }
@@ -392,10 +411,10 @@ function Properties({ inc, d }: { inc: Incident; d: Data }) {
     setBusy(key);
     try {
       const out = await fn();
-      toast(String(out.message || "Done."));
+      toast(said(out.message || "Done."));
       await d.reload();
     } catch (e) {
-      toast(`Couldn't: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't: ${errorText(e)}`);
     } finally {
       setBusy("");
     }

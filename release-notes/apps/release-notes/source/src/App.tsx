@@ -6,7 +6,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { FlaskConical, Tag } from "lucide-react";
-import { Banner, Button, DEMO, DataProvider, Header, Notice, Skeleton, runFunction, useToast } from "@lemma-plugins/kit";
+import { Banner, Button, DEMO, DataProvider, Header, Notice, Skeleton, runFunction, useToast, errorText } from "@lemma-plugins/kit";
 import { LOADERS, WhoProvider, ensureMine, startTell, useRN, useWho } from "./data";
 import { Asked } from "./Asked";
 import { Desk } from "./Desk";
@@ -68,7 +68,7 @@ function Shell() {
       toast(out?.message || "Cleared the sample.");
       await rn.reload();
     } catch (e) {
-      toast(`Couldn't clear the sample: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't clear the sample: ${errorText(e)}`);
     } finally {
       setClearing(false);
     }

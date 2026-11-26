@@ -17,6 +17,10 @@
     "created_at": "2026-01-01T00:00:00Z",
     "updated_at": "2026-01-01T00:00:00Z"
   },
+  "connections": {
+    "github": { "state": "ready", "as": "fernway" },
+    "slack": { "state": "ready", "as": "Fernway" }
+  },
   "notes": {
     "release_notes_on_note": "",
     "release_notes_sample_data": "In the demo the sample stays.",

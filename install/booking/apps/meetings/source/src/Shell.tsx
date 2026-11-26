@@ -8,6 +8,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { Avatar, Banner, Button, cx } from "@lemma-plugins/kit";
+import { stoppedText } from "./connection";
 import { useMeetings } from "./data";
 import { isOver } from "./marks";
 import { MeetingPage } from "./MeetingPage";
@@ -64,7 +65,7 @@ function Nav({ route, onPick }: { route: Route; onPick: () => void }) {
       </div>
       <div className="mt-nav__foot">
         {calendars.map((c) => (
-          <div key={c.id} className="mt-nav__cal" title={c.last_error || undefined}>
+          <div key={c.id} className="mt-nav__cal" title={c.last_error ? stoppedText(c.last_error, c.provider) : undefined}>
             <Avatar name={settings?.display_name} email={c.email} size={22} you />
             <span className="c-ellipsis">{c.provider === "sample" ? "Sample calendar" : c.email}</span>
             {c.last_error ? <TriangleAlert size={13} aria-label="Reading stopped" /> : null}
@@ -131,8 +132,9 @@ export function Shell() {
         {stopped.length ? (
           <div className="mt-strip">
             {stopped.map((c) => (
-              <Banner key={c.id} tone="danger" icon={TriangleAlert}>
-                <b>Couldn't read {c.email}.</b> {c.last_error}
+              <Banner key={c.id} tone="danger" icon={TriangleAlert}
+                action={route.page === "settings" ? undefined : <Button size="sm" onClick={() => to.settings()}>Calendars</Button>}>
+                <b>Couldn't read {c.email}.</b> {stoppedText(c.last_error || "", c.provider)}
               </Banner>
             ))}
           </div>

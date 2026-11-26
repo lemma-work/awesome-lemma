@@ -14,7 +14,7 @@
 // row writes. Schedules are made as the person in wire.ts.
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
-import { DEMO, client, create, items, orgId, runFunction, update, useData, useRows, whoAmI, type Loaders } from "@lemma-plugins/kit";
+import { DEMO, client, create, items, orgId, runFunction, update, useData, useRows, whoAmI, type Loaders, errorText } from "@lemma-plugins/kit";
 import { build, type Item, type Message } from "./transcript";
 import { nowMs, setDemoClock } from "./marks";
 import type { CodingEvent, Member, Question, Repo, Runtime, Session, Settings, Task } from "./types";
@@ -127,7 +127,7 @@ export function WorldProvider({ children }: { children: ReactNode }) {
     if (!base.org) return;
     client.agentRuntime.listProfiles(base.org).then(
       (r) => { setRuntimes(asRuntimes(r)); setRuntimesError(null); },
-      (e) => { setRuntimes([]); setRuntimesError(e instanceof Error ? e.message : String(e)); },
+      (e) => { setRuntimes([]); setRuntimesError(errorText(e)); },
     );
   }, [base.org]);
   useEffect(() => {
@@ -318,7 +318,7 @@ export function useConversation(id: string | null | undefined, enabled = true): 
         if (!DEMO) timer = window.setTimeout(load, st === "RUNNING" || st === "STOP_REQUESTED" ? 3000 : 30_000);
       } catch (e) {
         if (!alive) return;
-        setError(e instanceof Error ? e.message : String(e));
+        setError(errorText(e));
         setLoading(false);
       }
     };

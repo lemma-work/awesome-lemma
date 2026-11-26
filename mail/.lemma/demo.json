@@ -13,5 +13,15 @@
   ],
   "notes": {
     "mail-sort": "In the demo the sort doesn't run again. In a Lemma it reads your recent mail into your categories."
+  },
+  "connections": {
+    "gmail": {
+      "state": "ready",
+      "as": "you@northwind-tools.example"
+    },
+    "outlook": {
+      "state": "ready",
+      "as": "you@northwind-tools.example"
+    }
   }
 }

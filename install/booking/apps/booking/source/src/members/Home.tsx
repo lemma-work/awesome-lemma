@@ -3,7 +3,7 @@
 
 import { useMemo, useState } from "react";
 import { CalendarCheck, CalendarClock, CalendarX, Copy, ExternalLink, FlaskConical, Link2, Settings as Cog, Sparkles, Trash2 } from "lucide-react";
-import { Avatar, Banner, Button, Card, Empty, Header, Pill, Segmented, Switch, agoText, go, openApp, plural, runFunction, useToast } from "@lemma-plugins/kit";
+import { Avatar, Banner, Button, Card, Empty, Header, Pill, Segmented, Switch, agoText, go, openApp, plural, runFunction, useToast, errorText } from "@lemma-plugins/kit";
 import { clock, daysText, length, place, shortDay } from "../time";
 import { KIND_LABEL, PROVIDER_LABEL, useBooking, type Request } from "./data";
 import { pageLink, findWidget, onSample, turnOff, turnOn } from "./turnOn";
@@ -81,7 +81,7 @@ export function Home() {
       toast(out.message);
       await reload();
     } catch (e) {
-      toast(`Couldn't ${mode === "load" ? "add" : "clear"} the sample: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't ${mode === "load" ? "add" : "clear"} the sample: ${errorText(e)}`);
     } finally {
       setBusy("");
     }

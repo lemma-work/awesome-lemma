@@ -12,7 +12,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Check, CircleHelp, Plus, ScanSearch, SkipForward, Undo2, Users, X } from "lucide-react";
 import {
-  Avatar, Button, Card, Face, Logo, Pill, Spinner, client, cx, nameOf, openApp, plural, runFunction, useToast,
+  Avatar, Button, Card, Face, Logo, Pill, Spinner, client, cx, nameOf, openApp, plural, runFunction, useToast, errorText,
 } from "@lemma-plugins/kit";
 import { startSetup } from "./App";
 import { useLeads } from "./data";
@@ -181,7 +181,7 @@ function Fit({ run }: { run: Run }) {
     try {
       await submit(run.id, "fit", { fit_sentence: sentence.trim(), fit_examples: examples });
     } catch (e) {
-      toast(`Couldn't keep that: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't keep that: ${errorText(e)}`);
       setBusy(false);
     }
   };
@@ -251,7 +251,7 @@ function Kinds({ run }: { run: Run }) {
     try {
       await submit(run.id, "kinds", { kinds: [...on], daily_limit: n });
     } catch (e) {
-      toast(`Couldn't keep that: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't keep that: ${errorText(e)}`);
       setBusy(false);
     }
   };
@@ -348,7 +348,7 @@ function Review({ run }: { run: Run }) {
       toast(out.message);
       await reload("leads");
     } catch (e) {
-      toast(`Couldn't change that: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't change that: ${errorText(e)}`);
     } finally {
       setBusy("");
     }
@@ -358,7 +358,7 @@ function Review({ run }: { run: Run }) {
     try {
       await submit(run.id, "review", { looked: true });
     } catch (e) {
-      toast(`Couldn't start: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't start: ${errorText(e)}`);
       setBusy("");
     }
   };

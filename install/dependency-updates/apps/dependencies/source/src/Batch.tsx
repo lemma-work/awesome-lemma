@@ -8,7 +8,7 @@ import {
   ArrowLeft, Ban, CircleCheck, CircleX, Download, ExternalLink, Eye, FileCode, FileLock2, FlaskConical, GitBranch, GitMerge,
   GitPullRequest, Hammer, ListChecks, MessageSquare, Package, Search, ShieldAlert, Split, Upload, Wrench,
 } from "lucide-react";
-import { Button, Card, Empty, Header, Pill, Sheet, useToast } from "@lemma-plugins/kit";
+import { Button, Card, Empty, Header, Pill, Sheet, useToast, errorText } from "@lemma-plugins/kit";
 import { decide, merge, useDeps } from "./data";
 import { BatchState, Change, Checks, Mono, Read, Review, StatePill } from "./marks";
 import { clock, dayOf, plural, short } from "./model";
@@ -66,7 +66,7 @@ function Head({ b, updates }: { b: BatchRow; updates: Update[] }) {
       if (msg) toast(msg);
       setConfirm(false);
     } catch (e) {
-      toast(`Couldn't merge: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't merge: ${errorText(e)}`);
     } finally {
       setBusy(false);
     }
@@ -148,7 +148,7 @@ function Updates({ b, updates }: { b: BatchRow; updates: Update[] }) {
     try {
       toast(await decide(u.id, action));
     } catch (e) {
-      toast(`Couldn't do that: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't do that: ${errorText(e)}`);
     } finally {
       setBusy(null);
     }
@@ -241,7 +241,7 @@ function Side({ b, updates }: { b: BatchRow; updates: Update[] }) {
       toast(await decide(b.id, "ask", { text: ask.trim() }));
       setAsk("");
     } catch (e) {
-      toast(`Couldn't ask: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't ask: ${errorText(e)}`);
     } finally {
       setSending(false);
     }

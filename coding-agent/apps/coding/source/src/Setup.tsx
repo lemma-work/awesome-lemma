@@ -1,14 +1,14 @@
 // Set-up, once for the team by whoever opens the Coding agent first, and the
-// same screen to change it later: GitHub (the Lemma's connection, as each
-// person's own sign-in), the repositories the agent may work in with what it
+// same screen to change it later: GitHub (one connection for the whole Lemma,
+// connected here with the kit's <Connect>), the repositories the agent may work in with what it
 // runs first in each, and the defaults (who runs, on which model, keep the
 // pull request green and for how many tries, the issue label that hands an
 // issue over). Or a sample board to look around with. Saving also makes the
 // person's own schedules (wire.ts) and says which couldn't be made.
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { ArrowLeft, FlaskConical, Github, SquareTerminal } from "lucide-react";
-import { Button, DEMO, Field, Header, Spinner, Switch, client, cx, demoNote, orgId, useToast } from "@lemma-plugins/kit";
+import { Button, Connect, DEMO, Field, Header, Spinner, Switch, client, cx, demoNote, errorText, isConnectionProblem, useToast } from "@lemma-plugins/kit";
 import { call, runtimeOf, useCoding, useWorld } from "./data";
 import { AgentMenu, ModelMenu } from "./pickers";
 import { Mono } from "./marks";
@@ -26,7 +26,7 @@ export function Setup() {
   const done = !!settings?.setup_done_at;
   const [listed, setListed] = useState<Listed[] | null>(null);
   const [complete, setComplete] = useState(true);
-  const [ghError, setGhError] = useState<string | null>(null);
+  const [ghError, setGhError] = useState<unknown>(null);
   const [form, setForm] = useState<Record<string, RepoForm>>({});
   const [profile, setProfile] = useState(settings?.default_profile_id || "system:lemma");
   const [model, setModel] = useState<string | null>(settings?.default_model || null);
@@ -37,16 +37,22 @@ export function Setup() {
   const [problems, setProblems] = useState<string[] | null>(null);
   const [typed, setTyped] = useState("");
 
-  useEffect(() => {
+  // The repositories the Lemma's GitHub connection lets a task open in. A
+  // refusal keeps its error: <Connect> turns a connection one into its next step.
+  const readRepos = useCallback(() => {
     client.conversations.repositories().then(
       (r) => {
         const x = r as unknown as { items?: Listed[]; complete?: boolean };
         setListed(x.items || []);
         setComplete(x.complete !== false);
+        setGhError(null);
       },
-      (e) => { setListed([]); setGhError(e instanceof Error ? e.message : String(e)); },
+      (e) => { setListed([]); setGhError(e); },
     );
   }, []);
+  useEffect(readRepos, [readRepos]);
+  // Connected after the first read came back empty: read again.
+  const githubReady = () => { if (listed && (!listed.length || ghError)) { setListed(null); readRepos(); } };
   useEffect(() => {
     // What's saved, then everything GitHub lists, off until ticked.
     setForm((f) => {
@@ -61,21 +67,6 @@ export function Setup() {
   const set = (name: string, patch: Partial<RepoForm>) => setForm((f) => ({ ...f, [name]: { ...f[name], ...patch } }));
   const picked = rows.filter((r) => r.enabled);
   const runtime = runtimeOf(profile, runtimes);
-
-  const connect = async () => {
-    setBusy("connect");
-    try {
-      const org = await orgId();
-      if (!org) throw new Error("this Lemma's organization isn't known");
-      const req = (await client.connectors.createConnectRequest(org, { connector_id: "github", return_to: location.href } as never)) as { authorization_url?: string | null };
-      if (req.authorization_url) location.href = req.authorization_url;
-      else toast("GitHub is already connected. If a repository is missing, add it to the Lemma GitHub app's installation.");
-    } catch (e) {
-      toast(`Couldn't start connecting GitHub: ${e instanceof Error ? e.message : e}`);
-    } finally {
-      setBusy("");
-    }
-  };
 
   const save = async (sample: boolean) => {
     setBusy(sample ? "sample" : "save");
@@ -105,7 +96,7 @@ export function Setup() {
       await data.reload();
       if (!made.problems.length) to.board();
     } catch (e) {
-      toast(`Couldn't save: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't save: ${errorText(e)}`);
     } finally {
       setBusy("");
     }
@@ -114,14 +105,13 @@ export function Setup() {
   const github = (
     <section className="cd-setsec">
       <h2 className="cd-setsec__h"><Github size={15} aria-hidden="true" />GitHub</h2>
-      {!listed ? <p className="c-muted c-row"><Spinner /> Reading what your GitHub sign-in can see…</p> : null}
-      {listed && !listed.length ? (
-        <div className="cd-connect">
-          <p className="c-muted">{ghError ? "GitHub isn't connected for you in this Lemma, or the Lemma GitHub app covers none of your repositories." : "The Lemma GitHub app covers none of your repositories yet."} The agent checks out, pushes and opens pull requests as you.</p>
-          <div><Button variant="primary" icon={Github} busy={busy === "connect"} onClick={() => void connect()}>Connect GitHub</Button></div>
-        </div>
+      <Connect connector="github" slug="github" mode="shared" onReady={githubReady} error={ghError}
+        purpose="One GitHub connection for this Lemma: the agent checks out the repositories you tick, pushes its own branch and opens the pull request, and reads checks and review comments to keep it green. Merging stays with a person." />
+      {!listed ? <p className="c-muted c-row"><Spinner /> Reading the repositories GitHub lets this Lemma see…</p> : null}
+      {listed && !listed.length && !(ghError && isConnectionProblem(ghError)) ? (
+        <p className="cd-note">{ghError ? `Couldn't read the repositories: ${errorText(ghError, "github")}` : "No repositories yet: the Lemma's GitHub app isn't on any. Once it is, they show here."}</p>
       ) : null}
-      {listed && listed.length ? <p className="cd-note">Connected. The agent works as you: it pushes and opens pull requests with your GitHub sign-in.{complete ? "" : " Your installation covers more repositories than are listed here; type one below to add it."}</p> : null}
+      {listed && listed.length > 0 && !complete ? <p className="cd-note">The Lemma's GitHub app is on more repositories than are listed here; type one below to add it.</p> : null}
     </section>
   );
 

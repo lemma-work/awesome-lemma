@@ -11,7 +11,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { CalendarDays, Check, CircleAlert, Copy, Link2, Mail, Video } from "lucide-react";
-import { Button, client, openApp, orgId, q, sql, startWorkflow, update, create, useToast, whoAmI } from "@lemma-plugins/kit";
+import { Button, Connect, client, openApp, orgId, q, sql, startWorkflow, update, create, useToast, whoAmI, errorText } from "@lemma-plugins/kit";
 import { browserZone, daysText, DAY_NAMES, length } from "../time";
 import { PROVIDER_LABEL, useBooking, type Calendar, type Page, type Settings } from "./data";
 import { appOrigin, findWidget, pageLink, turnOn, type StepResult } from "./turnOn";
@@ -179,7 +179,7 @@ function Calendars({ run }: { run: Run }) {
       if (settings) await update("booking_settings", settings.id, { setup_step: "hours" });
       await submit(run, "calendars", { calendar_ids: [...picked] });
     } catch (e) {
-      toast(`Couldn't go on: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't go on: ${errorText(e)}`);
       setBusy(false);
     }
   };
@@ -240,7 +240,7 @@ function Hours({ run }: { run: Run }) {
       if (settings) await update("booking_settings", settings.id, { setup_step: "page" });
       await submit(run, "hours", v);
     } catch (e) {
-      toast(`Couldn't go on: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't go on: ${errorText(e)}`);
       setBusy(false);
     }
   };
@@ -334,7 +334,7 @@ function PageForm({ run }: { run: Run }) {
       if (settings) await update("booking_settings", settings.id, { setup_step: "video" });
       await submit(run, "page", { handle, name: v.name.trim(), about: v.about.trim() || undefined, more: v.more.trim() || undefined });
     } catch (e) {
-      toast(`Couldn't go on: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't go on: ${errorText(e)}`);
       setBusy(false);
     }
   };
@@ -371,29 +371,44 @@ function PageForm({ run }: { run: Run }) {
 
 interface Account { id: string; connector_id: string; status?: string; email?: string | null; display_name?: string | null }
 
-export function useMailAccounts() {
+/** Said beside Connect, for the mailbox a declined booking is emailed from (from the connectors' own purpose). */
+export const MAIL_PURPOSE: Record<"gmail" | "outlook", string> = {
+  gmail: "Emails a person whose booking couldn't be taken why, with your page's link, from your own Gmail. It sends nothing else and reads nothing. Without it, the page tells them.",
+  outlook: "Emails a person whose booking couldn't be taken why, with your page's link, from your own Outlook. It sends nothing else. Without it, the page tells them.",
+};
+
+/** My signed-in Gmail and Outlook accounts; read again whenever `again` changes (a sign-in finished by the Connect piece). */
+export function useMailAccounts(again?: unknown) {
   const [accounts, setAccounts] = useState<Account[] | null>(null);
   useEffect(() => {
+    let live = true;
     void (async () => {
       const org = await orgId();
-      if (!org) return setAccounts([]);
+      if (!org) return live && setAccounts([]);
       const lists = await Promise.all(["gmail", "outlook"].map((c) =>
         client.connectors.accounts.list(org, { connectorId: c, limit: 50 } as never).then(
           (r) => ((r as { items?: Account[] }).items || []) as Account[], () => [] as Account[])));
-      setAccounts(lists.flat().filter((a) => !a.status || a.status === "CONNECTED" || a.status === "ACTIVE"));
+      if (live) setAccounts(lists.flat().filter((a) => !a.status || a.status === "CONNECTED" || a.status === "ACTIVE"));
     })();
-  }, []);
+    return () => {
+      live = false;
+    };
+  }, [again]);
   return accounts;
 }
 
 export const addressOf = (a: Account) => (a.email || (a.display_name?.includes("@") ? a.display_name : "") || "").toLowerCase();
+
+/** The mailbox that goes with a calendar: Outlook's own, else Gmail. */
+const mailOf = (cal?: Calendar) => (cal?.provider === "outlook" ? "Outlook" : "Gmail");
 
 function VideoForm({ run }: { run: Run }) {
   const proposed = output(run, "propose") as null | { video: string; event_calendar: string | null };
   const chosen = (output(run, "calendars")?.calendar_ids as string[] | undefined) || [];
   const { calendars, settings } = useBooking();
   const toast = useToast();
-  const mail = useMailAccounts();
+  const [again, setAgain] = useState(0);
+  const mail = useMailAccounts(again);
   const mine = calendars.filter((c) => !chosen.length || chosen.includes(c.id));
   const [eventCal, setEventCal] = useState(proposed?.event_calendar || mine[0]?.id || "");
   const cal: Calendar | undefined = mine.find((c) => c.id === eventCal);
@@ -419,7 +434,7 @@ function VideoForm({ run }: { run: Run }) {
         mail_connector: s ? s.connector : "none", mail_account_id: s?.id, mail_address: s?.address,
       });
     } catch (e) {
-      toast(`Couldn't finish: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't finish: ${errorText(e)}`);
       setBusy(false);
     }
   };
@@ -459,9 +474,11 @@ function VideoForm({ run }: { run: Run }) {
             </select>
           </label>
         ) : (
-          <p className="c-muted">
-            The person is told on the page. To email them too, connect {cal?.provider === "google" ? "Gmail" : "Outlook"} in this Lemma and choose it in settings.
-          </p>
+          <>
+            <p className="c-muted">The person is told on the page. To email them why too, connect your {mailOf(cal)} here.</p>
+            <Connect connector={mailOf(cal) === "Outlook" ? "outlook" : "gmail"} mode="per_member" purpose={MAIL_PURPOSE[mailOf(cal) === "Outlook" ? "outlook" : "gmail"]}
+              quiet onReady={() => setAgain((n) => n + 1)} />
+          </>
         )}
       </div>
       <div className="c-setup__row">

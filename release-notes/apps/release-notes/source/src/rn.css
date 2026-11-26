@@ -11,6 +11,9 @@
 .rn-pad { padding: 12px 14px; margin: 0; }
 .rn-note { margin: 0 4px; }
 .rn-warn-text { color: var(--c-warning); font-size: 12.5px; }
+.rn-connects { display: grid; gap: 8px; }
+.rn-connects:empty { display: none; }
+.rn-connect-in { margin-bottom: 12px; }
 .rn-ok { color: var(--c-success); }
 .rn-bad { color: var(--c-danger); }
 .rn-grow-text { min-width: 0; flex: 1 1 240px; }

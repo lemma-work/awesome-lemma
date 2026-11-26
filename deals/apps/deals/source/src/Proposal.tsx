@@ -6,7 +6,7 @@
 import { useState } from "react";
 import { ArrowUpRight, Check, ChevronDown, PencilLine, Sparkles, X } from "lucide-react";
 import {
-  Button, Evidence, Logo, Menu, MenuItem, MenuLabel, Sheet, nameOf, openApp, runFunction, useToast,
+  Button, Evidence, Logo, Menu, MenuItem, MenuLabel, Sheet, nameOf, openApp, runFunction, useToast, errorText,
 } from "@lemma-plugins/kit";
 import { save, useDeals } from "./data";
 import { changeLine, kindWord } from "./marks";
@@ -42,7 +42,7 @@ export function ProposalCard({ change, showDeal = true }: { change: Change; show
       void runFunction("deals_needs_you", {}).catch(() => undefined);
     } catch (e) {
       setGone(false);
-      toast(`Couldn't ${action} it: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't ${action} it: ${errorText(e)}`);
     } finally {
       setBusy(null);
     }

@@ -504,3 +504,31 @@ svg { flex: none; }
 .c-nav__n { margin-left: auto; color: var(--c-faint); font-size: 12px; font-variant-numeric: tabular-nums; }
 .c-nav__n--hot { color: var(--c-text); }
 @media (hover: none) { .c-nav__item { height: 38px; } }
+
+/* ---------- Connect: one connector and the one thing to do about it ---------- */
+.c-connections { display: grid; gap: 10px; }
+.c-connect { padding: 14px 16px; border-radius: var(--c-radius-lg); background: var(--c-panel); box-shadow: inset 0 0 0 1px var(--c-border); min-width: 0; }
+.c-connect--ready { display: flex; align-items: center; gap: 10px; padding: 9px 12px; background: transparent; }
+.c-card .c-connect--ready, .c-connections .c-connect--ready { box-shadow: none; padding-left: 0; padding-right: 0; }
+.c-connect--ready .c-pill { margin-right: 4px; }
+.c-connect--ready b, .c-connect__why b { font-weight: 500; color: var(--c-text); }
+.c-connect__head { display: flex; align-items: center; gap: 10px; min-width: 0; flex-wrap: wrap; }
+.c-connect__title { font-weight: 500; color: var(--c-text); }
+.c-connect__label { color: var(--c-text); margin-right: 4px; }
+.c-connect__why { margin-top: 8px; color: var(--c-muted); line-height: 1.55; }
+.c-connect__why a { color: var(--c-text); text-decoration: underline; text-underline-offset: 2px; }
+.c-connect__row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+.c-connect__note { margin-top: 10px; color: var(--c-faint); font-size: 12px; line-height: 1.5; }
+.c-connect__note a { color: var(--c-muted); text-decoration: underline; text-underline-offset: 2px; }
+.c-connect__done { margin-top: 10px; display: flex; gap: 6px; align-items: flex-start; color: var(--c-success); }
+.c-connect__done svg { flex: none; margin-top: 2px; }
+.c-connect__choices { margin-top: 10px; border-radius: var(--c-radius); box-shadow: inset 0 0 0 1px var(--c-border); overflow: hidden; }
+.c-connect__choices .c-choice:last-child { border-bottom: 0; }
+.c-connect__raw { margin-top: 10px; color: var(--c-faint); font-size: 12px; }
+.c-connect__raw summary { cursor: pointer; display: inline-flex; gap: 4px; align-items: center; list-style: none; }
+.c-connect__raw summary::-webkit-details-marker { display: none; }
+.c-connect__raw code { display: block; margin-top: 6px; padding: 8px 10px; border-radius: var(--c-radius); background: var(--c-subtle); white-space: pre-wrap; word-break: break-word; font-size: 11.5px; }
+@media (max-width: 480px) {
+  .c-connect { padding: 12px; }
+  .c-connect__row .c-btn { flex: 1 1 auto; justify-content: center; }
+}

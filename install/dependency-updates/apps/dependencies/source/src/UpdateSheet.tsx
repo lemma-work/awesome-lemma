@@ -4,7 +4,7 @@
 
 import { useState } from "react";
 import { FileCode, ShieldAlert, Sparkles, TriangleAlert } from "lucide-react";
-import { Button, Menu, MenuItem, MenuLabel, Pill, Sheet, useToast } from "@lemma-plugins/kit";
+import { Button, Menu, MenuItem, MenuLabel, Pill, Sheet, useToast, errorText } from "@lemma-plugins/kit";
 import { decide, useDeps } from "./data";
 import { Ai, Bump, Change, Mono, Reach, Severity, StatePill } from "./marks";
 import { age, downloads, joins, short } from "./model";
@@ -90,7 +90,7 @@ function Footer({ u }: { u: Update }) {
     try {
       toast(await decide(u.id, action, extra));
     } catch (e) {
-      toast(`Couldn't do that: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't do that: ${errorText(e)}`);
     } finally {
       setBusy(null);
     }

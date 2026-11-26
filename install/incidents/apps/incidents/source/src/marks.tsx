@@ -1,14 +1,47 @@
 // Incidents' small marks: severity and status pills (always with a word),
 // the Lemma's sparkles tag, the honest "not here yet" note, an event's source
-// icon, and times said the same way everywhere.
+// icon, and times said the same way everywhere. And the accounts Incidents
+// works through: each one's Connect, in set-up and wherever one is missing.
 
-import type { ReactNode } from "react";
+import { useMemo, type ReactNode } from "react";
 import {
   Bot, CircleArrowUp, Code, GitBranch, GitMerge, Hash, Inbox, MessageSquare, Pin, Rocket, Sparkles, TriangleAlert, Users,
 } from "lucide-react";
-import { Avatar, Pill, cx, type Tone } from "@lemma-plugins/kit";
+import { Avatar, Connect, Pill, cx, useConnection, type ConnectionSpec, type Tone } from "@lemma-plugins/kit";
 import { DEFAULT_SEVERITIES } from "./data";
 import type { IncEvent, Incident, Settings } from "./types";
+
+/** The connectors Incidents declares (all SHARED, all optional), and what each is for and what is lost without it. */
+export const CONNECTORS = ["slack", "github", "sentry", "posthog", "resend"] as const;
+export type ConnectorKey = (typeof CONNECTORS)[number];
+
+const PURPOSE: Record<ConnectorKey, string> = {
+  slack: "Opens each incident's channel, invites the people, pins a header the Lemma keeps current, reads the channel into the timeline, and posts the updates the lead sends. Without it, an incident has no channel and its timeline is kept here only.",
+  github: "Merges, pushes, deploy runs and releases in the repositories you watch, for what changed before an incident; the Lemma reads the suspect pull requests. It never writes to GitHub. Without it, nothing shows what changed.",
+  sentry: "Read for errors around an incident. Without it, errors are named as not checked.",
+  posthog: "Read for who an incident reached. Without it, that is named as not checked.",
+  resend: "Emails each update the lead sends to the list below, from the Lemma's own mailbox. Without it, updates go to Slack only.",
+};
+
+export function isConnector(key: string | null | undefined): key is ConnectorKey {
+  return !!key && (CONNECTORS as readonly string[]).includes(key);
+}
+
+/** The Connect piece's spec for one of Incidents' connectors; Slack's slug is the one set-up reads through. */
+export function connectSpec(key: ConnectorKey, settings: Settings | null | undefined): ConnectionSpec {
+  return { connector: key, slug: key === "slack" ? settings?.slack_account || "slack" : key, mode: "shared", purpose: PURPOSE[key] };
+}
+
+/**
+ * A connector's Connect only while it needs something done: nothing while it
+ * is checked or when it is connected, unless a failed call says otherwise.
+ */
+export function NeedsConnect({ connector, settings, error, lead }: { connector: ConnectorKey; settings: Settings | null | undefined; error?: unknown; lead?: ReactNode }) {
+  const spec = useMemo(() => connectSpec(connector, settings), [connector, settings]);
+  const c = useConnection(spec);
+  if (c.state.kind === "loading" || (c.ready && !error)) return null;
+  return <Connect {...spec} connection={c} error={error} lead={lead} quiet primary={false} />;
+}
 
 export const STATUS = ["declared", "investigating", "fixing", "monitoring", "resolved"] as const;
 export const STATUS_WORDS: Record<string, string> = {

@@ -5,7 +5,7 @@
 
 import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
 import { ChevronDown, CircleDot, Inbox } from "lucide-react";
-import { Button, Empty, Menu, MenuItem, MenuLabel, Pill, SearchField, Segmented, Spinner, cx, plural, useToast } from "@lemma-plugins/kit";
+import { Button, Empty, Menu, MenuItem, MenuLabel, Pill, SearchField, Segmented, Spinner, cx, plural, useToast, errorText } from "@lemma-plugins/kit";
 import { agentName, fixConflicts, moveToCloud, startWork, useCoding, useConversation, useWorld, type Card, type Column } from "./data";
 import { Diff, Mono, PriorityPill, SessionPill, sourceWord } from "./marks";
 import { dollars, useCost, useWeekCost } from "./cost";
@@ -170,7 +170,7 @@ function useNeedAction(card: Card): { label: string; run: () => Promise<void> | 
             toast(out.message || "Moved to Lemma in the cloud.");
             to.task(card.id);
           } catch (e) {
-            toast(`Couldn't move it: ${e instanceof Error ? e.message : e}`);
+            toast(`Couldn't move it: ${errorText(e)}`);
           }
         },
       };
@@ -183,7 +183,7 @@ function useNeedAction(card: Card): { label: string; run: () => Promise<void> | 
               await fixConflicts(s, me);
               toast("Asked the agent to merge and fix the conflicts.");
             } catch (e) {
-              toast(`Couldn't ask the agent: ${e instanceof Error ? e.message : e}`);
+              toast(`Couldn't ask the agent: ${errorText(e)}`);
             }
           },
         };
@@ -283,7 +283,7 @@ export function AssignMenu({ card, label = "Assign", size = "sm" }: { card: Card
       toast(out.message || "Handed to the agent.");
       to.task(card.id);
     } catch (e) {
-      toast(`Couldn't hand it over: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't hand it over: ${errorText(e)}`);
     } finally {
       setBusy(false);
     }

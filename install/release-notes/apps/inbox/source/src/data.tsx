@@ -3,7 +3,7 @@
 // Every table is per person: all of it is the signed-in person's own mail.
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
-import { client, items, runFunction } from "@lemma-plugins/kit";
+import { client, items, runFunction, errorText } from "@lemma-plugins/kit";
 import type { Activity, Category, Conv, DraftRow, Mailbox, PromiseRow, Rule, Settings } from "./types";
 
 export interface Counts {
@@ -119,7 +119,7 @@ export function MailProvider({ children }: { children: ReactNode }) {
       setData((d) => ({ ...d, [name]: value }));
       setErrors((e) => ({ ...e, [name]: undefined }));
     } catch (err) {
-      setErrors((e) => ({ ...e, [name]: err instanceof Error ? err.message : String(err) }));
+      setErrors((e) => ({ ...e, [name]: errorText(err) }));
     }
   }, []);
   const reload = useCallback(

@@ -8,6 +8,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { Avatar, Banner, Button, cx } from "@lemma-plugins/kit";
+import { stoppedText } from "./connection";
 import { isSample, useMail } from "./data";
 import { List } from "./List";
 import { Promises } from "./Promises";
@@ -77,7 +78,7 @@ function Nav({ onPick }: { onPick: () => void }) {
       </div>
       <div className="m-nav__foot">
         {mailboxes.map((m) => (
-          <div key={m.id} className="m-nav__box" title={m.last_error || undefined}>
+          <div key={m.id} className="m-nav__box" title={m.last_error ? stoppedText(m.last_error, m.provider) : undefined}>
             <Avatar name={settings?.display_name} email={m.email} size={22} you />
             <span className="c-ellipsis">{m.account_id === "sample" ? "Sample mailbox" : m.email}</span>
             {m.last_error ? <BellOff size={13} aria-label="Reading stopped" /> : null}

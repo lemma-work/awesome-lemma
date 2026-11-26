@@ -5,7 +5,7 @@
 import { useEffect, useState, type ReactNode } from "react";
 import { Plus, ScanSearch, Settings as Cog } from "lucide-react";
 import {
-  AskButton, Avatar, Banner, Button, Header, Logo, SearchField, Sheet, Spinner, nameOf, q, runFunction, useToast,
+  AskButton, Avatar, Banner, Button, Header, Logo, SearchField, Sheet, Spinner, nameOf, q, runFunction, useToast, errorText,
 } from "@lemma-plugins/kit";
 import { CANDIDATES_SQL, useLeads, type Candidate } from "./data";
 import { LeadPage } from "./LeadPage";
@@ -91,7 +91,7 @@ export function LookSheet({ open, onClose }: { open: boolean; onClose: () => voi
       }
       await reload("leads");
     } catch (e) {
-      toast(`Couldn't ask: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't ask: ${errorText(e)}`);
     } finally {
       setBusy("");
     }

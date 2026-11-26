@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import { ArrowUpDown, CircleHelp, Users } from "lucide-react";
 import {
-  Avatar, Button, Card, Empty, Logo, Pill, Rel, SearchField, Segmented, Skeleton, Toolbar, cx, nameOf, plural, runFunction, useToast, when,
+  Avatar, Button, Card, Empty, Logo, Pill, Rel, SearchField, Segmented, Skeleton, Toolbar, cx, nameOf, plural, runFunction, useToast, when, errorText,
 } from "@lemma-plugins/kit";
 import { memberName, usePeople } from "./data";
 import { KIND_LABEL, KindPill, LastContact, WarmthPill } from "./marks";
@@ -255,7 +255,7 @@ export function UnsureList() {
       toast(out.message);
       await reload("people");
     } catch (e) {
-      toast(`Couldn't change that: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't change that: ${errorText(e)}`);
     } finally {
       setBusy("");
     }

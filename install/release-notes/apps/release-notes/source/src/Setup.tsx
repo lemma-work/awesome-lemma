@@ -1,6 +1,8 @@
 // Set-up, done once for the whole Lemma by whoever opens it first, and the
 // same form again in Settings:
 //
+//   connections    GitHub (needed) and Slack (optional), shared for the whole
+//                  Lemma, connected here with the kit's <Connect>
 //   repositories   from the Lemma's shared GitHub connection
 //   live           how you know a release reached people: the deploy
 //                  workflow's run (default), or a tag. A deployment
@@ -12,9 +14,9 @@
 // as whoever made it; a function can't make one), and each person's own
 // triggers are made when they open the app.
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { FlaskConical, Github, Globe, Hash, Rocket, Tag } from "lucide-react";
-import { Brief, Button, Card, DEMO, Field, Notice, Pill, Spinner, client, demoNote, items, q, useToast } from "@lemma-plugins/kit";
+import { Brief, Button, Card, Connect, DEMO, Field, Notice, Pill, Spinner, client, demoNote, items, q, useToast, errorText } from "@lemma-plugins/kit";
 import { browserZone, call, ensureMine, ensureTeamSchedules, json, useRN, useWho } from "./data";
 import { to } from "./route";
 import { Top } from "./Top";
@@ -41,7 +43,7 @@ export function Setup() {
       await rn.reload();
       to.desk();
     } catch (e) {
-      toast(`Couldn't load the sample: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't load the sample: ${errorText(e)}`);
     } finally {
       setLoading(false);
     }
@@ -56,7 +58,7 @@ export function Setup() {
           <div className="c-choices">
             <button type="button" className="c-choice" onClick={() => setMode("real")}>
               <Github size={16} aria-hidden="true" />
-              <span className="c-grow"><b className="rn-b">Set it up for your repositories</b><span className="rn-meta rn-block">Uses this Lemma's shared GitHub connection.</span></span>
+              <span className="c-grow"><b className="rn-b">Set it up for your repositories</b><span className="rn-meta rn-block">Connect GitHub once, for everyone in this Lemma, on the next page.</span></span>
             </button>
             <button type="button" className="c-choice" onClick={() => void sample()} disabled={loading}>
               {loading ? <Spinner /> : <FlaskConical size={16} aria-hidden="true" />}
@@ -109,15 +111,18 @@ function SetupForm({ first }: { first?: boolean }) {
   const [workflows, setWorkflows] = useState<Record<string, Options["workflows"]>>({});
   const [busy, setBusy] = useState(false);
   const [log, setLog] = useState<string[]>([]);
-  useEffect(() => {
+  // What the connections can see. `github` and `slack` are "ok" or the function's
+  // own words for what failed: those only decide what shows, never shown as they are.
+  const readOpts = useCallback(() => {
     if (DEMO) {
       setOpts({ github: "ok", repos: [{ name: "fernway/web", private: true }, { name: "fernway/api", private: true }], workflows: [], slack: "ok",
         channels: [{ id: "C07QSFERN", name: "product-updates" }, { id: "C07ENG", name: "eng" }] });
       return;
     }
     void call("release_notes_setup_options", {}).then((o) => setOpts(o as unknown as Options))
-      .catch((e) => setOpts({ github: e instanceof Error ? e.message : String(e), repos: [], workflows: [], slack: "unknown", channels: [] }));
+      .catch(() => setOpts({ github: "failed", repos: [], workflows: [], slack: "failed", channels: [] }));
   }, []);
+  useEffect(readOpts, [readOpts]);
   useEffect(() => { if (!publishers.length && me) setPublishers([me.id]); }, [me, publishers.length]);
   const loadWorkflows = (name: string) => {
     if (workflows[name] || DEMO) return;
@@ -162,15 +167,20 @@ function SetupForm({ first }: { first?: boolean }) {
       toast("Saved.");
       if (first) to.desk();
     } catch (e) {
-      toast(`Couldn't save: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't save: ${errorText(e)}`);
     } finally {
       setBusy(false);
     }
   };
 
   const noGithub = opts && opts.github !== "ok" && !opts.repos.length;
+  // Connected after this page read the options: read them again.
+  const githubReady = () => { if (opts && opts.github !== "ok") { setOpts(null); readOpts(); } };
+  const slackReady = () => { if (opts && opts.slack !== "ok") readOpts(); };
   return (
     <>
+      <Connect connector="github" slug="github" mode="shared" onReady={githubReady}
+        purpose="One GitHub connection for the whole Lemma: it reads the pull requests that merge and the deploys that finish in the repositories you pick, and puts the published note on the release. A comment is posted only when a person presses Send." />
       <Card title="Product">
         <Field label="What people call it" hint="The changelog page and the notes say this name.">
           <input className="c-input" value={product} onChange={(e) => setProduct(e.target.value)} placeholder="Fernway" />
@@ -179,7 +189,7 @@ function SetupForm({ first }: { first?: boolean }) {
       <Card title="Repositories" icon={Github} flush>
         {!opts ? <p className="rn-pad rn-meta"><Spinner /> Reading what the GitHub connection can see…</p> : null}
         {noGithub ? (
-          <p className="rn-pad">GitHub isn't connected for this Lemma ({opts?.github}). Connect it once, for everyone, in the Lemma's Connectors, then come back here.</p>
+          <p className="rn-pad rn-meta">No repositories yet: once GitHub is connected above, the ones the Lemma's GitHub app is on show here. <Button size="sm" variant="ghost" onClick={() => { setOpts(null); readOpts(); }}>Look again</Button></p>
         ) : null}
         {opts?.repos.map((r) => {
           const on = repos.find((x) => x.name === r.name);
@@ -218,7 +228,8 @@ function SetupForm({ first }: { first?: boolean }) {
         })}
       </Card>
       <Card title="Slack" icon={Hash}>
-        {opts && opts.slack !== "ok" ? <p className="rn-meta">Slack isn't connected for this Lemma ({opts.slack}). The note can still go to GitHub and the page.</p> : null}
+        <Connect connector="slack" slug="slack" mode="shared" onReady={slackReady} className="rn-connect-in"
+          purpose="Optional: posts the published note to the channel you pick, and replies in the Slack thread of someone who asked, when a person presses Send. Without it, the note still goes to GitHub and the changelog page, and nobody is told in Slack." />
         <Field label="Post the published note to" hint="Optional. Posted by the Lemma's Slack app.">
           <select className="c-input" value={slack} onChange={(e) => setSlack(e.target.value)} disabled={!opts?.channels.length}>
             <option value="">Nowhere</option>
@@ -278,7 +289,7 @@ function PageCard() {
       setState("on");
       toast("The changelog page can read your published notes.");
     } catch (e) {
-      toast(`Couldn't turn it on: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't turn it on: ${errorText(e)}`);
     } finally {
       setBusy(false);
     }
@@ -323,7 +334,7 @@ function SampleCard() {
       <Button size="sm" busy={busy} onClick={() => {
         setBusy(true);
         void call("release_notes_sample_data", { mode: "clear" }).then((o) => { toast(String(o.message || "Cleared.")); void rn.reload(); })
-          .catch((e) => toast(`Couldn't clear it: ${e instanceof Error ? e.message : e}`)).finally(() => setBusy(false));
+          .catch((e) => toast(`Couldn't clear it: ${errorText(e)}`)).finally(() => setBusy(false));
       }}>Clear the sample</Button>
       {DEMO ? null : <Notice>Set it up for real from the form here once it's cleared.</Notice>}
     </Card>

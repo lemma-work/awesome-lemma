@@ -112,7 +112,10 @@ function splitPatch(patch: string): Map<string, string> {
   return out;
 }
 
-/* ---------- GitHub, as the person, through the Lemma's connection ---------- */
+/* ---------- GitHub, through the Lemma's shared connection ---------- */
+
+// A refusal is thrown as the SDK gives it, code and all: say it with the kit's
+// errorText(e, "github"), or hand it to <Connect error>, never as its message.
 
 export async function github<T = unknown>(op: string, payload: Record<string, unknown>): Promise<T> {
   const r = (await client.connectors.pod.execute("github", op, payload)) as unknown as { result?: unknown; data?: unknown };

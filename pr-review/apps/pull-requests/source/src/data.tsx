@@ -10,7 +10,7 @@
 // (github.ts).
 
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
-import { DEMO, client, items, runFunction, update, useData, useRows, whoAmI, type Loaders } from "@lemma-plugins/kit";
+import { DEMO, client, errorText, items, runFunction, update, useData, useRows, whoAmI, type Loaders } from "@lemma-plugins/kit";
 import type { Finding, Member, MergeLog, PullRequest, Repository, RiskPath, Round, Rule, Settings } from "./types";
 
 export const LOADERS: Loaders = {
@@ -324,5 +324,5 @@ export async function ensureMine(meId: string): Promise<string | null> {
 }
 
 export function errText(e: unknown): string {
-  return e instanceof Error ? e.message : String(e);
+  return errorText(e);
 }

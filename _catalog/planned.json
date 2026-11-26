@@ -27,11 +27,7 @@
     { "name": "Decision log", "line": "founder", "position": 25, "one": "Every decision, who made it and why, from wherever it was said", "buildsOn": ["meetings", "mail", "chat"] },
     { "name": "Due diligence", "line": "founder", "position": 26, "one": "Files for investors behind one link, with who opened what", "buildsOn": ["fundraising"] },
 
-    { "name": "User feedback", "line": "product", "position": 34, "one": "What people say about your product and your rivals, filed under the feature it is about", "buildsOn": ["people-map"] , "merges": ["Mentions"] },
-    { "name": "Roadmap", "line": "product", "position": 35, "one": "Features ranked by who asked, with the spec drafted from what they said", "buildsOn": ["user-feedback", "deal-tracker"] , "merges": ["Specs"] },
     { "name": "Competitor watch", "line": "product", "position": 36, "one": "What your rivals ship and charge, and what people say about them", "buildsOn": ["user-feedback"] },
-    { "name": "User interviews", "line": "product", "position": 37, "one": "The right users found and booked, and each call turned into findings", "buildsOn": ["user-feedback", "booking-page", "meetings"] },
-    { "name": "Early access", "line": "product", "position": 38, "one": "Everyone in your beta, what they tried and what they said", "buildsOn": ["user-feedback", "forms"] },
 
     { "name": "Content calendar", "line": "marketing", "position": 39, "one": "From a passing idea to a post in your voice, with every step approved", "buildsOn": ["brand-kit"] },
     { "name": "LinkedIn", "line": "marketing", "position": 40, "one": "Posts drafted from the work you did, in each person's own voice", "buildsOn": ["brand-kit", "content-calendar"] },

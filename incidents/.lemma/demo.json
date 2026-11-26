@@ -30,5 +30,27 @@
     "incidents_setup_save": "In the demo the set-up isn't saved.",
     "incidents_sample_data": "In the demo the sample stays.",
     "incidents_needs_you": ""
+  },
+  "connections": {
+    "github": {
+      "state": "ready",
+      "as": "shop"
+    },
+    "slack": {
+      "state": "ready",
+      "as": "company.example"
+    },
+    "sentry": {
+      "state": "ready",
+      "as": "shop"
+    },
+    "posthog": {
+      "state": "ready",
+      "as": "shop"
+    },
+    "resend": {
+      "state": "ready",
+      "as": "company.example"
+    }
   }
 }

@@ -8,7 +8,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ChevronRight, CircleStop, Cloud, ExternalLink, FileText, GitPullRequest, Lock, RotateCcw, Send, Undo2, X } from "lucide-react";
-import { Button, Empty, Markdown, Menu, MenuItem, MenuLabel, Pill, Skeleton, Spinner, cx, plural, useToast, when } from "@lemma-plugins/kit";
+import { Button, Connect, Empty, Markdown, Menu, MenuItem, MenuLabel, Pill, Skeleton, Spinner, cx, errorText, isConnectionProblem, plural, useToast, when } from "@lemma-plugins/kit";
 import { agentName, handBack, isLive, moveToCloud, runtimeOf, sendToAgent, startWork, stopAgent, useCoding, useConversation, useWorld, type Card, type Live } from "./data";
 import { Diff, EventIcon, Inline, Mono, Prose, SessionPill, fromWords } from "./marks";
 import { dollars, useCost } from "./cost";
@@ -131,7 +131,7 @@ function Activity({ card, s, live, mine, cost }: { card: Card; s: Session; live:
       const out = (await run()) as { message?: string } | undefined;
       toast(out?.message || done);
     } catch (e) {
-      toast(`Couldn't do that: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't do that: ${errorText(e)}`);
     } finally {
       setBusy("");
     }
@@ -296,7 +296,7 @@ function Transcript({ s, live, mine }: { s: Session; live: Live; mine: boolean }
       setText("");
       live.refresh();
     } catch (e) {
-      toast(`Couldn't send: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't send: ${errorText(e)}`);
     } finally {
       setBusy("");
     }
@@ -398,7 +398,8 @@ function ChangesTab({ s, live, mine, defaultBranch }: { s: Session; live: Live; 
   const [set, setSet] = useState<ChangeSet | null>(null);
   const [state, setState] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<unknown>(null);
+  const [tick, setTick] = useState(0);
   const fromTranscript = useMemo<ChangeSet | null>(() => {
     if (!mine) return null;
     const steps = live.items.flatMap((i) => (i.kind === "steps" && i.group === "edit" ? i.steps : []));
@@ -434,21 +435,29 @@ function ChangesTab({ s, live, mine, defaultBranch }: { s: Session; live: Live; 
         }
         if (alive) { setSet(null); setState(note); setLoading(false); }
       } catch (e) {
-        if (alive) { setSet(null); setError(e instanceof Error ? e.message : String(e)); setLoading(false); }
+        if (alive) { setSet(null); setError(e); setLoading(false); }
       }
     })();
     return () => {
       alive = false;
     };
-  }, [s.id, s.conversation_id, s.pr_number, s.branch, s.head_sha, mine, s.repo, s.ref, defaultBranch]);
+  }, [s.id, s.conversation_id, s.pr_number, s.branch, s.head_sha, mine, s.repo, s.ref, defaultBranch, tick]);
 
   const shown = set && set.files.length ? set : fromTranscript;
+  // GitHub refused for want of a connection: its next step, in place.
+  const connect = error && isConnectionProblem(error) ? (
+    <Connect connector="github" slug="github" mode="shared" quiet error={error} onReady={() => setTick((n) => n + 1)}
+      purpose="The change is read from the pull request on GitHub, through this Lemma's GitHub connection." />
+  ) : null;
   if (loading) return <div className="cd-pad"><Skeleton kind="list" rows={4} /></div>;
   if (!shown) {
     return (
+      <>
+      {connect}
       <Empty icon={FileText} title="No changes to show yet">
-        {error ? `GitHub didn't answer: ${error}.` : STATE[state || ""] || "The change shows here once the agent has edited something, pushed its branch or opened the pull request."}
+        {error ? `GitHub didn't answer: ${errorText(error, "github")}` : STATE[state || ""] || "The change shows here once the agent has edited something, pushed its branch or opened the pull request."}
       </Empty>
+      </>
     );
   }
   const FROM: Record<ChangeSet["from"], string> = {
@@ -466,7 +475,8 @@ function ChangesTab({ s, live, mine, defaultBranch }: { s: Session; live: Live; 
         <span className="cd-note cd-note--inline">{FROM[shown.from]}</span>
       </div>
       {state && STATE[state] ? <p className="cd-note">{STATE[state]}</p> : null}
-      {error ? <p className="cd-note">GitHub didn't answer: {error}.</p> : null}
+      {error ? <p className="cd-note">GitHub didn't answer: {errorText(error, "github")}</p> : null}
+      {connect}
       {shown.files.map((f, i) => <FileDiff key={f.path} f={f} first={i === 0} />)}
       {shown.truncated ? <p className="cd-note">The change is too large to show in full here.</p> : null}
     </div>

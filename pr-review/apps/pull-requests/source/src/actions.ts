@@ -1,9 +1,10 @@
 // What a person does on GitHub under their own name, from this page: send a
 // pull request back, approve it, merge it. GitHub's own reason comes back
-// word for word when it refuses.
+// word for word when it refuses; a missing GitHub of their own comes back as
+// itself, for the page to show the way to connect it.
 
 import { addedLines, parsePatch } from "./diff";
-import { forget, githubSays, mergePull, postReview, type GhFile, type ReviewComment } from "./github";
+import { forget, githubSays, mergePull, needsMyGithub, postReview, type GhFile, type ReviewComment } from "./github";
 import type { Finding, MergeHow, PullRequest, Rule } from "./types";
 
 export function findingText(f: Finding, rule: Rule | undefined): string {
@@ -35,7 +36,7 @@ export async function sendBackAsMe(repo: string, pr: PullRequest, findings: Find
   try {
     await postReview(repo, pr.number, pr.head_sha || "", "REQUEST_CHANGES", body, comments);
   } catch (err) {
-    throw new Error(githubSays(err));
+    throw needsMyGithub(err) ? err : new Error(githubSays(err));
   } finally {
     forget(repo, pr.number);
   }
@@ -45,7 +46,7 @@ export async function approveAsMe(repo: string, pr: PullRequest): Promise<void> 
   try {
     await postReview(repo, pr.number, pr.head_sha || "", "APPROVE", "Every rule in scope passed.");
   } catch (err) {
-    throw new Error(githubSays(err));
+    throw needsMyGithub(err) ? err : new Error(githubSays(err));
   } finally {
     forget(repo, pr.number);
   }
@@ -58,7 +59,7 @@ export async function mergeAsMe(repo: string, pr: PullRequest, how: MergeHow | n
     const r = await mergePull(repo, pr.number, pr.head_sha || "", METHOD[how || "squash"]);
     if (r && r.merged === false) throw new Error(r.message || "GitHub didn't merge it.");
   } catch (err) {
-    throw new Error(githubSays(err));
+    throw needsMyGithub(err) ? err : new Error(githubSays(err));
   } finally {
     forget(repo, pr.number);
   }

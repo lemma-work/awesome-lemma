@@ -43,7 +43,10 @@ def render() -> str:
             optional = "" if column.get("required") else "?"
             nullable = "" if column.get("required") else " | null"
             lines.append(f"  {column['name']}{optional}: {kind}{nullable};")
-        lines += ["  created_at?: string;", "  updated_at?: string;", "}", ""]
+        # The platform's own timestamps, unless the table declares one itself.
+        declared = {column["name"] for column in spec["columns"]}
+        lines += [f"  {name}?: string;" for name in ("created_at", "updated_at") if name not in declared]
+        lines += ["}", ""]
     return "\n".join(lines)
 
 

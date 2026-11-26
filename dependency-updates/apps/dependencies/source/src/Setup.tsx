@@ -4,7 +4,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { ArrowLeft, FlaskConical, Package, Play } from "lucide-react";
-import { Banner, Button, Card, DEMO, Field, Header, Pill, Switch, q, useToast } from "@lemma-plugins/kit";
+import { Button, Card, Connect, DEMO, Field, Header, Pill, Switch, errorText, q, useToast } from "@lemma-plugins/kit";
 import { browserZone, call, coveredRepos, ensureSchedules, startRun, useDeps, useMe } from "./data";
 import { RepoPill } from "./marks";
 import { WEEKDAY_LONG, nextBatch } from "./model";
@@ -20,7 +20,6 @@ export function Setup() {
   const toast = useToast();
   const done = !!settings?.setup_done_at;
   const [covered, setCovered] = useState<{ full_name: string; default_branch?: string | null; private?: boolean }[] | null>(null);
-  const [problem, setProblem] = useState<string | null>(null);
   const [picked, setPicked] = useState<Set<string>>(new Set());
   const [weekday, setWeekday] = useState<Settings["weekday"]>(settings?.weekday || "mon");
   const [time, setTime] = useState(settings?.run_time || "06:00");
@@ -34,12 +33,8 @@ export function Setup() {
   useEffect(() => {
     setPicked(new Set(repos.filter((r) => r.active).map((r) => r.repo)));
   }, [repos]);
-  useEffect(() => {
-    void coveredRepos().then((out) => {
-      setCovered(out.repos);
-      setProblem(out.problem);
-    });
-  }, []);
+  const readCovered = () => void coveredRepos().then((out) => setCovered(out.repos));
+  useEffect(readCovered, []);
 
   const options = useMemo(() => {
     const names = new Map<string, { full_name: string; private?: boolean; default_branch?: string | null }>();
@@ -84,13 +79,13 @@ export function Setup() {
           await startRun(r.repo, `First look at ${r.repo}`, `First look at ${r.repo}: find its package managers and its install, test and build commands, and what is outdated. Open nothing.`, "a first look");
           lines.push(`Started a first look at ${r.repo}: its commands show below to confirm.`);
         } catch (e) {
-          lines.push(`Couldn't start a first look at ${r.repo}: ${e instanceof Error ? e.message : e}`);
+          lines.push(`Couldn't start a first look at ${r.repo}: ${errorText(e, "github")}`);
         }
         setLog([...lines]);
       }
       await reload();
     } catch (e) {
-      lines.push(`Couldn't save: ${e instanceof Error ? e.message : e}`);
+      lines.push(`Couldn't save: ${errorText(e)}`);
       setLog([...lines]);
     } finally {
       setBusy(null);
@@ -106,7 +101,7 @@ export function Setup() {
       await reload();
       to.week();
     } catch (e) {
-      toast(`Couldn't load the sample: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't load the sample: ${errorText(e)}`);
     } finally {
       setBusy(null);
     }
@@ -125,13 +120,10 @@ export function Setup() {
             <p className="c-muted">The Lemma installs and tests each update, one commit each. It holds majors and risky releases for you, opens security fixes the same day, and never merges.</p>
           </div>
         ) : null}
-        {problem && !DEMO ? (
-          <Banner icon={Package}>
-            <b>GitHub isn't connected to this Lemma for you.</b> Connect GitHub in the Lemma's connectors, then come back here. ({problem})
-          </Banner>
-        ) : null}
-
         <div className="c-stack">
+          <Connect connector="github" mode="shared" onReady={readCovered}
+            purpose="One GitHub connection for this Lemma: it reads the repositories you pick, pushes one branch per batch and opens its pull request. Nothing merges unless a person presses Merge." />
+
           <Card title="Repositories" count={picked.size} flush>
             {options.length ? (
               <ul className="c-list">
@@ -150,7 +142,7 @@ export function Setup() {
                 })}
               </ul>
             ) : (
-              <p className="c-card__body c-muted">{covered === null && !DEMO ? "Reading the repositories GitHub lets this Lemma see…" : "No repositories yet: the GitHub install covers none for you."}</p>
+              <p className="c-card__body c-muted">{covered === null && !DEMO ? "Reading the repositories GitHub lets this Lemma see…" : "No repositories yet: once GitHub is connected above, the ones the Lemma's GitHub app is on show here."}</p>
             )}
           </Card>
 
@@ -233,7 +225,7 @@ function CommandRow({ r }: { r: Repo }) {
       toast(`Confirmed ${r.repo}'s commands.`);
       await reload();
     } catch (e) {
-      toast(`Couldn't confirm: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't confirm: ${errorText(e)}`);
     } finally {
       setBusy(false);
     }

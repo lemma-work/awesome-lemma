@@ -10,7 +10,7 @@
 // moving between the inbox and a pull request shows what was last seen at once
 // and refreshes behind it.
 
-import { client } from "@lemma-plugins/kit";
+import { client, errorText, isConnectionProblem } from "@lemma-plugins/kit";
 import { isConnectionRequiredError } from "lemma-sdk";
 
 export const GITHUB = "github";
@@ -58,36 +58,47 @@ export interface GhRepo {
   id?: number;
 }
 
-/** The person hasn't connected GitHub (or it expired): say so, never show the raw error. */
+/** A GitHub connection isn't there (or expired, or is refused): which one,
+ *  with the platform's code and details kept for the kit's `<Connect error>`,
+ *  and never its text on screen. */
 export class NeedsGithub extends Error {
+  code?: string;
+  status?: number;
+  statusCode?: number;
+  details?: Record<string, unknown> | null;
   connectUrl: string | null;
   /** Their own GitHub (to post as themselves), not the Lemma's shared one. */
   personal: boolean;
-  constructor(message: string, connectUrl: string | null, personal = false) {
-    super(message);
-    this.connectUrl = connectUrl;
+  constructor(err: unknown, personal = false) {
+    const e = (err || {}) as { message?: string; code?: string; status?: number; statusCode?: number; details?: Record<string, unknown> | null; connectUrl?: string | null };
+    super(e.message || String(err));
+    this.code = e.code;
+    this.status = e.status;
+    this.statusCode = e.statusCode;
+    this.details = e.details ?? null;
+    this.connectUrl = e.connectUrl ?? null;
     this.personal = personal;
   }
 }
 
+/** The Lemma's shared GitHub is what is missing. */
 export function needsGithub(err: unknown): err is NeedsGithub {
-  return err instanceof NeedsGithub;
+  return err instanceof NeedsGithub && !err.personal;
 }
 
-/** GitHub's own words when it refuses, without the transport's wrapping. */
+/** The person's own GitHub is what is missing (to post as themselves). */
+export function needsMyGithub(err: unknown): err is NeedsGithub {
+  return err instanceof NeedsGithub && err.personal;
+}
+
+/** GitHub's own words when it refuses, without the transport's wrapping; a
+ *  missing connection in the kit's words. */
 export function githubSays(err: unknown): string {
-  if (err instanceof NeedsGithub)
-    return err.personal ? "Connect your own GitHub to post as yourself." : "Connect GitHub to this Lemma first.";
+  if (err instanceof NeedsGithub) return errorText(err, "github");
   const e = err as { message?: string; details?: unknown; body?: unknown };
   const raw = e?.message || String(err);
   const m = /"message"\s*:\s*"([^"]+)"/.exec(raw);
-  return (m ? m[1] : raw).replace(/^Error:\s*/, "").slice(0, 300);
-}
-
-let connectUrl: string | null = null;
-/** Where this person connects GitHub, once something has told us. */
-export function githubConnectUrl(): string | null {
-  return connectUrl;
+  return (m ? m[1] : errorText(err)).replace(/^Error:\s*/, "").slice(0, 300);
 }
 
 export async function gh<T = unknown>(op: string, payload: Record<string, unknown>, connector: string = GITHUB): Promise<T> {
@@ -97,11 +108,7 @@ export async function gh<T = unknown>(op: string, payload: Record<string, unknow
     const data = out && typeof out === "object" && "data" in (out as object) && !Array.isArray(out) && Object.keys(out as object).length <= 3 ? (out as { data: unknown }).data : out;
     return data as T;
   } catch (err) {
-    if (isConnectionRequiredError(err)) {
-      const personal = connector === GITHUB_PERSONAL;
-      if (!personal) connectUrl = err.connectUrl || connectUrl;
-      throw new NeedsGithub(err.message, err.connectUrl, personal);
-    }
+    if (isConnectionRequiredError(err) || isConnectionProblem(err)) throw new NeedsGithub(err, connector === GITHUB_PERSONAL);
     throw err;
   }
 }

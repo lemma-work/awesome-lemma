@@ -15,8 +15,37 @@
 //   the channel instead, and the screen says so;
 // - set-up's schedules: the tick, and one WEBHOOK schedule per GitHub event.
 
-import { DEMO, client, items, update } from "@lemma-plugins/kit";
+import { DEMO, client, connectionProblem, errorText, items, update } from "@lemma-plugins/kit";
 import type { Incident, Settings } from "./types";
+
+const CODES = /\b(CONNECTION_REQUIRED|REAUTH_REQUIRED|CONNECTOR_NEEDS_ACCOUNT|POD_CONNECTOR_NOT_FOUND|CONNECTOR_UNAVAILABLE|CONNECTION_REQUIRES_PERSON|CONNECTOR_NOT_INSTALLED|CONNECTOR_ACCESS_DENIED|CONNECTOR_USE_REFUSED)\b/;
+
+/**
+ * The connection problem inside text a function wrote (its message, an
+ * update's delivery), as an error `<Connect error>` and `connectionProblem`
+ * read; null when it isn't about a connection.
+ */
+export function problemIn(text: unknown): { code: string; message: string } | null {
+  const m = typeof text === "string" ? CODES.exec(text) : null;
+  return m ? { code: m[1], message: m[1] } : null;
+}
+
+/**
+ * A function's message for a toast, with a platform connection error inside
+ * it said in words ("Declared INC-15, SEV2. Slack isn't connected for this
+ * Lemma yet."), never as the platform wrote it.
+ */
+export function said(message: unknown, connector?: string): string {
+  const text = String(message || "");
+  const e = problemIn(text);
+  if (!e) return errorText(text);
+  const words = connectionProblem(e, connector)?.text || "";
+  const before = text.slice(0, text.indexOf(e.code));
+  const stop = before.lastIndexOf(". ");
+  const colon = before.indexOf(": ");
+  const keep = stop >= 0 ? before.slice(0, stop + 1) : colon >= 0 ? before.slice(0, colon + 1) : "";
+  return `${keep} ${words}`.trim();
+}
 
 type Surface = { name: string; platform?: string; surface_type?: string; pod_connector?: string | null; config?: { channels?: { channel_id?: string | null; channel_name?: string | null }[] } };
 
@@ -36,7 +65,7 @@ export async function connectChannel(channelId: string, channelName: string): Pr
     await client.podSurfaces.update(client.podId || "", surface.name, { config: { channels: routes } } as never);
     return null;
   } catch (e) {
-    return `Couldn't connect #${channelName} to the Lemma: ${e instanceof Error ? e.message : e}`;
+    return `Couldn't connect #${channelName} to the Lemma: ${errorText(e)}`;
   }
 }
 
@@ -104,7 +133,7 @@ export async function ensureSchedules(settings: Settings, repos: number): Promis
       name, schedule_type: "TIME", workflow_name: "incidents-tick", config: { cron: "*/15 * * * *" },
     } as never)) as unknown as { id: string }).id;
   } catch (e) {
-    problems.push(`the 15-minute check (${e instanceof Error ? e.message : e})`);
+    problems.push(`the 15-minute check (${errorText(e)})`);
   }
   if (repos) {
     for (const [event, workflow] of GITHUB_EVENTS) {
@@ -116,7 +145,7 @@ export async function ensureSchedules(settings: Settings, repos: number): Promis
           config: { source: "github", event },
         } as never)) as unknown as { id: string }).id;
       } catch (e) {
-        problems.push(`GitHub ${event.replace("_", " ")}s (${e instanceof Error ? e.message : e})`);
+        problems.push(`GitHub ${event.replace("_", " ")}s (${errorText(e, "github")})`);
       }
     }
   }

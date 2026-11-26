@@ -12,7 +12,7 @@
 //   - Merge (the GitHub connector's pulls_merge, after a confirmation).
 
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
-import { DEMO, client, demoNote, items, runFunction, update, useData, useRows, whoAmI, type Loaders } from "@lemma-plugins/kit";
+import { DEMO, client, demoNote, items, runFunction, update, useData, useRows, whoAmI, type Loaders, errorText } from "@lemma-plugins/kit";
 import type { Batch, Ignore, Repo, Rule, Settings, Update } from "./types";
 
 export const AGENT = "deps-updater";
@@ -192,7 +192,7 @@ export async function openNow(repos: Repo[]): Promise<string> {
       await startRun(r.repo, `Weekly batch for ${r.repo}, opened now`, `Weekly batch for ${r.repo}: open the batch now, without waiting for the schedule.`, "this week's batch");
       done.push(r.repo);
     } catch (e) {
-      return `Couldn't start ${r.repo}: ${e instanceof Error ? e.message : e}`;
+      return `Couldn't start ${r.repo}: ${errorText(e)}`;
     }
   }
   if (DEMO) return "";
@@ -259,7 +259,7 @@ export async function ensureSchedules(settings: Settings, repos: Repo[], me: Me)
       const made = (await client.schedules.create({ ...base, config: { cron, timezone: zone, repository: repo } } as never)) as unknown as { id: string };
       return made.id;
     } catch (e) {
-      out.platform.repository_schedule = { state: "no", note: `A time schedule can't name a repository yet (${e instanceof Error ? e.message : e}); each run clones by hand.` };
+      out.platform.repository_schedule = { state: "no", note: `A time schedule can't name a repository yet (${errorText(e)}); each run clones by hand.` };
       const made = (await client.schedules.create({ ...base, config: { cron, timezone: zone } } as never)) as unknown as { id: string };
       return made.id;
     }
@@ -271,12 +271,12 @@ export async function ensureSchedules(settings: Settings, repos: Repo[], me: Me)
       ids[`deps-weekly-${s}`] = await timeSchedule(`deps-weekly-${s}`, `${m || 0} ${h || 6} * * ${CRON_DAY[settings.weekday] ?? 1}`,
         `Weekly batch for ${r.repo}.`, r.repo);
     } catch (e) {
-      out.problems.push(`${r.repo}'s weekly batch (${e instanceof Error ? e.message : e})`);
+      out.problems.push(`${r.repo}'s weekly batch (${errorText(e)})`);
     }
     try {
       ids[`deps-security-${s}`] = await timeSchedule(`deps-security-${s}`, "0 7 * * *", `Security run for ${r.repo}.`, r.repo);
     } catch (e) {
-      out.problems.push(`${r.repo}'s daily security run (${e instanceof Error ? e.message : e})`);
+      out.problems.push(`${r.repo}'s daily security run (${errorText(e)})`);
     }
     if (JSON.stringify(ids) !== JSON.stringify(r.schedule_ids)) await update("deps_repo", r.id, { schedule_ids: ids }).catch(() => undefined);
   }
@@ -291,7 +291,7 @@ export async function ensureSchedules(settings: Settings, repos: Repo[], me: Me)
     } as never)) as unknown as { id: string }).id;
     out.platform.alert_trigger = { state: "yes", note: "Wakes on a Dependabot alert." };
   } catch (e) {
-    out.platform.alert_trigger = { state: "no", note: `No Dependabot alert event yet (${e instanceof Error ? e.message : e}); the daily run finds them.` };
+    out.platform.alert_trigger = { state: "no", note: `No Dependabot alert event yet (${errorText(e)}); the daily run finds them.` };
   }
   const events: [string, string][] = [["deps-github-pr", "deps-on-pull-request"], ["deps-github-checks", "deps-on-check-suite"], ["deps-github-review", "deps-on-review"]];
   for (const [name, workflow] of events) {
@@ -300,7 +300,7 @@ export async function ensureSchedules(settings: Settings, repos: Repo[], me: Me)
         name, schedule_type: "WEBHOOK", workflow_name: workflow, pod_connector: "github", config: { source: "github" },
       } as never)) as unknown as { id: string }).id;
     } catch (e) {
-      out.problems.push(`GitHub's ${workflow.replace("deps-on-", "").replace("-", " ")} events (${e instanceof Error ? e.message : e})`);
+      out.problems.push(`GitHub's ${workflow.replace("deps-on-", "").replace("-", " ")} events (${errorText(e)})`);
     }
   }
   try {
@@ -312,7 +312,7 @@ export async function ensureSchedules(settings: Settings, repos: Repo[], me: Me)
       instruction: "Comment run: carry out the @lemma request in this comment on the dependency pull request.",
     } as never)) as unknown as { id: string }).id;
   } catch (e) {
-    out.problems.push(`@lemma comments (${e instanceof Error ? e.message : e})`);
+    out.problems.push(`@lemma comments (${errorText(e)})`);
   }
   out.made = ids;
   const patch: Record<string, unknown> = { schedule_ids: ids, schedule_user_id: me.id };
@@ -337,7 +337,7 @@ export async function coveredRepos(): Promise<{ repos: { full_name: string; defa
       problem: null,
     };
   } catch (e) {
-    return { repos: [], problem: e instanceof Error ? e.message : String(e) };
+    return { repos: [], problem: errorText(e) };
   }
 }
 

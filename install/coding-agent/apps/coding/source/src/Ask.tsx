@@ -7,7 +7,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { ArrowLeft, BookMarked, Check, ChevronDown, Copy, FileSearch, ListPlus, MessageSquarePlus, SquareTerminal } from "lucide-react";
-import { Button, Empty, Menu, MenuLabel, Spinner, cx, useToast, when } from "@lemma-plugins/kit";
+import { Button, Empty, Menu, MenuLabel, Spinner, cx, useToast, when, errorText } from "@lemma-plugins/kit";
 import { agentName, call, useCoding, useConversation, useWorld } from "./data";
 import { Mono, Prose, SessionPill } from "./marks";
 import { github, split } from "./platform";
@@ -113,7 +113,7 @@ function Composer({ follow }: { follow?: Question }) {
       setText("");
       to.ask(out.question_id ? String(out.question_id) : null);
     } catch (e) {
-      toast(`Couldn't ask: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't ask: ${errorText(e)}`);
     } finally {
       setBusy(false);
     }

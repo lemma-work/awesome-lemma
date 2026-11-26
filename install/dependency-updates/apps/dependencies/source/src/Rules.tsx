@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { ArrowLeft, BookOpen, Clock, EyeOff, Package, Trash2 } from "lucide-react";
-import { Button, Card, Empty, Header, Pill, useToast } from "@lemma-plugins/kit";
+import { Button, Card, Empty, Header, Pill, useToast, errorText } from "@lemma-plugins/kit";
 import { addRule, decide, removeRule, useDeps, useMe } from "./data";
 import { Mono } from "./marks";
 import { WEEKDAY_LONG, dayOf, nextBatch, plural, short } from "./model";
@@ -22,7 +22,7 @@ export function Rules() {
       setText("");
       toast("Added. The Lemma reads it on its next run.");
     } catch (e) {
-      toast(`Couldn't add it: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't add it: ${errorText(e)}`);
     } finally {
       setBusy(false);
     }

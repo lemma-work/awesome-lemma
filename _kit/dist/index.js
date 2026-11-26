@@ -4,6 +4,7 @@ export { DataProvider, create, items, q, runFunction, sql, startWorkflow, update
 export { canOpenApps, go, isFramed, openApp, usePath, useRecordId } from "./location";
 export { applyTheme, isThemeMessage, startTheme, THEME_MESSAGE } from "./theme";
 export { AskButton, useAsk } from "./ask";
+export { Connect, Connections, connectionProblem, errorText, isConnectionProblem, serviceName, useConnection } from "./connect";
 export { DEMO, demoData, demoNote } from "./demo";
 export { FACE } from "./face";
 export * from "./ui";

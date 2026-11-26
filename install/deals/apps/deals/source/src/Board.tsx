@@ -7,7 +7,7 @@ import {
   ArrowDown, ArrowUp, CalendarDays, Check, KanbanSquare, Plus, Sparkles, Table2,
 } from "lucide-react";
 import {
-  Avatar, Button, Empty, Logo, Pill, SearchField, Segmented, Sheet, Skeleton, agoText, day, due, moneyShort, nameOf, plural, useToast,
+  Avatar, Button, Empty, Logo, Pill, SearchField, Segmented, Sheet, Skeleton, agoText, day, due, moneyShort, nameOf, plural, useToast, errorText,
 } from "@lemma-plugins/kit";
 import { save, useDeals } from "./data";
 import { StagePill, dealMoney } from "./marks";
@@ -134,7 +134,7 @@ function Board({ deals, stages, onAdd }: { deals: Deal[]; stages: Stage[]; onAdd
       await reload("deals");
       toast(`${deal.name}: ${stage.name}`, { action: { label: "Undo", run: () => void save("edit", { deal_id: id, fields: { stage: deal.stage } }, me).then(() => reload("deals")) } });
     } catch (e) {
-      toast(`Couldn't move it: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't move it: ${errorText(e)}`);
     } finally {
       setMoved((m) => {
         const next = { ...m };
@@ -374,7 +374,7 @@ export function NewDeal({ stage, onClose }: { stage: string; onClose: () => void
       onClose();
       if (out.deal_id) to.deal(out.deal_id);
     } catch (e) {
-      toast(`Couldn't add it: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't add it: ${errorText(e)}`);
     } finally {
       setBusy(false);
     }

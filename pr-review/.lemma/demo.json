@@ -26,6 +26,16 @@
     "created_at": "2026-01-01T00:00:00Z",
     "updated_at": "2026-01-01T00:00:00Z"
   },
+  "connections": {
+    "github": {
+      "state": "ready",
+      "as": "acme"
+    },
+    "github-personal": {
+      "state": "ready",
+      "as": "asha"
+    }
+  },
   "notes": {
     "prr_read_rules": "In the demo the repositories aren't read again. In a Lemma it reads the rule files on each default branch and proposes what changed.",
     "prr_sample_data": "In the demo the sample stays."

@@ -19,18 +19,33 @@
 //   so functions can use them;
 // - Declare (Incidents), Give to Coding agent, and Dependency updates.
 
-import { DEMO, client, items, q, runFunction, sql } from "@lemma-plugins/kit";
+import { DEMO, client, connectionProblem, errorText, items, q, runFunction, sql } from "@lemma-plugins/kit";
 import { call } from "./data";
 import type { Ask, Item, Report, Settings, SourceStatus } from "./types";
 
 const pod = () => client.podId as string;
 
-export function why(e: unknown): string {
+/** A caught failure in words: a connection problem as the kit says it, never the platform's own text. */
+export function why(e: unknown, connector?: string): string {
+  const problem = connectionProblem(e, connector);
+  if (problem) return problem.text;
   const err = e as { status?: number; statusCode?: number; message?: string; body?: { message?: string; detail?: string } };
   const status = err?.status || err?.statusCode;
-  const text = err?.body?.message || err?.body?.detail || err?.message || String(e);
+  const text = errorText(err?.body?.message || err?.body?.detail ? { message: err.body!.message || err.body!.detail } : e);
   if (status === 403) return `Lemma refused it (${text}). This needs edit access in this Lemma; ask whoever runs it.`;
   return text;
+}
+
+const CODES = /\b(CONNECTION_REQUIRED|REAUTH_REQUIRED|CONNECTOR_NEEDS_ACCOUNT|POD_CONNECTOR_NOT_FOUND|CONNECTOR_UNAVAILABLE|CONNECTION_REQUIRES_PERSON|CONNECTOR_NOT_INSTALLED|CONNECTOR_ACCESS_DENIED|CONNECTOR_USE_REFUSED)\b/;
+
+/**
+ * The connection problem inside a note a function wrote (the poll keeps a
+ * door's failure as text), as an error `<Connect error>` and
+ * `connectionProblem` can read; null when the note isn't about a connection.
+ */
+export function noteProblem(note: string | null | undefined): { code: string; message: string } | null {
+  const m = note ? CODES.exec(note) : null;
+  return m ? { code: m[1], message: m[1] } : null;
 }
 
 async function exists(path: string): Promise<boolean> {
@@ -114,7 +129,7 @@ export async function ensureSchedules(s: Settings, meId: string | null, inRotati
         if (g.needs) {
           status[g.door] = { state: "waiting", note: `Not live yet: needs ${g.needs}. Read every 15 minutes once GitHub allows it.` };
         } else {
-          problems.push(`GitHub ${g.event.replace("_", " ")} (${why(e)})`);
+          problems.push(`GitHub ${g.event.replace("_", " ")} (${why(e, "github")})`);
         }
       }
     }

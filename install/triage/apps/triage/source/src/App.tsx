@@ -8,7 +8,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { DoorOpen, FlaskConical, Inbox as InboxIcon, Settings2, Users } from "lucide-react";
-import { Banner, Button, DEMO, DataProvider, Kbd, Notice, SearchField, Segmented, Skeleton, runFunction, useToast } from "@lemma-plugins/kit";
+import { Banner, Button, DEMO, DataProvider, Kbd, Notice, SearchField, Segmented, Skeleton, runFunction, useToast, errorText } from "@lemma-plugins/kit";
 import { Case } from "./Case";
 import { LOADERS, WhoProvider, nameOf, nowMs, onTriage, refreshNeedsYou, useTriage, useWho } from "./data";
 import { Doors } from "./Doors";
@@ -43,7 +43,7 @@ function Gate() {
       </div>
     );
   }
-  if (errors.settings || errors.items) return <Notice>Couldn't read Triage: {errors.settings || errors.items}</Notice>;
+  if (errors.settings || errors.items) return <Notice>Couldn't read Triage: {errorText(errors.settings || errors.items)}</Notice>;
   if (!settings?.setup_done_at || route.page === "setup") return <Setup />;
   return <Shell />;
 }
@@ -94,7 +94,7 @@ function Shell() {
       await d.reload();
       to.list();
     } catch (e) {
-      toast(`Couldn't clear the sample: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't clear the sample: ${errorText(e)}`);
     } finally {
       setClearing(false);
     }

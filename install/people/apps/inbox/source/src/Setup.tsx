@@ -1,7 +1,7 @@
 // Set-up, one person at a time. The `mail-setup` workflow does the work and
 // waits on three forms; this is the screen for them.
 //
-//   start       Gmail or Outlook (connect it here), or a sample mailbox
+//   start       Gmail or Outlook (connected here, with the kit's Connect), or a sample mailbox
 //   reading     the first read of about a month, and learning the voice
 //   categories  the five plus what it found, each one sentence to keep, change
 //               or drop; the voice, rules and VIPs beside them
@@ -13,8 +13,9 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Check, Mail, PenLine, Plus, Sparkles, Trash2, UserRound } from "lucide-react";
 import {
-  Button, Card, Face, Pill, Spinner, Switch, client, orgId, plural, q, runFunction, update, useToast, whoAmI,
+  Button, Card, Connect, DEMO, Face, Pill, Spinner, Switch, client, demoNote, errorText, plural, q, runFunction, update, useConnection, useToast, whoAmI,
 } from "@lemma-plugins/kit";
+import { PURPOSE, addressOf, useAccounts, type Account, type Provider } from "./connection";
 import { useMail } from "./data";
 import { browserZone } from "./time";
 
@@ -26,17 +27,8 @@ type Run = {
   execution_context?: Record<string, unknown>;
 };
 
-interface Account {
-  id: string;
-  connector_id: string;
-  status?: string;
-  email?: string | null;
-  display_name?: string | null;
-}
-
 const NAMES: Record<string, string> = { gmail: "Gmail", outlook: "Outlook" };
 const STEPS = ["Connect", "Read", "Categories", "Drafts", "Sort"];
-const addressOf = (a: Account) => (a.email || (a.display_name?.includes("@") ? a.display_name : "") || "").toLowerCase();
 
 function stepOf(run: Run | null): number {
   if (!run) return 0;
@@ -115,36 +107,20 @@ export function Setup() {
 
 /* ---------- 1. connect ---------- */
 
-function useAccounts() {
-  const [accounts, setAccounts] = useState<Account[] | null>(null);
-  const [org, setOrg] = useState<string | null>(null);
-  useEffect(() => {
-    void (async () => {
-      const id = await orgId();
-      setOrg(id);
-      if (!id) return setAccounts([]);
-      const lists = await Promise.all(
-        ["gmail", "outlook"].map((c) =>
-          client.connectors.accounts.list(id, { connectorId: c, limit: 50 } as never).then(
-            (r) => ((r as { items?: Account[] }).items || []) as Account[],
-            () => [] as Account[],
-          ),
-        ),
-      );
-      setAccounts(lists.flat().filter((a) => !a.status || a.status === "CONNECTED" || a.status === "ACTIVE"));
-    })();
-  }, []);
-  return { accounts, org };
-}
-
 function Start({ failed }: { failed: string | null }) {
   const { settings, reload } = useMail();
   const toast = useToast();
-  const { accounts, org } = useAccounts();
-  const [provider, setProvider] = useState<"gmail" | "outlook">("gmail");
+  const [provider, setProvider] = useState<Provider>("gmail");
+  // Connecting, reconnecting, an organization without Gmail or Outlook, and
+  // asking someone who can: all the kit's. The account picker stays, because
+  // the set-up reads one account, by its id and address.
+  const conn = useConnection({ connector: provider, mode: "per_member", purpose: PURPOSE[provider] });
+  const listed = useAccounts(provider, conn.state.kind);
+  const mine: Account[] = DEMO
+    ? conn.state.kind === "ready" ? [{ id: `sample-${provider}`, connector_id: provider, email: conn.state.as }] : []
+    : listed || [];
   const [picked, setPicked] = useState<string>("");
   const [busy, setBusy] = useState("");
-  const mine = (accounts || []).filter((a) => a.connector_id === provider);
 
   useEffect(() => {
     if (mine.length && !mine.some((a) => a.id === picked)) setPicked(mine[0].id);
@@ -161,21 +137,8 @@ function Start({ failed }: { failed: string | null }) {
     await reload("settings");
   };
 
-  const connect = async () => {
-    if (!org) return;
-    setBusy("connect");
-    try {
-      const req = (await client.connectors.createConnectRequest(org, { connector_id: provider, return_to: location.href } as never)) as { authorization_url?: string | null };
-      if (req.authorization_url) location.href = req.authorization_url;
-      else toast("That account is already connected: pick it in the list.");
-    } catch (e) {
-      toast(`Couldn't start connecting ${NAMES[provider]}: ${e instanceof Error ? e.message : e}`);
-    } finally {
-      setBusy("");
-    }
-  };
-
   const useAccount = async () => {
+    if (DEMO) return demoNote("In the demo nothing is read. In your Lemma this reads your last month of mail from this account.");
     const account = mine.find((a) => a.id === picked);
     const email = account ? addressOf(account) : "";
     if (!account || !email) return toast("Pick an account with an address, or connect one.");
@@ -183,7 +146,7 @@ function Start({ failed }: { failed: string | null }) {
     try {
       await begin({ provider, account_id: account.id, email });
     } catch (e) {
-      toast(`Couldn't start: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't start: ${errorText(e, provider)}`);
     } finally {
       setBusy("");
     }
@@ -195,7 +158,7 @@ function Start({ failed }: { failed: string | null }) {
       await runFunction("mail_sample_data", { mode: "load" });
       await begin({ provider: "sample" });
     } catch (e) {
-      toast(`Couldn't load the sample: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't load the sample: ${errorText(e)}`);
     } finally {
       setBusy("");
     }
@@ -218,30 +181,31 @@ function Start({ failed }: { failed: string | null }) {
         ))}
       </div>
 
-      <div className="c-card c-choices">
-        {accounts === null ? (
-          <div className="c-choice c-muted"><Spinner /> Looking for {NAMES[provider]} accounts already connected…</div>
-        ) : mine.length === 0 ? (
-          <div className="c-choice c-muted">No {NAMES[provider]} account connected yet.</div>
-        ) : (
-          mine.map((a) => (
-            <label key={a.id} className="c-choice">
-              <input type="radio" name="account" checked={picked === a.id} onChange={() => setPicked(a.id)} />
-              <Mail size={15} className="c-faint" aria-hidden="true" />
-              <span className="c-grow c-ellipsis">{addressOf(a) || a.display_name || NAMES[provider]}</span>
-            </label>
-          ))
-        )}
-      </div>
+      <Connect connection={conn} connector={provider} mode="per_member" purpose={PURPOSE[provider]} quiet className="m-connect" />
 
-      <div className="c-setup__row">
-        <Button variant="primary" icon={Check} onClick={() => void useAccount()} busy={busy === "start"} disabled={!mine.length || !!busy}>
-          Read my last month
-        </Button>
-        <Button icon={Plus} onClick={() => void connect()} busy={busy === "connect"} disabled={!org || !!busy}>
-          Connect {NAMES[provider]}
-        </Button>
-      </div>
+      {mine.length ? (
+        <>
+          <div className="c-card c-choices" role="radiogroup" aria-label={`Your ${NAMES[provider]} accounts`}>
+            {mine.map((a) => (
+              <label key={a.id} className="c-choice">
+                <input type="radio" name="account" checked={picked === a.id} onChange={() => setPicked(a.id)} />
+                <Mail size={15} className="c-faint" aria-hidden="true" />
+                <span className="c-grow c-ellipsis">{addressOf(a) || a.display_name || NAMES[provider]}</span>
+              </label>
+            ))}
+          </div>
+          <div className="c-setup__row">
+            <Button variant="primary" icon={Check} onClick={() => void useAccount()} busy={busy === "start"} disabled={!!busy}>
+              Read my last month
+            </Button>
+            {conn.ready ? (
+              <Button icon={Plus} onClick={conn.connect} busy={conn.busy === "connect"} disabled={!!busy}>
+                Connect another
+              </Button>
+            ) : null}
+          </div>
+        </>
+      ) : null}
       <div className="m-or"><span>or</span></div>
       <Button variant="ghost" icon={Sparkles} onClick={() => void sample()} busy={busy === "sample"} disabled={!!busy}>
         Look around with a sample mailbox
@@ -345,7 +309,7 @@ function CategoriesStep({ run }: { run: Run }) {
         },
       } as never);
     } catch (e) {
-      toast(`Couldn't save: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't save: ${errorText(e)}`);
       setBusy(false);
     }
   };
@@ -450,7 +414,7 @@ function DraftsStep({ run }: { run: Run }) {
         },
       } as never);
     } catch (e) {
-      toast(`Couldn't save: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't save: ${errorText(e)}`);
       setBusy(false);
     }
   };

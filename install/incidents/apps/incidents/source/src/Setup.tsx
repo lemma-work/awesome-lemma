@@ -1,14 +1,16 @@
 // Set-up, once for the whole Lemma, by whoever opens Incidents first: the
-// Slack connection and #incidents, the repositories to watch, who gets
-// updates by email, and the severity words. Or sample incidents to look
-// around with. The same screen changes it later.
+// accounts it works through (Slack, GitHub, Sentry, PostHog, Resend, each
+// optional and connected right here), #incidents, the repositories to watch,
+// who gets updates by email, and the severity words. Or sample incidents to
+// look around with. The same screen changes it later.
 
 import { useState } from "react";
 import { ArrowLeft, Plus, TriangleAlert, X } from "lucide-react";
-import { Button, Field, Header, Spinner, useToast } from "@lemma-plugins/kit";
+import { Button, Connections, Field, Header, Spinner, errorText, useToast } from "@lemma-plugins/kit";
 import { DEFAULT_SEVERITIES, call, useIncidents } from "./data";
+import { CONNECTORS, connectSpec } from "./marks";
 import { to } from "./route";
-import { ensureSchedules } from "./wire";
+import { ensureSchedules, said } from "./wire";
 import type { Repo, Severity, Settings } from "./types";
 
 export function Setup() {
@@ -43,12 +45,12 @@ export function Setup() {
           toast("The sample is still loading; it fills in here in a moment.");
         }
       } else {
-        toast(String(out.message || "Saved."));
+        toast(said(out.message || "Saved."));
       }
       await reload();
       to.list();
     } catch (e) {
-      toast(`Couldn't save: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't save: ${errorText(e)}`);
     } finally {
       setBusy("");
     }
@@ -59,6 +61,11 @@ export function Setup() {
 
   const form = (
     <div className="in-form">
+      <div className="c-field">
+        <span>Connected accounts</span>
+        <small className="c-field__hint">Each optional; one account each, for the whole Lemma.</small>
+        <Connections items={CONNECTORS.map((key) => connectSpec(key, settings))} />
+      </div>
       <Field label="Announce incidents in" hint="Every incident is announced here, and each update the lead sends goes here too. Made if it doesn't exist.">
         <input className="c-input" value={channel} onChange={(e) => setChannel(e.target.value)} placeholder="#incidents" />
       </Field>
@@ -78,7 +85,7 @@ export function Setup() {
         ))}
         <div><Button size="sm" variant="ghost" icon={Plus} onClick={() => setRepos((rs) => [...rs, { repo: "", service: "", deploy_workflow: "" }])}>Add a repository</Button></div>
       </div>
-      <Field label="Email each update to" hint="Sent through the Lemma's mailbox (Resend) when it has one; otherwise updates go to Slack only.">
+      <Field label="Email each update to" hint="Sent through Resend, connected above; without it, updates go to Slack only.">
         <input className="c-input" value={emails} onChange={(e) => setEmails(e.target.value)} placeholder="support@company.example, cx@company.example" />
       </Field>
       <Field label="Send those emails from" hint="An address on a domain your mailbox has verified. Leave it empty to keep updates in Slack.">
@@ -119,7 +126,7 @@ export function Setup() {
       <div className="c-setup">
         <span className="in-setup__icon"><TriangleAlert size={18} aria-hidden="true" /></span>
         <h1>Set up incidents</h1>
-        <p className="c-setup__lead">Once for the whole Lemma. It uses the Lemma's Slack and GitHub connections; nothing is posted until someone declares.</p>
+        <p className="c-setup__lead">Once for the whole Lemma. Connect the accounts it works through below; nothing is posted until someone declares.</p>
         {form}
         <div className="c-setup__row">
           <Button variant="primary" busy={busy === "save"} disabled={!!busy} onClick={() => void save(false)}>Save and start</Button>

@@ -3,7 +3,7 @@
 
 import { useEffect, useState } from "react";
 import { Clock, Inbox, Plus, RefreshCw, Share2, Trash2, Users, X } from "lucide-react";
-import { Button, Card, Header, Switch, client, runFunction, startWorkflow, update, useToast, whoAmI } from "@lemma-plugins/kit";
+import { Button, Card, Header, Switch, client, runFunction, startWorkflow, update, useToast, whoAmI, errorText } from "@lemma-plugins/kit";
 import { turnOn } from "./App";
 import { usePeople } from "./data";
 import { to } from "./route";
@@ -38,7 +38,7 @@ export function SettingsPage() {
       await reload();
       toast(recount ? "Saved. Counting again with it." : "Saved.");
     } catch (e) {
-      toast(`Couldn't save: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't save: ${errorText(e)}`);
     } finally {
       setBusy("");
     }
@@ -52,7 +52,7 @@ export function SettingsPage() {
       setPaused(!on);
       await reload("settings");
     } catch (e) {
-      toast(`Couldn't change that: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't change that: ${errorText(e)}`);
     } finally {
       setBusy("");
     }
@@ -65,7 +65,7 @@ export function SettingsPage() {
       if (mode === "load") await startWorkflow("people-refresh");
       await reload();
     } catch (e) {
-      toast(`Couldn't do that: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't do that: ${errorText(e)}`);
     } finally {
       setBusy("");
     }

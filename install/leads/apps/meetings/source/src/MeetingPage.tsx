@@ -8,8 +8,9 @@ import {
   ArrowLeft, CalendarDays, CircleHelp, Clock, FileText, Gavel, Globe, Handshake, Link2, MapPin, NotebookPen, RefreshCw, Repeat, Search, UserRound,
 } from "lucide-react";
 import {
-  Avatar, Banner, Button, Card, Empty, Evidence, Header, Markdown, Menu, MenuItem, MenuLabel, Pill, Skeleton, Spinner, client, plural, q, runFunction, sql, update, useToast,
+  Avatar, Banner, Button, Card, Connect, Empty, Evidence, Header, Markdown, Menu, MenuItem, MenuLabel, Pill, Skeleton, Spinner, client, plural, q, runFunction, sql, update, useToast, errorText,
 } from "@lemma-plugins/kit";
+import { PURPOSE, stoppedText } from "./connection";
 import { useMeetings } from "./data";
 import { KIND_ICON, KIND_LABEL, KindPill, StatusPill, isOver, nameOf, statusOf } from "./marks";
 import { to } from "./route";
@@ -113,7 +114,7 @@ function Settle({ m }: { m: Meeting }) {
       toast(`${out.message}. The next read learns from it.`);
       await reload("meetings");
     } catch (e) {
-      toast(`Couldn't keep that: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't keep that: ${errorText(e)}`);
     } finally {
       setBusy("");
     }
@@ -150,7 +151,7 @@ function SortMenu({ m }: { m: Meeting }) {
       toast(out.message);
       await reload("meetings");
     } catch (e) {
-      toast(`Couldn't change it: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't change it: ${errorText(e)}`);
     }
   };
   return (
@@ -205,7 +206,7 @@ function BriefCard({ m }: { m: Meeting }) {
       await update("meetings_work", m.id, { brief_state: "wanted", brief_error: null });
       await reload("meetings");
     } catch (e) {
-      toast(`Couldn't ask for the brief: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't ask for the brief: ${errorText(e)}`);
     } finally {
       setBusy(false);
     }
@@ -236,7 +237,7 @@ function BriefCard({ m }: { m: Meeting }) {
       </div>
     );
   } else if (m.brief_state === "failed") {
-    body = <Banner tone="danger" action={<Button size="sm" busy={busy} onClick={() => void write()}>Try again</Button>}>{m.brief_error || "The brief couldn't be written."}</Banner>;
+    body = <Banner tone="danger" action={<Button size="sm" busy={busy} onClick={() => void write()}>Try again</Button>}>{m.brief_error ? stoppedText(m.brief_error) : "The brief couldn't be written."}</Banner>;
   } else if (m.wants_brief && !over) {
     body = (
       <Empty icon={Clock} title={due ? `Comes ${relDay(due)}` : "Comes before the meeting"}
@@ -303,7 +304,7 @@ function AfterPart({ m }: { m: Meeting }) {
       await reload("meetings");
       toast("Notes kept; reading them for decisions and promises.");
     } catch (e) {
-      toast(`Couldn't keep the notes: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't keep the notes: ${errorText(e)}`);
     } finally {
       setBusy("");
     }
@@ -316,7 +317,7 @@ function AfterPart({ m }: { m: Meeting }) {
       toast(out.message);
       await reload("meetings");
     } catch (e) {
-      toast(`Couldn't look: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't look: ${errorText(e)}`);
     } finally {
       setBusy("");
     }
@@ -341,13 +342,14 @@ function AfterPart({ m }: { m: Meeting }) {
         {reading ? (
           <span className="c-writing"><Spinner />Reading what was said for decisions and promises…</span>
         ) : m.notes_state === "failed" ? (
-          <Banner tone="danger">{m.notes_error || "The notes couldn't be read."}</Banner>
+          <Banner tone="danger">{m.notes_error ? stoppedText(m.notes_error, "googlemeet") : "The notes couldn't be read."}</Banner>
         ) : m.summary ? (
           <p className="mt-summary">{m.summary}</p>
         ) : null}
         {askNotes ? (
           <div className="c-stack">
-            {m.notes_error ? <p className="c-muted">{m.notes_error}</p> : null}
+            {m.notes_error ? <p className="c-muted">{stoppedText(m.notes_error, "googlemeet")}</p> : null}
+            {m.notes_error && settings?.notes_from === "meet" ? <Connect connector="googlemeet" mode="per_member" purpose={PURPOSE.googlemeet} quiet /> : null}
             <p className="c-muted">
               {settings?.notes_from === "meet" ? "No transcript from Google Meet yet. Look again, or write what happened." : "Write what happened: what was decided, who said they'd do what."}
             </p>

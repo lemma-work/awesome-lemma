@@ -9,8 +9,9 @@ import {
   Mail, MoreHorizontal, RotateCcw, Send, Sparkles, Trash2,
 } from "lucide-react";
 import {
-  Avatar, Button, Evidence, Menu, MenuItem, MenuLabel, Pill, client, create, due, nameOf, plural, runFunction, update, useToast,
+  Avatar, Button, Evidence, Menu, MenuItem, MenuLabel, Pill, client, create, due, nameOf, plural, runFunction, update, useToast, errorText, isConnectionProblem,
 } from "@lemma-plugins/kit";
+import { aboutConnection, stoppedText } from "./connection";
 import { isSample, useAct, useMail } from "./data";
 import { MailBody, peek } from "./mail-body";
 import { snoozeOptions } from "./List";
@@ -62,7 +63,7 @@ export function Reader(props: { c: Conv; view: View; onDone: () => void; onSnooz
       .download(c.document_path)
       .then((blob: Blob) => blob.text())
       .then((text: string) => alive && setDoc({ messages: parseThreadDoc(text) }))
-      .catch((e: unknown) => alive && setDoc({ messages: [], error: e instanceof Error ? e.message : String(e) }));
+      .catch((e: unknown) => alive && setDoc({ messages: [], error: errorText(e) }));
     return () => {
       alive = false;
     };
@@ -266,6 +267,9 @@ const INTENTS: { label: string; hint: string }[] = [
   { label: "Ask a question", hint: "Ask the one question I need answered before I can reply properly." },
 ];
 
+/** A send that failed for want of a connection points at the mailboxes, where it's reconnected. */
+const MAILBOXES = { action: { label: "Mailboxes", run: () => to.settings("mailboxes") } };
+
 const addresses = (text: string) => text.split(/[,;\s]+/).map((s) => s.trim().toLowerCase()).filter((s) => s.includes("@"));
 
 function Composer({ c, draft, box }: { c: Conv; draft?: DraftRow; box?: Mailbox }) {
@@ -274,7 +278,7 @@ function Composer({ c, draft, box }: { c: Conv; draft?: DraftRow; box?: Mailbox 
   const writing = c.draft_state === "wanted" || c.draft_state === "writing";
   const want = (hint: string) =>
     void act([c.id], "draft", { hint: hint || undefined, kind: c.state === "waiting" ? "follow_up" : "reply" }).catch((e: unknown) =>
-      toast(`Couldn’t ask for a draft: ${e instanceof Error ? e.message : e}`),
+      toast(`Couldn’t ask for a draft: ${errorText(e)}`),
     );
   if (writing) {
     return (
@@ -319,15 +323,17 @@ function ReplyBox({ c, draft, box, onWant }: { c: Conv; draft?: DraftRow; box?: 
   const deliver = useCallback(async (id: string) => {
     try {
       const out = await runFunction<{ sent: boolean; message: string }>("mail_send_draft", { draft_id: id });
-      toast(out.message || (out.sent ? "Sent" : "Not sent"));
+      if (out.sent) toast(out.message || "Sent");
+      else if (out.message && aboutConnection(out.message)) toast(`Not sent. ${stoppedText(out.message, box?.provider)}`, MAILBOXES);
+      else toast(out.message ? stoppedText(out.message, box?.provider) : "Not sent");
     } catch (e) {
-      toast(`Couldn’t send: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn’t send: ${errorText(e, box?.provider)}`, isConnectionProblem(e) ? MAILBOXES : undefined);
     } finally {
       setSending(false);
       void reload("drafts");
       void reload("conversations");
     }
-  }, [toast, reload]);
+  }, [toast, reload, box?.provider]);
 
   const send = useCallback(async (at?: string, label?: string) => {
     const recipients = addresses(to);
@@ -351,7 +357,7 @@ function ReplyBox({ c, draft, box, onWant }: { c: Conv; draft?: DraftRow; box?: 
       }
     } catch (e) {
       setSending(false);
-      return toast(`Couldn’t save the reply: ${e instanceof Error ? e.message : e}`);
+      return toast(`Couldn’t save the reply: ${errorText(e)}`);
     }
     const undo = () => {
       window.clearTimeout(timer.current);

@@ -11,8 +11,8 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { GitPullRequestArrow, Hash, Lock, Mail, MessageSquare, Send, Sparkles } from "lucide-react";
-import { Avatar, Button, Empty, Pill, Skeleton, Segmented, ago, day, plural, update as _u, useToast } from "@lemma-plugins/kit";
-import { asksFor, confirmAsk, conversationOf, issueNumber, messagesOf, sendMailDraft, sendReply, useRN, useWho } from "./data";
+import { Avatar, Button, Connect, Empty, Pill, Skeleton, Segmented, ago, day, plural, update as _u, useToast, errorText } from "@lemma-plugins/kit";
+import { asksFor, confirmAsk, connectionFailure, conversationOf, issueNumber, messagesOf, plain, sendMailDraft, sendReply, useRN, useWho } from "./data";
 import { to } from "./route";
 import { Top, focusNote } from "./Top";
 import type { Ask, Draft, Line, Note, Reply } from "./types";
@@ -150,7 +150,7 @@ function PersonRow({ a, selected, note, who }: { a: Ask; selected: boolean; note
       await confirmAsk(a, ok, note.state === "published" ? note.name : null);
       toast(ok ? (note.state === "published" ? "Linked. A reply is being drafted in your thread." : "Linked. They're told when it's published.") : "Not linked. Nobody is told.");
     } catch (e) {
-      toast(`Couldn't change it: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't change it: ${errorText(e)}`);
     }
   };
   return (
@@ -248,7 +248,7 @@ function MailComposer({ a, draft }: { a: Ask; draft: Draft | null }) {
     try {
       toast(await sendMailDraft(draft, body));
     } catch (e) {
-      toast(`Couldn't send: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't send: ${errorText(e)}`);
     } finally {
       setBusy(false);
     }
@@ -294,7 +294,8 @@ function ReplyComposer({ a, reply }: { a: Ask; reply: Reply | null }) {
     try {
       toast(await sendReply(reply, body));
     } catch (e) {
-      toast(`Couldn't send: ${e instanceof Error ? e.message : e}`);
+      const text = e instanceof Error ? plain(e.message, reply.channel) : errorText(e, reply.channel);
+      toast(/^Couldn't send/.test(text) ? text : `Couldn't send: ${text}`);
     } finally {
       setBusy(false);
     }
@@ -306,7 +307,11 @@ function ReplyComposer({ a, reply }: { a: Ask; reply: Reply | null }) {
       <div className="rn-cmp__b">
         {sent ? body.split(/\n{2,}/).map((p, i) => <p key={i}>{p}</p>)
           : <textarea className="c-input c-textarea rn-cmp__ta" value={body} onChange={(e) => setBody(e.target.value)} aria-label="Reply" />}
-        {reply.error ? <p className="rn-warn-text">{reply.error}</p> : null}
+        {reply.error && !sent ? <p className="rn-warn-text">{plain(reply.error, reply.channel)}</p> : null}
+        {!sent && connectionFailure(reply.error) && (reply.channel === "github" || reply.channel === "slack") ? (
+          <Connect quiet connector={reply.channel} slug={reply.channel} mode="shared" error={connectionFailure(reply.error)}
+            purpose={reply.channel === "github" ? "The reply goes on the issue through this Lemma's GitHub connection." : "The reply goes in their thread through this Lemma's Slack connection."} />
+        ) : null}
       </div>
       <div className="rn-cmp__a">
         {sent ? <Pill tone="success">Sent {ago(reply.sent_at)}</Pill>

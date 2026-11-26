@@ -1,10 +1,10 @@
 // PR review's own small marks: the rules bar, the findings count, live checks,
-// a verdict, a commit. Everything else is the kit's.
+// a verdict, a commit, and its two GitHub connections. Everything else is the kit's.
 
-import { useEffect, useState, useSyncExternalStore, type ReactNode } from "react";
-import { Check, CircleDashed, CircleMinus, Link2, X } from "lucide-react";
-import { Button, Pill, cx, plural, type Tone } from "@lemma-plugins/kit";
-import { checksOf, githubConnectUrl, needsGithub, summarize, type GhCheck } from "./github";
+import { useEffect, useRef, useState, useSyncExternalStore, type ReactNode } from "react";
+import { Check, CircleDashed, CircleMinus, X } from "lucide-react";
+import { Connect, Pill, errorText, plural, useConnection, type Connection, type ConnectionSpec, type Tone } from "@lemma-plugins/kit";
+import { GITHUB, GITHUB_PERSONAL, checksOf, needsGithub, summarize, type GhCheck } from "./github";
 import type { Finding, LedgerEntry, PullRequest, Round, Severity } from "./types";
 
 export const short = (sha: string | null | undefined) => (sha ? sha.slice(0, 7) : "");
@@ -100,29 +100,41 @@ export function StatePill({ pr }: { pr: PullRequest }) {
 
 /* ---------- GitHub checks, live, as the person ---------- */
 
-// Whether this person has GitHub connected, as the last call found out. The
-// inbox says so once, not on every row.
-let missing = false;
+// Whether the Lemma's GitHub answered, as the last call found out (the failure
+// itself, or null). The inbox says so once, not on every row. `back` counts
+// the times GitHub came back connected, so what failed reads again.
+let missing: unknown = null;
+let back = 0;
 const listeners = new Set<() => void>();
-function setMissing(v: boolean) {
-  if (missing === v) return;
-  missing = v;
+const tell = () => {
   for (const l of [...listeners]) l();
+};
+function setMissing(v: unknown) {
+  if (missing === v || (!missing && !v)) return;
+  missing = v;
+  tell();
 }
-export function useGithubMissing(): boolean {
-  return useSyncExternalStore(
-    (l) => {
-      listeners.add(l);
-      return () => void listeners.delete(l);
-    },
-    () => missing,
-    () => missing,
-  );
+/** GitHub is connected again: forget the failure and read once more. */
+export function githubBack() {
+  missing = null;
+  back++;
+  tell();
+}
+const subscribe = (l: () => void) => {
+  listeners.add(l);
+  return () => void listeners.delete(l);
+};
+export function useGithubMissing(): unknown {
+  return useSyncExternalStore(subscribe, () => missing, () => missing);
+}
+function useGithubBack(): number {
+  return useSyncExternalStore(subscribe, () => back, () => back);
 }
 
 export function useChecks(repo: string | null, sha: string | null | undefined, on = true): { list: GhCheck[] | null; err: unknown } {
   const [state, setState] = useState<{ key: string; list: GhCheck[] | null; err: unknown }>({ key: "", list: null, err: null });
   const key = repo && sha ? `${repo}@${sha}` : "";
+  const again = useGithubBack();
   useEffect(() => {
     if (!on || !repo || !sha) return;
     let alive = true;
@@ -130,17 +142,17 @@ export function useChecks(repo: string | null, sha: string | null | undefined, o
     setState({ key, list: now ?? null, err: null });
     next
       .then((list) => {
-        setMissing(false);
+        setMissing(null);
         if (alive) setState({ key, list, err: null });
       })
       .catch((err) => {
-        if (needsGithub(err)) setMissing(true);
+        if (needsGithub(err)) setMissing(err);
         if (alive) setState((s) => ({ key, list: s.key === key ? s.list : null, err }));
       });
     return () => {
       alive = false;
     };
-  }, [repo, sha, key, on]);
+  }, [repo, sha, key, on, again]);
   return state.key === key ? state : { list: null, err: null };
 }
 
@@ -155,7 +167,7 @@ const LAST: Record<string, ReactNode> = {
 export function ChecksPill({ list, err, last }: { list: GhCheck[] | null; err: unknown; last?: string | null }) {
   if (err) {
     if (last && LAST[last]) return <span title="As PR review last heard from GitHub">{LAST[last]}</span>;
-    return <span className="c-faint" title={needsGithub(err) ? "Connect GitHub to see checks" : "GitHub didn't answer"}>—</span>;
+    return <span className="c-faint" title={needsGithub(err) ? errorText(err, "github") : "GitHub didn't answer"}>—</span>;
   }
   if (!list) return <span className="c-skel" style={{ display: "inline-block", width: 64, height: 18, borderRadius: 999 }} aria-label="Checks loading" />;
   const s = summarize(list);
@@ -165,19 +177,63 @@ export function ChecksPill({ list, err, last }: { list: GhCheck[] | null; err: u
   return <Pill tone="success">Passing</Pill>;
 }
 
-export function ConnectGithub({ compact }: { compact?: boolean }) {
-  const url = githubConnectUrl();
-  return (
-    <div className={cx("prr-connect", compact && "prr-connect--compact")} role="status">
-      <Link2 size={14} aria-hidden="true" />
-      <span>Connect your GitHub account to see live checks and diffs, and to review or merge under your own name.</span>
-      {url ? (
-        <Button size="sm" onClick={() => window.open(url, "_blank", "noopener")}>
-          Connect GitHub
-        </Button>
-      ) : null}
-    </div>
-  );
+/* ---------- GitHub, connected from here ---------- */
+
+/** The Lemma's one shared GitHub: every read, and what its bot posts. */
+export const SHARED_GITHUB: ConnectionSpec = {
+  connector: "github",
+  slug: GITHUB,
+  mode: "shared",
+  purpose: "One GitHub connection for this Lemma: it reads the pull requests and rule files in the repositories you pick, and is how the Lemma's bot posts what Settings allows.",
+};
+
+/** Each person's own GitHub: only what is done in their name. */
+export const MY_GITHUB: ConnectionSpec = {
+  connector: "github",
+  slug: GITHUB_PERSONAL,
+  mode: "per_member",
+  purpose: "Your own GitHub, only for what you do in your name: a review you send back, an approval, a merge you press. Without it you still read everything and can send back as the Lemma's bot, but you can't approve or merge as yourself.",
+};
+
+/** Calls `fn` when a connection comes back ready after it wasn't (not when it
+ *  simply reads ready the first time). */
+function useBack(c: Connection, fn?: () => void) {
+  const was = useRef(c.state.kind);
+  useEffect(() => {
+    const now = c.state.kind;
+    if (now === "ready" && was.current !== "ready" && was.current !== "loading") fn?.();
+    was.current = now;
+  }, [c.state.kind]); // eslint-disable-line react-hooks/exhaustive-deps
+}
+
+/**
+ * The Lemma's GitHub for a page that reads through it: nothing while it is
+ * connected (or still being checked), its next step when it isn't. A failed
+ * read passed as `error` is checked again; once it is back, what failed reads
+ * again.
+ */
+export function useSharedGithub(error: unknown, onBack?: () => void): Connection {
+  const c = useConnection(SHARED_GITHUB);
+  useBack(c, () => {
+    githubBack();
+    onBack?.();
+  });
+  useEffect(() => {
+    if (error) c.report(error);
+  }, [error]); // eslint-disable-line react-hooks/exhaustive-deps
+  return c;
+}
+
+export function SharedGithubStep({ c, className }: { c: Connection; className?: string }) {
+  if (c.ready || c.state.kind === "loading") return null;
+  return <Connect {...SHARED_GITHUB} connection={c} className={className} />;
+}
+
+/** The person's own GitHub as the next step, after something they pressed needed it. */
+export function MyGithubStep({ error, onBack, className }: { error?: unknown; onBack?: () => void; className?: string }) {
+  const c = useConnection(MY_GITHUB);
+  useBack(c, onBack);
+  return <Connect {...MY_GITHUB} connection={c} error={error} className={className} />;
 }
 
 /* ---------- a ledger line ---------- */

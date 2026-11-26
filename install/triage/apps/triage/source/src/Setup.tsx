@@ -1,12 +1,15 @@
 // Set-up, once, by whoever opens Triage first (and its settings after).
-// Each step is optional except the first: the repositories to watch, who's
-// on triage, Slack channels, Sentry projects, the PostHog project, and the
-// report form. Or look around with a sample morning.
+// First the accounts Triage reads through (GitHub, Slack, Sentry, PostHog,
+// each optional, each connected right here). Then each step is optional
+// except the first: the repositories to watch, who's on triage, Slack
+// channels, Sentry projects, the PostHog project, and the report form. Or
+// look around with a sample morning.
 
 import { useEffect, useMemo, useState } from "react";
 import { ArrowDown, ArrowUp, FlaskConical, Inbox as InboxIcon, Trash2 } from "lucide-react";
-import { Button, DEMO, Field, Pill, Switch, runFunction, useToast } from "@lemma-plugins/kit";
+import { Button, Connections, DEMO, Field, Pill, Switch, runFunction, useToast } from "@lemma-plugins/kit";
 import { useTriage, useWho } from "./data";
+import { CONNECTED_DOORS, connectSpec } from "./doorstate";
 import { Gap, Who } from "./marks";
 import { to } from "./route";
 import { FORM_COLUMNS, ensureSchedules, turnOnForm, why, type Step } from "./wire";
@@ -116,13 +119,18 @@ export function Setup() {
           ) : null}
         </div>
 
+        <section className="tr-setup__connect" aria-labelledby="tr-connect-h">
+          <h2 id="tr-connect-h" className="tr-h2">Connected accounts<span className="tr-sub">each optional; one account each for the whole Lemma</span></h2>
+          <Connections items={CONNECTED_DOORS.map((key) => connectSpec(key, s))} />
+        </section>
+
         <ol className="tr-setup__steps">
           <li>
             <h2 className="tr-h2"><span className="tr-step__n">1</span>The repositories to watch</h2>
             <Field label="Repositories" hint="owner/name, one a line. Their issues, +1 comments and security alerts become reports; CODEOWNERS suggests owners.">
               <textarea className="c-textarea" rows={3} value={repos} onChange={(e) => setRepos(e.target.value)} placeholder={"acme/web\nacme/api"} />
             </Field>
-            <p className="tr-small tr-faint">Through the Lemma's GitHub connection. {repoList.length ? `${repoList.length} to watch.` : ""}</p>
+            <p className="tr-small tr-faint">Read through GitHub, connected above. {repoList.length ? `${repoList.length} to watch.` : ""}</p>
           </li>
           <li>
             <h2 className="tr-h2"><span className="tr-step__n">2</span>Who's on triage<span className="tr-sub">a week each, in this order</span></h2>
@@ -162,7 +170,7 @@ export function Setup() {
           </li>
           <li>
             <h2 className="tr-h2"><span className="tr-step__n">5</span>PostHog project<span className="tr-sub">optional</span></h2>
-            <Field label="Project id" hint="Read over PostHog's MCP server, through the Lemma's PostHog connection."><input className="c-input" value={posthogProject} onChange={(e) => setPosthogProject(e.target.value)} /></Field>
+            <Field label="Project id" hint="Read over PostHog's MCP server, through PostHog, connected above."><input className="c-input" value={posthogProject} onChange={(e) => setPosthogProject(e.target.value)} /></Field>
             <Field label="Connected account id" hint="Only when the Lemma has more than one MCP account."><input className="c-input" value={posthogAccount} onChange={(e) => setPosthogAccount(e.target.value)} /></Field>
           </li>
           <li>

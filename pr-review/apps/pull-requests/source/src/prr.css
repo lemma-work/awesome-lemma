@@ -26,9 +26,6 @@
 .prr-samplebar { padding: 12px var(--gutter) 0; }
 .prr-samplebar .c-banner { margin-bottom: 0; }
 
-.prr-connect { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 10px 12px; border-radius: var(--c-radius); background: var(--c-subtle); box-shadow: inset 0 0 0 1px var(--c-border); color: var(--c-muted); font-size: 12.5px; }
-.prr-connect span { flex: 1; min-width: 200px; }
-.prr-connect svg { color: var(--c-faint); }
 
 /* ---------- the rules bar ---------- */
 
@@ -202,6 +199,12 @@ button.prr-chip:hover { box-shadow: inset 0 0 0 1px var(--c-border-strong); }
 .prr-setrow { display: flex; gap: 14px; align-items: center; justify-content: space-between; padding: 11px 16px; border-top: 1px solid var(--c-border); }
 .prr-setrow:first-child { border-top: 0; }
 .prr-setrow__ctl { display: flex; align-items: center; gap: 8px; flex: none; }
+.prr-conn { padding: 11px 16px; border-top: 1px solid var(--c-border); min-width: 0; }
+.prr-conn:first-child { border-top: 0; }
+.prr-conn .c-connect { margin-top: 8px; }
+.prr-conn .c-connect--ready { padding: 0; }
+/* The Lemma's GitHub as a step, on a page that reads through it. */
+.prr-connect-in { margin: 12px var(--gutter) 0; }
 .prr-wrap { flex-wrap: wrap; flex: 1; justify-content: flex-end; }
 .prr-addrow { justify-content: flex-start; flex-wrap: wrap; }
 .prr-addrow .c-input { width: 200px; flex: 1 1 160px; }

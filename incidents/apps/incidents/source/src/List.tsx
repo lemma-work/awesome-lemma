@@ -4,11 +4,12 @@
 
 import { useState } from "react";
 import { Check, ChevronRight, CircleDashed, Sparkles, TriangleAlert } from "lucide-react";
-import { Button, Empty, Pill, openApp, useToast } from "@lemma-plugins/kit";
+import { Button, Empty, Pill, openApp, useToast, errorText } from "@lemma-plugins/kit";
 import { call, nowMs, useIncidents, type Data } from "./data";
 import { Ai, SevPill, StatusPill, Who, dayLabel, span, startOf } from "./marks";
 import { to, type View } from "./route";
 import type { Incident, Task } from "./types";
+import { said } from "./wire";
 
 export function counts(d: Data) {
   const open = d.incidents.filter((i) => i.status !== "resolved");
@@ -105,10 +106,10 @@ function Followups() {
     setBusy(key);
     try {
       const out = await call("incidents_followup", { incident: inc.id, proposal: key, dismiss });
-      toast(String(out.message || "Done."));
+      toast(said(out.message || "Done."));
       await d.reload();
     } catch (e) {
-      toast(`Couldn't: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't: ${errorText(e)}`);
     } finally {
       setBusy("");
     }

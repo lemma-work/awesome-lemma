@@ -4,8 +4,9 @@
 import { useEffect, useState } from "react";
 import { CalendarDays, Clock, NotebookPen, RefreshCw, Sparkles, Trash2, Zap } from "lucide-react";
 import {
-  Button, Card, Pill, Segmented, Switch, client, runFunction, startWorkflow, update, useToast,
+  Button, Card, Connect, Connections, Pill, Segmented, Switch, client, items, orgId, runFunction, startWorkflow, update, useToast, errorText,
 } from "@lemma-plugins/kit";
+import { CONNECTOR, PURPOSE, stoppedText, type Account } from "./connection";
 import { useMeetings } from "./data";
 import { KIND_HINT, KIND_ICON, KIND_PLURAL } from "./marks";
 import { to } from "./route";
@@ -19,6 +20,26 @@ export function SettingsPage() {
   const [busy, setBusy] = useState("");
   const [confirm, setConfirm] = useState(false);
   const on = new Set((settings?.kinds_on || []) as Kind[]);
+  // Each calendar connector a real calendar reads through: nothing while it's
+  // signed in, the next step (reconnect, ask an admin) when it isn't.
+  const connectors = [...new Set(calendars.map((c) => CONNECTOR[c.provider]).filter(Boolean))];
+  const google = calendars.some((c) => c.provider === "google");
+
+  // Google Meet connected here (set-up is over): read transcripts from it.
+  const adoptMeet = async () => {
+    if (!settings) return;
+    const org = await orgId();
+    if (!org) return;
+    const meet = await client.connectors.accounts.list(org, { connectorId: "googlemeet", limit: 50 } as never).then(
+      (r) => items<Account>(r).filter((a) => a.connector_id === "googlemeet" && (!a.status || a.status === "CONNECTED" || a.status === "ACTIVE")),
+      () => [] as Account[],
+    );
+    const pick = meet.find((a) => a.id === settings.meet_account_id) || meet.find((a) => a.is_default) || meet[0];
+    if (pick && pick.id !== settings.meet_account_id) {
+      await update("meetings_settings", settings.id, { meet_account_id: pick.id });
+      await reload("settings");
+    }
+  };
 
   const setKind = async (k: Kind, value: boolean) => {
     const next = KINDS.filter((x) => (x === k ? value : on.has(x)));
@@ -29,7 +50,7 @@ export function SettingsPage() {
       toast(out.message);
       await reload();
     } catch (e) {
-      toast(`Couldn't change that: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't change that: ${errorText(e)}`);
     } finally {
       setBusy("");
     }
@@ -42,7 +63,7 @@ export function SettingsPage() {
       if ("brief_when" in patch) await runFunction("meetings_due", {});
       await reload();
     } catch (e) {
-      toast(`Couldn't change that: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't change that: ${errorText(e)}`);
     }
   };
 
@@ -52,7 +73,7 @@ export function SettingsPage() {
       await startWorkflow("meetings-sweep");
       toast("Reading your calendar again.");
     } catch (e) {
-      toast(`Couldn't start the read: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't start the read: ${errorText(e)}`);
     } finally {
       setBusy("");
     }
@@ -66,7 +87,7 @@ export function SettingsPage() {
       to.week(0);
       await reload();
     } catch (e) {
-      toast(`Couldn't clear the sample: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't clear the sample: ${errorText(e)}`);
     } finally {
       setBusy("");
       setConfirm(false);
@@ -112,11 +133,19 @@ export function SettingsPage() {
           </div>
           <p className="c-faint" style={{ marginTop: 8 }}>
             {settings?.notes_from === "meet"
-              ? settings?.meet_account_id ? "Read from Google Meet's transcript when transcription was on." : "Connect Google Meet in set-up to read its transcripts; until then, write your notes."
+              ? sample && !google ? "On the sample calendar, its one transcript is read."
+                : !google ? "Meet transcripts are only for meetings on Google Calendar."
+                : settings?.meet_account_id ? "Read from Google Meet's transcript when transcription was on." : "Connect Google Meet to read its transcripts; until then nothing is written up after a meeting."
               : settings?.notes_from === "skip" ? "Nothing is written up after a meeting." : "After a meeting with people from outside, it asks you for a few lines and reads them."}
           </p>
+          {settings?.notes_from === "meet" && google ? (
+            <Connect connector="googlemeet" mode="per_member" purpose={PURPOSE.googlemeet} onReady={() => void adoptMeet()} className="mt-connect-piece" />
+          ) : null}
         </Card>
 
+        {connectors.length ? (
+          <Connections quiet items={connectors.map((c) => ({ connector: c, mode: "per_member" as const, purpose: PURPOSE[c] }))} />
+        ) : null}
         <Card title="Calendars" icon={CalendarDays} flush action={<Button size="sm" variant="ghost" icon={RefreshCw} busy={busy === "read"} onClick={() => void readNow()}>Read now</Button>}>
           <div className="c-list">
             {calendars.map((c) => (
@@ -126,7 +155,7 @@ export function SettingsPage() {
                   <div className="c-li__sub">
                     {c.provider === "sample" ? "Made-up meetings at .example addresses." : c.provider === "google" ? "Google Calendar" : "Outlook"}
                     {c.last_read_at ? ` · read ${relDay(at(c.last_read_at)!)}` : ""}
-                    {c.last_error ? ` · ${c.last_error}` : ""}
+                    {c.last_error ? ` · ${stoppedText(c.last_error, c.provider)}` : ""}
                   </div>
                 </div>
                 <Pill tone={c.last_error ? "danger" : c.state === "live" ? "success" : "plain"}>{c.last_error ? "Stopped" : c.state === "live" ? "Live" : "Reading"}</Pill>
@@ -187,7 +216,7 @@ function Running() {
         await reload("settings");
       }
     } catch (e) {
-      toast(`Couldn't ${value ? "turn it on" : "pause it"}: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't ${value ? "turn it on" : "pause it"}: ${errorText(e)}`);
     }
   };
 

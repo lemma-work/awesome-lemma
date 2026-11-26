@@ -8,8 +8,8 @@
 
 import { useMemo, useState } from "react";
 import { Check, CircleMinus, CirclePlus, GitMerge, Package, Pencil, RefreshCw, Sparkles, TriangleAlert, Users } from "lucide-react";
-import { AskButton, Avatar, Button, Card, DEMO, Empty, Pill, Sheet, ago, day, demoNote, plural, useToast } from "@lemma-plugins/kit";
-import { asksFor, call, issueNumber, leaveOut, redraft, saveLine, useRN, useWho } from "./data";
+import { AskButton, Avatar, Button, Card, Connect, DEMO, Empty, Pill, Sheet, ago, day, demoNote, plural, useToast, errorText } from "@lemma-plugins/kit";
+import { asksFor, call, issueNumber, leaveOut, publishProblems, publishText, redraft, saveLine, useRN, useWho } from "./data";
 import { to } from "./route";
 import { Top } from "./Top";
 import type { Line, Note, Pr } from "./types";
@@ -60,6 +60,7 @@ function DeskFor({ note, search }: { note: Note; search: string }) {
   const [publishing, setPublishing] = useState(false);
   const [dest, setDest] = useState({ github: true, page: true, slack: true });
   const [preview, setPreview] = useState(false);
+  const [problems, setProblems] = useState<Record<string, { code: string }>>({});
   const publisher = !rn.settings?.publishers?.length || rn.settings.publishers.some((p) => p.user_id === me?.id);
   const asked = new Set(shown.flatMap((l) => asksFor(l, note.repo, rn.asks).filter((a) => ["open", "shipped", "told"].includes(a.state)).map((a) => a.id))).size;
   const merged = prs.length;
@@ -71,10 +72,11 @@ function DeskFor({ note, search }: { note: Note; search: string }) {
     setPublishing(true);
     try {
       const out = await call("release_notes_publish", { note_id: note.id, ...dest, slack: dest.slack && !!slack });
-      toast(String(out.message || "Published."));
+      setProblems(publishProblems(out));
+      toast(publishText(out));
       if (out.published) to.asked();
     } catch (e) {
-      toast(`Couldn't publish: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't publish: ${errorText(e)}`);
     } finally {
       setPublishing(false);
     }
@@ -106,6 +108,19 @@ function DeskFor({ note, search }: { note: Note; search: string }) {
               {asked ? `After publishing, ${plural(asked, "person", "people")} who asked get${asked === 1 ? "s" : ""} a reply drafted in the thread they asked in. ` : ""}
               Nothing is sent until someone presses Send. GitHub posts go out as the person who presses Publish.
             </span>}>
+            {/* A publish that couldn't reach GitHub or Slack for want of a connection: its next step, here. */}
+            {problems.github || problems.slack ? (
+              <div className="rn-pad rn-connects">
+                {problems.github ? (
+                  <Connect quiet connector="github" slug="github" mode="shared" error={problems.github}
+                    purpose="Publishing puts the note on the GitHub release. Connect GitHub, then publish again." />
+                ) : null}
+                {problems.slack ? (
+                  <Connect quiet connector="slack" slug="slack" mode="shared" error={problems.slack}
+                    purpose={`Publishing posts the note to ${slack || "your Slack channel"}. Connect Slack, then publish again.`} />
+                ) : null}
+              </div>
+            ) : null}
             <Dest checked={dest.github} onChange={(v) => setDest({ ...dest, github: v })} title={`GitHub release ${note.tag || note.name}`} meta={`${note.repo}, as the release's description`} />
             <Dest checked={dest.page} onChange={(v) => setDest({ ...dest, page: v })} title="Changelog page" meta="Your public page, newest first" />
             {slack
@@ -170,7 +185,7 @@ function Merged({ prs, search, note }: { prs: Pr[]; search: string; note: Note }
       if (!DEMO) await redraft(note.id);
       toast(inNote.includes(p) ? `#${p.number} is left out; the note is being redrafted.` : `#${p.number} is in; the note is being redrafted.`);
     } catch (e) {
-      toast(`Couldn't change it: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't change it: ${errorText(e)}`);
     }
   };
   return (
@@ -233,7 +248,7 @@ function NoteCard({ note, lines, asked, prs, selected, onSelect, search }: {
       else await redraft(note.id);
       if (!DEMO) toast("Redrafting from every merge since the last release. Your edits stay.");
     } catch (e) {
-      toast(`Couldn't redraft: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't redraft: ${errorText(e)}`);
     } finally {
       setBusy(false);
     }
@@ -323,7 +338,7 @@ function Editable({ line, big }: { line: Line; big?: boolean }) {
         setEditing(false);
         toast("Saved. A redraft keeps your words.");
       } catch (e) {
-        toast(`Couldn't save: ${e instanceof Error ? e.message : e}`);
+        toast(`Couldn't save: ${errorText(e)}`);
       }
     };
     return (
@@ -364,7 +379,7 @@ function ThisLine({ line, note, prs }: { line: Line; note: Note; prs: Pr[] }) {
       await saveLine(line, { hidden: !line.hidden }, me);
       toast(line.hidden ? "Back in the note." : "Hidden from the note; it stays here.");
     } catch (e) {
-      toast(`Couldn't change it: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't change it: ${errorText(e)}`);
     }
   };
   const editor = line.edited_by ? members.find((m) => m.user_id === line.edited_by)?.name || (line.edited_by === me?.id ? "you" : "a member") : null;

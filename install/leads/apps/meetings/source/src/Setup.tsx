@@ -1,7 +1,7 @@
 // Set-up, one person at a time. The `meetings-setup` workflow does the work
 // and waits on four forms; this is the screen for them.
 //
-//   calendar  Google Calendar or Outlook (connected here), or a sample calendar
+//   calendar  Google Calendar or Outlook (connected here, with the kit's Connect), or a sample calendar
 //   reading   the last month and the next two weeks, then each meeting with
 //             outside people sorted with one Decisions call
 //   briefs    which kinds of meeting get a brief, with the meetings it would
@@ -14,8 +14,10 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { CalendarDays, Check, CircleAlert, CircleHelp, FileText, Mic, Moon, NotebookPen, SkipForward, Sparkles, Timer } from "lucide-react";
 import {
-  Banner, Button, Card, Face, Menu, MenuItem, MenuLabel, Pill, Spinner, Switch, client, orgId, plural, q, runFunction, update, useToast, whoAmI,
+  Banner, Button, Card, Connect, DEMO, Face, Menu, MenuItem, MenuLabel, Pill, Spinner, Switch, client, demoNote, errorText, orgId, plural, q, runFunction, update,
+  useConnection, useToast, whoAmI,
 } from "@lemma-plugins/kit";
+import { PURPOSE, addressOf, useAccounts, type Account, type CalendarConnector } from "./connection";
 import { useMeetings } from "./data";
 import { KIND_HINT, KIND_ICON, KIND_LABEL, KIND_PLURAL, Faces, KindPill, peopleLine } from "./marks";
 import { at, browserZone, clock, shortDay } from "./time";
@@ -28,18 +30,10 @@ type Run = {
   active_wait?: { node_id?: string; wait_type?: string } | null;
   step_history?: Step[];
 };
-interface Account {
-  id: string;
-  connector_id: string;
-  status?: string;
-  email?: string | null;
-  display_name?: string | null;
-}
 
 const STEPS = ["Calendar", "Read", "Briefs", "When", "After"];
 const NAMES: Record<string, string> = { google_calendar: "Google Calendar", outlook: "Outlook" };
 const PROVIDER: Record<string, "google" | "outlook"> = { google_calendar: "google", outlook: "outlook" };
-const addressOf = (a: Account) => (a.email || (a.display_name?.includes("@") ? a.display_name : "") || "").toLowerCase();
 const SURE_KIND = 0.5;
 const SURE_BRIEF = 0.55;
 
@@ -114,7 +108,7 @@ export function Setup() {
   } else if (!run) {
     body = <Working run={null} />;
   } else if (waiting === "connect") {
-    body = <Connect run={run} />;
+    body = <CalendarStep run={run} />;
   } else if (waiting === "kinds") {
     body = <Kinds run={run} onRestart={restart} />;
   } else if (waiting === "timing") {
@@ -153,64 +147,36 @@ function Restart({ failed, onRestart }: { failed: boolean; onRestart: () => Prom
 
 /* ---------- 1. calendar ---------- */
 
-function useAccounts(connectors: string[]) {
-  const [accounts, setAccounts] = useState<Account[] | null>(null);
-  const [org, setOrg] = useState<string | null>(null);
-  const key = connectors.join(",");
-  useEffect(() => {
-    void (async () => {
-      const id = await orgId();
-      setOrg(id);
-      if (!id) return setAccounts([]);
-      const lists = await Promise.all(
-        key.split(",").map((c) =>
-          client.connectors.accounts.list(id, { connectorId: c, limit: 50 } as never).then(
-            (r) => ((r as { items?: Account[] }).items || []) as Account[],
-            () => [] as Account[],
-          ),
-        ),
-      );
-      setAccounts(lists.flat().filter((a) => !a.status || a.status === "CONNECTED" || a.status === "ACTIVE"));
-    })();
-  }, [key]);
-  return { accounts, org };
-}
-
-/** The connectors this organization has installed (any member may read which). Null when that can't be read. */
-function useInstalled(org: string | null): Set<string> | null {
+/** The connectors this organization has added (any member may read which), to start on one it has. Null when that can't be read. */
+function useInstalled(): Set<string> | null {
   const [installed, setInstalled] = useState<Set<string> | null>(null);
   useEffect(() => {
-    if (!org) return;
-    void client.connectors.authConfigs.list(org, { limit: 100 }).then(
-      (r) => setInstalled(new Set((r.items || []).filter((i) => i.status !== "DISABLED").map((i) => i.connector_id))),
-      () => setInstalled(null),
+    if (DEMO) return;
+    void orgId().then((org) =>
+      org
+        ? client.connectors.authConfigs.list(org, { limit: 100 }).then(
+            (r) => setInstalled(new Set((r.items || []).filter((i) => i.status !== "DISABLED").map((i) => i.connector_id))),
+            () => setInstalled(null),
+          )
+        : undefined,
     );
-  }, [org]);
+  }, []);
   return installed;
 }
 
-/** A non-admin's Connect on a connector the organization never installed. */
-function notInstalled(e: unknown): boolean {
-  const err = e as { code?: string; message?: string };
-  return err?.code === "CONNECTOR_NOT_INSTALLED" || /not installed in this organization/i.test(err?.message || "");
-}
-
-async function connectRequest(org: string, connector: string): Promise<string | null> {
-  const req = (await client.connectors.createConnectRequest(org, { connector_id: connector, return_to: location.href } as never)) as {
-    authorization_url?: string | null;
-  };
-  return req.authorization_url || null;
-}
-
-function Connect({ run }: { run: Run }) {
+function CalendarStep({ run }: { run: Run }) {
   const { settings } = useMeetings();
   const toast = useToast();
-  const { accounts, org } = useAccounts(["google_calendar", "outlook"]);
-  const installed = useInstalled(org);
-  const [connector, setConnector] = useState<"google_calendar" | "outlook">("google_calendar");
+  const [connector, setConnector] = useState<CalendarConnector>("google_calendar");
   const [chose, setChose] = useState(false);
+  // Connecting, reconnecting, an organization without this calendar, and
+  // asking someone who can: all the kit's. The account picker stays, because
+  // the set-up reads one account, by its id and address.
+  const conn = useConnection({ connector, mode: "per_member", purpose: PURPOSE[connector] });
+  const accounts = useAccounts(["google_calendar", "outlook"], conn.state.kind);
+  const installed = useInstalled();
   // Start on a calendar this organization has: one the person already
-  // connected, else one installed here, else Google (an admin's Connect adds it).
+  // connected, else one added here, else Google (an admin's Connect adds it).
   useEffect(() => {
     if (chose || accounts == null) return;
     const order = ["google_calendar", "outlook"] as const;
@@ -219,7 +185,9 @@ function Connect({ run }: { run: Run }) {
   }, [accounts, installed, chose]);
   const [picked, setPicked] = useState("");
   const [busy, setBusy] = useState("");
-  const mine = (accounts || []).filter((a) => a.connector_id === connector);
+  const mine: Account[] = DEMO
+    ? conn.state.kind === "ready" ? [{ id: `sample-${connector}`, connector_id: connector, email: conn.state.as }] : []
+    : (accounts || []).filter((a) => a.connector_id === connector);
 
   useEffect(() => {
     if (mine.length && !mine.some((a) => a.id === picked)) setPicked(mine[0].id);
@@ -234,27 +202,8 @@ function Connect({ run }: { run: Run }) {
     } as never);
   };
 
-  const connect = async () => {
-    if (!org) return;
-    setBusy("connect");
-    try {
-      const url = await connectRequest(org, connector);
-      if (url) location.href = url;
-      else toast("That calendar is already connected: pick it in the list.");
-    } catch (e) {
-      if (notInstalled(e)) {
-        const other = connector === "google_calendar" ? "outlook" : "google_calendar";
-        const instead = installed?.has(other) ? `${NAMES[other]} or the sample calendar` : "the sample calendar";
-        toast(`${NAMES[connector]} isn't added to this organization yet: ask an admin to add it on the Connectors page, or use ${instead}.`);
-      } else {
-        toast(`Couldn't start connecting ${NAMES[connector]}: ${e instanceof Error ? e.message : e}`);
-      }
-    } finally {
-      setBusy("");
-    }
-  };
-
   const useAccount = async () => {
+    if (DEMO) return demoNote("In the demo nothing is read. In your Lemma this reads this calendar's last month and next two weeks.");
     const account = mine.find((a) => a.id === picked);
     const email = account ? addressOf(account) : "";
     if (!account || !email) return toast("Pick an account with an address, or connect one.");
@@ -262,7 +211,7 @@ function Connect({ run }: { run: Run }) {
     try {
       await submit({ provider: PROVIDER[connector], account_id: account.id, email });
     } catch (e) {
-      toast(`Couldn't start: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't start: ${errorText(e, connector)}`);
       setBusy("");
     }
   };
@@ -274,7 +223,7 @@ function Connect({ run }: { run: Run }) {
       await runFunction("meetings_sample_data", { mode: "load", timezone: browserZone(), display_name: me?.name || undefined });
       await submit({ provider: "sample" });
     } catch (e) {
-      toast(`Couldn't load the sample: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't load the sample: ${errorText(e)}`);
       setBusy("");
     }
   };
@@ -295,37 +244,31 @@ function Connect({ run }: { run: Run }) {
               <CalendarDays size={16} aria-hidden="true" className="c-faint" />
               <span className="c-grow">{NAMES[c]}</span>
               <span className="c-faint">
-                {accounts == null ? "" : (accounts || []).filter((a) => a.connector_id === c).length ? "Connected"
-                  : installed && !installed.has(c) ? "Not added to this organization" : "Not connected"}
+                {accounts == null ? "" : accounts.some((a) => a.connector_id === c) ? "Connected" : "Not connected"}
               </span>
             </label>
           ))}
         </div>
-        <div className="mt-connect">
-          {mine.length ? (
-            <>
-              <label className="c-field">
-                <span>Account</span>
-                <select className="c-input" value={picked} onChange={(e) => setPicked(e.target.value)}>
-                  {mine.map((a) => (
-                    <option key={a.id} value={a.id}>{addressOf(a) || a.display_name || a.id}</option>
-                  ))}
-                </select>
-              </label>
-              <div className="c-setup__row">
-                <Button variant="primary" busy={busy === "start"} onClick={() => void useAccount()}>Read this calendar</Button>
-                <Button variant="ghost" busy={busy === "connect"} onClick={() => void connect()}>Connect another</Button>
-              </div>
-            </>
-          ) : (
-            <div className="c-setup__row" style={{ marginTop: 0 }}>
-              <Button variant="primary" busy={busy === "connect"} disabled={accounts == null} onClick={() => void connect()}>
-                Connect {NAMES[connector]}
-              </Button>
+        {mine.length ? (
+          <div className="mt-connect">
+            <label className="c-field">
+              <span>Account</span>
+              <select className="c-input" value={picked} onChange={(e) => setPicked(e.target.value)}>
+                {mine.map((a) => (
+                  <option key={a.id} value={a.id}>{addressOf(a) || a.display_name || a.id}</option>
+                ))}
+              </select>
+            </label>
+            <div className="c-setup__row">
+              <Button variant="primary" busy={busy === "start"} disabled={!!busy} onClick={() => void useAccount()}>Read this calendar</Button>
+              {conn.ready ? (
+                <Button variant="ghost" busy={conn.busy === "connect"} disabled={!!busy} onClick={conn.connect}>Connect another</Button>
+              ) : null}
             </div>
-          )}
-        </div>
+          </div>
+        ) : null}
       </Card>
+      <Connect connection={conn} connector={connector} mode="per_member" purpose={PURPOSE[connector]} quiet className="mt-connect-piece" />
       <div className="mt-or">
         <span>or</span>
       </div>
@@ -439,7 +382,7 @@ function Kinds({ run, onRestart }: { run: Run; onRestart: () => Promise<void> })
       await reload("meetings");
       toast(`${m.title}: ${KIND_LABEL[kind].toLowerCase()}. The next read learns from it.`);
     } catch (e) {
-      toast(`Couldn't keep that: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't keep that: ${errorText(e)}`);
     } finally {
       setBusy("");
     }
@@ -450,7 +393,7 @@ function Kinds({ run, onRestart }: { run: Run; onRestart: () => Promise<void> })
     try {
       await client.workflows.runs.submitForm(run.id, { node_id: "kinds", inputs: { kinds_on: KINDS.filter((k) => on.has(k)) } } as never);
     } catch (e) {
-      toast(`Couldn't go on: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't go on: ${errorText(e)}`);
       setBusy("");
     }
   };
@@ -586,7 +529,7 @@ function Timing({ run }: { run: Run }) {
     try {
       await client.workflows.runs.submitForm(run.id, { node_id: "timing", inputs: { brief_when: value } } as never);
     } catch (e) {
-      toast(`Couldn't go on: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't go on: ${errorText(e)}`);
       setBusy(false);
     }
   };
@@ -635,7 +578,9 @@ function Choices<T extends string>({ name, options, value, onChange }: {
 function After({ run }: { run: Run }) {
   const { sample, calendars, settings, reload } = useMeetings();
   const toast = useToast();
-  const { accounts, org } = useAccounts(["googlemeet"]);
+  // Read again once Google Meet is connected below.
+  const [again, setAgain] = useState(0);
+  const accounts = useAccounts(["googlemeet"], again);
   useEffect(() => {
     void reload("calendars");
     void reload("settings");
@@ -644,19 +589,6 @@ function After({ run }: { run: Run }) {
   const [busy, setBusy] = useState("");
   const google = calendars.some((c) => c.provider === "google");
   const meet = (accounts || [])[0];
-
-  const connectMeet = async () => {
-    if (!org) return;
-    setBusy("meet");
-    try {
-      const url = await connectRequest(org, "googlemeet");
-      if (url) location.href = url;
-    } catch {
-      toast("Google Meet isn't added to this organization yet: an admin adds it on the Connectors page.");
-    } finally {
-      setBusy("");
-    }
-  };
 
   const finish = async () => {
     if (value === "meet" && !sample && !meet) return toast("Connect Google Meet first, or pick another way.");
@@ -673,7 +605,7 @@ function After({ run }: { run: Run }) {
         await turnOn(settings.id, settings.timezone || browserZone(), settings.schedules || {});
       }
     } catch (e) {
-      toast(`Couldn't finish: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't finish: ${errorText(e)}`);
       setBusy("");
     }
   };
@@ -698,9 +630,7 @@ function After({ run }: { run: Run }) {
       </p>
       <Choices name="after" options={options} value={value} onChange={setValue} />
       {value === "meet" && !sample && google && !meet ? (
-        <div className="c-setup__row">
-          <Button busy={busy === "meet"} onClick={() => void connectMeet()}>Connect Google Meet</Button>
-        </div>
+        <Connect connector="googlemeet" mode="per_member" purpose={PURPOSE.googlemeet} quiet onReady={() => setAgain((n) => n + 1)} className="mt-connect-piece" />
       ) : null}
       <div className="c-setup__row">
         <Button variant="primary" busy={busy === "go"} onClick={() => void finish()}>Finish</Button>

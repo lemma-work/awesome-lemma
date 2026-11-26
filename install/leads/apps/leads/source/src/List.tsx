@@ -5,7 +5,7 @@
 import { useState } from "react";
 import { CircleHelp, Clock, ScanSearch, SkipForward } from "lucide-react";
 import {
-  Avatar, Button, Card, Empty, Logo, Rel, SearchField, Segmented, Skeleton, Switch, Toolbar, nameOf, plural, runFunction, useToast,
+  Avatar, Button, Card, Empty, Logo, Rel, SearchField, Segmented, Skeleton, Switch, Toolbar, nameOf, plural, runFunction, useToast, errorText,
 } from "@lemma-plugins/kit";
 import { useLeads } from "./data";
 import { FitMark, KIND_LABEL, KindPill, StatePill, companySize } from "./marks";
@@ -203,7 +203,7 @@ function SkippedTable({ rows }: { rows: Lead[] }) {
       toast(out.message);
       await reload("leads");
     } catch (e) {
-      toast(`Couldn't change that: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't change that: ${errorText(e)}`);
     } finally {
       setBusy("");
     }

@@ -12,9 +12,7 @@ import {
   Users,
 } from "lucide-react";
 import {
-  AskButton, Avatar, Banner, Button, Card, Empty, Field, Header, Logo, Markdown, Menu, MenuItem, Notice, Pill,
-  Rel, SearchField, Segmented, Sheet, Skeleton, Spinner, Toolbar, agoText, create, day, go, nameOf, openApp, plural, q, runFunction, sql,
-  update, useRecordId, useToast, when,
+  AskButton, Avatar, Banner, Button, Card, Empty, Field, Header, Logo, Markdown, Menu, MenuItem, Notice, Pill, Rel, SearchField, Segmented, Sheet, Skeleton, Spinner, Toolbar, agoText, create, day, go, nameOf, openApp, plural, q, runFunction, sql, update, useRecordId, useToast, when, errorText,
 } from "@lemma-plugins/kit";
 import { CompaniesProvider, memberName, useCompanies, type Facts, type Link, type Mine } from "./data";
 
@@ -218,7 +216,7 @@ function CompanyPage({ id }: { id: string }) {
       toast(`Looking up ${c.name}…`);
       await load();
     } catch (e) {
-      toast(`Couldn't start the look-up: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't start the look-up: ${errorText(e)}`);
     } finally {
       setBusy("");
     }
@@ -438,7 +436,7 @@ function EditSheet({ kind, company, domains, onClose }: { kind: "" | "rename" | 
         if (out.company_id && out.company_id !== company.id && input.action === "merge") go(`/${out.company_id}`);
       }
     } catch (e) {
-      toast(`Couldn't do that: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't do that: ${errorText(e)}`);
     } finally {
       setBusy(false);
     }

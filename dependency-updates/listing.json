@@ -26,8 +26,8 @@
     { "verb": "decide", "line": "A release that adds an install script: let it through?" }
   ],
   "pictures": [
-    { "shot": "dependencies", "caption": "The week: security fixes, Monday's batch, and what waits for you" },
-    { "shot": "dependencies-batch", "caption": "A batch pull request: how it was checked, one commit per update" },
+    { "shot": "dependencies", "caption": "Security fixes, Monday's batch, and what waits for you" },
+    { "shot": "dependencies-batch", "caption": "One batch pull request, one commit per update, checked" },
     { "shot": "dependencies-update", "caption": "A held major: what changed and where your code uses it" }
   ]
 }

@@ -1,11 +1,11 @@
 // The doors under the header: each with its state in words and a dot that
-// is never the only signal. On a phone it folds to one line, "All doors"
-// opens the rest.
+// is never the only signal. A door that isn't connected opens Doors, where
+// its Connect is. On a phone it folds to one line, "All doors" opens the rest.
 
 import { useState } from "react";
-import { cx } from "@lemma-plugins/kit";
+import { cx, serviceName } from "@lemma-plugins/kit";
 import { nowMs, useTriage } from "./data";
-import { doorStates } from "./doorstate";
+import { doorStates, isConnectedDoor } from "./doorstate";
 import { to } from "./route";
 
 const SECURITY = ["dependabot", "code_scanning", "secret_scanning"];
@@ -26,7 +26,11 @@ export function SourceBar() {
       <button type="button" className="tr-src__head" onClick={() => to.doors()}>Doors</button>
       {shown.map((m) => (
         <span key={m.key} className={cx("tr-src__item", m.tone === "off" && "tr-src__item--off")}>
-          <span className={cx("tr-dot", `tr-dot--${m.tone}`)} aria-hidden="true" />{m.short}
+          {m.state === "Not connected" && isConnectedDoor(m.key) ? (
+            <button type="button" className="tr-src__link" onClick={() => to.doors()} title={`Connect ${serviceName(m.key)} in Doors`}>
+              <span className={cx("tr-dot", `tr-dot--${m.tone}`)} aria-hidden="true" />{m.short}
+            </button>
+          ) : <><span className={cx("tr-dot", `tr-dot--${m.tone}`)} aria-hidden="true" />{m.short}</>}
         </span>
       ))}
       <button type="button" className="tr-src__more" onClick={() => setOpen((v) => !v)} aria-expanded={open}>{open ? "Fewer" : "All doors"}</button>

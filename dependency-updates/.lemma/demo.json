@@ -24,5 +24,11 @@
     "deps_setup_save": "In the demo the set-up isn't saved.",
     "deps_sample_data": "In the demo the sample stays.",
     "deps_needs_you": ""
+  },
+  "connections": {
+    "github": {
+      "state": "ready",
+      "as": "northwind"
+    }
   }
 }

@@ -39,6 +39,14 @@ export interface DemoData {
     labels?: Record<string, string>;
     /** The sample person who is signed in. */
     user?: Record<string, unknown>;
+    /** Pod connector slug (or connector id) -> where `<Connect>` shows it stands: `{ state: "ready", as: "northwind" }` (the default), or `connect`, `use_mine`, `install`, `ask`, … */
+    connections?: Record<string, {
+        state?: string;
+        as?: string;
+        why?: string;
+        who?: string[];
+        accounts?: string[];
+    }>;
     /** Google Fonts family, in lower case -> stylesheet beside the page with that face in it. */
     fonts?: Record<string, string>;
 }

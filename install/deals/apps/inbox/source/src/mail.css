@@ -31,6 +31,7 @@
 .m-provider { margin-top: 22px; }
 .m-provider button { height: 30px; padding: 0 14px; }
 .m-provider + .c-choices { margin-top: 10px; }
+.m-connect { margin-top: 12px; }
 .m-or { display: flex; align-items: center; gap: 10px; margin: 22px 0 12px; color: var(--c-faint); font-size: 12px; }
 .m-or::before, .m-or::after { content: ""; flex: 1; height: 1px; background: var(--c-border); }
 .m-setup__h2 { font-size: 15px; margin-top: 28px; }

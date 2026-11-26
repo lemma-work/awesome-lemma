@@ -7,7 +7,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { FlaskConical, Settings2, TriangleAlert } from "lucide-react";
-import { Banner, Button, DEMO, DataProvider, Notice, SearchField, Segmented, Skeleton, runFunction, useToast } from "@lemma-plugins/kit";
+import { Banner, Button, DEMO, DataProvider, Notice, SearchField, Segmented, Skeleton, runFunction, useToast, errorText } from "@lemma-plugins/kit";
 import { LOADERS, WhoProvider, refreshNeedsYou, useIncidents } from "./data";
 import { Declare } from "./Declare";
 import { IncidentPage } from "./Incident";
@@ -36,7 +36,7 @@ function Gate() {
       </div>
     );
   }
-  if (errors.settings || errors.incidents) return <Notice>Couldn't read Incidents: {errors.settings || errors.incidents}</Notice>;
+  if (errors.settings || errors.incidents) return <Notice>Couldn't read Incidents: {errorText(errors.settings || errors.incidents)}</Notice>;
   if (!settings?.setup_done_at || route.page === "setup") return <Setup />;
   return <Shell />;
 }
@@ -66,7 +66,7 @@ function Shell() {
       await data.reload();
       to.list();
     } catch (e) {
-      toast(`Couldn't clear the sample: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't clear the sample: ${errorText(e)}`);
     } finally {
       setClearing(false);
     }

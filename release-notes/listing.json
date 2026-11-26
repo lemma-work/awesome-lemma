@@ -24,8 +24,8 @@
     { "verb": "answer", "line": "Tell Jo it shipped" }
   ],
   "pictures": [
-    { "shot": "release-notes", "caption": "What merged, turned into the note, with every line's sources" },
-    { "shot": "release-notes-asked", "caption": "Everyone who asked, with a reply drafted in their own thread" },
+    { "shot": "release-notes", "caption": "What merged, turned into notes, each line with sources" },
+    { "shot": "release-notes-asked", "caption": "Everyone who asked, a reply drafted in their thread" },
     { "shot": "changelog", "caption": "The public changelog page, newest first" }
   ]
 }

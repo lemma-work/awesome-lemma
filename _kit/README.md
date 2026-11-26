@@ -18,6 +18,7 @@ palette, type, buttons, tables, menus or drawers.
 | `q`, `items`, `sql`, `create`, `update`, `runFunction`, `startWorkflow`, `DataProvider`/`useRows` | reads and writes, whatever shape the API answers in |
 | `usePath`, `go`, `useRecordId`, `openApp`, `isFramed` | the app's path in the Lemma's address; opening another app of the Lemma |
 | `applyTheme`, `startTheme` | the host's `lemma-app-theme` message, as `--lemma-app-*` custom properties |
+| `Connect`, `Connections`, `useConnection`, `connectionProblem`, `errorText` | connecting an account from inside the app (below) |
 | `DEMO`, `demoNote`, `demoData` | demo mode: the app on its sample, in a browser, with no server (below) |
 | `Button`, `Pill`, `Switch`, `Field`, `Kbd`, `Spinner` | controls |
 | `Menu`, `MenuItem`, `MenuLabel` | a short list that opens on press (never on hover) |
@@ -94,6 +95,43 @@ has them.
    rendered screenshots before calling an app done.
 9. **Copy**: plain, specific, sentence case. Never "pod", "teammate" or
    "room" on screen; the noun is "Lemma". No sample names in copy.
+
+## Connecting accounts: `<Connect>`
+
+Every plugin is a self-sufficient app: it connects its own accounts from
+inside the app, and never sends anyone to the Lemma's connector pages to come
+back later (`_contract/lint.py` rule 11 fails on that copy, on connecting by
+hand, and on a connector call's error shown as its own text).
+
+```tsx
+<Connect connector="github" slug="github" mode="shared" purpose="One GitHub connection for this Lemma: …" onReady={reload} />
+<Connect connector="gmail" mode="per_member" quiet />          // nothing at all once connected
+const gh = useConnection({ connector: "github", mode: "shared" }); // gh.state.kind, gh.connect(), gh.report(e)
+toast(`Couldn't merge: ${errorText(e, "github")}`);            // a connection problem in words, never the platform's text
+```
+
+It reads where one pod connector stands for the person looking (the pod
+connector, their own accounts, whether they may share one, whether the
+organization has the connector) and shows the one next step:
+
+| State | What it shows |
+| --- | --- |
+| connected | "Connected as X · Change", or nothing with `quiet` |
+| per member, none yet | **Connect Gmail**: signs in in a new tab and comes back |
+| shared, I have an account | **Use my GitHub (name)**: shares it as the Lemma's in one step (`pod.accounts.add` + `shareAs`) |
+| shared, I have none | **Connect GitHub**, and shares it automatically once back |
+| GitHub signed in, App on no repository | **Choose repositories on GitHub**; with several installations, pick one |
+| sign-in expired | **Reconnect** (a shared one is shared again once back) |
+| I can't (not an editor here, the organization lacks the connector, someone else's account expired) | says so plainly, and **Ask someone who can**: a line in their own channel (`channels.notify`) |
+
+A sign-in opens in a new tab (a provider's page can't load in the Lemma's
+frame) with `return_to` the Lemma's `/oauth/complete`, which reports back and
+closes; the app sees the return by looking again (focus, and every few
+seconds while it waits). The raw error is kept behind a Details toggle.
+
+In a demo build it draws from `.lemma/demo.json`'s `connections`
+(`{ "<slug>": { "state": "ready", "as": "northwind" } }`; ready is the
+default), and its buttons only show a note.
 
 ## Pictures for the site
 

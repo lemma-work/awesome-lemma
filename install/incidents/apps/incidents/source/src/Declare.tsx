@@ -1,14 +1,15 @@
 // Declare an incident, in a drawer: what is broken, how bad, who leads. The
 // rest (the channel, the header, #incidents, a likely cause) is
 // incidents_declare's; then the app connects the channel to the Lemma as the
-// person (wire.ts).
+// person (wire.ts). Without Slack connected, Slack's Connect is at the top:
+// declaring still works, with the timeline kept here only.
 
 import { useEffect, useState } from "react";
-import { Button, Field, Sheet, useToast } from "@lemma-plugins/kit";
+import { Button, Field, Sheet, errorText, useToast } from "@lemma-plugins/kit";
 import { call, useIncidents, useWho } from "./data";
-import { sevOf } from "./marks";
+import { NeedsConnect, sevOf } from "./marks";
 import { to } from "./route";
-import { wireIncident } from "./wire";
+import { said, wireIncident } from "./wire";
 import type { Incident } from "./types";
 
 export function Declare({ open, onClose }: { open: boolean; onClose: () => void }) {
@@ -37,7 +38,7 @@ export function Declare({ open, onClose }: { open: boolean; onClose: () => void 
         title, severity: sev, service: service || null, impact: impact || null, source: "app",
         lead_user_id: person?.user_id || null, lead_name: person?.name || null, lead_email: person?.email || null,
       });
-      toast(String(out.message || "Declared."));
+      toast(said(out.message || "Declared.", "slack"));
       await d.reload();
       const number = Number(out.number);
       if (number) {
@@ -49,7 +50,7 @@ export function Declare({ open, onClose }: { open: boolean; onClose: () => void 
       setTitle(""); setService(""); setImpact("");
       onClose();
     } catch (e) {
-      toast(`Couldn't declare: ${e instanceof Error ? e.message : e}`);
+      toast(`Couldn't declare: ${errorText(e, "slack")}`);
     } finally {
       setBusy(false);
     }
@@ -58,6 +59,7 @@ export function Declare({ open, onClose }: { open: boolean; onClose: () => void 
     <Sheet open={open} title="Declare an incident" onClose={onClose}
       footer={<div className="c-row"><Button variant="primary" busy={busy} disabled={!title.trim()} onClick={() => void declare()}>Declare</Button><Button variant="ghost" onClick={onClose}>Cancel</Button></div>}>
       <div className="in-form">
+        <NeedsConnect connector="slack" settings={d.settings} lead="Each incident gets its own Slack channel, with the people invited and a header the Lemma keeps current. Without Slack, the incident is declared and its timeline is kept here only." />
         <Field label="What is broken">
           <input className="c-input" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Checkout returns 502 for card payments" autoFocus />
         </Field>

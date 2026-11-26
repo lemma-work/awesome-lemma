@@ -14,7 +14,7 @@
     "lucide-react": "^0.468.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
-    "@lemma-plugins/kit": "file:vendor/lemma-plugins-kit-0.1.0-c70cb30a.tgz",
+    "@lemma-plugins/kit": "file:vendor/lemma-plugins-kit-0.1.0-8b4994dd.tgz",
     "lemma-sdk": "file:vendor/lemma-sdk-0.10.1.tgz"
   },
   "devDependencies": {

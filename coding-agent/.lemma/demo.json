@@ -23,6 +23,12 @@
     "created_at": "2026-01-01T00:00:00Z",
     "updated_at": "2026-01-01T00:00:00Z"
   },
+  "connections": {
+    "github": {
+      "state": "ready",
+      "as": "acme"
+    }
+  },
   "notes": {
     "coding_setup_save": "In the demo the set-up isn't saved.",
     "coding_sample_data": "In the demo the sample stays.",
