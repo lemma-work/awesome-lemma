@@ -1,0 +1,13 @@
+{
+  // Started by the bundled forms-sent schedule when a new mail draft is sent. draft is per person, so the run is the draft's owner.
+  "name": "forms-sent",
+  "description": "A Forms reply was sent: the clock stops and the Today item closes.",
+  "max_concurrent_runs": 4,
+  "start": { "type": "DATASTORE_EVENT", "config": { "table_name": "draft", "operations": ["UPDATE"] } },
+  "nodes": [
+    { "id": "run", "type": "FUNCTION", "label": "Stop the clock",
+      "config": { "function_name": "forms_on_sent", "input_mapping": { "record_id": { "type": "expression", "value": "start.metadata.record_id" } } } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [ { "id": "e1", "source": "run", "target": "end" } ]
+}

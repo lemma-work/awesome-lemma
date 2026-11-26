@@ -1,0 +1,23 @@
+{
+  // The regular pass, run as one person: their own schedule (made by the app
+  // when set-up finishes) or "Refresh" in the app. Count, read anyone new,
+  // count again so companies and the team's view include them.
+  "name": "people-refresh",
+  "description": "Recount one person's people from their mail and meetings, read anyone new, and update companies and the team's view.",
+  "start": { "type": "MANUAL" },
+  "nodes": [
+    { "id": "find", "type": "FUNCTION", "label": "Count",
+      "config": { "function_name": "people_refresh", "input_mapping": {} } },
+    { "id": "sort", "type": "FUNCTION", "label": "Read anyone new",
+      "config": { "function_name": "people_sort", "input_mapping": {
+        "max_people": { "type": "literal", "value": 80 } } } },
+    { "id": "share", "type": "FUNCTION", "label": "Companies and the team's view",
+      "config": { "function_name": "people_refresh", "input_mapping": {} } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [
+    { "id": "e1", "source": "find", "target": "sort" },
+    { "id": "e2", "source": "sort", "target": "share" },
+    { "id": "e3", "source": "share", "target": "end" }
+  ]
+}

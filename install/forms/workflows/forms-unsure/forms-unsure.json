@@ -1,0 +1,13 @@
+{
+  // Every 15 minutes (the bundled forms-unsure schedule).
+  "name": "forms-unsure",
+  "description": "Not-sure answers nobody picked for within the hour go to the form's default owner; stale polled doors are marked broken.",
+  "max_concurrent_runs": 4,
+  "start": { "type": "SCHEDULED", "config": { "schedule_type": "CRON" } },
+  "nodes": [
+    { "id": "run", "type": "FUNCTION", "label": "Sweep",
+      "config": { "function_name": "forms_unsure_sweep", "input_mapping": {} } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [ { "id": "e1", "source": "run", "target": "end" } ]
+}

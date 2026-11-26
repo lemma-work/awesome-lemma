@@ -1,0 +1,13 @@
+{
+  // Every 15 minutes, as the person whose Google or Meta account is read: its schedule (forms-poll-<user>) is made by the app when they add a polled door.
+  "name": "forms-poll",
+  "description": "New answers to this person's Google Forms and Meta lead forms.",
+  "max_concurrent_runs": 4,
+  "start": { "type": "SCHEDULED", "config": { "schedule_type": "CRON" } },
+  "nodes": [
+    { "id": "run", "type": "FUNCTION", "label": "Read new answers",
+      "config": { "function_name": "forms_poll", "input_mapping": {} } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [ { "id": "e1", "source": "run", "target": "end" } ]
+}

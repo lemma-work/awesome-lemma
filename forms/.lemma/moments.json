@@ -1,0 +1,224 @@
+{
+ "//": "The pictures on Forms' page, taken from its Try it demo by `node _kit/bin/moments.mjs forms` into .lemma/moments/.",
+ "captures": [
+  {
+   "name": "reply-drafted",
+   "alt": "A demo request that came in three minutes ago, with a reply already drafted in the owner's own mailbox and one Send button",
+   "route": "/a/0de9274b-189a-5b89-9c01-51dd841fa397",
+   "viewport": [
+    1184,
+    1700
+   ],
+   "steps": [
+    {
+     "wait": 1200
+    },
+    {
+     "mouse": [
+      4,
+      4
+     ]
+    }
+   ],
+   "clip": {
+    "selector": ".fm-reply",
+    "pad": 10
+   },
+   "phone": {
+    "viewport": [
+     390,
+     3200
+    ],
+    "clip": {
+     "selector": ".fm-reply",
+     "pad": 6
+    }
+   }
+  },
+  {
+   "name": "sent-to-owner",
+   "alt": "Why an answer went to Priya: OKL Architects has an open deal, and it's hers; every other rule marked not needed",
+   "route": "/a/0de9274b-189a-5b89-9c01-51dd841fa397",
+   "viewport": [
+    1184,
+    1500
+   ],
+   "steps": [
+    {
+     "wait": 1200
+    },
+    {
+     "mouse": [
+      4,
+      4
+     ]
+    }
+   ],
+   "clip": {
+    "selector": ".fm-why",
+    "pad": 10
+   },
+   "phone": {
+    "viewport": [
+     390,
+     2600
+    ],
+    "clip": {
+     "selector": ".fm-why",
+     "pad": 6
+    }
+   }
+  },
+  {
+   "name": "bug-to-triage",
+   "alt": "A bug sent through the contact form, read as a bug and filed in Triage as T-52",
+   "route": "/a/f7f7f6d7-8f0a-505e-b54f-bcf43f8e05c0",
+   "viewport": [
+    1184,
+    1500
+   ],
+   "steps": [
+    {
+     "wait": 1200
+    },
+    {
+     "mouse": [
+      4,
+      4
+     ]
+    }
+   ],
+   "clip": {
+    "selector": ".fm-why",
+    "pad": 10
+   },
+   "phone": {
+    "viewport": [
+     390,
+     2600
+    ],
+    "clip": {
+     "selector": ".fm-why",
+     "pad": 6
+    }
+   }
+  },
+  {
+   "name": "every-door",
+   "alt": "Every door on one page: website forms, Google Forms, Meta lead forms and Triage's form, with a stopped Meta door",
+   "route": "/doors",
+   "viewport": [
+    1440,
+    900
+   ],
+   "steps": [
+    {
+     "wait": 1200
+    },
+    {
+     "mouse": [
+      4,
+      4
+     ]
+    }
+   ],
+   "clip": {
+    "selector": ".fm-doors",
+    "pad": 0,
+    "height": 820
+   },
+   "bleed": "bottom",
+   "phone": {
+    "viewport": [
+     390,
+     900
+    ],
+    "clip": {
+     "selector": ".fm-doors",
+     "pad": 0,
+     "height": 840
+    }
+   }
+  },
+  {
+   "name": "card-and-deal",
+   "alt": "Beside the answer: who she is from the owner's People map, her company, its open deal and Lead research's read",
+   "route": "/a/0de9274b-189a-5b89-9c01-51dd841fa397",
+   "viewport": [
+    1184,
+    1300
+   ],
+   "steps": [
+    {
+     "wait": 1400
+    },
+    {
+     "mouse": [
+      4,
+      4
+     ]
+    }
+   ],
+   "clip": {
+    "selector": ".fm-side",
+    "pad": 0,
+    "height": 760
+   },
+   "phone": {
+    "viewport": [
+     390,
+     4200
+    ],
+    "clip": {
+     "selector": ".fm-side",
+     "pad": 0,
+     "height": 820
+    }
+   }
+  },
+  {
+   "name": "spam-key",
+   "alt": "A spam pitch on its page: U puts it back as not sure, S sets it aside again, its timeline growing each time",
+   "loop": true,
+   "route": "/a/abee7d70-ca48-58c5-b404-54a3b2e1e70c",
+   "viewport": [
+    1184,
+    900
+   ],
+   "before": [
+    {
+     "wait": 1200
+    },
+    {
+     "mouse": [
+      4,
+      4
+     ]
+    }
+   ],
+   "steps": [
+    {
+     "wait": 900
+    },
+    {
+     "key": "u"
+    },
+    {
+     "wait": 1700
+    },
+    {
+     "key": "s"
+    },
+    {
+     "wait": 1700
+    }
+   ],
+   "clip": {
+    "selector": ".fm-case",
+    "pad": 0,
+    "height": 640
+   },
+   "poster": 0.5
+  }
+ ]
+}

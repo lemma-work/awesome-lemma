@@ -31,11 +31,13 @@ first-class, so nothing here belongs to one source.
 | `feature` | one thing one of the team's products does or could do, in the team's words: what feedback files under; added by User feedback | `product_id` (always ours), `name`, `parent_id`, `aliases`, `state` (suggested, active, merged, archived), `merged_into`, `stage` (idea, planned, building, beta, live, declined), `owner_user_id`, `work_source`/`work_id`, `task_id` |
 | `feedback` | one thing one person said about one feature, word for word; added by User feedback, written too by User interviews, Early access, Competitor watch | `quote`, `point`, `product_id`, `feature_id`, `filed_by`, `kind`, `compared_with`, `sentiment`, `importance`, `handle_kind`/`handle`, `company_id`, `source`/`source_id`, `heard_by`, `is_public`, `said_at`, `state` (new, processed, set_aside), `plugin` |
 | `article` | the published copy of one answer customers or the public may read, never past its check date; added by Know-how, read by Support inbox and Help center | `title`, `slug`, `summary`, `body_md`, `topic`, `kind` (answer, procedure, policy), `checked_at`, `checked_by_name`, `good_until` (it leaves at the start of the next day), `help_path`, `source_plugin`/`source_id`; Public, no RLS; id `uuid5(ARTICLE_NS, "<source_plugin>:<source_id>")`, `ARTICLE_NS = 60a094a9-68d4-4995-8508-e9a616fcd38c` |
+| `form` | one door an answer can come through: a website form, a Google Form, a Meta lead form, a form tool's webhook, or another plugin's own form (Triage's report form); added by Forms, registered by the plugin whose form it is | `name`, `source`, `source_account`, `source_id`, `place`, `share`, `owner_plugin`, `purpose`, `default_owner_user_id`, `reply_mode` (chat_only, draft, lemma_address), `audience`, `state` (on, paused, off, broken, soon), `state_why`, `held_by_user_id`, `fields`, `cursor`, `last_read_at`, `last_answer_at`, `week`; id `uuid5(FORMS_NS, "<source>:<source_id>")`, `FORMS_NS = ba341d0a-0b0a-4d01-9869-2c8791b9f203` |
+| `form_answer` | one answer to one form, from someone outside the team, with their words; added by Forms, filed by the plugin it is routed to (Triage for bugs) | `form_id`, `source`/`source_id`, `received_at`, `handle_kind`/`handle`, `name`, `company_name`/`company_id`, `contact_id`, `row_author`, `fields`, `message`, `files`, `came_from`, `kind`, `kind_sure`, `kind_why`, `routed_to`, `owner_user_id`, `owner_why`, `owner_rule`, `rules_checked`, `state` (new, unsure, routed, drafted, replied, filed, set_aside), `hand_version`, `draft_state`/`draft_id`, `work_source`/`work_id`/`work_label`, `first_reply_at`; id `uuid5(FORMS_NS, "<form id>:<source answer id>")` |
 | `needs_you` | one thing that needs one member, from any plugin, for Today | `verb`, `title`, `why`, `quote`, `due_at`, `source_plugin`/`_table`/`_id`, `source_version`, `app`/`path`, `state`, `weight` |
 
 `conversation` to `meeting` and `personal_task` are per person (RLS): each
 member sees their own. `company`, `company_domain`, `project`, `task`,
-`deal`, `brand`, `ask`, `away`, `repository`, `pull_request`, `product`, `feature` and `feedback` are team-wide.
+`deal`, `brand`, `ask`, `away`, `repository`, `pull_request`, `product`, `feature`, `feedback`, `form` and `form_answer` are team-wide.
 `company` and `company_domain` are team-wide: two members who both deal with
 Acme share one company, and Deal tracker hangs deals on it. Nothing anyone
 said lives there.
@@ -60,6 +62,18 @@ said lives there.
   `company_domain` to say who it is with. Proposals, Fundraising, Partners and
   Customer health read it. A deal from a CRM later is the same row, told
   apart by `source` and the CRM's id.
+- **A form answer was said to the team, so the team keeps its words.**
+  `form_answer` keeps what someone wrote into one of the team's forms, word
+  for word, as `triage_report` does, and everyone in the Lemma can read it
+  (Careers answers and CVs too: the Careers form says so when it is turned
+  on). The owner's conversation about it is still their own (`conversation`,
+  `source` form, written only by their own run). A plugin that owns a kind
+  of work listens for answers routed to it (`routed_to`) and writes back
+  what they became (`work_source`, `work_id`, `work_label`, `state` filed);
+  a plugin with a form of its own registers it in `form` (`owner_plugin`)
+  and keeps its `last_answer_at` and `week`, so every door is counted in one
+  place while its answers stay that plugin's. `FORMS_NS =
+  ba341d0a-0b0a-4d01-9869-2c8791b9f203`.
 
 - **A task is one shape in two tables.** The platform's row-level security
   lets a row through to its owner only (`schema_manager.py`,

@@ -1,0 +1,75 @@
+{
+  "reply-drafted": {
+    "kind": "still",
+    "width": 834,
+    "height": 493,
+    "alt": "A demo request that came in three minutes ago, with a reply already drafted in the owner's own mailbox and one Send button",
+    "bleed": null,
+    "window": null,
+    "phone": {
+      "width": 374,
+      "height": 674,
+      "bleed": null
+    }
+  },
+  "sent-to-owner": {
+    "kind": "still",
+    "width": 834,
+    "height": 330,
+    "alt": "Why an answer went to Priya: OKL Architects has an open deal, and it's hers; every other rule marked not needed",
+    "bleed": null,
+    "window": null,
+    "phone": {
+      "width": 374,
+      "height": 372,
+      "bleed": null
+    }
+  },
+  "bug-to-triage": {
+    "kind": "still",
+    "width": 834,
+    "height": 397,
+    "alt": "A bug sent through the contact form, read as a bug and filed in Triage as T-52",
+    "bleed": null,
+    "window": null,
+    "phone": {
+      "width": 374,
+      "height": 425,
+      "bleed": null
+    }
+  },
+  "every-door": {
+    "kind": "still",
+    "width": 1440,
+    "height": 814,
+    "alt": "Every door on one page: website forms, Google Forms, Meta lead forms and Triage's form, with a stopped Meta door",
+    "bleed": "bottom",
+    "window": null,
+    "phone": {
+      "width": 390,
+      "height": 814,
+      "bleed": "bottom"
+    }
+  },
+  "card-and-deal": {
+    "kind": "still",
+    "width": 330,
+    "height": 760,
+    "alt": "Beside the answer: who she is from the owner's People map, her company, its open deal and Lead research's read",
+    "bleed": null,
+    "window": null,
+    "phone": {
+      "width": 390,
+      "height": 820,
+      "bleed": null
+    }
+  },
+  "spam-key": {
+    "kind": "loop",
+    "width": 1184,
+    "height": 640,
+    "alt": "A spam pitch on its page: U puts it back as not sure, S sets it aside again, its timeline growing each time",
+    "bleed": null,
+    "window": null
+  }
+}

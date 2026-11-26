@@ -1,0 +1,31 @@
+{
+  // One routing rule, in order. The open deal's owner always comes first and
+  // each form's default owner last; these are the team's own in between.
+  "name": "forms_rule",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "position", "type": "INTEGER", "required": true, "default": 0 },
+    // Empty for every form, empty kind for any kind.
+    { "name": "form_id", "type": "UUID" },
+    { "name": "kind", "type": "ENUM",
+      "options": ["lead", "support", "bug", "feedback", "beta", "application"] },
+    // Who they are, in a sentence ("architects and designers"), matched by
+    // the same read that picks the kind; empty for none.
+    { "name": "describes", "type": "TEXT", "max_length": 200 },
+    // member: one member. turns: members taking turns. plugin: a plugin's work.
+    { "name": "to_kind", "type": "ENUM", "required": true, "default": "member",
+      "options": ["member", "turns", "plugin"] },
+    // [user ids] for member (one) and turns (several).
+    { "name": "members", "type": "JSON" },
+    { "name": "next_turn", "type": "INTEGER", "default": 0 },
+    // triage; later support_inbox, early_access, hiring, user_feedback.
+    { "name": "plugin", "type": "TEXT", "max_length": 32 },
+    // The words shown for it: "Bugs go to Triage".
+    { "name": "reason", "type": "TEXT", "max_length": 200 },
+    { "name": "enabled", "type": "BOOLEAN", "default": true },
+    { "name": "sample", "type": "BOOLEAN", "default": false }
+  ],
+  "config": {}
+}

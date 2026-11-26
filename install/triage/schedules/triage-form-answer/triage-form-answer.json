@@ -1,0 +1,8 @@
+{
+  // Forms sent an answer here: only the write that set routed_to to triage.
+  "name": "triage-form-answer",
+  "schedule_type": "DATASTORE",
+  "config": { "table_name": "form_answer", "operations": ["UPDATE"], "when": { "routed_to": { "to": "triage" } }, "bulk_writes": "each" },
+  "workflow_name": "triage-form-answer",
+  "is_active": true
+}

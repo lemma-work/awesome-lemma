@@ -1,0 +1,12 @@
+{
+  // Forms carries People map, and with it Mail and Meetings, so one install
+  // into an empty Lemma brings them: an answer lands on its owner's People
+  // map card, and the reply is a draft in the owner's own mailbox, sent with
+  // Mail. It uses Deal tracker (an open deal's owner first; Deal tracker
+  // hears the owner's form conversation as it hears mail), Lead research
+  // and Triage (bugs are filed there) when they are installed, and never
+  // carries them. Read by _build/assemble.py, which merges People map from
+  // its own folder into install/forms/, the bundle that is installed.
+  "name": "forms",
+  "carries": ["people"]
+}

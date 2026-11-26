@@ -1,0 +1,10 @@
+{
+  // A new form_answer, from a web form, a poll, a webhook or a person.
+  // `bulk_writes: each`: answers are filed with a bulk write, which skips a
+  // datastore trigger unless the schedule asks for each row.
+  "name": "forms-read",
+  "schedule_type": "DATASTORE",
+  "config": { "table_name": "form_answer", "operations": ["INSERT"], "bulk_writes": "each" },
+  "workflow_name": "forms-read",
+  "is_active": true
+}

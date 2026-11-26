@@ -1,0 +1,6 @@
+{
+  "connector": "googleforms",
+  "mode": "PER_MEMBER",
+  "required": false,
+  "purpose": "Reads new answers to the Google Forms you add, every 15 minutes, from the account of whoever added them. Forms never changes a form or its answers."
+}

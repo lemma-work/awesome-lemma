@@ -1,0 +1,13 @@
+{
+  // Its schedule is made by the app with include_outside_rows when the first webhook door is added (the webhook address, lemma-platform#1255). row_author is hook:<name>.
+  "name": "forms-hooked",
+  "description": "A delivery to one of the Lemma's form webhooks, filed as one answer.",
+  "max_concurrent_runs": 4,
+  "start": { "type": "DATASTORE_EVENT", "config": { "table_name": "forms_hooked", "operations": ["INSERT"] } },
+  "nodes": [
+    { "id": "run", "type": "FUNCTION", "label": "File the delivery",
+      "config": { "function_name": "forms_on_hook", "input_mapping": { "record_id": { "type": "expression", "value": "start.metadata.record_id" }, "row_author": { "type": "expression", "value": "start.metadata.row_author", "optional": true } } } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [ { "id": "e1", "source": "run", "target": "end" } ]
+}

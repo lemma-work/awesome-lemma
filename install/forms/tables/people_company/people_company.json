@@ -1,0 +1,23 @@
+{
+  // People map's own state about a company: same id as the shared `company`
+  // row. Team-wide (no RLS), like the company: what it does, looked up on the
+  // web when someone asks, and the team's notes.
+  "name": "people_company",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    // Markdown, under 150 words: what they do, who for, anything recent.
+    { "name": "research", "type": "TEXT", "max_length": 4000 },
+    // [{title, url}] the look-up used.
+    { "name": "research_sources", "type": "JSON" },
+    { "name": "research_state", "type": "ENUM", "required": true, "default": "none",
+      "options": ["none", "wanted", "writing", "ready", "failed"] },
+    { "name": "researched_at", "type": "DATETIME" },
+    { "name": "research_error", "type": "TEXT", "max_length": 600 },
+    { "name": "notes", "type": "TEXT", "max_length": 8000 },
+    { "name": "notes_by", "type": "TEXT", "max_length": 200 },
+    { "name": "notes_at", "type": "DATETIME" }
+  ],
+  "config": {}
+}

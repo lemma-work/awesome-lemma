@@ -1,0 +1,154 @@
+{
+  // A person's set-up, one run each, started by the Inbox app on their first
+  // open (and by anyone who joins later, for their own mailbox). The app is
+  // the screen for its three forms; each form waits for that person.
+  //
+  //   connect     Gmail, Outlook, or the sample mailbox (the app connects)
+  //   read        the first read, about the last 30 days, a pass at a time
+  //   propose     categories (the five plus up to four found), voice, rules, VIPs
+  //   categories  the person keeps, renames, drops or adds
+  //   drafts      which categories get replies drafted without asking
+  //   sort        every conversation read, one Decisions call each
+  //   done        the inbox opens on what it found
+  //   memory      Mail's block in /memory/AGENTS.md and the person's in
+  //               /me/AGENTS.md, so the Lemma's agents know (mail_memory)
+  "name": "mail-setup",
+  "description": "Set up one person's mail: connect, read the last month, propose categories and a voice, ask which categories get drafts, then sort everything.",
+  "run_title": ["hold.email"],
+  "start": { "type": "MANUAL" },
+  "nodes": [
+    { "id": "connect", "type": "FORM", "label": "Connect your mail",
+      "config": { "input_schema": {
+        "type": "object",
+        "properties": {
+          "provider": { "type": "string", "enum": ["gmail", "outlook", "sample"], "title": "Gmail, Outlook, or the sample mailbox" },
+          "account_id": { "type": "string", "title": "Connected account" },
+          "email": { "type": "string", "title": "Address" },
+          "display_name": { "type": "string", "title": "Your name" },
+          "timezone": { "type": "string", "title": "Time zone" }
+        },
+        "required": ["provider"]
+      } } },
+    { "id": "hold", "type": "FUNCTION", "label": "Hold the mailbox",
+      "config": { "function_name": "mail_connect", "input_mapping": {
+        "provider": { "type": "expression", "value": "connect.provider" },
+        "account_id": { "type": "expression", "value": "connect.account_id", "optional": true },
+        "email": { "type": "expression", "value": "connect.email", "optional": true },
+        "display_name": { "type": "expression", "value": "connect.display_name", "optional": true },
+        "timezone": { "type": "expression", "value": "connect.timezone", "optional": true } } } },
+    { "id": "read", "type": "LOOP", "label": "First read, a pass at a time",
+      "config": { "items_path": "hold.passes", "item_var_name": "pass", "child_node_id": "read_pass" } },
+    { "id": "read_pass", "type": "FUNCTION", "label": "Read the last month",
+      "config": { "function_name": "mail_sync", "input_mapping": {
+        "mailbox_id": { "type": "expression", "value": "hold.mailbox_id" },
+        "mode": { "type": "literal", "value": "backfill" },
+        "budget_seconds": { "type": "literal", "value": 90 },
+        "run_pass": { "type": "expression", "value": "loop.pass" } } } },
+    { "id": "people", "type": "FUNCTION", "label": "Who you deal with",
+      "config": { "function_name": "mail_people", "input_mapping": {} } },
+    { "id": "report", "type": "FUNCTION", "label": "What the first read found",
+      "config": { "function_name": "mail_setup_report", "input_mapping": { "samples": { "type": "literal", "value": 14 } } } },
+    { "id": "propose", "type": "AGENT", "label": "Learn the voice, find categories",
+      "config": { "agent_name": "mail-setup", "input_mapping": {
+        "me": { "type": "expression", "value": "report.me" },
+        "totals": { "type": "expression", "value": "report.totals" },
+        "writing": { "type": "expression", "value": "report.writing" },
+        "people": { "type": "expression", "value": "report.people" },
+        "domains": { "type": "expression", "value": "report.domains" },
+        "bulk": { "type": "expression", "value": "report.bulk" },
+        "categories": { "type": "expression", "value": "report.categories" } } } },
+    { "id": "proposals", "type": "FUNCTION", "label": "Shape the proposals",
+      "config": { "function_name": "mail_setup_proposals", "input_mapping": {
+        "setup": { "type": "expression", "value": "propose" } } } },
+    { "id": "categories", "type": "FORM", "label": "Your categories",
+      "config": { "input_schema": {
+        "type": "object",
+        "properties": {
+          "categories": {
+            "type": "array", "title": "Categories",
+            "items": { "type": "object", "properties": {
+              "key": { "type": "string" }, "name": { "type": "string", "maxLength": 80 },
+              "sentence": { "type": "string", "maxLength": 600 }, "keep": { "type": "boolean" },
+              "found": { "type": "boolean" }, "why": { "type": "string" } },
+              "required": ["name", "sentence"] },
+            "default": { "type": "expression", "value": "proposals.categories" } },
+          "voice": { "type": "string", "title": "How you write", "maxLength": 8000,
+            "default": { "type": "expression", "value": "proposals.voice", "optional": true } },
+          "rules": {
+            "type": "array", "title": "Rules",
+            "items": { "type": "object", "properties": {
+              "text": { "type": "string" }, "scope": { "type": "string" }, "why": { "type": "string" }, "keep": { "type": "boolean" } },
+              "required": ["text"] },
+            "default": { "type": "expression", "value": "proposals.rules", "optional": true } },
+          "vips": {
+            "type": "array", "title": "VIPs",
+            "items": { "type": "object", "properties": {
+              "email": { "type": "string" }, "name": { "type": "string" }, "reason": { "type": "string" }, "keep": { "type": "boolean" } },
+              "required": ["email"] },
+            "default": { "type": "expression", "value": "proposals.vips", "optional": true } }
+        },
+        "required": ["categories"]
+      } } },
+    { "id": "apply", "type": "FUNCTION", "label": "Keep what you chose",
+      "config": { "function_name": "mail_setup_apply", "input_mapping": {
+        "categories": { "type": "expression", "value": "categories.categories" },
+        "voice": { "type": "expression", "value": "categories.voice", "optional": true },
+        "traits": { "type": "expression", "value": "proposals.traits", "optional": true },
+        "rules": { "type": "expression", "value": "categories.rules", "optional": true },
+        "vips": { "type": "expression", "value": "categories.vips", "optional": true } } } },
+    { "id": "drafts", "type": "FORM", "label": "Which categories get drafts",
+      "config": { "input_schema": {
+        "type": "object",
+        "properties": {
+          "draft_categories": {
+            "type": "array", "title": "Draft replies in", "uniqueItems": true,
+            "items": { "type": "string", "enum": { "type": "expression", "value": "apply.category_keys" } },
+            "default": { "type": "expression", "value": "apply.draft_default", "optional": true } },
+          "brand_categories": {
+            "type": "array", "title": "Write in the team's brand voice", "uniqueItems": true,
+            "items": { "type": "string", "enum": { "type": "expression", "value": "apply.category_keys" } },
+            "default": { "type": "expression", "value": "apply.brand_default", "optional": true } }
+        },
+        "required": ["draft_categories"]
+      } } },
+    { "id": "plan", "type": "FUNCTION", "label": "Plan the first sort",
+      "config": { "function_name": "mail_setup_drafts", "input_mapping": {
+        "draft_categories": { "type": "expression", "value": "drafts.draft_categories" },
+        "brand_categories": { "type": "expression", "value": "drafts.brand_categories", "optional": true } } } },
+    { "id": "sort", "type": "LOOP", "label": "Sort what came in",
+      "config": { "items_path": "plan.passes", "item_var_name": "pass", "child_node_id": "sort_pass" } },
+    { "id": "sort_pass", "type": "FUNCTION", "label": "Sort forty",
+      "config": { "function_name": "mail_sort", "input_mapping": {
+        "max_conversations": { "type": "literal", "value": 40 },
+        "run_pass": { "type": "expression", "value": "loop.pass" } } } },
+    { "id": "people_again", "type": "FUNCTION", "label": "Refresh who you deal with",
+      "config": { "function_name": "mail_people", "input_mapping": {} } },
+    { "id": "done", "type": "FUNCTION", "label": "Open on what it found",
+      "config": { "function_name": "mail_setup_done", "input_mapping": {} } },
+    // Last, so nothing waits on it: Mail's block in /memory/AGENTS.md and its
+    // guide, and this person's own block in /me/AGENTS.md (the run is theirs).
+    { "id": "memory", "type": "FUNCTION", "label": "Tell this Lemma's agents about Mail",
+      "config": { "function_name": "mail_memory", "input_mapping": {
+        "remove": { "type": "literal", "value": false } } } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [
+    { "id": "e1", "source": "connect", "target": "hold" },
+    { "id": "e2", "source": "hold", "target": "read" },
+    { "id": "e3", "source": "read_pass", "target": "read" },
+    { "id": "e4", "source": "read", "target": "people" },
+    { "id": "e5", "source": "people", "target": "report" },
+    { "id": "e6", "source": "report", "target": "propose" },
+    { "id": "e7", "source": "propose", "target": "proposals" },
+    { "id": "e8", "source": "proposals", "target": "categories" },
+    { "id": "e9", "source": "categories", "target": "apply" },
+    { "id": "e10", "source": "apply", "target": "drafts" },
+    { "id": "e11", "source": "drafts", "target": "plan" },
+    { "id": "e12", "source": "plan", "target": "sort" },
+    { "id": "e13", "source": "sort_pass", "target": "sort" },
+    { "id": "e14", "source": "sort", "target": "people_again" },
+    { "id": "e15", "source": "people_again", "target": "done" },
+    { "id": "e16", "source": "done", "target": "memory" },
+    { "id": "e17", "source": "memory", "target": "end" }
+  ]
+}

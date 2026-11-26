@@ -1,0 +1,6 @@
+{
+  "name": "forms",
+  "description": "Every answer to the team's outside forms in one queue: a clock on each, the Lemma's read of what it is, who it went to and why, the reply drafted in the owner's own mailbox; every door answers come through, with its count, its rule and its state; and the set-up that opens the website forms.",
+  "public_slug": "${forms_slug}",
+  "visibility": "POD"
+}

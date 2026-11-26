@@ -1,0 +1,38 @@
+{
+  "name": "forms_setup_save",
+  "description": "Keep Forms' set-up (only the fields given): who holds the forms open, the goal, how long a not-sure answer waits, the widget, schedules made by a person, doors ticked, plugins present, quiet mode, the routing rules in order, and a member who opened Forms. done writes the memory block. Safe to run again.",
+  "type": "API",
+  "visibility": "POD",
+  "code": {
+    "$file": "code.py"
+  },
+  "permissions": {
+    "grants": [
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "forms_settings",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read",
+          "datastore.record.write"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "forms_rule",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read",
+          "datastore.record.write"
+        ]
+      },
+      {
+        "resource_type": "function",
+        "resource_name": "forms_memory",
+        "permission_ids": [
+          "function.execute"
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,19 @@
+{
+  // Beta sign-up: a starter web form, opened to people outside the Lemma by
+  // the app; filed by forms-web-beta. See forms_contact.
+  "name": "forms_beta",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "name", "type": "TEXT", "required": true, "max_length": 200, "description": "Your name" },
+    { "name": "email", "type": "TEXT", "required": true, "max_length": 320, "description": "Your email" },
+    { "name": "company", "type": "TEXT", "max_length": 200, "description": "Company" },
+    { "name": "projects", "type": "TEXT", "max_length": 500, "description": "What would you try it on?" },
+    { "name": "message", "type": "TEXT", "max_length": 5000, "description": "Anything else?" },
+    { "name": "page", "type": "TEXT", "max_length": 1000, "description": "Page" },
+    { "name": "campaign", "type": "TEXT", "max_length": 200, "description": "Campaign" },
+    { "name": "answer_id", "type": "UUID" }
+  ],
+  "config": {}
+}

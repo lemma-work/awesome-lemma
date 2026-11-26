@@ -1,0 +1,22 @@
+{
+  // Careers: a starter web form, opened to people outside the Lemma by the
+  // app; filed by forms-web-careers. Applications are team-wide, CVs too:
+  // the form says so when it is turned on. See forms_contact.
+  "name": "forms_careers",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "name", "type": "TEXT", "required": true, "max_length": 200, "description": "Your name" },
+    { "name": "email", "type": "TEXT", "required": true, "max_length": 320, "description": "Your email" },
+    { "name": "company", "type": "TEXT", "max_length": 200, "description": "Where you work now (optional)" },
+    { "name": "role", "type": "TEXT", "required": true, "max_length": 200, "description": "Which role?" },
+    { "name": "cv", "type": "FILE_PATH", "max_length": 1000, "description": "Your CV" },
+    { "name": "notice", "type": "TEXT", "max_length": 200, "description": "When could you start?" },
+    { "name": "message", "type": "TEXT", "max_length": 5000, "description": "Why this role?" },
+    { "name": "page", "type": "TEXT", "max_length": 1000, "description": "Page" },
+    { "name": "campaign", "type": "TEXT", "max_length": 200, "description": "Campaign" },
+    { "name": "answer_id", "type": "UUID" }
+  ],
+  "config": {}
+}

@@ -1,0 +1,26 @@
+{
+  // Contact us: a starter web form. The app opens it to people outside the
+  // Lemma (public rows) for the columns the team keeps on; each answer is
+  // filed by its own trigger (forms-web-contact, made by the app with
+  // include_outside_rows). A column's description is the form's label.
+  // `page` and `campaign` are filled by the team's own page, never typed.
+  // Files land in /forms/forms_contact. No open column has a default: a
+  // column with one is filled by the table, never by the visitor.
+  "name": "forms_contact",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "name", "type": "TEXT", "required": true, "max_length": 200, "description": "Your name" },
+    { "name": "email", "type": "TEXT", "required": true, "max_length": 320, "description": "Your email" },
+    { "name": "company", "type": "TEXT", "max_length": 200, "description": "Company" },
+    { "name": "about", "type": "ENUM", "options": ["buying", "help", "a_problem", "something_else"], "description": "What is it about?" },
+    { "name": "message", "type": "TEXT", "required": true, "max_length": 5000, "description": "How can we help?" },
+    { "name": "file", "type": "FILE_PATH", "max_length": 1000, "description": "A file, if it helps" },
+    { "name": "page", "type": "TEXT", "max_length": 1000, "description": "Page" },
+    { "name": "campaign", "type": "TEXT", "max_length": 200, "description": "Campaign" },
+    // Internal: the answer it became.
+    { "name": "answer_id", "type": "UUID" }
+  ],
+  "config": {}
+}

@@ -1,0 +1,9 @@
+{
+  // Every 15 minutes: not-sure answers older than the hour go to their
+  // form's default owner; polled doors not read for an hour are marked broken.
+  "name": "forms-unsure",
+  "schedule_type": "TIME",
+  "config": { "cron": "*/15 * * * *", "timezone": "UTC" },
+  "workflow_name": "forms-unsure",
+  "is_active": true
+}

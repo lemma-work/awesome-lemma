@@ -1,0 +1,98 @@
+{
+  // One answer to one form, from anyone outside the team: a visitor's row on
+  // a web form, a Google Forms response, a Meta lead, a webhook delivery.
+  // Added by Forms. A form answer was said to the team, so the team keeps its
+  // words: everyone in the Lemma can read every answer (as triage_report).
+  // The owner's conversation about it is their own (`conversation`, per
+  // person), written only by their own run.
+  //
+  // Team-wide (no RLS). Found by id: uuid5(FORMS_NS, "<form id>:<source
+  // answer id>") with FORMS_NS = ba341d0a-0b0a-4d01-9869-2c8791b9f203, so a
+  // re-read or a redelivery never files twice.
+  //
+  // A plugin that owns a kind of work listens for answers routed to it
+  // (`routed_to`), files them, and writes back what they became
+  // (`work_source`, `work_id`, `work_label`) and `state` filed.
+  //
+  // Shared definition (plugins/_contract), first written by Forms. Carried
+  // unchanged by every plugin that uses it; _contract/lint.py fails on any
+  // difference.
+  "name": "form_answer",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "form_id", "type": "UUID", "required": true,
+      "foreign_key": { "references": "form.id" } },
+    // The door, and the provider's response id, the raw row's id or the
+    // delivery's id.
+    { "name": "source", "type": "TEXT", "required": true, "max_length": 32 },
+    { "name": "source_id", "type": "TEXT", "required": true, "max_length": 400 },
+    // When they sent it, from the provider. The clock starts here; the
+    // system created_at is when Forms filed it.
+    { "name": "received_at", "type": "DATETIME" },
+    // Who, as best known: an email (lowercased) or a phone.
+    { "name": "handle_kind", "type": "TEXT", "max_length": 32 },
+    { "name": "handle", "type": "TEXT", "max_length": 320 },
+    { "name": "name", "type": "TEXT", "max_length": 200 },
+    { "name": "company_name", "type": "TEXT", "max_length": 200 },
+    // From company_domain; free webmail never makes one.
+    { "name": "company_id", "type": "UUID" },
+    // When the platform proved who it was (a host token, a confirmed email).
+    { "name": "contact_id", "type": "TEXT", "max_length": 64 },
+    // contact:<id>, visitor, hook:<name>, poll.
+    { "name": "row_author", "type": "TEXT", "max_length": 80 },
+    // [{label, value, type}] in the form's order.
+    { "name": "fields", "type": "JSON" },
+    // The longest free-text answer, for lists and the read.
+    { "name": "message", "type": "TEXT", "max_length": 5000 },
+    // Paths of files they sent, linked, never read.
+    { "name": "files", "type": "JSON" },
+    // The whole answer as markdown, for agents and search.
+    { "name": "document_path", "type": "FILE_PATH", "max_length": 500 },
+    // page, campaign, UTM, gclid, ad and form ids.
+    { "name": "came_from", "type": "JSON" },
+    // What it is; empty means not sure.
+    { "name": "kind", "type": "ENUM",
+      "options": ["lead", "support", "bug", "feedback", "beta", "application", "spam"] },
+    { "name": "kind_sure", "type": "FLOAT" },
+    // Why, from a closed list: "asks for a demo, samples or a price".
+    { "name": "kind_why", "type": "TEXT", "max_length": 120 },
+    { "name": "kind_by", "type": "ENUM", "options": ["lemma", "person"] },
+    // Which work it went to: deals, triage, forms (the owner, with no owning
+    // plugin); later support_inbox, early_access, hiring, user_feedback.
+    { "name": "routed_to", "type": "TEXT", "max_length": 32 },
+    { "name": "owner_user_id", "type": "USER" },
+    // For an owner who isn't a member (a sample's).
+    { "name": "owner_name", "type": "TEXT", "max_length": 200 },
+    // In words: "OKL Architects has an open deal, and it's Priya's".
+    { "name": "owner_why", "type": "TEXT", "max_length": 300 },
+    { "name": "owner_rule", "type": "ENUM",
+      "options": ["deal", "rule", "turn", "default", "person", "plugin"] },
+    // Each rule and what it answered (used, not needed, none set).
+    { "name": "rules_checked", "type": "JSON" },
+    { "name": "state", "type": "ENUM", "required": true, "default": "new",
+      "options": ["new", "unsure", "routed", "drafted", "replied", "filed", "set_aside"] },
+    // Bumped whenever the owner's copy must change (a new owner, set aside,
+    // put back). The owner's own schedule listens on it.
+    { "name": "hand_version", "type": "INTEGER", "default": 0 },
+    { "name": "draft_state", "type": "ENUM", "default": "none",
+      "options": ["none", "wanted", "writing", "ready", "failed", "no_mailbox"] },
+    // The owner's draft row.
+    { "name": "draft_id", "type": "UUID" },
+    // When the owner's own run wrote their conversation.
+    { "name": "taken_at", "type": "DATETIME" },
+    { "name": "set_aside_why", "type": "TEXT", "max_length": 300 },
+    { "name": "set_aside_by", "type": "USER" },
+    // What it became in another plugin: triage_item and "T-52".
+    { "name": "work_source", "type": "TEXT", "max_length": 32 },
+    { "name": "work_id", "type": "TEXT", "max_length": 400 },
+    { "name": "work_label", "type": "TEXT", "max_length": 80 },
+    // The first reply, for the honest speed number.
+    { "name": "first_reply_at", "type": "DATETIME" },
+    { "name": "replied_by", "type": "USER" },
+    { "name": "reply_via", "type": "ENUM", "options": ["mail", "lemma_address", "elsewhere"] },
+    { "name": "sample", "type": "BOOLEAN", "default": false }
+  ],
+  "config": {}
+}

@@ -1,0 +1,37 @@
+{
+  "name": "forms_memory",
+  "description": "Tells this Lemma's agents that Forms is installed: its own block in /memory/AGENTS.md and its guide at /memory/plugins/forms.md with the team's forms and who gets what, leaving the team's notes alone. Set-up runs it; safe to run again. remove takes both out.",
+  "type": "API",
+  "visibility": "POD",
+  "code": {
+    "$file": "code.py"
+  },
+  "permissions": {
+    "grants": [
+      {
+        "resource_type": "folder",
+        "resource_name": "/memory",
+        "permission_ids": [
+          "folder.read",
+          "folder.write"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "form",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "forms_rule",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read"
+        ]
+      }
+    ]
+  }
+}

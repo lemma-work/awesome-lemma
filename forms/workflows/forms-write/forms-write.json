@@ -1,0 +1,38 @@
+{
+  // Each member's own schedule (forms-write-<user>), made by the app on their
+  // first visit: DATASTORE UPDATE on form_answer, rows OWNER_READABLE, run as
+  // them, when owner_user_id is them and draft_state becomes wanted (their
+  // own forms_take sets it). Their voice, their mailbox.
+  "name": "forms-write",
+  "description": "Write the reply an answer's owner owes: gather the brief, let forms-writer draft it in their voice, keep it as a draft in their mailbox.",
+  "max_concurrent_runs": 4,
+  "start": { "type": "DATASTORE_EVENT", "config": { "table_name": "form_answer", "operations": ["UPDATE"] } },
+  "nodes": [
+    { "id": "brief", "type": "FUNCTION", "label": "Gather the brief",
+      "config": { "function_name": "forms_writing_context",
+        "input_mapping": { "record_id": { "type": "expression", "value": "start.metadata.record_id" } } } },
+    { "id": "write", "type": "AGENT", "label": "Write",
+      "config": { "agent_name": "forms-writer",
+        "input_mapping": {
+          "me": { "type": "expression", "value": "brief.me" },
+          "voice": { "type": "expression", "value": "brief.voice", "optional": true },
+          "form": { "type": "expression", "value": "brief.form" },
+          "answer": { "type": "expression", "value": "brief.answer" },
+          "person": { "type": "expression", "value": "brief.person", "optional": true },
+          "past_lines": { "type": "expression", "value": "brief.past_lines", "optional": true },
+          "deal": { "type": "expression", "value": "brief.deal", "optional": true },
+          "brand": { "type": "expression", "value": "brief.brand", "optional": true },
+          "hint": { "type": "expression", "value": "brief.hint", "optional": true } } } },
+    { "id": "save", "type": "FUNCTION", "label": "Keep the draft",
+      "config": { "function_name": "forms_save_draft",
+        "input_mapping": {
+          "record_id": { "type": "expression", "value": "start.metadata.record_id" },
+          "draft": { "type": "expression", "value": "write" } } } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [
+    { "id": "e1", "source": "brief", "target": "write" },
+    { "id": "e2", "source": "write", "target": "save" },
+    { "id": "e3", "source": "save", "target": "end" }
+  ]
+}

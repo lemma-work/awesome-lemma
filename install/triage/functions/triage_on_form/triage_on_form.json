@@ -113,6 +113,15 @@
           "datastore.record.read",
           "datastore.record.write"
         ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "form",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read",
+          "datastore.record.write"
+        ]
       }
     ]
   }

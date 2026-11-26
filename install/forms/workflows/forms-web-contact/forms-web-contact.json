@@ -1,0 +1,22 @@
+{
+  // A visitor's answer to the Contact us form (forms_contact). Its schedule is made by
+  // the app, as the person who turns the form on, with include_outside_rows
+  // (a bundle can't carry that field, and without it every visitor's row is
+  // dropped); so the run is theirs. row_author names the contact
+  // ("contact:<id>") or "visitor". One workflow per form: the server allows
+  // one schedule per workflow and person.
+  "name": "forms-web-contact",
+  "description": "An answer to the Contact us form, filed as one answer to read and route.",
+  "max_concurrent_runs": 4,
+  "start": { "type": "DATASTORE_EVENT", "config": { "table_name": "forms_contact", "operations": ["INSERT"] } },
+  "nodes": [
+    { "id": "file", "type": "FUNCTION", "label": "File the answer",
+      "config": { "function_name": "forms_on_web", "input_mapping": {
+        "table": { "type": "literal", "value": "forms_contact" },
+        "record_id": { "type": "expression", "value": "start.metadata.record_id" },
+        "row_author": { "type": "expression", "value": "start.metadata.row_author", "optional": true },
+        "payload": { "type": "expression", "value": "start.payload", "optional": true } } } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [ { "id": "e1", "source": "file", "target": "end" } ]
+}

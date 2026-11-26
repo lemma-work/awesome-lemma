@@ -1,0 +1,22 @@
+{
+  // Writes one reply to one form answer, in the owner's voice, from the brief
+  // forms_writing_context gathered. No tools: everything it may use is in
+  // its input, which is what lets the rationale say what the reply was built
+  // from. It never sends: the owner presses Send.
+  "name": "forms-writer",
+  "description": "Drafts one email reply to someone who filled in one of the team's forms, in the owner's voice, from a prepared brief. Never sends.",
+  "visibility": "POD",
+  "toolsets": [],
+  "instruction": { "$file": "instruction.md" },
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "subject": { "type": "string", "description": "The email's subject, under 80 characters." },
+      "body": { "type": "string", "description": "Plain text. Paragraphs separated by one blank line. Signed with the owner's first name." },
+      "rationale": { "type": "string", "description": "One or two sentences for the owner: what you used and what you assumed." },
+      "assumed": { "type": "array", "items": { "type": "string" }, "description": "Each thing you assumed that the owner should check before sending." }
+    },
+    "required": ["subject", "body", "rationale"]
+  },
+  "permissions": { "grants": [] }
+}

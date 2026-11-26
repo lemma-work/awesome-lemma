@@ -1,0 +1,16 @@
+{
+  // An answer Forms sent to Triage (routed_to became triage on the shared
+  // form_answer): filed like any other report, and what it became written
+  // back to the answer. Forms is never carried; this only listens.
+  "name": "triage-form-answer",
+  "description": "An answer to one of the team's forms that Forms sent here: filed like any other report.",
+  "max_concurrent_runs": 4,
+  "start": { "type": "DATASTORE_EVENT", "config": { "table_name": "form_answer", "operations": ["UPDATE"] } },
+  "nodes": [
+    { "id": "file", "type": "FUNCTION", "label": "File the answer",
+      "config": { "function_name": "triage_on_form_answer", "input_mapping": {
+        "record_id": { "type": "expression", "value": "start.metadata.record_id" } } } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [ { "id": "e1", "source": "file", "target": "end" } ]
+}

@@ -1,0 +1,2714 @@
+[
+ {
+  "match": "join person p on p.id = h.person_id where lower(h.handle) = 'mara@okl-architects.example'",
+  "response": {
+   "items": [
+    {
+     "id": "person-mara",
+     "name": "Mara Lindqvist",
+     "org": "OKL Architects",
+     "title": "Principal",
+     "conversation_count": 3,
+     "last_inbound_at": "2026-11-25T10:39:00+00:00"
+    }
+   ],
+   "total": 1
+  }
+ },
+ {
+  "match": "join person p on p.id = h.person_id where lower(h.handle) = 'ama@stoneyard.example'",
+  "response": {
+   "items": [
+    {
+     "id": "person-ama",
+     "name": "Ama Owusu",
+     "org": "Stoneyard",
+     "title": null,
+     "conversation_count": 1,
+     "last_inbound_at": "2026-11-25T06:36:00+00:00"
+    }
+   ],
+   "total": 1
+  }
+ },
+ {
+  "match": "from person_handle h join person p",
+  "response": {
+   "items": [],
+   "total": 0
+  }
+ },
+ {
+  "match": "on h.person_id = l.id where lower(h.handle) = 'mara@okl-architects.example'",
+  "response": {
+   "items": [
+    {
+     "summary": "A 24-person practice doing public libraries and schools. Mara is a named principal on two tenders this year. Worth a same-day reply.",
+     "fit_why": "Specifies architectural lighting for public buildings",
+     "role": "Principal",
+     "state": "found"
+    }
+   ],
+   "total": 1
+  }
+ },
+ {
+  "match": "from leads_person l",
+  "response": {
+   "items": [],
+   "total": 0
+  }
+ },
+ {
+  "match": "lower(company_domain) = 'okl-architects.example'",
+  "response": {
+   "items": [
+    {
+     "id": "87ff8af3-58a6-52c8-82a8-5c94ab80e4f3",
+     "name": "Norrby library refit",
+     "stage": "Proposal",
+     "amount": 48000,
+     "currency": "GBP",
+     "owner_user_id": "user-sample",
+     "owner_name": "Priya Raman"
+    }
+   ],
+   "total": 1
+  }
+ },
+ {
+  "match": "from deal where status = 'open'",
+  "response": {
+   "items": [],
+   "total": 0
+  }
+ },
+ {
+  "match": "from forms_settings order by",
+  "response": {
+   "items": [
+    {
+     "id": "b20c7c0f-b6ea-5f76-88ce-643c7f77f558",
+     "steward_user_id": "user-ellis",
+     "members": [
+      {
+       "user_id": "user-sample",
+       "name": "Priya Raman",
+       "schedules": {
+        "take": "s-priya",
+        "let_go": "s-priya-2",
+        "write": "s-priya-3"
+       },
+       "at": "2026-10-02T09:00:00+00:00"
+      },
+      {
+       "user_id": "user-tomas",
+       "name": "Tomás Ortega",
+       "schedules": {
+        "take": "s-tomas",
+        "let_go": "s-tomas-2",
+        "write": "s-tomas-3"
+       },
+       "at": "2026-10-02T09:00:00+00:00"
+      },
+      {
+       "user_id": "user-sam",
+       "name": "Sam Whitlock",
+       "schedules": {
+        "take": "s-sam",
+        "let_go": "s-sam-2",
+        "write": "s-sam-3"
+       },
+       "at": "2026-10-02T09:00:00+00:00"
+      },
+      {
+       "user_id": "user-noor",
+       "name": "Noor Haddad",
+       "schedules": {},
+       "at": "2026-10-02T09:00:00+00:00"
+      },
+      {
+       "user_id": "user-ellis",
+       "name": "Ellis Grant",
+       "schedules": {
+        "take": "s-ellis",
+        "let_go": "s-ellis-2",
+        "write": "s-ellis-3"
+       },
+       "at": "2026-10-02T09:00:00+00:00"
+      }
+     ],
+     "plugins": {
+      "triage": true,
+      "deals": true,
+      "leads": true,
+      "people": true
+     },
+     "goal_minutes": 60,
+     "unsure_after_minutes": 60,
+     "widget_id": "w-sample",
+     "widget_key": "pk_7Hq2sample",
+     "schedules": {
+      "forms-web-contact": "s1",
+      "forms-web-demo": "s2",
+      "forms-web-careers": "s3"
+     },
+     "doors_wanted": [
+      "website",
+      "google",
+      "meta",
+      "plugin"
+     ],
+     "setup_done_at": "2026-10-01T09:00:00+00:00",
+     "quiet": true,
+     "sample": false,
+     "created_at": "2026-10-01T09:00:00+00:00"
+    }
+   ],
+   "total": 1
+  }
+ },
+ {
+  "match": "from form order by",
+  "response": {
+   "items": [
+    {
+     "id": "c8ea39bd-d63d-589c-a842-be774df22fe9",
+     "name": "Contact us",
+     "source": "web",
+     "source_id": "forms_contact",
+     "place": "halvard.example/contact · link",
+     "share": {
+      "ways": [
+       "link"
+      ],
+      "url": null
+     },
+     "owner_plugin": "forms",
+     "reply_mode": "draft",
+     "audience": "anyone",
+     "state": "on",
+     "fields": [
+      {
+       "key": "name",
+       "label": "Your name",
+       "order": 0
+      },
+      {
+       "key": "email",
+       "label": "Your email",
+       "order": 1
+      },
+      {
+       "key": "company",
+       "label": "Company",
+       "order": 2
+      },
+      {
+       "key": "about",
+       "label": "What is it about?",
+       "order": 3
+      },
+      {
+       "key": "message",
+       "label": "How can we help?",
+       "order": 4
+      },
+      {
+       "key": "file",
+       "label": "A file, if it helps",
+       "order": 5
+      }
+     ],
+     "sample": true,
+     "held_by_user_id": "user-ellis",
+     "default_owner_user_id": "user-ellis",
+     "created_at": "2026-10-16T10:42:00+00:00",
+     "week": [
+      {
+       "day": "2026-11-22",
+       "n": 1
+      },
+      {
+       "day": "2026-11-23",
+       "n": 1
+      },
+      {
+       "day": "2026-11-24",
+       "n": 1
+      },
+      {
+       "day": "2026-11-25",
+       "n": 4
+      }
+     ],
+     "last_answer_at": "2026-11-25T10:31:00+00:00"
+    },
+    {
+     "id": "72a708d6-2af8-55b2-9bfd-acf0c4501b25",
+     "name": "Request a demo",
+     "source": "web",
+     "source_id": "forms_demo",
+     "place": "halvard.example/specifiers · on your page",
+     "share": {
+      "ways": [
+       "page"
+      ],
+      "url": null
+     },
+     "owner_plugin": "forms",
+     "purpose": "lead",
+     "default_owner_user_id": "user-sample",
+     "reply_mode": "draft",
+     "audience": "anyone",
+     "state": "on",
+     "fields": [
+      {
+       "key": "name",
+       "label": "Your name",
+       "order": 0
+      },
+      {
+       "key": "email",
+       "label": "Work email",
+       "order": 1
+      },
+      {
+       "key": "company",
+       "label": "Company",
+       "order": 2
+      },
+      {
+       "key": "project",
+       "label": "What are you working on?",
+       "order": 3
+      },
+      {
+       "key": "how_much",
+       "label": "How many do you need?",
+       "order": 4
+      },
+      {
+       "key": "message",
+       "label": "Anything else we should know?",
+       "order": 5
+      },
+      {
+       "key": "drawings",
+       "label": "Drawings or a brief",
+       "order": 6
+      }
+     ],
+     "sample": true,
+     "held_by_user_id": "user-ellis",
+     "created_at": "2026-10-16T10:42:00+00:00",
+     "week": [
+      {
+       "day": "2026-11-22",
+       "n": 1
+      },
+      {
+       "day": "2026-11-24",
+       "n": 2
+      },
+      {
+       "day": "2026-11-25",
+       "n": 2
+      }
+     ],
+     "last_answer_at": "2026-11-25T10:39:00+00:00"
+    },
+    {
+     "id": "63e45b48-93da-52f0-98e7-1769c363931e",
+     "name": "Careers",
+     "source": "web",
+     "source_id": "forms_careers",
+     "place": "halvard.example/careers · link",
+     "share": {
+      "ways": [
+       "link"
+      ],
+      "url": null
+     },
+     "owner_plugin": "forms",
+     "purpose": "application",
+     "reply_mode": "chat_only",
+     "audience": "anyone",
+     "state": "on",
+     "fields": [
+      {
+       "key": "name",
+       "label": "Your name",
+       "order": 0
+      },
+      {
+       "key": "email",
+       "label": "Your email",
+       "order": 1
+      },
+      {
+       "key": "role",
+       "label": "Which role?",
+       "order": 2
+      },
+      {
+       "key": "cv",
+       "label": "Your CV",
+       "order": 3
+      },
+      {
+       "key": "notice",
+       "label": "When could you start?",
+       "order": 4
+      },
+      {
+       "key": "message",
+       "label": "Why this role?",
+       "order": 5
+      }
+     ],
+     "sample": true,
+     "held_by_user_id": "user-ellis",
+     "default_owner_user_id": "user-noor",
+     "created_at": "2026-10-16T10:42:00+00:00",
+     "week": [
+      {
+       "day": "2026-11-22",
+       "n": 1
+      },
+      {
+       "day": "2026-11-25",
+       "n": 1
+      }
+     ],
+     "last_answer_at": "2026-11-25T09:07:00+00:00"
+    },
+    {
+     "id": "436a3558-745a-531b-8d33-255c88cadefb",
+     "name": "Beta sign-up",
+     "source": "web",
+     "source_id": "forms_beta",
+     "share": {
+      "ways": [
+       "page"
+      ],
+      "url": null
+     },
+     "owner_plugin": "forms",
+     "purpose": "beta",
+     "reply_mode": "draft",
+     "audience": "anyone",
+     "state": "off",
+     "fields": [
+      {
+       "key": "name",
+       "label": "Your name",
+       "order": 0
+      },
+      {
+       "key": "email",
+       "label": "Your email",
+       "order": 1
+      },
+      {
+       "key": "company",
+       "label": "Company",
+       "order": 2
+      },
+      {
+       "key": "projects",
+       "label": "What would you try it on?",
+       "order": 3
+      },
+      {
+       "key": "message",
+       "label": "Anything else?",
+       "order": 4
+      }
+     ],
+     "sample": true,
+     "held_by_user_id": null,
+     "default_owner_user_id": "user-sam",
+     "created_at": "2026-10-16T10:42:00+00:00",
+     "week": [],
+     "last_answer_at": null
+    },
+    {
+     "id": "4a4c2499-218a-5cdf-88bd-ea9d195cd1e7",
+     "name": "Pilot programme",
+     "source": "google_forms",
+     "source_id": "1FAIpQLSc-sample-pilot",
+     "place": "Google Forms · sam@halvard.example",
+     "owner_plugin": "forms",
+     "purpose": "beta",
+     "reply_mode": "draft",
+     "audience": "anyone",
+     "state": "on",
+     "fields": [
+      {
+       "key": "q1",
+       "label": "Your name",
+       "order": 0
+      },
+      {
+       "key": "q2",
+       "label": "Email",
+       "order": 1
+      },
+      {
+       "key": "q3",
+       "label": "Studio or company",
+       "order": 2
+      },
+      {
+       "key": "q4",
+       "label": "Which project would you pilot on?",
+       "order": 3
+      }
+     ],
+     "last_read_at": "2026-11-25T10:38:00+00:00",
+     "sample": true,
+     "held_by_user_id": "user-sam",
+     "default_owner_user_id": "user-sam",
+     "created_at": "2026-10-16T10:42:00+00:00",
+     "week": [
+      {
+       "day": "2026-11-23",
+       "n": 1
+      },
+      {
+       "day": "2026-11-25",
+       "n": 1
+      }
+     ],
+     "last_answer_at": "2026-11-25T07:32:00+00:00"
+    },
+    {
+     "id": "9fb16f03-03f5-5aea-8597-583b6a74f85d",
+     "name": "Showroom visit",
+     "source": "google_forms",
+     "source_id": "1FAIpQLSc-sample-showroom",
+     "place": "Google Forms · noor@halvard.example",
+     "owner_plugin": "forms",
+     "purpose": "lead",
+     "reply_mode": "draft",
+     "audience": "anyone",
+     "state": "paused",
+     "state_why": "Paused by Noor",
+     "fields": [
+      {
+       "key": "q1",
+       "label": "Your name",
+       "order": 0
+      },
+      {
+       "key": "q2",
+       "label": "Email",
+       "order": 1
+      },
+      {
+       "key": "q3",
+       "label": "When would you like to visit?",
+       "order": 2
+      }
+     ],
+     "last_read_at": "2026-11-24T03:12:00+00:00",
+     "sample": true,
+     "held_by_user_id": "user-noor",
+     "default_owner_user_id": "user-tomas",
+     "created_at": "2026-10-16T10:42:00+00:00",
+     "week": [],
+     "last_answer_at": null
+    },
+    {
+     "id": "d34d9ca4-9575-5748-923b-dba13083e579",
+     "name": "Spring catalogue",
+     "source": "meta_ads",
+     "source_id": "88120045-sample-spring",
+     "place": "Meta · Halvard Lighting page",
+     "owner_plugin": "forms",
+     "purpose": "lead",
+     "reply_mode": "draft",
+     "audience": "anyone",
+     "state": "on",
+     "fields": [
+      {
+       "key": "full_name",
+       "label": "Full name",
+       "order": 0
+      },
+      {
+       "key": "email",
+       "label": "Email",
+       "order": 1
+      },
+      {
+       "key": "phone_number",
+       "label": "Phone",
+       "order": 2
+      },
+      {
+       "key": "company_name",
+       "label": "Company",
+       "order": 3
+      }
+     ],
+     "last_read_at": "2026-11-25T10:38:00+00:00",
+     "sample": true,
+     "held_by_user_id": "user-sam",
+     "default_owner_user_id": "user-sam",
+     "created_at": "2026-10-16T10:42:00+00:00",
+     "week": [
+      {
+       "day": "2026-11-21",
+       "n": 1
+      },
+      {
+       "day": "2026-11-23",
+       "n": 1
+      },
+      {
+       "day": "2026-11-25",
+       "n": 2
+      }
+     ],
+     "last_answer_at": "2026-11-25T09:40:00+00:00"
+    },
+    {
+     "id": "c14fbba3-4b63-549b-afbf-5307cba36cf0",
+     "name": "Trade show leads",
+     "source": "meta_ads",
+     "source_id": "88120046-sample-tradeshow",
+     "place": "Meta · Halvard Lighting page",
+     "owner_plugin": "forms",
+     "purpose": "lead",
+     "reply_mode": "draft",
+     "audience": "anyone",
+     "state": "broken",
+     "state_why": "The Meta sign-in ran out on Monday at 09:14",
+     "fields": [
+      {
+       "key": "full_name",
+       "label": "Full name",
+       "order": 0
+      },
+      {
+       "key": "email",
+       "label": "Email",
+       "order": 1
+      },
+      {
+       "key": "phone_number",
+       "label": "Phone",
+       "order": 2
+      }
+     ],
+     "last_read_at": "2026-11-24T03:12:00+00:00",
+     "sample": true,
+     "held_by_user_id": "user-sam",
+     "default_owner_user_id": "user-sam",
+     "created_at": "2026-10-16T10:42:00+00:00",
+     "week": [],
+     "last_answer_at": null
+    },
+    {
+     "id": "495d6a9d-a0fb-5ff2-8583-e68400b9b32e",
+     "name": "Report a problem",
+     "source": "plugin",
+     "source_id": "triage_form",
+     "place": "Triage · help.halvard.example",
+     "owner_plugin": "triage",
+     "purpose": "bug",
+     "reply_mode": "chat_only",
+     "audience": "anyone",
+     "state": "on",
+     "fields": [],
+     "sample": true,
+     "held_by_user_id": "user-ellis",
+     "default_owner_user_id": "user-tomas",
+     "created_at": "2026-10-16T10:42:00+00:00",
+     "week": [
+      {
+       "day": "2026-11-25",
+       "n": 1
+      },
+      {
+       "day": "2026-11-24",
+       "n": 2
+      },
+      {
+       "day": "2026-11-22",
+       "n": 1
+      },
+      {
+       "day": "2026-11-20",
+       "n": 1
+      }
+     ],
+     "last_answer_at": "2026-11-25T09:52:00+00:00"
+    }
+   ],
+   "total": 9
+  }
+ },
+ {
+  "match": "from form_answer order by",
+  "response": {
+   "items": [
+    {
+     "id": "4509c567-cac9-5852-bef1-049dbe253e8e",
+     "form_id": "c8ea39bd-d63d-589c-a842-be774df22fe9",
+     "source": "web",
+     "source_id": "sample-lucas",
+     "received_at": "2026-11-25T10:31:00+00:00",
+     "handle_kind": "email",
+     "handle": "lucas@moreau-studio.example",
+     "name": "Lucas Moreau",
+     "company_name": "Moreau Studio",
+     "company_id": null,
+     "contact_id": null,
+     "row_author": "visitor",
+     "fields": [
+      {
+       "label": "Your name",
+       "key": "name",
+       "value": "Lucas Moreau",
+       "type": "text"
+      },
+      {
+       "label": "Your email",
+       "key": "email",
+       "value": "lucas@moreau-studio.example",
+       "type": "email"
+      },
+      {
+       "label": "Company",
+       "key": "company",
+       "value": "Moreau Studio",
+       "type": "text"
+      },
+      {
+       "label": "What is it about?",
+       "key": "about",
+       "value": "something_else",
+       "type": "text"
+      },
+      {
+       "label": "How can we help?",
+       "key": "message",
+       "value": "Do you do anything for outdoor? We have a courtyard project coming up next spring and I'm not sure it's your kind of thing. Happy to talk it through.",
+       "type": "text"
+      }
+     ],
+     "message": "Do you do anything for outdoor? We have a courtyard project coming up next spring and I'm not sure it's your kind of thing. Happy to talk it through.",
+     "files": [],
+     "came_from": {},
+     "kind": null,
+     "kind_sure": 0.41,
+     "kind_why": "doesn't say enough to tell",
+     "kind_by": "lemma",
+     "routed_to": "forms",
+     "owner_user_id": "user-ellis",
+     "owner_name": "Ellis Grant",
+     "owner_why": "Not sure where it goes, so Ellis is asked to pick",
+     "owner_rule": "default",
+     "state": "unsure",
+     "hand_version": 1,
+     "draft_state": "none",
+     "sample": true,
+     "document_path": "/forms/answers/4509c567-cac9-5852-bef1-049dbe253e8e.md",
+     "rules_checked": [],
+     "created_at": "2026-11-25T10:31:00+00:00"
+    },
+    {
+     "id": "0de9274b-189a-5b89-9c01-51dd841fa397",
+     "form_id": "72a708d6-2af8-55b2-9bfd-acf0c4501b25",
+     "source": "web",
+     "source_id": "sample-mara",
+     "received_at": "2026-11-25T10:39:00+00:00",
+     "handle_kind": "email",
+     "handle": "mara@okl-architects.example",
+     "name": "Mara Lindqvist",
+     "company_name": "OKL Architects",
+     "company_id": "7f8f77d3-7298-592e-b6e0-426d298e87ca",
+     "contact_id": null,
+     "row_author": "visitor",
+     "fields": [
+      {
+       "label": "Your name",
+       "key": "name",
+       "value": "Mara Lindqvist",
+       "type": "text"
+      },
+      {
+       "label": "Work email",
+       "key": "email",
+       "value": "mara@okl-architects.example",
+       "type": "email"
+      },
+      {
+       "label": "Company",
+       "key": "company",
+       "value": "OKL Architects",
+       "type": "text"
+      },
+      {
+       "label": "What are you working on?",
+       "key": "project",
+       "value": "Norrby library refit, three floors",
+       "type": "text"
+      },
+      {
+       "label": "How many do you need?",
+       "key": "how_much",
+       "value": "hundreds",
+       "type": "text"
+      },
+      {
+       "label": "Anything else we should know?",
+       "key": "message",
+       "value": "We're specifying the Norrby library refit and would like to see the Arc range dimmed on DALI-2. Could we also get samples of the 2700K linear before our client meeting on the 4th?",
+       "type": "text"
+      },
+      {
+       "label": "Drawings or a brief",
+       "key": "drawings",
+       "value": "/forms/forms_demo/norrby-reflected-ceiling-plan.pdf",
+       "type": "file"
+      }
+     ],
+     "message": "We're specifying the Norrby library refit and would like to see the Arc range dimmed on DALI-2. Could we also get samples of the 2700K linear before our client meeting on the 4th?",
+     "files": [
+      "/forms/forms_demo/norrby-reflected-ceiling-plan.pdf"
+     ],
+     "came_from": {
+      "page": "halvard.example/specifiers/arc",
+      "campaign": "specifier-newsletter-nov"
+     },
+     "kind": "lead",
+     "kind_sure": 0.94,
+     "kind_why": "asks for a demo, samples or a price",
+     "kind_by": "lemma",
+     "routed_to": "deals",
+     "owner_user_id": "user-sample",
+     "owner_name": "Priya Raman",
+     "owner_why": "OKL Architects has an open deal, and it's Priya's",
+     "owner_rule": "deal",
+     "state": "drafted",
+     "hand_version": 1,
+     "draft_state": "ready",
+     "sample": true,
+     "document_path": "/forms/answers/0de9274b-189a-5b89-9c01-51dd841fa397.md",
+     "rules_checked": [
+      {
+       "rule": "An open deal's owner",
+       "result": "used",
+       "said": "OKL Architects has an open deal, and it's Priya's",
+       "deal": "Norrby library refit"
+      },
+      {
+       "rule": "Support goes to Tomás",
+       "result": "not_needed",
+       "said": "Not needed"
+      },
+      {
+       "rule": "Bugs go to Triage",
+       "result": "not_needed",
+       "said": "Not needed"
+      },
+      {
+       "rule": "Meta leads: Sam and Priya take turns",
+       "result": "not_needed",
+       "said": "Not needed"
+      },
+      {
+       "rule": "Architects and lighting designers go to Priya",
+       "result": "not_needed",
+       "said": "Not needed"
+      },
+      {
+       "rule": "The form's default owner",
+       "result": "not_needed",
+       "said": "Not needed"
+      }
+     ],
+     "created_at": "2026-11-25T10:39:00+00:00",
+     "taken_at": "2026-11-25T10:39:00+00:00",
+     "draft_id": "bb083615-c3da-55a8-a6e5-04e4b63acd89"
+    },
+    {
+     "id": "98118f76-ddc4-5d78-b2cf-171acc441ef6",
+     "form_id": "c8ea39bd-d63d-589c-a842-be774df22fe9",
+     "source": "web",
+     "source_id": "sample-hannah",
+     "received_at": "2026-11-25T09:58:00+00:00",
+     "handle_kind": "email",
+     "handle": "hannah@berg-interiors.example",
+     "name": "Hannah Berg",
+     "company_name": "Berg Interiors",
+     "company_id": null,
+     "contact_id": null,
+     "row_author": "visitor",
+     "fields": [
+      {
+       "label": "Your name",
+       "key": "name",
+       "value": "Hannah Berg",
+       "type": "text"
+      },
+      {
+       "label": "Your email",
+       "key": "email",
+       "value": "hannah@berg-interiors.example",
+       "type": "email"
+      },
+      {
+       "label": "Company",
+       "key": "company",
+       "value": "Berg Interiors",
+       "type": "text"
+      },
+      {
+       "label": "What is it about?",
+       "key": "about",
+       "value": "help",
+       "type": "text"
+      },
+      {
+       "label": "How can we help?",
+       "key": "message",
+       "value": "Two of the Halo drivers we fitted in September flicker when dimmed below 20%. Is there a firmware fix, or should we swap them?",
+       "type": "text"
+      }
+     ],
+     "message": "Two of the Halo drivers we fitted in September flicker when dimmed below 20%. Is there a firmware fix, or should we swap them?",
+     "files": [],
+     "came_from": {},
+     "kind": "support",
+     "kind_sure": 0.88,
+     "kind_why": "asks for help with something they have",
+     "kind_by": "lemma",
+     "routed_to": "forms",
+     "owner_user_id": "user-tomas",
+     "owner_name": "Tomás Ortega",
+     "owner_why": "Support goes to Tomás (Support inbox isn't built yet)",
+     "owner_rule": "rule",
+     "state": "drafted",
+     "hand_version": 1,
+     "draft_state": "ready",
+     "sample": true,
+     "document_path": "/forms/answers/98118f76-ddc4-5d78-b2cf-171acc441ef6.md",
+     "rules_checked": [
+      {
+       "rule": "An open deal's owner",
+       "result": "not_needed",
+       "said": "No open deal with Berg Interiors"
+      },
+      {
+       "rule": "Support goes to Tomás",
+       "result": "used",
+       "said": "Support goes to Tomás (Support inbox isn't built yet)"
+      },
+      {
+       "rule": "Bugs go to Triage",
+       "result": "not_needed",
+       "said": "Doesn't fit"
+      },
+      {
+       "rule": "Meta leads: Sam and Priya take turns",
+       "result": "not_needed",
+       "said": "Doesn't fit"
+      },
+      {
+       "rule": "Architects and lighting designers go to Priya",
+       "result": "not_needed",
+       "said": "Doesn't fit"
+      },
+      {
+       "rule": "The form's default owner",
+       "result": "not_needed",
+       "said": "Not needed"
+      }
+     ],
+     "created_at": "2026-11-25T09:58:00+00:00"
+    },
+    {
+     "id": "6afad9a0-4cdd-57e3-a83a-83b043bac803",
+     "form_id": "d34d9ca4-9575-5748-923b-dba13083e579",
+     "source": "meta_ads",
+     "source_id": "sample-daniel",
+     "received_at": "2026-11-25T09:40:00+00:00",
+     "handle_kind": "phone",
+     "handle": "+44 7700 900123",
+     "name": "Daniel Okafor",
+     "company_name": "Okafor Build",
+     "company_id": null,
+     "contact_id": null,
+     "row_author": "poll",
+     "fields": [
+      {
+       "label": "Full name",
+       "key": "full_name",
+       "value": "Daniel Okafor",
+       "type": "text"
+      },
+      {
+       "label": "Phone",
+       "key": "phone_number",
+       "value": "+44 7700 900123",
+       "type": "text"
+      },
+      {
+       "label": "Company",
+       "key": "company_name",
+       "value": "Okafor Build",
+       "type": "text"
+      }
+     ],
+     "message": "+44 7700 900123",
+     "files": [],
+     "came_from": {
+      "ad_name": "Spring catalogue · carousel"
+     },
+     "kind": "lead",
+     "kind_sure": 0.71,
+     "kind_why": "asks for a demo, samples or a price",
+     "kind_by": "lemma",
+     "routed_to": "forms",
+     "owner_user_id": "user-sam",
+     "owner_name": "Sam Whitlock",
+     "owner_why": "Meta leads: Sam and Priya take turns: Sam's turn",
+     "owner_rule": "turn",
+     "state": "routed",
+     "hand_version": 1,
+     "draft_state": "none",
+     "sample": true,
+     "document_path": "/forms/answers/6afad9a0-4cdd-57e3-a83a-83b043bac803.md",
+     "rules_checked": [
+      {
+       "rule": "An open deal's owner",
+       "result": "not_needed",
+       "said": "No open deal with Okafor Build"
+      },
+      {
+       "rule": "Support goes to Tomás",
+       "result": "not_needed",
+       "said": "Doesn't fit"
+      },
+      {
+       "rule": "Bugs go to Triage",
+       "result": "not_needed",
+       "said": "Doesn't fit"
+      },
+      {
+       "rule": "Meta leads: Sam and Priya take turns",
+       "result": "used",
+       "said": "Meta leads: Sam and Priya take turns: Sam's turn"
+      },
+      {
+       "rule": "Architects and lighting designers go to Priya",
+       "result": "not_needed",
+       "said": "Doesn't fit"
+      },
+      {
+       "rule": "The form's default owner",
+       "result": "not_needed",
+       "said": "Not needed"
+      }
+     ],
+     "created_at": "2026-11-25T09:40:00+00:00"
+    },
+    {
+     "id": "ade95e7d-e3ab-5a03-a76f-7215d26f7cdd",
+     "form_id": "63e45b48-93da-52f0-98e7-1769c363931e",
+     "source": "web",
+     "source_id": "sample-ravi",
+     "received_at": "2026-11-25T09:07:00+00:00",
+     "handle_kind": "email",
+     "handle": "ravi.menon@outlook.example",
+     "name": "Ravi Menon",
+     "company_name": null,
+     "company_id": null,
+     "contact_id": null,
+     "row_author": "visitor",
+     "fields": [
+      {
+       "label": "Your name",
+       "key": "name",
+       "value": "Ravi Menon",
+       "type": "text"
+      },
+      {
+       "label": "Your email",
+       "key": "email",
+       "value": "ravi.menon@outlook.example",
+       "type": "email"
+      },
+      {
+       "label": "Which role?",
+       "key": "role",
+       "value": "Lighting designer",
+       "type": "text"
+      },
+      {
+       "label": "Your CV",
+       "key": "cv",
+       "value": "/forms/forms_careers/ravi-menon-cv.pdf",
+       "type": "file"
+      },
+      {
+       "label": "When could you start?",
+       "key": "notice",
+       "value": "One month",
+       "type": "text"
+      },
+      {
+       "label": "Why this role?",
+       "key": "message",
+       "value": "I've spent six years on museum and hospitality schemes and would love to design product rather than specify it.",
+       "type": "text"
+      }
+     ],
+     "message": "I've spent six years on museum and hospitality schemes and would love to design product rather than specify it.",
+     "files": [
+      "/forms/forms_careers/ravi-menon-cv.pdf"
+     ],
+     "came_from": {},
+     "kind": "application",
+     "kind_sure": 0.97,
+     "kind_why": "applies for a job",
+     "kind_by": "lemma",
+     "routed_to": "forms",
+     "owner_user_id": "user-noor",
+     "owner_name": "Noor Haddad",
+     "owner_why": "No rule answered, so it's with Careers' default owner, Noor",
+     "owner_rule": "default",
+     "state": "routed",
+     "hand_version": 1,
+     "draft_state": "none",
+     "sample": true,
+     "document_path": "/forms/answers/ade95e7d-e3ab-5a03-a76f-7215d26f7cdd.md",
+     "rules_checked": [
+      {
+       "rule": "An open deal's owner",
+       "result": "not_needed",
+       "said": "Not for a job application"
+      },
+      {
+       "rule": "Support goes to Tomás",
+       "result": "not_needed",
+       "said": "Doesn't fit"
+      },
+      {
+       "rule": "Bugs go to Triage",
+       "result": "not_needed",
+       "said": "Doesn't fit"
+      },
+      {
+       "rule": "Meta leads: Sam and Priya take turns",
+       "result": "not_needed",
+       "said": "Doesn't fit"
+      },
+      {
+       "rule": "Architects and lighting designers go to Priya",
+       "result": "not_needed",
+       "said": "Doesn't fit"
+      },
+      {
+       "rule": "The form's default owner",
+       "result": "used",
+       "said": "No rule answered, so it's with Careers' default owner, Noor"
+      }
+     ],
+     "created_at": "2026-11-25T09:07:00+00:00"
+    },
+    {
+     "id": "7fde4ea9-6a65-54b9-a52b-ae7b2ba62588",
+     "form_id": "4a4c2499-218a-5cdf-88bd-ea9d195cd1e7",
+     "source": "google_forms",
+     "source_id": "sample-ines",
+     "received_at": "2026-11-25T07:32:00+00:00",
+     "handle_kind": "email",
+     "handle": "ines@lumen-works.example",
+     "name": "Ines Duarte",
+     "company_name": "Lumen Works",
+     "company_id": null,
+     "contact_id": null,
+     "row_author": "poll",
+     "fields": [
+      {
+       "label": "Your name",
+       "key": "q1",
+       "value": "Ines Duarte",
+       "type": "text"
+      },
+      {
+       "label": "Email",
+       "key": "q2",
+       "value": "ines@lumen-works.example",
+       "type": "email"
+      },
+      {
+       "label": "Studio or company",
+       "key": "q3",
+       "value": "Lumen Works",
+       "type": "text"
+      },
+      {
+       "label": "Which project would you pilot on?",
+       "key": "q4",
+       "value": "A hotel lobby in Porto, opening in March",
+       "type": "text"
+      }
+     ],
+     "message": "A hotel lobby in Porto, opening in March",
+     "files": [],
+     "came_from": {},
+     "kind": "beta",
+     "kind_sure": 0.9,
+     "kind_why": "wants to try something early",
+     "kind_by": "lemma",
+     "routed_to": "forms",
+     "owner_user_id": "user-sam",
+     "owner_name": "Sam Whitlock",
+     "owner_why": "No rule answered, so it's with Pilot programme's default owner, Sam",
+     "owner_rule": "default",
+     "state": "replied",
+     "hand_version": 1,
+     "draft_state": "none",
+     "sample": true,
+     "document_path": "/forms/answers/7fde4ea9-6a65-54b9-a52b-ae7b2ba62588.md",
+     "first_reply_at": "2026-11-25T08:44:00+00:00",
+     "reply_via": "mail",
+     "replied_by": "user-sam",
+     "rules_checked": [
+      {
+       "rule": "An open deal's owner",
+       "result": "not_needed",
+       "said": "No open deal with Lumen Works"
+      },
+      {
+       "rule": "Support goes to Tomás",
+       "result": "not_needed",
+       "said": "Doesn't fit"
+      },
+      {
+       "rule": "Bugs go to Triage",
+       "result": "not_needed",
+       "said": "Doesn't fit"
+      },
+      {
+       "rule": "Meta leads: Sam and Priya take turns",
+       "result": "not_needed",
+       "said": "Doesn't fit"
+      },
+      {
+       "rule": "Architects and lighting designers go to Priya",
+       "result": "not_needed",
+       "said": "Doesn't fit"
+      },
+      {
+       "rule": "The form's default owner",
+       "result": "used",
+       "said": "No rule answered, so it's with Pilot programme's default owner, Sam"
+      }
+     ],
+     "created_at": "2026-11-25T07:32:00+00:00"
+    },
+    {
+     "id": "f7f7f6d7-8f0a-505e-b54f-bcf43f8e05c0",
+     "form_id": "c8ea39bd-d63d-589c-a842-be774df22fe9",
+     "source": "web",
+     "source_id": "sample-jon",
+     "received_at": "2026-11-25T08:32:00+00:00",
+     "handle_kind": "email",
+     "handle": "jon@pike-electrical.example",
+     "name": "Jon Pike",
+     "company_name": "Pike Electrical",
+     "company_id": null,
+     "contact_id": null,
+     "row_author": "visitor",
+     "fields": [
+      {
+       "label": "Your name",
+       "key": "name",
+       "value": "Jon Pike",
+       "type": "text"
+      },
+      {
+       "label": "Your email",
+       "key": "email",
+       "value": "jon@pike-electrical.example",
+       "type": "email"
+      },
+      {
+       "label": "Company",
+       "key": "company",
+       "value": "Pike Electrical",
+       "type": "text"
+      },
+      {
+       "label": "What is it about?",
+       "key": "about",
+       "value": "a_problem",
+       "type": "text"
+      },
+      {
+       "label": "How can we help?",
+       "key": "message",
+       "value": "The configurator on your site crashes when I pick the 600mm Linear in black. Tried Chrome and Safari.",
+       "type": "text"
+      }
+     ],
+     "message": "The configurator on your site crashes when I pick the 600mm Linear in black. Tried Chrome and Safari.",
+     "files": [],
+     "came_from": {},
+     "kind": "bug",
+     "kind_sure": 0.92,
+     "kind_why": "reports a fault with a product",
+     "kind_by": "lemma",
+     "routed_to": "triage",
+     "owner_user_id": "user-tomas",
+     "owner_name": "Tomás Ortega",
+     "owner_why": "Bugs go to Triage: Triage files it and gives it an owner",
+     "owner_rule": "plugin",
+     "state": "filed",
+     "hand_version": 1,
+     "draft_state": "none",
+     "sample": true,
+     "document_path": "/forms/answers/f7f7f6d7-8f0a-505e-b54f-bcf43f8e05c0.md",
+     "work_source": "triage_item",
+     "work_id": "sample-t52",
+     "work_label": "T-52",
+     "rules_checked": [
+      {
+       "rule": "An open deal's owner",
+       "result": "not_needed",
+       "said": "No open deal with Pike Electrical"
+      },
+      {
+       "rule": "Support goes to Tomás",
+       "result": "not_needed",
+       "said": "Doesn't fit"
+      },
+      {
+       "rule": "Bugs go to Triage",
+       "result": "used",
+       "said": "Bugs go to Triage: Triage files it and gives it an owner"
+      },
+      {
+       "rule": "Meta leads: Sam and Priya take turns",
+       "result": "not_needed",
+       "said": "Doesn't fit"
+      },
+      {
+       "rule": "Architects and lighting designers go to Priya",
+       "result": "not_needed",
+       "said": "Doesn't fit"
+      },
+      {
+       "rule": "The form's default owner",
+       "result": "not_needed",
+       "said": "Not needed"
+      }
+     ],
+     "created_at": "2026-11-25T08:32:00+00:00"
+    },
+    {
+     "id": "7f1161eb-7b21-5ee7-af52-369f4a6068ec",
+     "form_id": "d34d9ca4-9575-5748-923b-dba13083e579",
+     "source": "meta_ads",
+     "source_id": "sample-ama",
+     "received_at": "2026-11-25T06:36:00+00:00",
+     "handle_kind": "email",
+     "handle": "ama@stoneyard.example",
+     "name": "Ama Owusu",
+     "company_name": "Stoneyard",
+     "company_id": null,
+     "contact_id": null,
+     "row_author": "poll",
+     "fields": [
+      {
+       "label": "Full name",
+       "key": "full_name",
+       "value": "Ama Owusu",
+       "type": "text"
+      },
+      {
+       "label": "Email",
+       "key": "email",
+       "value": "ama@stoneyard.example",
+       "type": "email"
+      },
+      {
+       "label": "Phone",
+       "key": "phone_number",
+       "value": "+44 7700 900456",
+       "type": "text"
+      },
+      {
+       "label": "Company",
+       "key": "company_name",
+       "value": "Stoneyard",
+       "type": "text"
+      }
+     ],
+     "message": "+44 7700 900456",
+     "files": [],
+     "came_from": {
+      "ad_name": "Spring catalogue · carousel"
+     },
+     "kind": "lead",
+     "kind_sure": 0.83,
+     "kind_why": "asks for a demo, samples or a price",
+     "kind_by": "lemma",
+     "routed_to": "forms",
+     "owner_user_id": "user-sample",
+     "owner_name": "Priya Raman",
+     "owner_why": "Meta leads: Sam and Priya take turns: Priya's turn",
+     "owner_rule": "turn",
+     "state": "replied",
+     "hand_version": 1,
+     "draft_state": "none",
+     "sample": true,
+     "document_path": "/forms/answers/7f1161eb-7b21-5ee7-af52-369f4a6068ec.md",
+     "first_reply_at": "2026-11-25T07:23:00+00:00",
+     "reply_via": "mail",
+     "replied_by": "user-sample",
+     "rules_checked": [
+      {
+       "rule": "An open deal's owner",
+       "result": "not_needed",
+       "said": "No open deal with Stoneyard"
+      },
+      {
+       "rule": "Support goes to Tomás",
+       "result": "not_needed",
+       "said": "Doesn't fit"
+      },
+      {
+       "rule": "Bugs go to Triage",
+       "result": "not_needed",
+       "said": "Doesn't fit"
+      },
+      {
+       "rule": "Meta leads: Sam and Priya take turns",
+       "result": "used",
+       "said": "Meta leads: Sam and Priya take turns: Priya's turn"
+      },
+      {
+       "rule": "Architects and lighting designers go to Priya",
+       "result": "not_needed",
+       "said": "Doesn't fit"
+      },
+      {
+       "rule": "The form's default owner",
+       "result": "not_needed",
+       "said": "Not needed"
+      }
+     ],
+     "created_at": "2026-11-25T06:36:00+00:00",
+     "taken_at": "2026-11-25T06:36:00+00:00"
+    },
+    {
+     "id": "abee7d70-ca48-58c5-b404-54a3b2e1e70c",
+     "form_id": "c8ea39bd-d63d-589c-a842-be774df22fe9",
+     "source": "web",
+     "source_id": "sample-seo",
+     "received_at": "2026-11-25T09:32:00+00:00",
+     "handle_kind": "email",
+     "handle": "kevin@rankfast-seo.example",
+     "name": "Kevin",
+     "company_name": "RankFast",
+     "company_id": null,
+     "contact_id": null,
+     "row_author": "visitor",
+     "fields": [
+      {
+       "label": "Your name",
+       "key": "name",
+       "value": "Kevin",
+       "type": "text"
+      },
+      {
+       "label": "Your email",
+       "key": "email",
+       "value": "kevin@rankfast-seo.example",
+       "type": "email"
+      },
+      {
+       "label": "Company",
+       "key": "company",
+       "value": "RankFast",
+       "type": "text"
+      },
+      {
+       "label": "What is it about?",
+       "key": "about",
+       "value": "something_else",
+       "type": "text"
+      },
+      {
+       "label": "How can we help?",
+       "key": "message",
+       "value": "Hi! We can get halvard.example to page one of Google in 30 days. Guaranteed results, reply for our price list.",
+       "type": "text"
+      }
+     ],
+     "message": "Hi! We can get halvard.example to page one of Google in 30 days. Guaranteed results, reply for our price list.",
+     "files": [],
+     "came_from": {},
+     "kind": "spam",
+     "kind_sure": 0.98,
+     "kind_why": "sells something to the team, or is junk",
+     "kind_by": "lemma",
+     "routed_to": null,
+     "owner_user_id": null,
+     "owner_name": null,
+     "owner_why": null,
+     "owner_rule": null,
+     "state": "set_aside",
+     "hand_version": 1,
+     "draft_state": "none",
+     "sample": true,
+     "document_path": "/forms/answers/abee7d70-ca48-58c5-b404-54a3b2e1e70c.md",
+     "set_aside_why": "sells something to the team, or is junk",
+     "rules_checked": [],
+     "created_at": "2026-11-25T09:32:00+00:00"
+    },
+    {
+     "id": "55111e6c-dc10-560c-baad-f169f9d7217f",
+     "form_id": "72a708d6-2af8-55b2-9bfd-acf0c4501b25",
+     "source": "web",
+     "source_id": "sample-backlinks",
+     "received_at": "2026-11-25T08:02:00+00:00",
+     "handle_kind": "email",
+     "handle": "offers@linkpartners.example",
+     "name": "Link Partners",
+     "company_name": "Link Partners",
+     "company_id": null,
+     "contact_id": null,
+     "row_author": "visitor",
+     "fields": [
+      {
+       "label": "Your name",
+       "key": "name",
+       "value": "Link Partners",
+       "type": "text"
+      },
+      {
+       "label": "Work email",
+       "key": "email",
+       "value": "offers@linkpartners.example",
+       "type": "email"
+      },
+      {
+       "label": "Company",
+       "key": "company",
+       "value": "Link Partners",
+       "type": "text"
+      },
+      {
+       "label": "What are you working on?",
+       "key": "project",
+       "value": "Guest posts",
+       "type": "text"
+      },
+      {
+       "label": "Anything else we should know?",
+       "key": "message",
+       "value": "We offer high authority backlinks for lighting websites. 50% off this week only.",
+       "type": "text"
+      }
+     ],
+     "message": "We offer high authority backlinks for lighting websites. 50% off this week only.",
+     "files": [],
+     "came_from": {},
+     "kind": "spam",
+     "kind_sure": 0.96,
+     "kind_why": "sells something to the team, or is junk",
+     "kind_by": "lemma",
+     "routed_to": null,
+     "owner_user_id": null,
+     "owner_name": null,
+     "owner_why": null,
+     "owner_rule": null,
+     "state": "set_aside",
+     "hand_version": 1,
+     "draft_state": "none",
+     "sample": true,
+     "document_path": "/forms/answers/55111e6c-dc10-560c-baad-f169f9d7217f.md",
+     "set_aside_why": "sells something to the team, or is junk",
+     "rules_checked": [],
+     "created_at": "2026-11-25T08:02:00+00:00"
+    },
+    {
+     "id": "17d21f1a-b863-5073-8cac-12e7cc284f0c",
+     "form_id": "72a708d6-2af8-55b2-9bfd-acf0c4501b25",
+     "source": "web",
+     "source_id": "sample-freya",
+     "received_at": "2026-11-24T08:42:00+00:00",
+     "handle_kind": "email",
+     "handle": "freya@holm-arkitekter.example",
+     "name": "Freya Holm",
+     "company_name": "Holm Arkitekter",
+     "row_author": "visitor",
+     "fields": [
+      {
+       "label": "Name",
+       "key": "name",
+       "value": "Freya Holm",
+       "type": "text"
+      },
+      {
+       "label": "Email",
+       "key": "email",
+       "value": "freya@holm-arkitekter.example",
+       "type": "email"
+      },
+      {
+       "label": "Company",
+       "key": "company",
+       "value": "Holm Arkitekter",
+       "type": "text"
+      }
+     ],
+     "kind": "lead",
+     "kind_sure": 0.9,
+     "kind_why": "asks for a demo, samples or a price",
+     "kind_by": "lemma",
+     "routed_to": "forms",
+     "owner_user_id": "user-sample",
+     "owner_name": "Priya Raman",
+     "owner_rule": "rule",
+     "owner_why": "Went to Priya",
+     "state": "replied",
+     "hand_version": 1,
+     "draft_state": "none",
+     "first_reply_at": "2026-11-24T10:17:00+00:00",
+     "reply_via": "mail",
+     "replied_by": "user-sample",
+     "sample": true,
+     "rules_checked": [],
+     "created_at": "2026-11-24T08:42:00+00:00"
+    },
+    {
+     "id": "162b9fa7-b3d4-584b-832b-61a2e56b75f2",
+     "form_id": "72a708d6-2af8-55b2-9bfd-acf0c4501b25",
+     "source": "web",
+     "source_id": "sample-marco",
+     "received_at": "2026-11-24T04:42:00+00:00",
+     "handle_kind": "email",
+     "handle": "marco@bellini-hospitality.example",
+     "name": "Marco Bellini",
+     "company_name": "Bellini Hospitality",
+     "row_author": "visitor",
+     "fields": [
+      {
+       "label": "Name",
+       "key": "name",
+       "value": "Marco Bellini",
+       "type": "text"
+      },
+      {
+       "label": "Email",
+       "key": "email",
+       "value": "marco@bellini-hospitality.example",
+       "type": "email"
+      },
+      {
+       "label": "Company",
+       "key": "company",
+       "value": "Bellini Hospitality",
+       "type": "text"
+      }
+     ],
+     "kind": "lead",
+     "kind_sure": 0.9,
+     "kind_why": "asks for a demo, samples or a price",
+     "kind_by": "lemma",
+     "routed_to": "forms",
+     "owner_name": "Sam Whitlock",
+     "owner_rule": "rule",
+     "owner_why": "Went to Sam",
+     "state": "replied",
+     "hand_version": 1,
+     "draft_state": "none",
+     "first_reply_at": "2026-11-24T05:34:00+00:00",
+     "reply_via": "mail",
+     "sample": true,
+     "rules_checked": [],
+     "owner_user_id": "user-sam",
+     "replied_by": "user-sam",
+     "created_at": "2026-11-24T04:42:00+00:00"
+    },
+    {
+     "id": "49cf2fe2-3532-5e58-915b-2b08ba684024",
+     "form_id": "c8ea39bd-d63d-589c-a842-be774df22fe9",
+     "source": "web",
+     "source_id": "sample-aiko",
+     "received_at": "2026-11-24T01:42:00+00:00",
+     "handle_kind": "email",
+     "handle": "aiko@tanaka-design.example",
+     "name": "Aiko Tanaka",
+     "company_name": "Tanaka Design",
+     "row_author": "visitor",
+     "fields": [
+      {
+       "label": "Name",
+       "key": "name",
+       "value": "Aiko Tanaka",
+       "type": "text"
+      },
+      {
+       "label": "Email",
+       "key": "email",
+       "value": "aiko@tanaka-design.example",
+       "type": "email"
+      },
+      {
+       "label": "Company",
+       "key": "company",
+       "value": "Tanaka Design",
+       "type": "text"
+      }
+     ],
+     "kind": "support",
+     "kind_sure": 0.9,
+     "kind_why": "asks for help with something they have",
+     "kind_by": "lemma",
+     "routed_to": "forms",
+     "owner_name": "Tomás Ortega",
+     "owner_rule": "rule",
+     "owner_why": "Went to Tomás",
+     "state": "replied",
+     "hand_version": 1,
+     "draft_state": "none",
+     "first_reply_at": "2026-11-24T03:50:00+00:00",
+     "reply_via": "mail",
+     "sample": true,
+     "rules_checked": [],
+     "owner_user_id": "user-tomas",
+     "replied_by": "user-tomas",
+     "created_at": "2026-11-24T01:42:00+00:00"
+    },
+    {
+     "id": "c4990c91-654d-5055-bf86-be31e5fa1a39",
+     "form_id": "d34d9ca4-9575-5748-923b-dba13083e579",
+     "source": "meta_ads",
+     "source_id": "sample-owen",
+     "received_at": "2026-11-23T11:42:00+00:00",
+     "handle_kind": "email",
+     "handle": "owen@price-builds.example",
+     "name": "Owen Price",
+     "company_name": "Price Builds",
+     "row_author": "poll",
+     "fields": [
+      {
+       "label": "Name",
+       "key": "name",
+       "value": "Owen Price",
+       "type": "text"
+      },
+      {
+       "label": "Email",
+       "key": "email",
+       "value": "owen@price-builds.example",
+       "type": "email"
+      },
+      {
+       "label": "Company",
+       "key": "company",
+       "value": "Price Builds",
+       "type": "text"
+      }
+     ],
+     "kind": "lead",
+     "kind_sure": 0.9,
+     "kind_why": "asks for a demo, samples or a price",
+     "kind_by": "lemma",
+     "routed_to": "forms",
+     "owner_name": "Sam Whitlock",
+     "owner_rule": "rule",
+     "owner_why": "Went to Sam",
+     "state": "replied",
+     "hand_version": 1,
+     "draft_state": "none",
+     "first_reply_at": "2026-11-23T12:46:00+00:00",
+     "reply_via": "mail",
+     "sample": true,
+     "rules_checked": [],
+     "owner_user_id": "user-sam",
+     "replied_by": "user-sam",
+     "created_at": "2026-11-23T11:42:00+00:00"
+    },
+    {
+     "id": "a50f35ad-a051-5825-ba2e-4ed1f2cee581",
+     "form_id": "4a4c2499-218a-5cdf-88bd-ea9d195cd1e7",
+     "source": "google_forms",
+     "source_id": "sample-lena",
+     "received_at": "2026-11-23T06:42:00+00:00",
+     "handle_kind": "email",
+     "handle": "lena@vogt-licht.example",
+     "name": "Lena Vogt",
+     "company_name": "Vogt Licht",
+     "row_author": "poll",
+     "fields": [
+      {
+       "label": "Name",
+       "key": "name",
+       "value": "Lena Vogt",
+       "type": "text"
+      },
+      {
+       "label": "Email",
+       "key": "email",
+       "value": "lena@vogt-licht.example",
+       "type": "email"
+      },
+      {
+       "label": "Company",
+       "key": "company",
+       "value": "Vogt Licht",
+       "type": "text"
+      }
+     ],
+     "kind": "beta",
+     "kind_sure": 0.9,
+     "kind_why": "wants to try something early",
+     "kind_by": "lemma",
+     "routed_to": "forms",
+     "owner_name": "Sam Whitlock",
+     "owner_rule": "rule",
+     "owner_why": "Went to Sam",
+     "state": "replied",
+     "hand_version": 1,
+     "draft_state": "none",
+     "first_reply_at": "2026-11-23T10:12:00+00:00",
+     "reply_via": "mail",
+     "sample": true,
+     "rules_checked": [],
+     "owner_user_id": "user-sam",
+     "replied_by": "user-sam",
+     "created_at": "2026-11-23T06:42:00+00:00"
+    },
+    {
+     "id": "f94de411-953b-53b0-850a-8855b5ad5a59",
+     "form_id": "c8ea39bd-d63d-589c-a842-be774df22fe9",
+     "source": "web",
+     "source_id": "sample-tariq",
+     "received_at": "2026-11-23T03:42:00+00:00",
+     "handle_kind": "email",
+     "handle": "tariq@aziz-studio.example",
+     "name": "Tariq Aziz",
+     "company_name": "Aziz Studio",
+     "row_author": "visitor",
+     "fields": [
+      {
+       "label": "Name",
+       "key": "name",
+       "value": "Tariq Aziz",
+       "type": "text"
+      },
+      {
+       "label": "Email",
+       "key": "email",
+       "value": "tariq@aziz-studio.example",
+       "type": "email"
+      },
+      {
+       "label": "Company",
+       "key": "company",
+       "value": "Aziz Studio",
+       "type": "text"
+      }
+     ],
+     "kind": "feedback",
+     "kind_sure": 0.9,
+     "kind_why": "says what they think of the product",
+     "kind_by": "lemma",
+     "routed_to": "forms",
+     "owner_name": "Ellis Grant",
+     "owner_rule": "rule",
+     "owner_why": "Went to Ellis",
+     "state": "replied",
+     "hand_version": 1,
+     "draft_state": "none",
+     "first_reply_at": "2026-11-23T06:42:00+00:00",
+     "reply_via": "mail",
+     "sample": true,
+     "rules_checked": [],
+     "owner_user_id": "user-ellis",
+     "replied_by": "user-ellis",
+     "created_at": "2026-11-23T03:42:00+00:00"
+    },
+    {
+     "id": "a5993b76-d97f-50cf-8d08-5fd52415a6e0",
+     "form_id": "72a708d6-2af8-55b2-9bfd-acf0c4501b25",
+     "source": "web",
+     "source_id": "sample-sofia",
+     "received_at": "2026-11-22T12:42:00+00:00",
+     "handle_kind": "email",
+     "handle": "sofia@rossi-interni.example",
+     "name": "Sofia Rossi",
+     "company_name": "Rossi Interni",
+     "row_author": "visitor",
+     "fields": [
+      {
+       "label": "Name",
+       "key": "name",
+       "value": "Sofia Rossi",
+       "type": "text"
+      },
+      {
+       "label": "Email",
+       "key": "email",
+       "value": "sofia@rossi-interni.example",
+       "type": "email"
+      },
+      {
+       "label": "Company",
+       "key": "company",
+       "value": "Rossi Interni",
+       "type": "text"
+      }
+     ],
+     "kind": "lead",
+     "kind_sure": 0.9,
+     "kind_why": "asks for a demo, samples or a price",
+     "kind_by": "lemma",
+     "routed_to": "forms",
+     "owner_user_id": "user-sample",
+     "owner_name": "Priya Raman",
+     "owner_rule": "rule",
+     "owner_why": "Went to Priya",
+     "state": "replied",
+     "hand_version": 1,
+     "draft_state": "none",
+     "first_reply_at": "2026-11-22T14:10:00+00:00",
+     "reply_via": "mail",
+     "replied_by": "user-sample",
+     "sample": true,
+     "rules_checked": [],
+     "created_at": "2026-11-22T12:42:00+00:00"
+    },
+    {
+     "id": "e0d504ad-5348-501a-a14a-bd65b42e714b",
+     "form_id": "c8ea39bd-d63d-589c-a842-be774df22fe9",
+     "source": "web",
+     "source_id": "sample-ben",
+     "received_at": "2026-11-22T08:42:00+00:00",
+     "handle_kind": "email",
+     "handle": "ben@carter-electric.example",
+     "name": "Ben Carter",
+     "company_name": "Carter Electric",
+     "row_author": "visitor",
+     "fields": [
+      {
+       "label": "Name",
+       "key": "name",
+       "value": "Ben Carter",
+       "type": "text"
+      },
+      {
+       "label": "Email",
+       "key": "email",
+       "value": "ben@carter-electric.example",
+       "type": "email"
+      },
+      {
+       "label": "Company",
+       "key": "company",
+       "value": "Carter Electric",
+       "type": "text"
+      }
+     ],
+     "kind": "support",
+     "kind_sure": 0.9,
+     "kind_why": "asks for help with something they have",
+     "kind_by": "lemma",
+     "routed_to": "forms",
+     "owner_name": "Tomás Ortega",
+     "owner_rule": "rule",
+     "owner_why": "Went to Tomás",
+     "state": "replied",
+     "hand_version": 1,
+     "draft_state": "none",
+     "first_reply_at": "2026-11-22T11:02:00+00:00",
+     "reply_via": "mail",
+     "sample": true,
+     "rules_checked": [],
+     "owner_user_id": "user-tomas",
+     "replied_by": "user-tomas",
+     "created_at": "2026-11-22T08:42:00+00:00"
+    },
+    {
+     "id": "c014b1a2-4ac1-5a4b-96ca-782cc9c102cf",
+     "form_id": "63e45b48-93da-52f0-98e7-1769c363931e",
+     "source": "web",
+     "source_id": "sample-nadia",
+     "received_at": "2026-11-22T03:42:00+00:00",
+     "handle_kind": "email",
+     "handle": "nadia.petrova@gmail.example",
+     "name": "Nadia Petrova",
+     "row_author": "visitor",
+     "fields": [
+      {
+       "label": "Name",
+       "key": "name",
+       "value": "Nadia Petrova",
+       "type": "text"
+      },
+      {
+       "label": "Email",
+       "key": "email",
+       "value": "nadia.petrova@gmail.example",
+       "type": "email"
+      }
+     ],
+     "kind": "application",
+     "kind_sure": 0.9,
+     "kind_why": "applies for a job",
+     "kind_by": "lemma",
+     "routed_to": "forms",
+     "owner_name": "Noor Haddad",
+     "owner_rule": "rule",
+     "owner_why": "Went to Noor",
+     "state": "filed",
+     "hand_version": 1,
+     "draft_state": "none",
+     "work_label": "Kept for Hiring",
+     "sample": true,
+     "rules_checked": [],
+     "owner_user_id": "user-noor",
+     "created_at": "2026-11-22T03:42:00+00:00"
+    },
+    {
+     "id": "ac30582e-f572-5902-a59c-57f1220f451b",
+     "form_id": "d34d9ca4-9575-5748-923b-dba13083e579",
+     "source": "meta_ads",
+     "source_id": "sample-leo",
+     "received_at": "2026-11-21T08:42:00+00:00",
+     "handle_kind": "email",
+     "handle": "leo@martins-arq.example",
+     "name": "Leo Martins",
+     "company_name": "Martins Arq",
+     "row_author": "poll",
+     "fields": [
+      {
+       "label": "Name",
+       "key": "name",
+       "value": "Leo Martins",
+       "type": "text"
+      },
+      {
+       "label": "Email",
+       "key": "email",
+       "value": "leo@martins-arq.example",
+       "type": "email"
+      },
+      {
+       "label": "Company",
+       "key": "company",
+       "value": "Martins Arq",
+       "type": "text"
+      }
+     ],
+     "kind": "lead",
+     "kind_sure": 0.9,
+     "kind_why": "asks for a demo, samples or a price",
+     "kind_by": "lemma",
+     "routed_to": "forms",
+     "owner_user_id": "user-sample",
+     "owner_name": "Priya Raman",
+     "owner_rule": "rule",
+     "owner_why": "Went to Priya",
+     "state": "replied",
+     "hand_version": 1,
+     "draft_state": "none",
+     "first_reply_at": "2026-11-21T09:29:00+00:00",
+     "reply_via": "mail",
+     "replied_by": "user-sample",
+     "sample": true,
+     "rules_checked": [],
+     "created_at": "2026-11-21T08:42:00+00:00"
+    }
+   ],
+   "total": 20
+  }
+ },
+ {
+  "match": "from forms_event order by",
+  "response": {
+   "items": [
+    {
+     "id": "1e3e5a76-da11-5cad-9222-247a2e1d2376",
+     "answer_id": "4509c567-cac9-5852-bef1-049dbe253e8e",
+     "at": "2026-11-25T10:31:00+00:00",
+     "kind": "arrived",
+     "actor": "lemma",
+     "actor_name": "Lemma",
+     "text": "Lucas Moreau sent Contact us (Website).",
+     "sample": true,
+     "created_at": "2026-11-25T10:31:00+00:00"
+    },
+    {
+     "id": "36658011-9f87-50cd-856a-d309e0780005",
+     "answer_id": "4509c567-cac9-5852-bef1-049dbe253e8e",
+     "at": "2026-11-25T10:32:00+00:00",
+     "kind": "read",
+     "actor": "lemma",
+     "actor_name": "Lemma",
+     "text": "Not sure what this is (41% sure); Ellis is asked to pick.",
+     "sample": true,
+     "created_at": "2026-11-25T10:32:00+00:00"
+    },
+    {
+     "id": "8e78b229-dc44-5422-8bd7-b8679beb75ec",
+     "answer_id": "0de9274b-189a-5b89-9c01-51dd841fa397",
+     "at": "2026-11-25T10:39:00+00:00",
+     "kind": "arrived",
+     "actor": "lemma",
+     "actor_name": "Lemma",
+     "text": "Mara Lindqvist sent Request a demo (Website).",
+     "sample": true,
+     "created_at": "2026-11-25T10:39:00+00:00"
+    },
+    {
+     "id": "0ed76256-6188-55bb-a4e9-64f36b66c791",
+     "answer_id": "0de9274b-189a-5b89-9c01-51dd841fa397",
+     "at": "2026-11-25T10:39:30+00:00",
+     "kind": "read",
+     "actor": "lemma",
+     "actor_name": "Lemma",
+     "text": "Read as lead: asks for a demo, samples or a price (94% sure).",
+     "sample": true,
+     "created_at": "2026-11-25T10:39:30+00:00"
+    },
+    {
+     "id": "280e39c0-0e29-50b1-af13-8363c7a1efce",
+     "answer_id": "0de9274b-189a-5b89-9c01-51dd841fa397",
+     "at": "2026-11-25T10:39:36+00:00",
+     "kind": "routed",
+     "actor": "lemma",
+     "actor_name": "Lemma",
+     "text": "Went to Priya Raman: OKL Architects has an open deal, and it's Priya's.",
+     "sample": true,
+     "created_at": "2026-11-25T10:39:36+00:00"
+    },
+    {
+     "id": "28783802-c1aa-5ac5-ba54-b3eb07c8c019",
+     "answer_id": "0de9274b-189a-5b89-9c01-51dd841fa397",
+     "at": "2026-11-25T10:37:00+00:00",
+     "kind": "chat",
+     "actor": "lemma",
+     "actor_name": "Lemma",
+     "text": "Asked the Lemma beside the form whether the Arc range dims on DALI-2; it answered from the published spec sheet.",
+     "sample": true,
+     "created_at": "2026-11-25T10:37:00+00:00"
+    },
+    {
+     "id": "a4f5c99c-0358-5f4e-9106-81ed5ab27f4a",
+     "answer_id": "0de9274b-189a-5b89-9c01-51dd841fa397",
+     "at": "2026-11-25T10:40:00+00:00",
+     "kind": "taken",
+     "actor": "lemma",
+     "actor_name": "Lemma",
+     "text": "In Priya Raman's conversations, on Mara's card.",
+     "sample": true,
+     "created_at": "2026-11-25T10:40:00+00:00"
+    },
+    {
+     "id": "8992fa47-b965-56bf-9fbb-6aafb9bf0d03",
+     "answer_id": "0de9274b-189a-5b89-9c01-51dd841fa397",
+     "at": "2026-11-25T10:41:30+00:00",
+     "kind": "drafted",
+     "actor": "lemma",
+     "actor_name": "Lemma",
+     "text": "Reply drafted in priya@halvard.example's mailbox; waiting for Send.",
+     "sample": true,
+     "created_at": "2026-11-25T10:41:30+00:00"
+    },
+    {
+     "id": "1c53afdf-fe80-5925-a62f-98ac53f0214c",
+     "answer_id": "98118f76-ddc4-5d78-b2cf-171acc441ef6",
+     "at": "2026-11-25T09:58:00+00:00",
+     "kind": "arrived",
+     "actor": "lemma",
+     "actor_name": "Lemma",
+     "text": "Hannah Berg sent Contact us (Website).",
+     "sample": true,
+     "created_at": "2026-11-25T09:58:00+00:00"
+    },
+    {
+     "id": "3bfb094c-a458-5d40-ae2f-9e1b321876fd",
+     "answer_id": "98118f76-ddc4-5d78-b2cf-171acc441ef6",
+     "at": "2026-11-25T09:58:30+00:00",
+     "kind": "read",
+     "actor": "lemma",
+     "actor_name": "Lemma",
+     "text": "Read as support: asks for help with something they have (88% sure).",
+     "sample": true,
+     "created_at": "2026-11-25T09:58:30+00:00"
+    },
+    {
+     "id": "356bbc50-ee9c-5c08-8450-f5ecc6922b73",
+     "answer_id": "98118f76-ddc4-5d78-b2cf-171acc441ef6",
+     "at": "2026-11-25T09:58:36+00:00",
+     "kind": "routed",
+     "actor": "lemma",
+     "actor_name": "Lemma",
+     "text": "Went to Tomás Ortega: Support goes to Tomás (Support inbox isn't built yet).",
+     "sample": true,
+     "created_at": "2026-11-25T09:58:36+00:00"
+    },
+    {
+     "id": "92dd4256-5a23-5581-a8ac-d059b9a8802e",
+     "answer_id": "98118f76-ddc4-5d78-b2cf-171acc441ef6",
+     "at": "2026-11-25T09:59:00+00:00",
+     "kind": "taken",
+     "actor": "lemma",
+     "actor_name": "Lemma",
+     "text": "In Tomás Ortega's conversations, on Hannah's card.",
+     "sample": true,
+     "created_at": "2026-11-25T09:59:00+00:00"
+    },
+    {
+     "id": "36fcfc5d-5288-5ce4-8a11-9d391978d1b4",
+     "answer_id": "98118f76-ddc4-5d78-b2cf-171acc441ef6",
+     "at": "2026-11-25T10:00:30+00:00",
+     "kind": "drafted",
+     "actor": "lemma",
+     "actor_name": "Lemma",
+     "text": "Reply drafted in tomás@halvard.example's mailbox; waiting for Send.",
+     "sample": true,
+     "created_at": "2026-11-25T10:00:30+00:00"
+    },
+    {
+     "id": "12983e6b-0344-5e0e-a606-627750bc02f5",
+     "answer_id": "6afad9a0-4cdd-57e3-a83a-83b043bac803",
+     "at": "2026-11-25T09:40:00+00:00",
+     "kind": "arrived",
+     "actor": "lemma",
+     "actor_name": "Lemma",
+     "text": "Daniel Okafor sent Spring catalogue (Meta lead ads).",
+     "sample": true,
+     "created_at": "2026-11-25T09:40:00+00:00"
+    },
+    {
+     "id": "0192695e-5d47-5389-abcd-1c1a3001e38d",
+     "answer_id": "6afad9a0-4cdd-57e3-a83a-83b043bac803",
+     "at": "2026-11-25T09:51:00+00:00",
+     "kind": "note",
+     "actor": "lemma",
+     "actor_name": "Lemma",
+     "text": "Read from Meta 11 minutes after it was sent (Meta is read every 15 minutes).",
+     "sample": true,
+     "created_at": "2026-11-25T09:51:00+00:00"
+    },
+    {
+     "id": "05c8e0d4-b157-5a18-943c-60a7a5fbbb4e",
+     "answer_id": "6afad9a0-4cdd-57e3-a83a-83b043bac803",
+     "at": "2026-11-25T09:51:30+00:00",
+     "kind": "read",
+     "actor": "lemma",
+     "actor_name": "Lemma",
+     "text": "Read as lead: asks for a demo, samples or a price (71% sure).",
+     "sample": true,
+     "created_at": "2026-11-25T09:51:30+00:00"
+    },
+    {
+     "id": "b2ea527f-3924-5fb4-8735-21123cd91666",
+     "answer_id": "6afad9a0-4cdd-57e3-a83a-83b043bac803",
+     "at": "2026-11-25T09:51:36+00:00",
+     "kind": "routed",
+     "actor": "lemma",
+     "actor_name": "Lemma",
+     "text": "Went to Sam Whitlock: Meta leads: Sam and Priya take turns: Sam's turn.",
+     "sample": true,
+     "created_at": "2026-11-25T09:51:36+00:00"
+    },
+    {
+     "id": "66dbd071-b1fa-5a0e-b74f-9e67e22bfcda",
+     "answer_id": "ade95e7d-e3ab-5a03-a76f-7215d26f7cdd",
+     "at": "2026-11-25T09:07:00+00:00",
+     "kind": "arrived",
+     "actor": "lemma",
+     "actor_name": "Lemma",
+     "text": "Ravi Menon sent Careers (Website).",
+     "sample": true,
+     "created_at": "2026-11-25T09:07:00+00:00"
+    },
+    {
+     "id": "8f17be2b-df75-5d47-b08d-285908c8bdab",
+     "answer_id": "ade95e7d-e3ab-5a03-a76f-7215d26f7cdd",
+     "at": "2026-11-25T09:07:30+00:00",
+     "kind": "read",
+     "actor": "lemma",
+     "actor_name": "Lemma",
+     "text": "Read as application: applies for a job (97% sure).",
+     "sample": true,
+     "created_at": "2026-11-25T09:07:30+00:00"
+    },
+    {
+     "id": "9e035ed0-11bc-544c-8aea-19286478bf50",
+     "answer_id": "ade95e7d-e3ab-5a03-a76f-7215d26f7cdd",
+     "at": "2026-11-25T09:07:36+00:00",
+     "kind": "routed",
+     "actor": "lemma",
+     "actor_name": "Lemma",
+     "text": "Went to Noor Haddad: No rule answered, so it's with Careers' default owner, Noor.",
+     "sample": true,
+     "created_at": "2026-11-25T09:07:36+00:00"
+    },
+    {
+     "id": "1f2e9055-f49b-5935-bec1-a7444f6d7817",
+     "answer_id": "7fde4ea9-6a65-54b9-a52b-ae7b2ba62588",
+     "at": "2026-11-25T07:32:00+00:00",
+     "kind": "arrived",
+     "actor": "lemma",
+     "actor_name": "Lemma",
+     "text": "Ines Duarte sent Pilot programme (Google Forms).",
+     "sample": true,
+     "created_at": "2026-11-25T07:32:00+00:00"
+    },
+    {
+     "id": "91cc5296-7518-55ba-93b5-7a1cdbcdfa7c",
+     "answer_id": "7fde4ea9-6a65-54b9-a52b-ae7b2ba62588",
+     "at": "2026-11-25T07:32:30+00:00",
+     "kind": "read",
+     "actor": "lemma",
+     "actor_name": "Lemma",
+     "text": "Read as beta: wants to try something early (90% sure).",
+     "sample": true,
+     "created_at": "2026-11-25T07:32:30+00:00"
+    },
+    {
+     "id": "b03f366d-f61f-5b16-b73a-ef1551be8498",
+     "answer_id": "7fde4ea9-6a65-54b9-a52b-ae7b2ba62588",
+     "at": "2026-11-25T07:32:36+00:00",
+     "kind": "routed",
+     "actor": "lemma",
+     "actor_name": "Lemma",
+     "text": "Went to Sam Whitlock: No rule answered, so it's with Pilot programme's default owner, Sam.",
+     "sample": true,
+     "created_at": "2026-11-25T07:32:36+00:00"
+    },
+    {
+     "id": "04659868-a725-587f-9a0f-0e8a106077a4",
+     "answer_id": "7fde4ea9-6a65-54b9-a52b-ae7b2ba62588",
+     "at": "2026-11-25T08:44:00+00:00",
+     "kind": "sent",
+     "actor": "lemma",
+     "actor_name": "Lemma",
+     "text": "Sam Whitlock sent the reply, 1h 12m after it came in.",
+     "sample": true,
+     "created_at": "2026-11-25T08:44:00+00:00"
+    },
+    {
+     "id": "19a66f9c-4f74-5e14-945b-61e6343589ab",
+     "answer_id": "f7f7f6d7-8f0a-505e-b54f-bcf43f8e05c0",
+     "at": "2026-11-25T08:32:00+00:00",
+     "kind": "arrived",
+     "actor": "lemma",
+     "actor_name": "Lemma",
+     "text": "Jon Pike sent Contact us (Website).",
+     "sample": true,
+     "created_at": "2026-11-25T08:32:00+00:00"
+    },
+    {
+     "id": "d017fd37-c265-59f3-b663-d8574582738e",
+     "answer_id": "f7f7f6d7-8f0a-505e-b54f-bcf43f8e05c0",
+     "at": "2026-11-25T08:32:30+00:00",
+     "kind": "read",
+     "actor": "lemma",
+     "actor_name": "Lemma",
+     "text": "Read as bug: reports a fault with a product (92% sure).",
+     "sample": true,
+     "created_at": "2026-11-25T08:32:30+00:00"
+    },
+    {
+     "id": "9e676f9e-319e-54fd-b73b-193d7ba7c706",
+     "answer_id": "f7f7f6d7-8f0a-505e-b54f-bcf43f8e05c0",
+     "at": "2026-11-25T08:32:36+00:00",
+     "kind": "routed",
+     "actor": "lemma",
+     "actor_name": "Lemma",
+     "text": "Went to Tomás Ortega: Bugs go to Triage: Triage files it and gives it an owner.",
+     "sample": true,
+     "created_at": "2026-11-25T08:32:36+00:00"
+    },
+    {
+     "id": "cb1635ed-8dec-5279-98a5-753603e1cb60",
+     "answer_id": "f7f7f6d7-8f0a-505e-b54f-bcf43f8e05c0",
+     "at": "2026-11-25T08:34:00+00:00",
+     "kind": "filed",
+     "actor": "lemma",
+     "actor_name": "Lemma",
+     "text": "Filed in Triage as T-52; Tomás is on triage.",
+     "sample": true,
+     "created_at": "2026-11-25T08:34:00+00:00"
+    },
+    {
+     "id": "69b83fff-a877-590d-9aec-16bb26a8e16e",
+     "answer_id": "7f1161eb-7b21-5ee7-af52-369f4a6068ec",
+     "at": "2026-11-25T06:36:00+00:00",
+     "kind": "arrived",
+     "actor": "lemma",
+     "actor_name": "Lemma",
+     "text": "Ama Owusu sent Spring catalogue (Meta lead ads).",
+     "sample": true,
+     "created_at": "2026-11-25T06:36:00+00:00"
+    },
+    {
+     "id": "4f32b994-757d-51b8-9bd1-12a19606f0bb",
+     "answer_id": "7f1161eb-7b21-5ee7-af52-369f4a6068ec",
+     "at": "2026-11-25T06:42:00+00:00",
+     "kind": "note",
+     "actor": "lemma",
+     "actor_name": "Lemma",
+     "text": "Read from Meta 6 minutes after it was sent (Meta is read every 15 minutes).",
+     "sample": true,
+     "created_at": "2026-11-25T06:42:00+00:00"
+    },
+    {
+     "id": "a799273d-42ce-5237-ba9a-7a68fcdff6cd",
+     "answer_id": "7f1161eb-7b21-5ee7-af52-369f4a6068ec",
+     "at": "2026-11-25T06:42:30+00:00",
+     "kind": "read",
+     "actor": "lemma",
+     "actor_name": "Lemma",
+     "text": "Read as lead: asks for a demo, samples or a price (83% sure).",
+     "sample": true,
+     "created_at": "2026-11-25T06:42:30+00:00"
+    },
+    {
+     "id": "bc6e1e68-b5f9-53d9-a727-e201426bd65c",
+     "answer_id": "7f1161eb-7b21-5ee7-af52-369f4a6068ec",
+     "at": "2026-11-25T06:42:36+00:00",
+     "kind": "routed",
+     "actor": "lemma",
+     "actor_name": "Lemma",
+     "text": "Went to Priya Raman: Meta leads: Sam and Priya take turns: Priya's turn.",
+     "sample": true,
+     "created_at": "2026-11-25T06:42:36+00:00"
+    },
+    {
+     "id": "4306dd8c-935f-5330-8c03-4c2499f1783b",
+     "answer_id": "7f1161eb-7b21-5ee7-af52-369f4a6068ec",
+     "at": "2026-11-25T06:43:00+00:00",
+     "kind": "taken",
+     "actor": "lemma",
+     "actor_name": "Lemma",
+     "text": "In Priya Raman's conversations, on Ama's card.",
+     "sample": true,
+     "created_at": "2026-11-25T06:43:00+00:00"
+    },
+    {
+     "id": "ae5b9a6d-a826-568d-81a6-fd9ca6901000",
+     "answer_id": "7f1161eb-7b21-5ee7-af52-369f4a6068ec",
+     "at": "2026-11-25T07:23:00+00:00",
+     "kind": "sent",
+     "actor": "lemma",
+     "actor_name": "Lemma",
+     "text": "Priya Raman sent the reply, 41 min after it came in.",
+     "sample": true,
+     "created_at": "2026-11-25T07:23:00+00:00"
+    },
+    {
+     "id": "d0ab02eb-189a-5c84-9a45-d0d30bba5b43",
+     "answer_id": "abee7d70-ca48-58c5-b404-54a3b2e1e70c",
+     "at": "2026-11-25T09:32:00+00:00",
+     "kind": "arrived",
+     "actor": "lemma",
+     "actor_name": "Lemma",
+     "text": "Kevin sent Contact us (Website).",
+     "sample": true,
+     "created_at": "2026-11-25T09:32:00+00:00"
+    },
+    {
+     "id": "7cb88172-9f34-5f4b-ad1b-feaf3a6be08d",
+     "answer_id": "abee7d70-ca48-58c5-b404-54a3b2e1e70c",
+     "at": "2026-11-25T09:33:00+00:00",
+     "kind": "set_aside",
+     "actor": "lemma",
+     "actor_name": "Lemma",
+     "text": "Set aside as spam: sells something to the team, or is junk (98% sure).",
+     "sample": true,
+     "created_at": "2026-11-25T09:33:00+00:00"
+    },
+    {
+     "id": "e518cc4c-62ca-5bfb-9fdd-bc9c2ce1fecc",
+     "answer_id": "55111e6c-dc10-560c-baad-f169f9d7217f",
+     "at": "2026-11-25T08:02:00+00:00",
+     "kind": "arrived",
+     "actor": "lemma",
+     "actor_name": "Lemma",
+     "text": "Link Partners sent Request a demo (Website).",
+     "sample": true,
+     "created_at": "2026-11-25T08:02:00+00:00"
+    },
+    {
+     "id": "159bd9b0-56b3-50dd-8a86-c51a4d7170d1",
+     "answer_id": "55111e6c-dc10-560c-baad-f169f9d7217f",
+     "at": "2026-11-25T08:03:00+00:00",
+     "kind": "set_aside",
+     "actor": "lemma",
+     "actor_name": "Lemma",
+     "text": "Set aside as spam: sells something to the team, or is junk (96% sure).",
+     "sample": true,
+     "created_at": "2026-11-25T08:03:00+00:00"
+    },
+    {
+     "id": "5b152ed2-c926-524f-a6a6-32f5d918ff57",
+     "answer_id": "17d21f1a-b863-5073-8cac-12e7cc284f0c",
+     "at": "2026-11-24T08:42:00+00:00",
+     "kind": "arrived",
+     "actor": "lemma",
+     "actor_name": "Lemma",
+     "text": "Freya Holm sent Request a demo.",
+     "sample": true,
+     "created_at": "2026-11-24T08:42:00+00:00"
+    },
+    {
+     "id": "c885bae1-5e09-5983-b0b8-f7a639c0996e",
+     "answer_id": "162b9fa7-b3d4-584b-832b-61a2e56b75f2",
+     "at": "2026-11-24T04:42:00+00:00",
+     "kind": "arrived",
+     "actor": "lemma",
+     "actor_name": "Lemma",
+     "text": "Marco Bellini sent Request a demo.",
+     "sample": true,
+     "created_at": "2026-11-24T04:42:00+00:00"
+    },
+    {
+     "id": "24ba2088-f5b1-5418-935d-0a5613806cd3",
+     "answer_id": "49cf2fe2-3532-5e58-915b-2b08ba684024",
+     "at": "2026-11-24T01:42:00+00:00",
+     "kind": "arrived",
+     "actor": "lemma",
+     "actor_name": "Lemma",
+     "text": "Aiko Tanaka sent Contact us.",
+     "sample": true,
+     "created_at": "2026-11-24T01:42:00+00:00"
+    },
+    {
+     "id": "2519fa06-b9e8-5d54-83d8-2db7e0ea0dba",
+     "answer_id": "c4990c91-654d-5055-bf86-be31e5fa1a39",
+     "at": "2026-11-23T11:42:00+00:00",
+     "kind": "arrived",
+     "actor": "lemma",
+     "actor_name": "Lemma",
+     "text": "Owen Price sent Spring catalogue.",
+     "sample": true,
+     "created_at": "2026-11-23T11:42:00+00:00"
+    },
+    {
+     "id": "9cd51c85-e400-51da-b1d7-524f9db60b58",
+     "answer_id": "a50f35ad-a051-5825-ba2e-4ed1f2cee581",
+     "at": "2026-11-23T06:42:00+00:00",
+     "kind": "arrived",
+     "actor": "lemma",
+     "actor_name": "Lemma",
+     "text": "Lena Vogt sent Pilot programme.",
+     "sample": true,
+     "created_at": "2026-11-23T06:42:00+00:00"
+    },
+    {
+     "id": "94a292f3-30ce-5fa0-a6ce-f89d0a1b8236",
+     "answer_id": "f94de411-953b-53b0-850a-8855b5ad5a59",
+     "at": "2026-11-23T03:42:00+00:00",
+     "kind": "arrived",
+     "actor": "lemma",
+     "actor_name": "Lemma",
+     "text": "Tariq Aziz sent Contact us.",
+     "sample": true,
+     "created_at": "2026-11-23T03:42:00+00:00"
+    },
+    {
+     "id": "298f5023-4e43-548d-9714-99bddd7c93f9",
+     "answer_id": "a5993b76-d97f-50cf-8d08-5fd52415a6e0",
+     "at": "2026-11-22T12:42:00+00:00",
+     "kind": "arrived",
+     "actor": "lemma",
+     "actor_name": "Lemma",
+     "text": "Sofia Rossi sent Request a demo.",
+     "sample": true,
+     "created_at": "2026-11-22T12:42:00+00:00"
+    },
+    {
+     "id": "b1867114-25c3-5bdf-affe-90210272b545",
+     "answer_id": "e0d504ad-5348-501a-a14a-bd65b42e714b",
+     "at": "2026-11-22T08:42:00+00:00",
+     "kind": "arrived",
+     "actor": "lemma",
+     "actor_name": "Lemma",
+     "text": "Ben Carter sent Contact us.",
+     "sample": true,
+     "created_at": "2026-11-22T08:42:00+00:00"
+    },
+    {
+     "id": "3eef476e-c0d4-5fc0-81e4-04fa8cbee4a3",
+     "answer_id": "c014b1a2-4ac1-5a4b-96ca-782cc9c102cf",
+     "at": "2026-11-22T03:42:00+00:00",
+     "kind": "arrived",
+     "actor": "lemma",
+     "actor_name": "Lemma",
+     "text": "Nadia Petrova sent Careers.",
+     "sample": true,
+     "created_at": "2026-11-22T03:42:00+00:00"
+    },
+    {
+     "id": "8148b19d-ad54-5e2d-8224-80ba5691ad0d",
+     "answer_id": "ac30582e-f572-5902-a59c-57f1220f451b",
+     "at": "2026-11-21T08:42:00+00:00",
+     "kind": "arrived",
+     "actor": "lemma",
+     "actor_name": "Lemma",
+     "text": "Leo Martins sent Spring catalogue.",
+     "sample": true,
+     "created_at": "2026-11-21T08:42:00+00:00"
+    }
+   ],
+   "total": 48
+  }
+ },
+ {
+  "match": "from forms_rule order by",
+  "response": {
+   "items": [
+    {
+     "id": "020dc34f-2e30-53d1-8be8-b15d917570df",
+     "position": 0,
+     "kind": "support",
+     "to_kind": "member",
+     "members": [
+      "user-tomas"
+     ],
+     "reason": "Support goes to Tomás",
+     "enabled": true,
+     "sample": true,
+     "created_at": "2026-10-26T10:42:00+00:00"
+    },
+    {
+     "id": "43d59b76-9a14-5dff-9bff-49ff5b6d85b3",
+     "position": 1,
+     "kind": "bug",
+     "to_kind": "plugin",
+     "members": [],
+     "plugin": "triage",
+     "reason": "Bugs go to Triage",
+     "enabled": true,
+     "sample": true,
+     "created_at": "2026-10-26T10:42:00+00:00"
+    },
+    {
+     "id": "759ea3e3-3e05-561f-801c-4f3c8e7077d5",
+     "position": 2,
+     "form_id": "d34d9ca4-9575-5748-923b-dba13083e579",
+     "kind": "lead",
+     "to_kind": "turns",
+     "members": [
+      "user-sam",
+      "user-sample"
+     ],
+     "reason": "Meta leads: Sam and Priya take turns",
+     "enabled": true,
+     "sample": true,
+     "created_at": "2026-10-26T10:42:00+00:00"
+    },
+    {
+     "id": "e8c1c090-fdd3-536d-9224-e17514b5653b",
+     "position": 3,
+     "describes": "architects and lighting designers",
+     "to_kind": "member",
+     "members": [
+      "user-sample"
+     ],
+     "reason": "Architects and lighting designers go to Priya",
+     "enabled": true,
+     "sample": true,
+     "created_at": "2026-10-26T10:42:00+00:00"
+    }
+   ],
+   "total": 4
+  }
+ },
+ {
+  "match": "from away order by",
+  "response": {
+   "items": [
+    {
+     "id": "away-1",
+     "member_id": "user-tomas",
+     "name": "Tomás Ortega",
+     "day": "2026-11-27",
+     "part": "full",
+     "created_at": "2026-11-25T10:42:00+00:00"
+    },
+    {
+     "id": "away-2",
+     "member_id": "user-noor",
+     "name": "Noor Haddad",
+     "day": "2026-11-25",
+     "part": "half",
+     "created_at": "2026-11-25T10:42:00+00:00"
+    }
+   ],
+   "total": 2
+  }
+ },
+ {
+  "match": "from draft where source = 'mail'",
+  "response": {
+   "items": [
+    {
+     "id": "bb083615-c3da-55a8-a6e5-04e4b63acd89",
+     "conversation_id": null,
+     "source": "mail",
+     "source_account": "mailbox-priya",
+     "kind": "new",
+     "to_handles": [
+      "mara@okl-architects.example"
+     ],
+     "subject": "Re: Arc on DALI-2 and 2700K samples",
+     "body": "Hi Mara,\n\nThanks for getting in touch about the Norrby library. Yes, the whole Arc range dims on DALI-2, down to 1%, and I can show you that on a call this week: would Thursday at 10:00 or 14:00 suit?\n\nI'll have samples of the 2700K Linear sent to your studio so they reach you before your client meeting on the 4th. Could you confirm the address you'd like them at?\n\nI've also had a look at the reflected ceiling plan you sent, and I'll bring a suggested layout for the reading rooms to the call.\n\nBest,\nPriya",
+     "original_body": "Hi Mara,\n\nThanks for getting in touch about the Norrby library. Yes, the whole Arc range dims on DALI-2, down to 1%, and I can show you that on a call this week: would Thursday at 10:00 or 14:00 suit?\n\nI'll have samples of the 2700K Linear sent to your studio so they reach you before your client meeting on the 4th. Could you confirm the address you'd like them at?\n\nI've also had a look at the reflected ceiling plan you sent, and I'll bring a suggested layout for the reading rooms to the call.\n\nBest,\nPriya",
+     "state": "proposed",
+     "rationale": "Used the open deal (proposal stage), her drawings and your voice. Assumed the samples can ship this week.",
+     "created_at": "2026-11-25T10:41:30+00:00",
+     "updated_at": "2026-11-25T10:41:30+00:00"
+    }
+   ],
+   "total": 1
+  }
+ },
+ {
+  "match": "from mail_mailbox order by",
+  "response": {
+   "items": [
+    {
+     "id": "mailbox-priya",
+     "provider": "gmail",
+     "account_id": "gmail-priya",
+     "email": "priya@halvard.example",
+     "owner_name": "Priya Raman",
+     "state": "live",
+     "connected_at": "2026-09-01T09:00:00+00:00"
+    }
+   ],
+   "total": 1
+  }
+ },
+ {
+  "match": "from forms_sample_row",
+  "response": {
+   "items": [
+    {
+     "n": 0
+    }
+   ],
+   "total": 1
+  }
+ }
+]

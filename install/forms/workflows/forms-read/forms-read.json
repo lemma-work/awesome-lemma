@@ -1,0 +1,13 @@
+{
+  // Started by the bundled forms-read schedule on each new form_answer. form_answer is team-wide, so it runs as the schedule's owner; it writes no one's per-person rows.
+  "name": "forms-read",
+  "description": "A new answer read with one Decisions call and sent to the first rule that answers.",
+  "max_concurrent_runs": 4,
+  "start": { "type": "DATASTORE_EVENT", "config": { "table_name": "form_answer", "operations": ["INSERT"] } },
+  "nodes": [
+    { "id": "run", "type": "FUNCTION", "label": "Read and route",
+      "config": { "function_name": "forms_read", "input_mapping": { "record_id": { "type": "expression", "value": "start.metadata.record_id" } } } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [ { "id": "e1", "source": "run", "target": "end" } ]
+}

@@ -1,0 +1,6 @@
+{
+  "connector": "google_calendar",
+  "mode": "PER_MEMBER",
+  "required": false,
+  "purpose": "Reads your Google Calendar: the next two weeks for briefs, the last month for what was said. Never adds, changes or answers an event."
+}

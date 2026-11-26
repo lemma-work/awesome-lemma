@@ -1,0 +1,6 @@
+{
+  "connector": "metaads",
+  "mode": "PER_MEMBER",
+  "required": false,
+  "purpose": "Reads new leads from the Meta lead forms you pick, every 15 minutes, from the account of whoever picked them. Forms never changes an ad or a form."
+}

@@ -1,0 +1,21 @@
+{
+  // Request a demo: a starter web form, opened to people outside the Lemma
+  // by the app; filed by forms-web-demo. See forms_contact.
+  "name": "forms_demo",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "name", "type": "TEXT", "required": true, "max_length": 200, "description": "Your name" },
+    { "name": "email", "type": "TEXT", "required": true, "max_length": 320, "description": "Work email" },
+    { "name": "company", "type": "TEXT", "max_length": 200, "description": "Company" },
+    { "name": "project", "type": "TEXT", "max_length": 500, "description": "What are you working on?" },
+    { "name": "how_much", "type": "ENUM", "options": ["a_few", "dozens", "hundreds", "not_sure_yet"], "description": "How many do you need?" },
+    { "name": "message", "type": "TEXT", "max_length": 5000, "description": "Anything else we should know?" },
+    { "name": "drawings", "type": "FILE_PATH", "max_length": 1000, "description": "Drawings or a brief (optional)" },
+    { "name": "page", "type": "TEXT", "max_length": 1000, "description": "Page" },
+    { "name": "campaign", "type": "TEXT", "max_length": 200, "description": "Campaign" },
+    { "name": "answer_id", "type": "UUID" }
+  ],
+  "config": {}
+}

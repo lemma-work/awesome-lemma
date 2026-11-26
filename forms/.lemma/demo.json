@@ -1,0 +1,51 @@
+{
+  "anchor": "2026-11-25T10:42:00Z",
+  "zone": "UTC",
+  "apps": [
+    {
+      "name": "forms",
+      "label": "Forms",
+      "start": "/"
+    }
+  ],
+  "labels": {
+    "triage": "Triage",
+    "deals": "Deal tracker",
+    "people": "People map",
+    "inbox": "Mail",
+    "leads": "Lead research"
+  },
+  "user": {
+    "id": "user-sample",
+    "email": "priya@halvard.example",
+    "first_name": "Priya",
+    "last_name": "Raman",
+    "name": "Priya Raman",
+    "is_active": true,
+    "is_superuser": false,
+    "is_verified": true,
+    "created_at": "2026-01-01T00:00:00Z",
+    "updated_at": "2026-01-01T00:00:00Z"
+  },
+  "notes": {
+    "forms_setup_save": "In the demo the set-up isn't saved.",
+    "forms_door_save": "In the demo the door isn't saved.",
+    "forms_sample_data": "In the demo the sample stays.",
+    "forms_needs_you": "",
+    "mail_send_draft": "In the demo nothing is sent: in a Lemma, Mail sends it from the owner's own mailbox after a 10-second undo.",
+    "leads_request": "In the demo nobody is looked up: in a Lemma, Lead research reads them and the read lands here and on their card."
+  },
+  "connections": {
+    "googleforms": {
+      "state": "ready",
+      "as": "sam@halvard.example"
+    },
+    "metaads": {
+      "state": "reconnect"
+    },
+    "gmail": {
+      "state": "ready",
+      "as": "priya@halvard.example"
+    }
+  }
+}

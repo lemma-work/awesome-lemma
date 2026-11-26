@@ -1,0 +1,9 @@
+{
+  // The person marked one of Mail's items done outside Mail (Today).
+  "name": "mail-needs-you-done",
+  "schedule_type": "DATASTORE",
+  "config": { "table_name": "needs_you", "operations": ["UPDATE"],
+              "when": { "source_plugin": "mail", "closed_by": "person", "state": { "to": "done" } } },
+  "workflow_name": "mail-needs-you-on-done",
+  "is_active": true
+}

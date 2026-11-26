@@ -1,0 +1,13 @@
+{
+  // Same handshake as mail-draft-wanted, for promises the sort heard.
+  "name": "mail-promise-wanted",
+  "schedule_type": "DATASTORE",
+  "config": {
+    "table_name": "mail_thread",
+    "operations": ["INSERT", "UPDATE"],
+    "when": { "promise_state": { "to": "wanted" } },
+    "bulk_writes": "each"
+  },
+  "workflow_name": "mail-find-promises",
+  "is_active": true
+}

@@ -14,7 +14,6 @@
     { "name": "Outreach", "line": "sales", "position": 12, "one": "Messages to a list you choose, written for each person and sent when you approve", "buildsOn": ["mail", "people-map", "lead-research"] },
     { "name": "Partners", "line": "sales", "position": 13, "one": "Partners and resellers, what each one owes you and the deals they bring", "buildsOn": ["people-map", "deal-tracker"] },
 
-    { "name": "Forms", "line": "support", "position": 15, "one": "Every form outside people fill in, on your site, in Google Forms or from an ad, each answer sent to the work it belongs to", "buildsOn": [] },
     { "name": "Support inbox", "line": "support", "position": 16, "one": "Every customer question in one queue, answered from what you know, day and night, and handed to engineering when it's a bug", "buildsOn": ["mail", "people-map", "know-how", "forms", "triage", "tasks"], "merges": ["Front desk", "Support report", "Escalations"] },
     { "name": "Help center", "line": "support", "position": 17, "one": "A public help center written from the answers you already gave", "buildsOn": ["support-inbox", "know-how"] },
     { "name": "Customer onboarding", "line": "support", "position": 18, "one": "Each new customer taken from signed to their first win", "buildsOn": ["deal-tracker", "tasks"] },

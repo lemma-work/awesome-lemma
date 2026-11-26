@@ -1,0 +1,10 @@
+{
+  // A new mail draft became sent: forms_on_sent stops the clock when it is
+  // a Forms reply. draft is per person, so it runs as the draft's owner.
+  "name": "forms-sent",
+  "schedule_type": "DATASTORE",
+  "config": { "table_name": "draft", "operations": ["UPDATE"],
+              "when": { "source": "mail", "kind": "new", "state": { "to": "sent" } }, "bulk_writes": "each" },
+  "workflow_name": "forms-sent",
+  "is_active": true
+}

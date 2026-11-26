@@ -1,0 +1,33 @@
+{
+  // One row per person: which of Mail's categories count as people they deal
+  // with, their own domains, whether the team sees who they know, and where
+  // their set-up got to. Per person (RLS).
+  "name": "people_settings",
+  "primary_key_column": "id",
+  "enable_rls": true,
+  "visibility": "POD",
+  "columns": [
+    { "name": "display_name", "type": "TEXT", "max_length": 200 },
+    { "name": "timezone", "type": "TEXT", "max_length": 64, "default": "UTC" },
+    // Mail category keys whose conversations make someone a person here.
+    // VIP, People and the person's own by default; never Newsletters, Updates
+    // or Cold.
+    { "name": "categories", "type": "JSON" },
+    // The person's own email domains: colleagues are not contacts.
+    { "name": "own_domains", "type": "JSON" },
+    // The team sees who they deal with: the person, the company, the last
+    // contact and the warmth (people_link). Never what was said.
+    { "name": "share_with_team", "type": "BOOLEAN", "default": true },
+    // start -> categories -> domains -> finding -> review -> done.
+    { "name": "setup_step", "type": "ENUM", "required": true, "default": "start",
+      "options": ["start", "categories", "domains", "finding", "review", "done"] },
+    { "name": "setup_run_id", "type": "TEXT", "max_length": 64 },
+    { "name": "setup_done_at", "type": "DATETIME" },
+    // What the first read found, for the set-up's screens.
+    { "name": "setup_summary", "type": "JSON" },
+    // Schedules made for this person: name -> id.
+    { "name": "schedules", "type": "JSON" },
+    { "name": "refreshed_at", "type": "DATETIME" }
+  ],
+  "config": {}
+}

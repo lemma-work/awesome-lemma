@@ -1,0 +1,86 @@
+{
+  "name": "Forms",
+  "line": "support",
+  "position": 15,
+  "job": "Every form outside people fill in, on your site, in Google Forms or from an ad, each answer sent to the work it belongs to",
+  "intro": "Answers from your website forms, Google Forms and Meta lead ads land in one queue with a clock on each. The Lemma reads what each one is and sends it to the right person, with the reason. A reply is drafted in their mailbox, and nothing goes until they press Send.",
+  "does": [
+    "Every answer in one queue, not sure first, then by how long it has waited, with spam set aside and one key to put it back.",
+    "Sent to one person with the reason: an open deal's owner first, then your rules, then the form's owner. Bugs can go to Triage.",
+    "A reply drafted in the owner's own mailbox, a line in their Today, and the honest time to first reply."
+  ],
+  "jobs": ["SALES", "SUPPORT", "FOUNDER", "OPERATIONS"],
+  "accounts": [
+    {
+      "any": ["Gmail", "Outlook"],
+      "why": "Through Mail: each person connects their own mailbox, so the reply to an answer is drafted there and sent when they press Send."
+    },
+    {
+      "any": ["Google Forms"],
+      "why": "Reads new answers to the Google Forms you add, every 15 minutes, from the account of whoever added them.",
+      "optional": true
+    },
+    {
+      "any": ["Meta lead ads"],
+      "why": "Reads new leads from the lead forms you pick, every 15 minutes. Not checked against a live account yet.",
+      "optional": true
+    }
+  ],
+  "setup": [
+    "Once for the whole Lemma: tick where people fill in forms for you, and turn on a website form (Contact us is on by default). Share its link, put it on your page, or in your product.",
+    "Say who gets what, or skip it and everything goes to you. Or look around with a sample week first.",
+    "Each person opens Forms once, so answers sent to them reach their Today, and connects their mail for drafted replies."
+  ],
+  "today": [
+    { "verb": "answer", "line": "Answers to your forms, each with a reply drafted" },
+    { "verb": "decide", "line": "Where an answer goes, when the Lemma isn't sure" }
+  ],
+  "pictures": [
+    { "shot": "forms", "caption": "The answers, not sure first, by the clock" },
+    { "shot": "forms-answer", "caption": "One answer, with the reply already drafted" },
+    { "shot": "forms-doors", "caption": "Every door answers come through" }
+  ],
+  "hero": {
+    "eyebrow": "Forms",
+    "headline": "Every form answer, with the right person",
+    "sub": "Website forms, Google Forms and ad leads in one queue. Each one is read, sent to whoever should reply, and the reply is drafted before they open it.",
+    "visual": "reply-drafted"
+  },
+  "headings": {
+    "how": "Taking answers in minutes.",
+    "better": "What it works with.",
+    "trust": "Nothing goes without a person.",
+    "faq": "Questions people ask first."
+  },
+  "steps": [
+    { "title": "Turn on a form and share it.", "body": "Start with Contact us: a link, a form on your own page, or inside your product. Add Google Forms by pasting its edit link.", "visual": "every-door" },
+    { "title": "Say who gets what.", "body": "An open deal's owner first, then your rules, then each form's owner. Skip it and everything comes to you.", "visual": "sent-to-owner" },
+    { "title": "Reply from a draft.", "body": "The owner finds the reply already written in their own mailbox and in their Today. They read it, then send.", "visual": "card-and-deal" }
+  ],
+  "moments": [
+    { "label": "Speed", "title": "A reply drafted three minutes in.", "body": "The answer is read, sent to its owner and answered in a draft in their own mailbox, while the person who wrote is still at their desk.", "note": "Drafted, not sent", "visual": "reply-drafted" },
+    { "label": "Who gets it", "title": "Sent to the right person, with why.", "body": "When their company already has an open deal, its owner gets it. Every rule it checked is shown, marked used or not needed.", "note": "The reason, in words", "visual": "sent-to-owner" },
+    { "label": "Bugs", "title": "A bug through Contact us goes to Triage.", "body": "Someone reports a fault on your contact form. It becomes an item in Triage, and the answer shows its number and owner.", "note": "Filed, not lost", "visual": "bug-to-triage" },
+    { "label": "Every door", "title": "Every door on one page.", "body": "Website forms, Google Forms, ad lead forms and other plugins' forms, each with its count, its rule and whether it is still taking answers.", "note": "One stopped door, said plainly", "visual": "every-door" },
+    { "label": "Who they are", "title": "Who they are, beside what they wrote.", "body": "Their People map card, their company and its open deal sit next to the answer, so the reply starts from what the team already knows.", "note": "From People map", "visual": "card-and-deal" },
+    { "label": "Spam", "title": "Spam is one key, and so is undo.", "body": "S sets a pitch aside with the reason, never deleted. U puts it back, and each correction teaches the next read.", "note": "S and U", "visual": "spam-key" }
+  ],
+  "betterWith": [
+    { "plugin": "Deal tracker", "line": "An open deal's owner gets the answer first" },
+    { "plugin": "Triage", "line": "Bugs from your forms filed as items" },
+    { "plugin": "Lead research", "line": "Who sent it, looked up before you reply" },
+    { "plugin": "Today", "line": "Answers waiting on you, with the draft" }
+  ],
+  "trust": [
+    { "title": "Nothing sends on its own.", "body": "Every reply is a draft in the owner's mailbox until they press Send. The chat beside a form answers only from what you've published." },
+    { "title": "Spam set aside, never deleted.", "body": "Every answer is kept, with the reason it was set aside, and one key puts it back." },
+    { "title": "What they wrote is the team's.", "body": "An answer to a team form is readable by everyone in the Lemma. Leave Careers off if applications should stay private." }
+  ],
+  "faq": [
+    { "q": "Which forms does it read?", "a": "Its own website forms, Google Forms and Meta lead ads. Typeform, Tally, Webflow, Fillout, Google Ads and LinkedIn through Zapier come once your Lemma has a webhook address." },
+    { "q": "Does it ever reply on its own?", "a": "No. A reply is drafted in the owner's mailbox and goes only when they press Send." },
+    { "q": "What if it isn't sure where an answer goes?", "a": "It asks the form's owner to pick. After an hour with no pick, it goes to them anyway, still marked not sure." },
+    { "q": "Can I change the form's fields?", "a": "Rename, switch off or add fields on each form. The form's link shows the form's own name for now; your own page can set its title and thank-you." }
+  ],
+  "closing": "Answer every form while they're still waiting."
+}

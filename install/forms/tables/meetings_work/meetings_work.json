@@ -1,0 +1,47 @@
+{
+  // Meetings' own working state for one meeting. Its id IS the meeting's id:
+  // the shared `meeting` row says what the meeting is and what was made of
+  // it, from any calendar; this row is how Meetings gets there (how the read
+  // went, where the brief and the notes are). Plugins above Meetings read the
+  // meeting, not this.
+  "name": "meetings_work",
+  "primary_key_column": "id",
+  "enable_rls": true,
+  "visibility": "POD",
+  "columns": [
+    // Who decided the kind and the brief: the domains (internal), the
+    // Decisions read, or the person.
+    { "name": "sorted_by", "type": "ENUM", "options": ["domains", "decision", "person"] },
+    { "name": "sorted_at", "type": "DATETIME" },
+    // The read could not tell (no answer, or a low confidence): shown as not
+    // sure until the person settles it, which teaches the next read.
+    { "name": "unsure", "type": "BOOLEAN", "default": false },
+    // The read's answers, {kind, needs_brief}, each {value, confidence}
+    // (confidence 0 to 1, null when the provider reports none), kept so a
+    // change to the person's switches re-decides without asking again; and
+    // one line on why it is where it is.
+    { "name": "answers", "type": "JSON" },
+    { "name": "reason", "type": "TEXT", "max_length": 300 },
+    // What the read saw, kept so a correction can become an example.
+    { "name": "evidence", "type": "TEXT", "max_length": 3000 },
+    // The brief handshake: planned (due later) -> wanted (a datastore trigger
+    // starts the writer as the owner) -> writing -> ready, or failed.
+    { "name": "brief_state", "type": "ENUM", "required": true, "default": "none",
+      "options": ["none", "planned", "wanted", "writing", "ready", "failed"] },
+    { "name": "brief_due_at", "type": "DATETIME" },
+    { "name": "brief_error", "type": "TEXT", "max_length": 600 },
+    // Who the writer looked up on the web, and what it drew on.
+    { "name": "searched", "type": "JSON" },
+    { "name": "built_from", "type": "JSON" },
+    // The same handshake after the meeting, for the notes reader. waiting:
+    // the meeting is over and nothing to read yet.
+    { "name": "notes_state", "type": "ENUM", "required": true, "default": "none",
+      "options": ["none", "waiting", "wanted", "reading", "ready", "failed", "skipped"] },
+    { "name": "notes_from", "type": "ENUM", "options": ["meet", "notes", "sample"] },
+    { "name": "notes_error", "type": "TEXT", "max_length": 600 },
+    // What the reader found that did not match the text word for word, and
+    // was left out.
+    { "name": "dropped", "type": "INTEGER", "default": 0 }
+  ],
+  "config": {}
+}

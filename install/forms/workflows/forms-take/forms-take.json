@@ -1,0 +1,13 @@
+{
+  // Each member's own schedule (forms-take-<user>), made by the app on their first visit: DATASTORE UPDATE on form_answer, rows OWNER_READABLE, run as them, when owner_user_id is them and hand_version changed. Only a run as them can write their per-person rows.
+  "name": "forms-take",
+  "description": "An answer came to this person: their conversation, person, reply wanted and Today item.",
+  "max_concurrent_runs": 4,
+  "start": { "type": "DATASTORE_EVENT", "config": { "table_name": "form_answer", "operations": ["UPDATE"] } },
+  "nodes": [
+    { "id": "run", "type": "FUNCTION", "label": "Take it",
+      "config": { "function_name": "forms_take", "input_mapping": { "record_id": { "type": "expression", "value": "start.metadata.record_id" } } } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [ { "id": "e1", "source": "run", "target": "end" } ]
+}

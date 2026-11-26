@@ -1,0 +1,37 @@
+{
+  "format_version": 4,
+  "name": "Forms",
+  "description": "Every form outside people fill in, on your site, in Google Forms or from an ad, each answer sent to the work it belongs to: one queue of answers with a clock on each, the Lemma's read of what it is, who it went to and why, and a reply drafted in the owner's own mailbox. Nothing is sent until a person presses Send.",
+  "variables": {
+    "inbox_slug": {
+      "type": "app_slug",
+      "source_value": "mail-inbox",
+      "default": "mail-inbox",
+      "description": "Public URL slug for the Inbox app (unique platform-wide; a suffix is added on collision)"
+    },
+    "meetings_slug": {
+      "type": "app_slug",
+      "source_value": "meetings",
+      "default": "meetings",
+      "description": "Public URL slug for the Meetings app (unique platform-wide; a suffix is added on collision)"
+    },
+    "people_slug": {
+      "type": "app_slug",
+      "source_value": "people",
+      "default": "people",
+      "description": "Public URL slug for the People app (unique platform-wide; a suffix is added on collision)"
+    },
+    "companies_slug": {
+      "type": "app_slug",
+      "source_value": "companies",
+      "default": "companies",
+      "description": "Public URL slug for the Companies app (unique platform-wide; a suffix is added on collision)"
+    },
+    "forms_slug": {
+      "type": "app_slug",
+      "source_value": "lemma-forms",
+      "default": "lemma-forms",
+      "description": "Public URL slug for the Forms app (unique platform-wide; a suffix is added on collision)"
+    }
+  }
+}

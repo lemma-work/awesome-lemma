@@ -1257,5 +1257,25 @@ def triage_on_form(ctx: FunctionContext, data: TriageOnFormInput) -> TriageOnFor
         pod.table("triage_form").update(data.record_id, {"report_id": rep["id"]})
     except Exception:  # noqa: BLE001
         pass
+    count_in_forms(pod)
     item = out.get("item") or {}
     return TriageOnFormResult(number=item.get("number"), report_id=rep["id"], message=out["message"])
+
+
+FORMS_NS = _uuid.UUID("ba341d0a-0b0a-4d01-9869-2c8791b9f203")
+
+
+def count_in_forms(pod) -> None:
+    """Keep the report form's row in the shared `form` table (Forms' Doors counts
+    every door there), with its last answer and seven days of counts. Its
+    answers stay Triage's."""
+    since = (now() - _timedelta(days=7)).date().isoformat()
+    try:
+        days = q(pod, "SELECT CAST(received_at AS DATE) AS day, COUNT(*) AS n FROM triage_report WHERE door = 'form' AND via = 'web' "
+                      f"AND received_at >= {lit(since)} GROUP BY CAST(received_at AS DATE) ORDER BY day")
+        pod.records.bulk_create("form", [{"id": str(_uuid.uuid5(FORMS_NS, "plugin:triage_form")), "name": "Report a problem",
+                                          "source": "plugin", "source_id": "triage_form", "owner_plugin": "triage", "purpose": "bug",
+                                          "state": "on", "last_answer_at": now_iso(),
+                                          "week": [{"day": str(d.get("day"))[:10], "n": int(d.get("n") or 0)} for d in days]}], upsert=True)
+    except Exception:  # noqa: BLE001 - the report is filed either way
+        pass

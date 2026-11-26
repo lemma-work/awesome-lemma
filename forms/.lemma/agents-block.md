@@ -1,0 +1,1 @@
+- Forms is installed: every answer to the team's forms, each sent to its owner. Look one up with `forms_lookup`; guide: `/memory/plugins/forms.md`.

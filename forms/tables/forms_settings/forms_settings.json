@@ -1,0 +1,32 @@
+{
+  // Forms' set-up, one row for the whole Lemma, written by forms_setup_save.
+  // Who set it up holds the forms open (the steward) until someone else
+  // takes them over.
+  "name": "forms_settings",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "steward_user_id", "type": "USER" },
+    // Who opened Forms, each with the ids of their own schedules:
+    // [{user_id, name, schedules: {take, let_go, write, poll}, at}].
+    { "name": "members", "type": "JSON" },
+    // Which plugins this Lemma has, kept by the app (a function can't look).
+    { "name": "plugins", "type": "JSON" },
+    // The first-reply goal, and how long a not-sure answer waits for a pick.
+    { "name": "goal_minutes", "type": "INTEGER", "default": 60 },
+    { "name": "unsure_after_minutes", "type": "INTEGER", "default": 60 },
+    // The Lemma's web widget that draws the forms.
+    { "name": "widget_id", "type": "TEXT", "max_length": 64 },
+    { "name": "widget_key", "type": "TEXT", "max_length": 120 },
+    // The schedules the app made as a person: {name: id}.
+    { "name": "schedules", "type": "JSON" },
+    // Where set-up got to: which doors were ticked.
+    { "name": "doors_wanted", "type": "JSON" },
+    { "name": "setup_done_at", "type": "DATETIME" },
+    // Quiet: nothing is sent anywhere, even with a person's tap (tests, the sample).
+    { "name": "quiet", "type": "BOOLEAN", "default": false },
+    { "name": "sample", "type": "BOOLEAN", "default": false }
+  ],
+  "config": {}
+}

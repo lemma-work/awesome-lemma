@@ -1,0 +1,6 @@
+{
+  "name": "companies",
+  "description": "The companies you and your team deal with: what they do (looked up), the people there, conversations, meetings and notes.",
+  "public_slug": "${companies_slug}",
+  "visibility": "POD"
+}

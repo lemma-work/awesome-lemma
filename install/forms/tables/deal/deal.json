@@ -1,0 +1,67 @@
+{
+  // Something the team is trying to win from another company: a sale, a
+  // renewal, an expansion, a quote, a pilot, an order, paid work. One row per
+  // deal, from any source: proposed from a conversation or a meeting and kept
+  // by a person, pasted from a spreadsheet, typed in, or later synced from a
+  // CRM, told apart by `source` and the provider's id.
+  //
+  // Team-wide (no RLS): everyone in the Lemma sees every deal, and each has an
+  // owner. Nothing anyone said lives here: the sentence a change came from
+  // stays with the person whose conversation it was (Deal tracker's
+  // `deals_change`, per person).
+  //
+  // Shared definition (plugins/_contract), first written by Deal tracker.
+  // Carried unchanged by every plugin that uses it (Proposals, Fundraising,
+  // Partners, Customer health); _contract/lint.py fails on any difference. A
+  // plugin's own state about a deal goes in its own table, keyed by the
+  // deal's id or naming it in a `deal_id` column (Deal tracker:
+  // `deals_history`, `deals_note`).
+  "name": "deal",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    // What is being bought, in the team's words: "Annual plan, 40 seats",
+    // never just the company's name.
+    { "name": "name", "type": "TEXT", "required": true, "max_length": 200 },
+    // The company (shared `company`, by id), and its name and main domain as
+    // they were when the deal was made, so a deal still says who it is with
+    // if the company is merged or tidied away. No foreign key for that reason.
+    { "name": "company_id", "type": "UUID" },
+    { "name": "company_name", "type": "TEXT", "max_length": 200 },
+    { "name": "company_domain", "type": "TEXT", "max_length": 253 },
+    // The people on it, by handle rather than by person id (a `person` is
+    // each member's own): [{handle, name}], the main contact first. Handles
+    // as in person_handle (an email lowercased).
+    { "name": "people", "type": "JSON" },
+    // Who on the team owns it.
+    { "name": "owner_user_id", "type": "USER" },
+    { "name": "owner_name", "type": "TEXT", "max_length": 200 },
+    // The stage's name, as the team names its stages (Deal tracker keeps the
+    // list, in order, in `deals_stage`). `status` says what it means for
+    // anyone who doesn't read that list.
+    { "name": "stage", "type": "TEXT", "required": true, "max_length": 80 },
+    // open: still being worked. won, lost: closed.
+    { "name": "status", "type": "ENUM", "required": true, "default": "open",
+      "options": ["open", "won", "lost"] },
+    { "name": "amount", "type": "FLOAT" },
+    // ISO 4217, e.g. EUR.
+    { "name": "currency", "type": "TEXT", "max_length": 3 },
+    // The day it is expected to close (or did).
+    { "name": "close_date", "type": "DATE" },
+    // The one next thing that moves it, in a short line.
+    { "name": "next_step", "type": "TEXT", "max_length": 300 },
+    { "name": "closed_at", "type": "DATETIME" },
+    { "name": "lost_reason", "type": "TEXT", "max_length": 300 },
+    // Where it came from: mail, meeting, slack, ... (a conversation or a
+    // meeting a person kept it from), spreadsheet, person (typed in), sample,
+    // or a CRM later (hubspot, pipedrive).
+    { "name": "source", "type": "TEXT", "required": true, "default": "person", "max_length": 32 },
+    // The provider's own id: the conversation's or the meeting's source_id,
+    // the spreadsheet's row, a CRM's deal id.
+    { "name": "source_id", "type": "TEXT", "max_length": 400 },
+    // The newest change to it, or contact about it anyone kept.
+    { "name": "last_activity_at", "type": "DATETIME" }
+  ],
+  "config": {}
+}

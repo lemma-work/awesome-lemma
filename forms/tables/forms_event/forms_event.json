@@ -1,0 +1,20 @@
+{
+  // One line of an answer's timeline. id = uuid5(FORMS_NS, "event:<answer>:<kind>:<key>"),
+  // so writing it again changes nothing.
+  "name": "forms_event",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "answer_id", "type": "UUID", "required": true },
+    { "name": "at", "type": "DATETIME", "required": true },
+    { "name": "kind", "type": "ENUM", "required": true,
+      "options": ["arrived", "read", "routed", "taken", "drafted", "sent", "filed", "set_aside", "back", "rerouted", "chat", "note"] },
+    // A member's user id, or "lemma".
+    { "name": "actor", "type": "TEXT", "max_length": 64 },
+    { "name": "actor_name", "type": "TEXT", "max_length": 200 },
+    { "name": "text", "type": "TEXT", "max_length": 1000 },
+    { "name": "sample", "type": "BOOLEAN", "default": false }
+  ],
+  "config": {}
+}

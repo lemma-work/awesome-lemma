@@ -1,0 +1,21 @@
+{
+  // A person overriding the Lemma's read: the kind, the owner, spam, put
+  // back. The newest go with each read as examples.
+  "name": "forms_correction",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "answer_id", "type": "UUID", "required": true },
+    // kind, owner, spam, back.
+    { "name": "what", "type": "TEXT", "required": true, "max_length": 32 },
+    { "name": "from_value", "type": "TEXT", "max_length": 200 },
+    { "name": "to_value", "type": "TEXT", "max_length": 200 },
+    { "name": "by", "type": "USER" },
+    { "name": "at", "type": "DATETIME" },
+    // The answer as the read saw it.
+    { "name": "evidence", "type": "TEXT", "max_length": 4000 },
+    { "name": "sample", "type": "BOOLEAN", "default": false }
+  ],
+  "config": {}
+}

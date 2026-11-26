@@ -90,6 +90,8 @@ GROUPS = {
     "project": "projects",
     "deal": "deals",
     "brand": "brand",
+    "form": "forms",
+    "form_answer": "forms",
     "article": "articles",
 }
 DAY_TABLE = "needs_you"
@@ -106,6 +108,7 @@ TABLES = {
     "deals": ("Deals", "Something the team is trying to win, with its stage"),
     "brand": ("Brand", "Your colours, type, logos and voice"),
     "articles": ("Customer answers", "Checked answers customers may read, never past their check date"),
+    "forms": ("Form answers", "Every answer to the team's forms, and where each one went"),
 }
 
 # The landing page's shape: how many of each part, and one-glance headlines.

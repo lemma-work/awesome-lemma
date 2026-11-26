@@ -1,0 +1,30 @@
+{
+  "name": "forms_door_save",
+  "description": "Keep one door in the shared form table after the app made what only a person can (a table opened, an account connected, a hook): name, place, sharing, purpose, default owner, reply mode, audience, state and why, who holds it open, fields, account.",
+  "type": "API",
+  "visibility": "POD",
+  "code": {
+    "$file": "code.py"
+  },
+  "permissions": {
+    "grants": [
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "forms_settings",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "form",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read",
+          "datastore.record.write"
+        ]
+      }
+    ]
+  }
+}
