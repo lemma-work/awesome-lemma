@@ -1,0 +1,62 @@
+{
+  // One feature in beta: its sign-up page, its flag, and the clock the
+  // testers are on. Team-wide: everyone in the Lemma sees the team's betas.
+  // The feature itself is the shared `feature` row (stage beta while it runs).
+  "name": "early_access_beta",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "feature_id", "type": "UUID" },
+    { "name": "product_id", "type": "UUID" },
+    // The sign-up page's address: <app address>/<slug>. Lowercase letters,
+    // digits and dashes; never b, p or setup (the members' own paths).
+    { "name": "slug", "type": "TEXT", "required": true, "unique": true, "max_length": 48 },
+    { "name": "name", "type": "TEXT", "required": true, "max_length": 120 },
+    { "name": "intro", "type": "TEXT", "max_length": 400 },
+    // draft: set up, not taking sign-ups. open: taking them. paused: the
+    // page says so. closed: the beta is over.
+    { "name": "state", "type": "ENUM", "required": true, "default": "draft", "options": ["draft", "open", "paused", "closed"] },
+    // How letting someone in turns the feature on for them: a PostHog flag
+    // through a static cohort, by hand in another tool (a tick per person),
+    // or nothing (the invite is the access).
+    { "name": "flag_tool", "type": "ENUM", "required": true, "default": "none", "options": ["posthog", "none", "by_hand"] },
+    { "name": "flag_key", "type": "TEXT", "max_length": 200 },
+    // The static cohort the flag targets (PostHog's integer id, as text).
+    { "name": "cohort_id", "type": "TEXT", "max_length": 40 },
+    { "name": "cohort_name", "type": "TEXT", "max_length": 200 },
+    // The pod connector to PostHog's MCP server, and the account, when the
+    // Lemma has more than one.
+    { "name": "posthog_account", "type": "TEXT", "max_length": 64, "default": "posthog" },
+    { "name": "posthog_account_id", "type": "TEXT", "max_length": 64 },
+    { "name": "posthog_project_id", "type": "TEXT", "max_length": 40 },
+    // PostHog's own address for the project, for "Open in PostHog".
+    { "name": "posthog_url", "type": "TEXT", "max_length": 400 },
+    // What "used it" means: event names (["export_csv"]) and/or a URL
+    // fragment ({"url": "/exports"}).
+    { "name": "usage_events", "type": "JSON" },
+    // A PostHog survey whose answers are this beta's feedback (its UUID).
+    { "name": "survey_id", "type": "TEXT", "max_length": 64 },
+    { "name": "survey_seen_at", "type": "DATETIME" },
+    { "name": "batch_size", "type": "INTEGER", "required": true, "default": 10 },
+    { "name": "checkin_day", "type": "INTEGER", "required": true, "default": 6 },
+    { "name": "quiet_days", "type": "INTEGER", "required": true, "default": 7 },
+    // The sign-up questions, in order: [{key, label, on}]. Keys are the
+    // early_access_signup columns (role, use_for, today).
+    { "name": "questions", "type": "JSON" },
+    { "name": "owner_user_id", "type": "USER" },
+    { "name": "opened_at", "type": "DATETIME" },
+    // The link the app shares (with the web widget's key), and the key.
+    { "name": "page_url", "type": "TEXT", "max_length": 600 },
+    { "name": "widget_key", "type": "TEXT", "max_length": 120 },
+    // Each turn-on step as it was read back: [{step, ok, said, at}].
+    { "name": "turned_on", "type": "JSON" },
+    // The last hourly sweep: when, and what it could read
+    // ({usage: "read"|"not_connected"|"failed", note, people}).
+    { "name": "sweep_at", "type": "DATETIME" },
+    { "name": "sweep", "type": "JSON" },
+    // Made by early_access_sample_data; clearing removes it.
+    { "name": "sample", "type": "BOOLEAN", "default": false }
+  ],
+  "config": {}
+}

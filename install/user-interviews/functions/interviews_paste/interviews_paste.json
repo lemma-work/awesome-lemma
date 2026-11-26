@@ -1,0 +1,38 @@
+{
+  "name": "interviews_paste",
+  "description": "A call's words no meeting brought (person_id, text, kind transcript or notes): a pasted transcript (Name: words, [m:ss] or VTT) or typed notes, kept in the member's own files, then read for findings.",
+  "type": "API",
+  "visibility": "POD",
+  "code": {
+    "$file": "code.py"
+  },
+  "permissions": {
+    "grants": [
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "interviews_person",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read",
+          "datastore.record.write"
+        ]
+      },
+      {
+        "resource_type": "folder",
+        "resource_name": "/interviews-sample",
+        "permission_ids": [
+          "folder.read",
+          "folder.write"
+        ]
+      },
+      {
+        "resource_type": "workflow",
+        "resource_name": "interviews-read",
+        "permission_ids": [
+          "workflow.read",
+          "workflow.execute"
+        ]
+      }
+    ]
+  }
+}

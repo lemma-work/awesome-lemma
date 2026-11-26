@@ -1,0 +1,38 @@
+{
+  "name": "deals_find",
+  "description": "Set-up: how many conversations and meeting notes from the last 30 days there are to read for deals, as passes.",
+  "type": "API",
+  "visibility": "POD",
+  "code": {
+    "$file": "code.py"
+  },
+  "permissions": {
+    "grants": [
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "deals_member",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read",
+          "datastore.record.write"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "conversation",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "meeting",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read"
+        ]
+      }
+    ]
+  }
+}

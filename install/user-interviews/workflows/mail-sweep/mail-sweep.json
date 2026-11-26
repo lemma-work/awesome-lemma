@@ -1,0 +1,28 @@
+{
+  // Time-driven chores. Nudges are not written here: the sweep only sets
+  // draft_state to wanted, and the trigger starts the writer as the owner.
+  "name": "mail-sweep",
+  "description": "Hourly: bring back snoozed conversations, ready nudges for follow-ups that came due, send drafts a person scheduled.",
+  "start": { "type": "SCHEDULED", "config": { "schedule_type": "CRON" } },
+  "nodes": [
+    { "id": "sweep", "type": "FUNCTION", "label": "What time made due",
+      "config": { "function_name": "mail_sweep", "input_mapping": {} } },
+    { "id": "sends", "type": "LOOP", "label": "Each scheduled send",
+      "config": { "items_path": "sweep.due_sends", "item_var_name": "draft_id", "child_node_id": "send" } },
+    { "id": "send", "type": "FUNCTION", "label": "Send",
+      "config": { "function_name": "mail_send_draft", "input_mapping": {
+        "draft_id": { "type": "expression", "value": "loop.draft_id" } } } },
+    { "id": "nudges", "type": "FUNCTION", "label": "Worth a nudge yet, all of it",
+      "config": { "function_name": "mail_nudge_check", "input_mapping": { "all": { "type": "literal", "value": true } } } },
+    { "id": "needs", "type": "FUNCTION", "label": "What needs you, all of it",
+      "config": { "function_name": "mail_needs_you", "input_mapping": { "all": { "type": "literal", "value": true } } } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [
+    { "id": "e1", "source": "sweep", "target": "sends" },
+    { "id": "e2", "source": "send", "target": "sends" },
+    { "id": "e3", "source": "sends", "target": "nudges" },
+    { "id": "e5", "source": "nudges", "target": "needs" },
+    { "id": "e4", "source": "needs", "target": "end" }
+  ]
+}

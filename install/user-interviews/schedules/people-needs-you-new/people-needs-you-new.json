@@ -1,0 +1,9 @@
+{
+  // Someone new to People map who is already quiet (the first count, the sample).
+  "name": "people-needs-you-new",
+  "schedule_type": "DATASTORE",
+  "config": { "table_name": "people_person", "operations": ["INSERT"],
+              "when": { "quiet": true }, "bulk_writes": "each" },
+  "workflow_name": "people-needs-you-on-new",
+  "is_active": true
+}

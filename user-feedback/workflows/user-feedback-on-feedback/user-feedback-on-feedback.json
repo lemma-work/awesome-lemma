@@ -1,0 +1,15 @@
+{
+  // A quote was kept (state processed), by this plugin or another: write the
+  // ask a request from someone with a handle gets.
+  "name": "user-feedback-on-feedback",
+  "description": "Write the ask for a kept request from someone with a handle, against the feature's work, whichever plugin kept it.",
+  "max_concurrent_runs": 4,
+  "start": { "type": "DATASTORE_EVENT", "config": { "table_name": "feedback", "operations": ["UPDATE"] } },
+  "nodes": [
+    { "id": "ask", "type": "FUNCTION", "label": "Who asked, for when it ships",
+      "config": { "function_name": "user_feedback_on_feedback",
+        "input_mapping": { "feedback_id": { "type": "expression", "value": "start.metadata.record_id" } } } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [ { "id": "e1", "source": "ask", "target": "end" } ]
+}

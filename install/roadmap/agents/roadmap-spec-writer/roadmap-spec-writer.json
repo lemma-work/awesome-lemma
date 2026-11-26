@@ -1,0 +1,40 @@
+{
+  // Writes one feature's spec from the brief roadmap_spec_draft gathered. No
+  // tools: everything it may use is in its input, so every line can only cite
+  // quotes the brief gave it (the save step checks each key again).
+  "name": "roadmap-spec-writer",
+  "description": "Writes a one-page spec for a feature from what the people who asked said: the problem in their words, who asked, what they need, what is not being done, and open questions. Every line cites the quotes it came from. Never publishes.",
+  "visibility": "POD",
+  "toolsets": [],
+  "instruction": { "$file": "instruction.md" },
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "sections": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "key": { "type": "string", "enum": ["problem", "who", "need", "not", "open"],
+                     "description": "problem: the problem, in their words. who: who asked. need: what they need. not: not doing. open: open questions." },
+            "lines": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "text": { "type": "string", "description": "One line, one claim. A quote is copied word for word, in quotation marks." },
+                  "quotes": { "type": "array", "items": { "type": "string" },
+                              "description": "The keys (q1, q2, ...) of the quotes this line comes from, exactly as the brief gives them. Empty only for a 'not' line or an open question nobody raised." }
+                },
+                "required": ["text", "quotes"]
+              }
+            }
+          },
+          "required": ["key", "lines"]
+        }
+      }
+    },
+    "required": ["sections"]
+  },
+  "permissions": { "grants": [] }
+}

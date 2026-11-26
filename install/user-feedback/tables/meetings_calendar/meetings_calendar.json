@@ -1,0 +1,24 @@
+{
+  // A calendar a person connected (or the sample). Per person. The shared
+  // `meeting` rows it reads carry this row's id as their source_account.
+  "name": "meetings_calendar",
+  "primary_key_column": "id",
+  "enable_rls": true,
+  "visibility": "POD",
+  "columns": [
+    { "name": "provider", "type": "ENUM", "required": true, "options": ["google", "outlook", "sample"] },
+    // The connected account (empty for the sample, which has none and so can
+    // never reach a real calendar).
+    { "name": "account_id", "type": "TEXT", "max_length": 64 },
+    { "name": "email", "type": "TEXT", "required": true, "max_length": 320 },
+    // Domains that count as the owner's own on this calendar, beside their
+    // settings' my_domains. The sample adds its made-up team's.
+    { "name": "own_domains", "type": "JSON" },
+    { "name": "state", "type": "ENUM", "required": true, "default": "reading",
+      "options": ["reading", "live", "stopped"] },
+    { "name": "last_read_at", "type": "DATETIME" },
+    { "name": "last_error", "type": "TEXT", "max_length": 600 },
+    { "name": "connected_at", "type": "DATETIME" }
+  ],
+  "config": {}
+}

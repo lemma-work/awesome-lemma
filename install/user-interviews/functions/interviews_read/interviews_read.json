@@ -1,0 +1,95 @@
+{
+  "name": "interviews_read",
+  "description": "Read one call (person_id) around the interviews-reader agent, as the member who had it. brief: the document, the study's question and features, who spoke. save: keeps a proposal only when its quote is in the document word for word, with the minute from the nearest [m:ss], never the member's own lines; then their Today.",
+  "type": "API",
+  "visibility": "POD",
+  "code": {
+    "$file": "code.py"
+  },
+  "permissions": {
+    "grants": [
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "interviews_person",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read",
+          "datastore.record.write"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "interviews_proposal",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read",
+          "datastore.record.write",
+          "datastore.record.delete"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "feature",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "meetings_settings",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "mail_settings",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "interviews_study",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "interviews_proposal",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "needs_you",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read",
+          "datastore.record.write"
+        ]
+      },
+      {
+        "resource_type": "folder",
+        "resource_name": "/interviews-sample",
+        "permission_ids": [
+          "folder.read"
+        ]
+      },
+      {
+        "resource_type": "folder",
+        "resource_name": "/meetings-sample",
+        "permission_ids": [
+          "folder.read"
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "//": "The pictures on User interviews' page on the website, taken from its Try it demo by `node _kit/bin/moments.mjs user-interviews` into .lemma/moments/. listing.json names them by `name`.",
+  "captures": [
+    {
+      "name": "people",
+      "alt": "A study's people: each with why they fit (a won deal, what they said before, a pasted plan), where they stand, and at the bottom the ones resting under the contact rules, each with its rule and date",
+      "route": "/s/f4364123-0992-5f38-afd8-846ed44d13e5",
+      "viewport": [1440, 1500],
+      "steps": [{ "wait": 900 }],
+      "clip": { "selector": ".ui-main > .c-table-wrap", "pad": 8 },
+      "phone": { "viewport": [390, 1600], "clip": { "selector": ".ui-main > .c-table-wrap", "pad": 8, "height": 1100 } }
+    },
+    {
+      "name": "keep",
+      "alt": "A call's proposed findings: the filter one is kept with the A key and turns Kept, filed under its feature",
+      "loop": true,
+      "cursor": true,
+      "route": "/s/f4364123-0992-5f38-afd8-846ed44d13e5/p/1cac398f-7f08-57e7-97ea-3d6f925973f7",
+      "viewport": [1440, 900],
+      "steps": [
+        { "wait": 900 },
+        { "click": ".ui-prop", "nth": 2 },
+        { "wait": 700 },
+        { "key": "a" },
+        { "wait": 1800 },
+        { "mouse": [4, 4] }
+      ],
+      "clip": { "selector": ".ui-props", "pad": 0, "height": 620 },
+      "poster": 0.5
+    },
+    {
+      "name": "grid",
+      "alt": "Features by people across a study's calls: keeping one more finding from a call moves Keep filters in exports from 3 to 4 of 4 people",
+      "loop": true,
+      "cursor": true,
+      "route": "/s/f4364123-0992-5f38-afd8-846ed44d13e5/findings/88772b37-10c4-5764-aaef-1b12b468ddfb",
+      "viewport": [1440, 1100],
+      "steps": [
+        { "wait": 1200 },
+        { "click": ".ui-pending .c-btn", "text": "Keep" },
+        { "wait": 2200 },
+        { "mouse": [4, 4] }
+      ],
+      "clip": { "selector": ".ui-page", "from": ".ui-findhead", "to": ".ui-quotes" },
+      "poster": 0.6
+    }
+  ]
+}

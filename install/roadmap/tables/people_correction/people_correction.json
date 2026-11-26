@@ -1,0 +1,22 @@
+{
+  // The owner corrected a read: this is someone they deal with after all (or
+  // not), or they are an investor, not a partner. With the evidence the read
+  // saw, so the newest twenty go with every read as worked examples. Per
+  // person (RLS).
+  "name": "people_correction",
+  "primary_key_column": "id",
+  "enable_rls": true,
+  "visibility": "POD",
+  "columns": [
+    // The shared person's id. Not a foreign key on purpose: Mail's sample
+    // clear deletes people it made, and a key here would block it. People
+    // map's refresh removes rows whose person is gone.
+    { "name": "person_id", "type": "UUID", "required": true },
+    { "name": "field", "type": "ENUM", "required": true, "options": ["deal_with", "kind"] },
+    // As words the questions use: someone / noise, or a kind.
+    { "name": "from_value", "type": "TEXT", "max_length": 32 },
+    { "name": "to_value", "type": "TEXT", "required": true, "max_length": 32 },
+    { "name": "evidence", "type": "TEXT", "max_length": 4000 }
+  ],
+  "config": {}
+}

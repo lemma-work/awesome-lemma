@@ -1,0 +1,64 @@
+{
+  // A sentence about a product, found in one member's own mail or meeting by
+  // their own run (user_feedback_read). Per person (RLS): only the member who
+  // heard it sees it, until they share it. Sharing writes the shared
+  // `feedback` row with this same id (the contract's FEEDBACK_NS rule), and
+  // only the sentence and who said it go there, never the thread.
+  //
+  // Rival mentions stay here whether shared or not: Competitor watch reads
+  // this table as the hearer (product_id a rival, or compared_with set) to
+  // flag an open deal where a rival came up. Columns it relies on: product_id,
+  // compared_with, feature_id, kind, handle_kind, handle, name, company_id,
+  // source, source_id, conversation_id, said_at, share_state.
+  "name": "user_feedback_heard",
+  "primary_key_column": "id",
+  "enable_rls": true,
+  "visibility": "POD",
+  "columns": [
+    // Word for word: a sentence of the passage, picked by number.
+    { "name": "quote", "type": "TEXT", "required": true, "max_length": 2000 },
+    { "name": "point", "type": "TEXT", "max_length": 200 },
+    { "name": "product_id", "type": "UUID" },
+    // The Lemma's pick among the team's features; null when none fitted.
+    { "name": "feature_id", "type": "UUID" },
+    { "name": "kind", "type": "ENUM", "required": true, "default": "other",
+      "options": ["request", "problem", "praise", "question", "comparison", "other"] },
+    // Rival product ids the sentence names.
+    { "name": "compared_with", "type": "JSON" },
+    { "name": "sentiment", "type": "ENUM", "options": ["positive", "negative", "mixed", "neutral"] },
+    { "name": "importance", "type": "ENUM", "required": true, "default": "unknown",
+      "options": ["unknown", "nice", "important", "blocker"] },
+    { "name": "handle_kind", "type": "TEXT", "max_length": 32 },
+    { "name": "handle", "type": "TEXT", "max_length": 320 },
+    { "name": "name", "type": "TEXT", "max_length": 200 },
+    // Their title and organisation as People map knows them ("Head of Finance").
+    { "name": "role", "type": "TEXT", "max_length": 200 },
+    { "name": "company_id", "type": "UUID" },
+    { "name": "company_name", "type": "TEXT", "max_length": 200 },
+    // mail or meeting; the thread's or the meeting's provider id; where in a
+    // recording; the member's own conversation or meeting.
+    { "name": "source", "type": "TEXT", "required": true, "max_length": 32 },
+    { "name": "source_account", "type": "TEXT", "max_length": 64 },
+    { "name": "source_id", "type": "TEXT", "required": true, "max_length": 400 },
+    { "name": "at_seconds", "type": "INTEGER" },
+    { "name": "conversation_id", "type": "UUID" },
+    { "name": "meeting_id", "type": "UUID" },
+    // The subject or the meeting's title, for the member only.
+    { "name": "place", "type": "TEXT", "max_length": 300 },
+    { "name": "said_at", "type": "DATETIME", "required": true },
+    // How sure the read was of the feature, and up to three feature ids to
+    // offer (the pick first), with the words of the quote that match each
+    // one's name or other names ({feature id: [words]}).
+    { "name": "confidence", "type": "FLOAT" },
+    { "name": "options", "type": "JSON" },
+    { "name": "matched", "type": "JSON" },
+    // unshared: only the member has it. shared: in `feedback` (feedback_id).
+    // dismissed: they kept it private.
+    { "name": "share_state", "type": "ENUM", "required": true, "default": "unshared",
+      "options": ["unshared", "shared", "dismissed"] },
+    { "name": "feedback_id", "type": "UUID" },
+    { "name": "shared_at", "type": "DATETIME" },
+    { "name": "sample", "type": "BOOLEAN", "default": false }
+  ],
+  "config": {}
+}

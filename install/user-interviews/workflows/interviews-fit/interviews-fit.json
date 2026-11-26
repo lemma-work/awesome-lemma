@@ -1,0 +1,38 @@
+{
+  // Who fits a study: started by the app on the study when its sentence is
+  // written or changed, as the person writing it (their own people count).
+  "name": "interviews-fit",
+  "description": "Read who fits a study from its sentence, then build its list of people.",
+  "run_title": ["start.metadata.record_id"],
+  "max_concurrent_runs": 2,
+  "start": { "type": "MANUAL" },
+  "nodes": [
+    { "id": "brief", "type": "FUNCTION", "label": "The sentence and the fields",
+      "config": { "function_name": "interviews_fit", "input_mapping": {
+        "mode": { "type": "literal", "value": "brief" },
+        "study_id": { "type": "expression", "value": "start.metadata.record_id" } } } },
+    { "id": "any", "type": "DECISION", "label": "A sentence to read?",
+      "config": { "rules": [ { "condition": "brief.skip == `true`", "next_node_id": "end" } ] } },
+    { "id": "read", "type": "AGENT", "label": "Read it into filters",
+      "config": { "agent_name": "interviews-fit-reader", "input_mapping": {
+        "sentence": { "type": "expression", "value": "brief.brief.sentence" },
+        "question": { "type": "expression", "value": "brief.brief.question" },
+        "study_features": { "type": "expression", "value": "brief.brief.study_features" },
+        "fields": { "type": "expression", "value": "brief.brief.fields" },
+        "values": { "type": "expression", "value": "brief.brief.values" } } } },
+    { "id": "save", "type": "FUNCTION", "label": "Keep the filters, build the list",
+      "config": { "function_name": "interviews_fit", "input_mapping": {
+        "mode": { "type": "literal", "value": "save" },
+        "study_id": { "type": "expression", "value": "start.metadata.record_id" },
+        "written": { "type": "expression", "value": "read" } } } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [
+    { "id": "e1", "source": "brief", "target": "any" },
+    { "id": "e2", "source": "any", "target": "read", "label": "a sentence" },
+    { "id": "e3", "source": "any", "target": "end", "label": "none: everyone fits" },
+    { "id": "e4", "source": "read", "target": "save" },
+    { "id": "e5", "source": "save", "target": "end" }
+  ],
+  "visibility": "POD"
+}

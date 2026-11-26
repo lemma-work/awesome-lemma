@@ -1,0 +1,39 @@
+{
+  // Draft one feature's spec: started from the app's "Draft the spec" and
+  // Redraft, or from chat, with the feature as the record the run is about.
+  "name": "roadmap-spec",
+  "description": "Draft a feature's spec from what the people who asked said, every line citing its quotes, keeping the lines a person edited.",
+  "max_concurrent_runs": 2,
+  "start": { "type": "MANUAL" },
+  "nodes": [
+    { "id": "brief", "type": "FUNCTION", "label": "What the spec is drafted from",
+      "config": { "function_name": "roadmap_spec_draft", "input_mapping": {
+        "mode": { "type": "literal", "value": "brief" },
+        "feature_id": { "type": "expression", "value": "start.metadata.record_id" } } } },
+    { "id": "anything", "type": "DECISION", "label": "Anything to draft from?",
+      "config": { "rules": [ { "condition": "brief.skip == `true`", "next_node_id": "end" } ] } },
+    { "id": "write", "type": "AGENT", "label": "Write the spec",
+      "config": { "agent_name": "roadmap-spec-writer",
+        "input_mapping": {
+          "feature": { "type": "expression", "value": "brief.brief.feature" },
+          "facts": { "type": "expression", "value": "brief.brief.facts" },
+          "quotes": { "type": "expression", "value": "brief.brief.quotes" },
+          "kept_lines": { "type": "expression", "value": "brief.brief.kept_lines" } } } },
+    { "id": "save", "type": "FUNCTION", "label": "Check the quotes and keep the spec",
+      "config": { "function_name": "roadmap_spec_draft",
+        "input_mapping": {
+          "mode": { "type": "literal", "value": "save" },
+          "feature_id": { "type": "expression", "value": "brief.feature_id" },
+          "keys": { "type": "expression", "value": "brief.keys" },
+          "written": { "type": "expression", "value": "write" } } } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [
+    { "id": "e1", "source": "brief", "target": "anything" },
+    { "id": "e2", "source": "anything", "target": "write", "label": "quotes to draft from" },
+    { "id": "e3", "source": "anything", "target": "end", "label": "nothing filed yet" },
+    { "id": "e4", "source": "write", "target": "save" },
+    { "id": "e5", "source": "save", "target": "end" }
+  ],
+  "visibility": "POD"
+}

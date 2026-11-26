@@ -1,0 +1,21 @@
+{
+  "name": "roadmap_memory",
+  "description": "Tells this Lemma's agents that Roadmap is installed: Roadmap's block in /memory/AGENTS.md and its guide at /memory/plugins/roadmap.md, leaving the team's notes alone. Set-up runs it; safe to run again. remove takes both out.",
+  "type": "API",
+  "visibility": "POD",
+  "code": {
+    "$file": "code.py"
+  },
+  "permissions": {
+    "grants": [
+      {
+        "resource_type": "folder",
+        "resource_name": "/memory",
+        "permission_ids": [
+          "folder.read",
+          "folder.write"
+        ]
+      }
+    ]
+  }
+}

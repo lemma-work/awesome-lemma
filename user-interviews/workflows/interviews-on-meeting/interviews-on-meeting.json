@@ -1,0 +1,17 @@
+{
+  // Each member's own triggers on `meeting` (rows OWNER_READABLE, made by the
+  // app as them): a new meeting may be a booking; a meeting whose document
+  // changed may be a call to read.
+  "name": "interviews-on-meeting",
+  "description": "A meeting of yours: book an invited person whose call it is, and read a booked call's transcript or notes.",
+  "max_concurrent_runs": 4,
+  "start": { "type": "DATASTORE_EVENT", "config": { "table_name": "meeting", "operations": ["INSERT", "UPDATE"] } },
+  "nodes": [
+    { "id": "match", "type": "FUNCTION", "label": "A study's call?",
+      "config": { "function_name": "interviews_on_meeting", "input_mapping": {
+        "meeting_id": { "type": "expression", "value": "start.metadata.record_id" } } } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [ { "id": "e1", "source": "match", "target": "end" } ],
+  "visibility": "POD"
+}

@@ -1,0 +1,80 @@
+{
+  "name": "early_access_sweep",
+  "description": "Every hour, as a beta's owner: usage from PostHog by HogQL (active when used in 7 days; not connected is never inactive), people PostHog now knows added to the cohort, the day-6 check-in and the one chase drafted (never a second), and PostHog survey answers filed as feedback.",
+  "type": "API",
+  "visibility": "POD",
+  "code": {
+    "$file": "code.py"
+  },
+  "permissions": {
+    "grants": [
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "early_access_beta",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read",
+          "datastore.record.write"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "early_access_tester",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read",
+          "datastore.record.write"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "early_access_signup",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "feedback",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read",
+          "datastore.record.write"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "form",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read",
+          "datastore.record.write"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "draft",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read"
+        ]
+      },
+      {
+        "resource_type": "connector",
+        "resource_name": "posthog",
+        "permission_ids": [
+          "connector.use"
+        ]
+      },
+      {
+        "resource_type": "workflow",
+        "resource_name": "early-access-draft",
+        "permission_ids": [
+          "workflow.read",
+          "workflow.execute"
+        ]
+      }
+    ]
+  }
+}

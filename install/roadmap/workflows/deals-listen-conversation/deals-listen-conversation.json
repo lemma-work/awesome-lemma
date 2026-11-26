@@ -1,0 +1,45 @@
+{
+  // Started by `deals-heard-conversation`: Mail read a conversation's newest words (its sort wrote sorted_at).
+  // conversation is per person, so the run is that person's, and reads only their
+  // own words. Most conversation rows have nobody from a company in them, or the
+  // person hasn't set Deal tracker up: the read returns at once, without a
+  // call. Otherwise two Decisions questions, the second only on a yes; the
+  // extractor runs only on that yes, and what
+  // needs the person (needs_you) is written after.
+  "name": "deals-listen-conversation",
+  "description": "A conversation with someone at a company has new words: does it change a deal, what kind, and (only on a yes) the change with its sentence, kept as a proposal.",
+  "run_title": ["read.message"],
+  "start": { "type": "DATASTORE_EVENT", "config": { "table_name": "conversation", "operations": ["UPDATE"] } },
+  "nodes": [
+    { "id": "read", "type": "FUNCTION", "label": "Does it change a deal? What kind?",
+      "config": { "function_name": "deals_read",
+        "input_mapping": { "conversation_id": { "type": "expression", "value": "start.metadata.record_id" } } } },
+    { "id": "found", "type": "DECISION", "label": "A yes?",
+      "config": { "rules": [ { "condition": "read.ask == `true`", "next_node_id": "extract" } ] } },
+    { "id": "extract", "type": "AGENT", "label": "Pull out the change and its sentence",
+      "config": { "agent_name": "deals-extractor", "input_mapping": {
+        "items": { "type": "expression", "value": "read.items" },
+        "stages": { "type": "expression", "value": "read.stages" },
+        "currency": { "type": "expression", "value": "read.currency" },
+        "today": { "type": "expression", "value": "read.today" },
+        "owner": { "type": "expression", "value": "read.owner" },
+        "corrections": { "type": "expression", "value": "read.corrections", "optional": true } } } },
+    { "id": "propose", "type": "FUNCTION", "label": "Keep it as a proposal",
+      "config": { "function_name": "deals_propose", "input_mapping": {
+        "items": { "type": "expression", "value": "read.items" },
+        "result": { "type": "expression", "value": "extract" },
+        "stages": { "type": "expression", "value": "read.stages" },
+        "currency": { "type": "expression", "value": "read.currency" } } } },
+    { "id": "needs", "type": "FUNCTION", "label": "What needs you",
+      "config": { "function_name": "deals_needs_you", "input_mapping": {} } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [
+    { "id": "e1", "source": "read", "target": "found" },
+    { "id": "e2", "source": "found", "target": "end" },
+    { "id": "e3", "source": "found", "target": "extract" },
+    { "id": "e4", "source": "extract", "target": "propose" },
+    { "id": "e5", "source": "propose", "target": "needs" },
+    { "id": "e6", "source": "needs", "target": "end" }
+  ]
+}

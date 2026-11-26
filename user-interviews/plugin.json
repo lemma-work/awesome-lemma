@@ -1,0 +1,12 @@
+{
+  // User interviews carries People map and Booking page (and with them Mail
+  // and Meetings), so one install brings the people it looks through, the
+  // mailbox invites go from, the booking page they carry and the calls it
+  // reads. It should carry User feedback too, whose `feedback` and `feature`
+  // its findings are filed in; User feedback isn't built yet, so it carries
+  // the contract tables it uses directly (product, feature, feedback, ask,
+  // deal) and adds "user-feedback" to carries once that plugin exists.
+  // Read by _build/assemble.py.
+  "name": "user-interviews",
+  "carries": ["people", "booking"]
+}

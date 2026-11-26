@@ -1,0 +1,33 @@
+{
+  // Reads one call's transcript or notes for findings: what the person said,
+  // word for word, with the point and the feature. No tools; interviews_read
+  // keeps only quotes that are in the document word for word.
+  "name": "interviews-reader",
+  "description": "Reads one research call's transcript or notes and proposes findings, each a verbatim quote with its point, feature, kind and how much it mattered.",
+  "visibility": "POD",
+  "toolsets": [],
+  "instruction": { "$file": "instruction.md" },
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "findings": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "quote": { "type": "string", "description": "Copied from the document exactly, one to three sentences, without the [m:ss] or the speaker's name." },
+            "point": { "type": "string", "description": "One line, under 90 characters: 'Wants the export to keep the filter'." },
+            "feature_id": { "type": "string", "description": "An id from features, or empty." },
+            "feature_new": { "type": "string", "description": "When no feature fits: a short name for a new one, in the team's style: 'Keep filters in exports'." },
+            "kind": { "type": "string", "enum": ["request", "problem", "praise", "question", "comparison", "other"] },
+            "importance": { "type": "string", "enum": ["unknown", "nice", "important", "blocker"] },
+            "reason": { "type": "string", "description": "A few words on why this is a finding." }
+          },
+          "required": ["quote", "point", "kind", "importance"]
+        }
+      }
+    },
+    "required": ["findings"]
+  },
+  "permissions": { "grants": [] }
+}

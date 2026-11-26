@@ -1,0 +1,41 @@
+{
+  // One study: a question the team wants answered by talking to people, how
+  // many calls it wants, and the features it is about. Team-wide (no RLS):
+  // everyone in the Lemma sees the studies and who is in them.
+  "name": "interviews_study",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    // The question, in the team's words ("Why do admins rebuild our reports in a spreadsheet?").
+    { "name": "question", "type": "TEXT", "required": true, "max_length": 300 },
+    // The shared `feature` rows it is about, by id.
+    { "name": "feature_ids", "type": "JSON" },
+    // How many calls it wants.
+    { "name": "want", "type": "INTEGER", "default": 6 },
+    { "name": "owner_user_id", "type": "USER" },
+    { "name": "owner_name", "type": "TEXT", "max_length": 200 },
+    // draft: being written. running: people are invited and called. done:
+    // enough calls. archived: put away.
+    { "name": "state", "type": "ENUM", "required": true, "default": "draft",
+      "options": ["draft", "running", "done", "archived"] },
+    // Who fits, in a sentence, and how the Lemma read it:
+    // {filters: [{field, values, line}], unknown: [{line}], read_at}.
+    { "name": "fit_sentence", "type": "TEXT", "max_length": 600 },
+    { "name": "fit_read", "type": "JSON" },
+    // none, reading (the fit reader is at work), ready, failed.
+    { "name": "fit_state", "type": "ENUM", "required": true, "default": "none",
+      "options": ["none", "reading", "ready", "failed"] },
+    { "name": "fit_error", "type": "TEXT", "max_length": 400 },
+    // One line every invite carries: what the call is about, for them.
+    { "name": "invite_line", "type": "TEXT", "max_length": 400 },
+    // When the pool of people was last built, and how many came from where:
+    // {deal, feedback, ask, mine, pasted, total, resting}.
+    { "name": "pool_at", "type": "DATETIME" },
+    { "name": "pool_counts", "type": "JSON" },
+    { "name": "opened_at", "type": "DATETIME" },
+    { "name": "closed_at", "type": "DATETIME" },
+    { "name": "sample", "type": "BOOLEAN", "default": false }
+  ],
+  "config": {}
+}

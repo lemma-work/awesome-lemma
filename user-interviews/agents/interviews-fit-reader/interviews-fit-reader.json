@@ -1,0 +1,38 @@
+{
+  // Reads "who fits" for a study, in a sentence, into filters over the fields
+  // this Lemma holds. No tools; interviews_fit keeps only the fields and values
+  // that exist, and says what has no data.
+  "name": "interviews-fit-reader",
+  "description": "Turns a sentence about who to interview into filters over the fields the team's tables hold, and names anything asked for that no table holds.",
+  "visibility": "POD",
+  "toolsets": [],
+  "instruction": { "$file": "instruction.md" },
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "filters": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "field": { "type": "string", "enum": ["title_has", "deal_status", "deal_stage", "said_about", "said_kind", "importance", "company", "source", "people_kind", "pasted"] },
+            "values": { "type": "array", "items": { "type": "string" } },
+            "column": { "type": "string", "description": "For pasted: the column's name, as listed." },
+            "line": { "type": "string", "description": "The filter in plain words, for the person to check: 'Title has admin or ops'." }
+          },
+          "required": ["field", "values", "line"]
+        }
+      },
+      "unknown": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": { "line": { "type": "string", "description": "What was asked for that no field holds, in plain words: 'Used reports in the last 30 days'." } },
+          "required": ["line"]
+        }
+      }
+    },
+    "required": ["filters", "unknown"]
+  },
+  "permissions": { "grants": [] }
+}

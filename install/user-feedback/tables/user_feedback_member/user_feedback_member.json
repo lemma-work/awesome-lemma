@@ -1,0 +1,19 @@
+{
+  // One member's own choices (RLS: only they see their row). Read my mail and
+  // read my meetings are on unless they turn them off; sharing on my own is
+  // off unless they turn it on. A member who turns reading off gets no rows.
+  "name": "user_feedback_member",
+  "primary_key_column": "id",
+  "enable_rls": true,
+  "visibility": "POD",
+  "columns": [
+    { "name": "member_id", "type": "USER", "required": true },
+    { "name": "read_mail", "type": "BOOLEAN", "default": true },
+    { "name": "read_meetings", "type": "BOOLEAN", "default": true },
+    // Share what customers say about the product from my mail and meetings
+    // on my own, without asking each time.
+    { "name": "auto_share", "type": "BOOLEAN", "default": false },
+    { "name": "setup_done_at", "type": "DATETIME" }
+  ],
+  "config": {}
+}

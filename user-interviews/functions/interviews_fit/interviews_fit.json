@@ -1,0 +1,53 @@
+{
+  "name": "interviews_fit",
+  "description": "Who fits a study, read from its sentence around the interviews-fit-reader agent. brief: the sentence and the fields and values this Lemma holds. save: keeps filters on real fields, marks anything else as no data, writes fit_read and builds the pool.",
+  "type": "API",
+  "visibility": "POD",
+  "code": {
+    "$file": "code.py"
+  },
+  "permissions": {
+    "grants": [
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "interviews_study",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read",
+          "datastore.record.write"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "interviews_pasted",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "feature",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "deal",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read"
+        ]
+      },
+      {
+        "resource_type": "function",
+        "resource_name": "interviews_pool",
+        "permission_ids": [
+          "function.execute"
+        ]
+      }
+    ]
+  }
+}

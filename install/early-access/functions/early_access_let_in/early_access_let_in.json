@@ -1,0 +1,55 @@
+{
+  "name": "early_access_let_in",
+  "description": "The app's Let in press, as the person (never an agent or schedule): adds each picked tester to the flag's PostHog static cohort (or marks the flag by hand or none), sets them picked (invited when writing themselves), says You're in on their status page, and records the batch.",
+  "type": "API",
+  "visibility": "POD",
+  "code": {
+    "$file": "code.py"
+  },
+  "permissions": {
+    "grants": [
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "early_access_tester",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read",
+          "datastore.record.write"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "early_access_beta",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "early_access_batch",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read",
+          "datastore.record.write"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "early_access_status",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read",
+          "datastore.record.write"
+        ]
+      },
+      {
+        "resource_type": "connector",
+        "resource_name": "posthog",
+        "permission_ids": [
+          "connector.use"
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "name": "User interviews",
+  "line": "product",
+  "position": 37,
+  "job": "The right users found and booked, and each call turned into findings",
+  "intro": "User interviews starts from a question and finds who to ask among the people your team already knows: deals, what people said, your own contacts, a list you paste. It drafts an invite in your voice for each, notices the booking, and after the call proposes findings from the transcript or your notes, each a quote you keep or set aside, filed under its feature.",
+  "does": [
+    "Say who fits in a sentence; the Lemma reads it into filters you can check, and ranks everyone with the reason they fit and what they said before.",
+    "Contact rules for the whole team: nobody invited twice in a month, rested after a no-show, never after they ask not to be.",
+    "After each call, findings with the quote and the minute, checked word for word; the ones you keep are counted by feature, in people."
+  ],
+  "jobs": ["PRODUCT", "FOUNDER"],
+  "accounts": [
+    { "any": ["Gmail", "Outlook"], "why": "Invites go from your own mailbox, one at a time, when you press Send." },
+    { "any": ["Google Calendar", "Outlook"], "why": "Your booking page and your calls, read afterwards from your notes." },
+    { "any": ["Google Meet"], "why": "Optional: the call's transcript, read for findings.", "optional": true }
+  ],
+  "setup": [
+    "Once for the whole Lemma: the product findings are filed under, and the contact rules.",
+    "Each person: their mailbox, where a call's words come from afterwards, and their booking page, each a button in the app.",
+    "Or look around with a sample study: a reporting product and people at made-up companies, at every stage."
+  ],
+  "today": [
+    { "verb": "decide", "line": "5 findings from the call with Kettle & Co to review" },
+    { "verb": "decide", "line": "Did Mei show up for your call?" },
+    { "verb": "do", "line": "3 invites to send" }
+  ],
+  "pictures": [
+    { "shot": "interviews", "caption": "Who fits, why, and where each person stands" },
+    { "shot": "interviews-call", "caption": "Findings from a call, each with its quote" },
+    { "shot": "interviews-findings", "caption": "Features by people, across every call" }
+  ]
+}

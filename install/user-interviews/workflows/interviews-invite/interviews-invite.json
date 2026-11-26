@@ -1,0 +1,39 @@
+{
+  // One invite: started by the app for each person the member chooses to
+  // invite, as that member (their mailbox, their voice, their booking page).
+  // Writes a Mail draft; nothing is sent.
+  "name": "interviews-invite",
+  "description": "Write one interview invite in your voice, with the study's line and your booking link, as a draft for you to send.",
+  "run_title": ["start.metadata.record_id"],
+  "max_concurrent_runs": 3,
+  "start": { "type": "MANUAL" },
+  "nodes": [
+    { "id": "brief", "type": "FUNCTION", "label": "Who, and why they fit",
+      "config": { "function_name": "interviews_invite", "input_mapping": {
+        "mode": { "type": "literal", "value": "brief" },
+        "person_id": { "type": "expression", "value": "start.metadata.record_id" } } } },
+    { "id": "ok", "type": "DECISION", "label": "Free to invite?",
+      "config": { "rules": [ { "condition": "brief.skip == `true`", "next_node_id": "end" } ] } },
+    { "id": "write", "type": "AGENT", "label": "Write the invite",
+      "config": { "agent_name": "interviews-inviter", "input_mapping": {
+        "study": { "type": "expression", "value": "brief.brief.study" },
+        "person": { "type": "expression", "value": "brief.brief.person" },
+        "me": { "type": "expression", "value": "brief.brief.me" },
+        "voice": { "type": "expression", "value": "brief.brief.voice", "optional": true },
+        "booking": { "type": "expression", "value": "brief.brief.booking" } } } },
+    { "id": "save", "type": "FUNCTION", "label": "Keep it as a draft",
+      "config": { "function_name": "interviews_invite", "input_mapping": {
+        "mode": { "type": "literal", "value": "save" },
+        "person_id": { "type": "expression", "value": "start.metadata.record_id" },
+        "written": { "type": "expression", "value": "write" } } } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [
+    { "id": "e1", "source": "brief", "target": "ok" },
+    { "id": "e2", "source": "ok", "target": "write", "label": "free to invite" },
+    { "id": "e3", "source": "ok", "target": "end", "label": "resting, or nothing to send from" },
+    { "id": "e4", "source": "write", "target": "save" },
+    { "id": "e5", "source": "save", "target": "end" }
+  ],
+  "visibility": "POD"
+}

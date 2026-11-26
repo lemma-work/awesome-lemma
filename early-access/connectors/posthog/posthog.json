@@ -1,0 +1,10 @@
+{
+  // PostHog's own MCP server, through the generic MCP connector: who used the
+  // beta (HogQL over events), survey answers, and adding the people let in
+  // to the flag's static cohort. Optional: without it, usage reads "not
+  // connected" and the flag is turned on by hand with a tick per person.
+  "connector": "mcp",
+  "mode": "SHARED",
+  "required": false,
+  "purpose": "Who used the beta, and turning the flag on for the people you let in, through PostHog's MCP server. Needs a key that can write cohorts."
+}

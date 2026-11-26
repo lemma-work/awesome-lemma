@@ -1,0 +1,22 @@
+{
+  // "Worth a nudge yet?" for one mail conversation, as Mail last answered it.
+  // Its id IS the conversation's id: one nudge per conversation, however many
+  // late promises are owed in it. Asked once per day and per new words.
+  "name": "mail_nudge",
+  "primary_key_column": "id",
+  "enable_rls": true,
+  "visibility": "POD",
+  "columns": [
+    // yes (a nudge was asked of the writer), not_yet, done_elsewhere, chased,
+    // no, unsure (under 0.5).
+    { "name": "answer", "type": "TEXT", "max_length": 16 },
+    { "name": "confidence", "type": "FLOAT" },
+    { "name": "asked_at", "type": "DATETIME" },
+    // The conversation's newest message when asked: newer words ask again.
+    { "name": "through", "type": "DATETIME" },
+    // One line on the answer, shown on the person's waiting item.
+    { "name": "reason", "type": "TEXT", "max_length": 300 },
+    { "name": "evidence", "type": "TEXT", "max_length": 4000 }
+  ],
+  "config": {}
+}

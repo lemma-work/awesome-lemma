@@ -1,0 +1,11 @@
+{
+  // Early access carries Mail inside its bundle, so one install brings both:
+  // invites, check-ins and the one chase are Mail drafts in the inviting
+  // member's own mailbox, and Mail sends one only when a person presses Send.
+  // It uses Forms (registers its sign-up in the shared `form` table) and User
+  // feedback (writes `feedback`) when they are there, and carries neither.
+  // Read by _build/assemble.py, which merges Mail from its own folder into
+  // install/early-access/, the bundle that is installed.
+  "name": "early-access",
+  "carries": ["mail"]
+}

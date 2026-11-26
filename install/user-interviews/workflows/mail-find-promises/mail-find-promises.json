@@ -1,0 +1,31 @@
+{
+  // Started by `mail-promise-wanted` when the sort answered yes to a promise
+  // question. Writes down what was promised and by when.
+  "name": "mail-find-promises",
+  "description": "Write down the promises in one conversation, either way, with the sentence and the date.",
+  "max_concurrent_runs": 4,
+  "start": { "type": "DATASTORE_EVENT", "config": { "table_name": "mail_thread", "operations": ["INSERT", "UPDATE"] } },
+  "nodes": [
+    { "id": "context", "type": "FUNCTION", "label": "Read the conversation",
+      "config": { "function_name": "mail_promise_context",
+        "input_mapping": { "conversation_id": { "type": "expression", "value": "start.metadata.record_id" } } } },
+    { "id": "find", "type": "AGENT", "label": "Write the promise down",
+      "config": { "agent_name": "mail-promises",
+        "input_mapping": {
+          "me": { "type": "expression", "value": "context.me" },
+          "directions": { "type": "expression", "value": "context.directions" },
+          "conversation": { "type": "expression", "value": "context.conversation" },
+          "open_promises": { "type": "expression", "value": "context.open_promises" } } } },
+    { "id": "save", "type": "FUNCTION", "label": "Store it",
+      "config": { "function_name": "mail_save_promises",
+        "input_mapping": {
+          "conversation_id": { "type": "expression", "value": "start.metadata.record_id" },
+          "found": { "type": "expression", "value": "find" } } } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [
+    { "id": "e1", "source": "context", "target": "find" },
+    { "id": "e2", "source": "find", "target": "save" },
+    { "id": "e3", "source": "save", "target": "end" }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+ "items": [
+  {
+   "pod_member_id": "member-sample",
+   "user_id": "user-sample",
+   "user_name": "Product lead",
+   "user_email": "product.lead@ledgerline.example",
+   "email": "product.lead@ledgerline.example",
+   "roles": [
+    "POD_ADMIN"
+   ]
+  },
+  {
+   "pod_member_id": "member-two",
+   "user_id": "user-two",
+   "user_name": "Account manager",
+   "user_email": "accounts@ledgerline.example",
+   "email": "accounts@ledgerline.example",
+   "roles": [
+    "POD_USER"
+   ]
+  }
+ ]
+}

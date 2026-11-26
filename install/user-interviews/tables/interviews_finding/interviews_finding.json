@@ -1,0 +1,16 @@
+{
+  // A kept finding's place in a study: its id is the `feedback` row's id, so
+  // "4 of 6 people in this study" is a join, with nothing added to `feedback`.
+  // Team-wide.
+  "name": "interviews_finding",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "study_id", "type": "UUID", "required": true },
+    { "name": "person_id", "type": "UUID", "required": true },
+    { "name": "meeting_id", "type": "UUID" },
+    { "name": "kept_at", "type": "DATETIME" }
+  ],
+  "config": {}
+}

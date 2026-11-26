@@ -1,0 +1,32 @@
+{
+  // Started by `people-lookup-wanted` when a company's research_state becomes
+  // wanted (someone pressed "Look them up"). people_company is team-wide, so
+  // the run is the schedule's owner; that is why the look-up is given only
+  // what the whole team may see.
+  "name": "people-company-lookup",
+  "description": "Look one company up on the web and keep what it does, its size, where it is and anything recent.",
+  "max_concurrent_runs": 3,
+  "start": { "type": "DATASTORE_EVENT", "config": { "table_name": "people_company", "operations": ["INSERT", "UPDATE"] } },
+  "nodes": [
+    { "id": "context", "type": "FUNCTION", "label": "What the team knows",
+      "config": { "function_name": "people_company_context",
+        "input_mapping": { "company_id": { "type": "expression", "value": "start.metadata.record_id" } } } },
+    { "id": "look", "type": "AGENT", "label": "Look them up",
+      "config": { "agent_name": "people-researcher",
+        "input_mapping": {
+          "company": { "type": "expression", "value": "context.company" },
+          "domains": { "type": "expression", "value": "context.domains" },
+          "people": { "type": "expression", "value": "context.people" } } } },
+    { "id": "save", "type": "FUNCTION", "label": "Keep it",
+      "config": { "function_name": "people_save_company",
+        "input_mapping": {
+          "company_id": { "type": "expression", "value": "start.metadata.record_id" },
+          "result": { "type": "expression", "value": "look" } } } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [
+    { "id": "e1", "source": "context", "target": "look" },
+    { "id": "e2", "source": "look", "target": "save" },
+    { "id": "e3", "source": "save", "target": "end" }
+  ]
+}

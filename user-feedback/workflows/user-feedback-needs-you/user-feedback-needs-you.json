@@ -1,0 +1,15 @@
+{
+  // Each filer's own trigger (the app makes one per filer, as them): new or
+  // kept feedback changes their "N new to file" in Today.
+  "name": "user-feedback-needs-you",
+  "description": "Keep a filer's \"new to file\" item in Today current, as them.",
+  "max_concurrent_runs": 2,
+  "start": { "type": "DATASTORE_EVENT", "config": { "table_name": "feedback", "operations": ["INSERT", "UPDATE"] } },
+  "nodes": [
+    { "id": "today", "type": "FUNCTION", "label": "Today",
+      "config": { "function_name": "user_feedback_needs_you",
+        "input_mapping": { "feedback_id": { "type": "expression", "value": "start.metadata.record_id" } } } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [ { "id": "e1", "source": "today", "target": "end" } ]
+}

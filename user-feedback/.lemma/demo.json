@@ -1,0 +1,25 @@
+{
+  "anchor": "2026-11-26T12:00:00Z",
+  "zone": ["Asia/Kolkata", "Asia/Calcutta"],
+  "apps": [
+    { "name": "feedback", "label": "Feedback", "start": "/" }
+  ],
+  "user": {
+    "id": "user-sample",
+    "email": "product.lead@ledgerline.example",
+    "first_name": "Product",
+    "last_name": "lead",
+    "name": "Product lead",
+    "is_active": true,
+    "is_superuser": false,
+    "is_verified": true,
+    "created_at": "2026-01-01T00:00:00Z",
+    "updated_at": "2026-01-01T00:00:00Z"
+  },
+  "notes": {
+    "user_feedback_setup_save": "In the demo the set-up isn't saved.",
+    "user_feedback_sample_data": "In the demo the sample stays.",
+    "user_feedback_needs_you": "",
+    "user_feedback_read": "In the demo nothing is read: in a Lemma your own run reads your sorted mail and summarised meetings."
+  }
+}

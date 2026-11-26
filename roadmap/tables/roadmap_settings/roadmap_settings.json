@@ -1,0 +1,35 @@
+{
+  // The Lemma's roadmap set-up: one row (id fixed by roadmap_setup_save).
+  // Team-wide, no RLS.
+  "name": "roadmap_settings",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    // Who gets the roadmap's "decide" items in Today.
+    { "name": "lead_user_id", "type": "USER" },
+    { "name": "lead_name", "type": "TEXT", "max_length": 200 },
+    // IANA zone of the lead's 07:00 run.
+    { "name": "timezone", "type": "TEXT", "max_length": 64, "default": "UTC" },
+    // Money is shown in this currency first (Deal tracker's, else USD); other
+    // currencies are added beside it, never converted.
+    { "name": "currency", "type": "TEXT", "max_length": 3, "default": "USD" },
+    // A "now" item whose tasks have not moved in this many days is flagged.
+    { "name": "stale_days", "type": "INTEGER", "default": 14 },
+    // The outside page: off until set-up turns it on.
+    { "name": "public_on", "type": "BOOLEAN", "default": false },
+    // The product the roadmap is for (shared `product`, role ours) and its name.
+    { "name": "product_id", "type": "UUID" },
+    { "name": "product_label", "type": "TEXT", "max_length": 120 },
+    // The web widget the outside page reads through.
+    { "name": "widget_id", "type": "TEXT", "max_length": 64 },
+    { "name": "page_url", "type": "TEXT", "max_length": 300 },
+    { "name": "setup_done_at", "type": "DATETIME" },
+    // The sample is loaded.
+    { "name": "sample", "type": "BOOLEAN", "default": false },
+    // The lead's own daily schedule (roadmap-daily), made by the app as them.
+    { "name": "schedule_id", "type": "TEXT", "max_length": 64 },
+    { "name": "schedule_user_id", "type": "USER" }
+  ],
+  "config": {}
+}

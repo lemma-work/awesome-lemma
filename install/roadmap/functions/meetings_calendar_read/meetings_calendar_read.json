@@ -1,0 +1,87 @@
+{
+  "name": "meetings_calendar_read",
+  "description": "Read Google Calendar, Outlook or the sample calendar: the last month and the next two weeks, into meetings, and everyone on them into the shared people (found by handle, as Mail does). Who is from outside comes from email domains, never a model. Idempotent.",
+  "type": "API",
+  "visibility": "POD",
+  "code": {
+    "$file": "code.py"
+  },
+  "permissions": {
+    "grants": [
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "meetings_calendar",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read",
+          "datastore.record.write"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "meetings_settings",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "meeting",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read",
+          "datastore.record.write"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "meetings_work",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read",
+          "datastore.record.write"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "person",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read",
+          "datastore.record.write"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "person_handle",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read",
+          "datastore.record.write"
+        ]
+      },
+      {
+        "resource_type": "folder",
+        "resource_name": "/meetings-sample",
+        "permission_ids": [
+          "folder.read"
+        ]
+      },
+      {
+        "resource_type": "connector",
+        "resource_name": "google_calendar",
+        "permission_ids": [
+          "connector.use"
+        ]
+      },
+      {
+        "resource_type": "connector",
+        "resource_name": "outlook",
+        "permission_ids": [
+          "connector.use"
+        ]
+      }
+    ]
+  }
+}

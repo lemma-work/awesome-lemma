@@ -1,0 +1,54 @@
+{
+  "roster-row": {
+    "kind": "still",
+    "width": 1416,
+    "height": 330,
+    "alt": "The roster: a quiet tester with a note drafted, then the people waiting in the next batch, each with their fit and what they said",
+    "bleed": "bottom",
+    "window": null,
+    "phone": {
+      "width": 374,
+      "height": 520,
+      "bleed": "bottom"
+    }
+  },
+  "batch-reasons": {
+    "kind": "still",
+    "width": 996,
+    "height": 470,
+    "alt": "The next batch ranked by fit, each person with a one-line reason that names a fact, and what they said at sign-up",
+    "bleed": "bottom",
+    "window": null,
+    "phone": {
+      "width": 374,
+      "height": 560,
+      "bleed": "bottom"
+    }
+  },
+  "drafted-invite": {
+    "kind": "still",
+    "width": 420,
+    "height": 760,
+    "alt": "An invite drafted in the member's own mailbox, quoting what the tester said at sign-up, one of ten, with Edit and Leave out",
+    "bleed": null,
+    "window": null,
+    "phone": {
+      "width": 390,
+      "height": 846,
+      "bleed": null
+    }
+  },
+  "one-chase": {
+    "kind": "still",
+    "width": 580,
+    "height": 760,
+    "alt": "A quiet tester's drawer: the one note drafted for them, Send, Edit or Not now, and their beta from sign-up to their last reply",
+    "bleed": null,
+    "window": null,
+    "phone": {
+      "width": 390,
+      "height": 900,
+      "bleed": null
+    }
+  }
+}

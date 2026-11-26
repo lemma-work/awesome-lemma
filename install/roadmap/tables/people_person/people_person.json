@@ -1,0 +1,83 @@
+{
+  // People map's own state about one person the owner may deal with: same id
+  // as the shared `person` row. Per person (RLS): what is here was read from
+  // the owner's own conversations and meetings, so it is theirs alone.
+  //
+  // Who is in it: anyone in a conversation in a category the owner counted at
+  // set-up, or on a meeting with people from outside, minus the owner's own
+  // domains. One Decisions call per new person says whether they are someone
+  // the owner deals with or noise, and what they are to the owner. Everything
+  // else is counted, never asked: warmth is the time since the last contact
+  // either way against this person's own usual gap.
+  "name": "people_person",
+  "primary_key_column": "id",
+  "enable_rls": true,
+  "visibility": "POD",
+  "columns": [
+    // The person's main address, and its domain (for the company).
+    { "name": "handle", "type": "TEXT", "max_length": 320 },
+    { "name": "domain", "type": "TEXT", "max_length": 253 },
+    // In a counted category or an outside meeting now. A person the owner
+    // added stays in whatever the categories say.
+    { "name": "in_scope", "type": "BOOLEAN", "default": true },
+
+    // --- what the read said (Decisions), or the owner -------------------------
+    // Someone the owner deals with (true) or noise: a receipt sender, a no-reply
+    // address, a list (false). Null until read, and while not sure.
+    { "name": "deal_with", "type": "BOOLEAN" },
+    // What they are to the owner. Null until read, and while not sure.
+    { "name": "kind", "type": "ENUM",
+      "options": ["customer", "investor", "partner", "candidate", "vendor", "colleague", "other"] },
+    { "name": "sorted_by", "type": "ENUM", "options": ["decision", "person"] },
+    { "name": "sorted_at", "type": "DATETIME" },
+    // An answer under the line (0.5): waits for the owner, who settles it.
+    { "name": "unsure", "type": "BOOLEAN", "default": false },
+    // {deal_with: {value, confidence}, kind: {value, confidence}} as answered.
+    { "name": "answers", "type": "JSON" },
+    { "name": "reason", "type": "TEXT", "max_length": 300 },
+    // What the read saw, kept so a correction can be an example for the next.
+    { "name": "evidence", "type": "TEXT", "max_length": 4000 },
+
+    // --- counted, never asked --------------------------------------------------
+    { "name": "company_id", "type": "UUID" },
+    { "name": "first_contact_at", "type": "DATETIME" },
+    // The newest contact either way: a message in or out, or a meeting held.
+    { "name": "last_contact_at", "type": "DATETIME" },
+    { "name": "last_contact_dir", "type": "ENUM", "options": ["inbound", "outbound", "meeting"] },
+    { "name": "last_inbound_at", "type": "DATETIME" },
+    { "name": "last_outbound_at", "type": "DATETIME" },
+    { "name": "last_met_at", "type": "DATETIME" },
+    { "name": "conversation_count", "type": "INTEGER", "default": 0 },
+    { "name": "meeting_count", "type": "INTEGER", "default": 0 },
+    // Times the owner and they got back in touch: contact days more than three
+    // days apart start a new one.
+    { "name": "episodes", "type": "INTEGER", "default": 0 },
+    // Their usual gap between those, in days (the median). Null with one.
+    { "name": "usual_gap_days", "type": "FLOAT" },
+    // warm: within 1.5 usual gaps (at least a week); cooling: within 3 (at
+    // least three weeks); cold: longer; new: no contact yet, a meeting ahead.
+    // No usual gap yet counts as two weeks.
+    { "name": "warmth", "type": "ENUM", "options": ["warm", "cooling", "cold", "new"] },
+    // Gone quiet: someone the owner deals with (not a colleague), cooling or
+    // cold, both sides have spoken (or met), nothing ahead, and no reply owed
+    // by the owner. What Today's "gone quiet" reads, as it is.
+    { "name": "quiet", "type": "BOOLEAN", "default": false },
+    { "name": "quiet_days", "type": "INTEGER" },
+    // A conversation with them waits on the owner's reply.
+    { "name": "waiting_on_me", "type": "BOOLEAN", "default": false },
+    { "name": "next_meeting_at", "type": "DATETIME" },
+    { "name": "next_meeting_id", "type": "TEXT", "max_length": 64 },
+    { "name": "refreshed_at", "type": "DATETIME" },
+
+    // --- where things stand (the summary writer) ---------------------------------
+    // Two to four sentences, each ending with [n] for the source it rests on.
+    { "name": "summary", "type": "TEXT", "max_length": 2000 },
+    // [{n, kind: conversation|meeting, id, label, at}] for the [n] marks.
+    { "name": "summary_sources", "type": "JSON" },
+    { "name": "summary_state", "type": "ENUM", "required": true, "default": "none",
+      "options": ["none", "wanted", "writing", "ready", "failed"] },
+    { "name": "summary_at", "type": "DATETIME" },
+    { "name": "summary_error", "type": "TEXT", "max_length": 600 }
+  ],
+  "config": {}
+}

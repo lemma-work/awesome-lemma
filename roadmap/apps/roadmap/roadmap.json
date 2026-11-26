@@ -1,0 +1,6 @@
+{
+  "name": "roadmap",
+  "description": "The team's features ranked by who asked: people, companies, blockers and the deals behind them, now / next / later as a board, and each feature's page with a spec drafted from what people said, every line citing its quotes.",
+  "public_slug": "${roadmap_slug}",
+  "visibility": "POD"
+}

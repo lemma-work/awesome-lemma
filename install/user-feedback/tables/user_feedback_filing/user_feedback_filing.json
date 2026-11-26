@@ -1,0 +1,26 @@
+{
+  // The Lemma's filing of one `feedback` row; id = the feedback row's id.
+  // Decisions answers with a value and a confidence, never text, so the
+  // reason the app shows under each choice is worked out in code: the words
+  // of the quote that match the feature's name or other names (`matched`),
+  // else "The Lemma's pick" with sure or not sure from `confidence`.
+  "name": "user_feedback_filing",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    // Up to three feature ids, the Lemma's pick first.
+    { "name": "options", "type": "JSON" },
+    { "name": "confidence", "type": "FLOAT" },
+    // {feature id: [words of the quote matching its name or other names]}
+    { "name": "matched", "type": "JSON" },
+    // What the filing proposed, before any person moved it.
+    { "name": "picked", "type": "UUID" },
+    // Decisions calls this filing took.
+    { "name": "calls", "type": "INTEGER", "default": 0 },
+    { "name": "filed_at", "type": "DATETIME" },
+    { "name": "error", "type": "TEXT", "max_length": 300 },
+    { "name": "sample", "type": "BOOLEAN", "default": false }
+  ],
+  "config": {}
+}

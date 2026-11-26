@@ -1,0 +1,10 @@
+{
+  // A new inbound message: early_access_on_reply acts when it is a tester's
+  // reply in a thread an Early access note started. message is per person,
+  // so it runs as the member whose mail it is.
+  "name": "early-access-on-reply",
+  "schedule_type": "DATASTORE",
+  "config": { "table_name": "message", "operations": ["INSERT"], "when": { "direction": "inbound" }, "bulk_writes": "each" },
+  "workflow_name": "early-access-on-reply",
+  "is_active": true
+}

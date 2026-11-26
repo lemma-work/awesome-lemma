@@ -1,0 +1,10 @@
+#!/bin/bash
+# Start one of this Lemma's workflows about a record, as the app does.
+#   bin/start interviews-fit interviews_study <study id>
+here="$(cd "$(dirname "$0")/.." && pwd)"
+set -a; . "$here/.lemma.env"; set +a
+token="$(lemma --server "$LEMMA_SERVER" auth print-token)"
+api="$(lemma --server "$LEMMA_SERVER" config show 2>/dev/null | sed -n 's/^ *base url *//p' | head -1)"
+curl -s -X POST -H "Authorization: Bearer $token" -H "Content-Type: application/json" \
+  "$api/pods/$LEMMA_POD_ID/workflows/$1/runs" -d "{\"about\": {\"table\": \"$2\", \"record_id\": \"$3\"}}"
+echo

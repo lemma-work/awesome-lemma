@@ -1,0 +1,16 @@
+{
+  // A member's people conversation was sorted (Mail): read it for what was
+  // said about the product. Started by user-feedback-read-conversation, as
+  // the conversation's owner, so it reads only their own mail.
+  "name": "user-feedback-read-conversation",
+  "description": "Read one sorted conversation, as its owner, for sentences about the product; keep them private to the owner until they share.",
+  "max_concurrent_runs": 4,
+  "start": { "type": "DATASTORE_EVENT", "config": { "table_name": "conversation", "operations": ["UPDATE"] } },
+  "nodes": [
+    { "id": "read", "type": "FUNCTION", "label": "Find what was said about the product",
+      "config": { "function_name": "user_feedback_read",
+        "input_mapping": { "conversation_id": { "type": "expression", "value": "start.metadata.record_id" } } } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [ { "id": "e1", "source": "read", "target": "end" } ]
+}

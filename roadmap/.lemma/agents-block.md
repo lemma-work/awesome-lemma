@@ -1,0 +1,1 @@
+- Roadmap is installed: features ranked by who asked, with specs. Rank with `roadmap_rank`; guide: `/memory/plugins/roadmap.md`.

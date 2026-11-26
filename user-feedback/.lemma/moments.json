@@ -1,0 +1,46 @@
+{
+  "//": "The pictures on User feedback's page on the website, taken from its Try it demo by `node _kit/bin/moments.mjs user-feedback` into .lemma/moments/. listing.json names them by `name`.",
+  "captures": [
+    {
+      "name": "file",
+      "alt": "The inbox: J moves to the next quote, Enter keeps it under the feature the Lemma picked, X sets one aside",
+      "loop": true,
+      "route": "/",
+      "viewport": [1440, 820],
+      "clip": { "x": 0, "y": 34, "width": 1440, "height": 786 },
+      "poster": 1.0,
+      "steps": [
+        { "wait": 1400 },
+        { "key": "j" }, { "wait": 900 },
+        { "key": "Enter" }, { "wait": 1400 },
+        { "key": "j" }, { "wait": 900 },
+        { "key": "x" }, { "wait": 1400 }
+      ]
+    },
+    {
+      "name": "why",
+      "alt": "Three features to file a quote under, each with the words of the quote that match it or how sure the Lemma was",
+      "route": "/",
+      "viewport": [1440, 900],
+      "clip": { "selector": ".uf-pane", "pad": 0, "height": 640 },
+      "steps": [{ "wait": 1400 }]
+    },
+    {
+      "name": "private",
+      "alt": "From your mail and meetings: sentences only you can see, with Share with the team and Keep private",
+      "route": "/mine",
+      "viewport": [1440, 760],
+      "clip": { "x": 0, "y": 34, "width": 1440, "height": 726 },
+      "steps": [{ "wait": 1400 }]
+    },
+    {
+      "name": "suggested",
+      "alt": "This week's cards: a feature nine quotes fit that isn't on the list, and two features that look like one",
+      "route": "/week",
+      "viewport": [1440, 900],
+      "clip": { "selector": ".uf-wside", "pad": 8, "height": 620 },
+      "steps": [{ "wait": 1400 }],
+      "phone": false
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "name": "interviews",
+  "description": "User interviews: a study's question, who fits and why, invites sent when you press Send, the calls booked, and findings from each call kept under their features.",
+  "public_slug": "${interviews_slug}",
+  "visibility": "POD"
+}

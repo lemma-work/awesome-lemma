@@ -1,0 +1,16 @@
+{
+  // One schedule for everyone: mail_thread is per person, so each firing runs
+  // as the owner of the row that changed. `to` fires only on the write that
+  // MADE it wanted. `bulk_writes: each`: the sort writes in bulk, and a bulk
+  // write skips a datastore trigger unless the schedule asks for each row.
+  "name": "mail-draft-wanted",
+  "schedule_type": "DATASTORE",
+  "config": {
+    "table_name": "mail_thread",
+    "operations": ["INSERT", "UPDATE"],
+    "when": { "draft_state": { "to": "wanted" } },
+    "bulk_writes": "each"
+  },
+  "workflow_name": "mail-write-draft",
+  "is_active": true
+}

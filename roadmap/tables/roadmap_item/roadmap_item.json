@@ -1,0 +1,35 @@
+{
+  // The team's plan for one feature: when (the horizon), who owns it, the
+  // Tasks project doing it, and what the outside page says about it. One row
+  // per feature, its id the feature's id (`feature` is the shared list User
+  // feedback keeps; Roadmap never adds a column there). Written by
+  // roadmap_set, roadmap_project and roadmap_ship. Team-wide, no RLS.
+  "name": "roadmap_item",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    // none: on nobody's roadmap. now: being built. next: decided, not
+    // started. later: likely, not decided. shipped: out, kept on the page for
+    // 90 days. Every option is here from the start: an import never changes
+    // an existing ENUM column.
+    { "name": "horizon", "type": "ENUM", "required": true, "default": "none",
+      "options": ["none", "now", "next", "later", "shipped"] },
+    { "name": "horizon_at", "type": "DATETIME" },
+    { "name": "horizon_by", "type": "USER" },
+    // Who answers for it: a member, or a team's name ("Records team").
+    { "name": "owner_user_id", "type": "USER" },
+    { "name": "owner_label", "type": "TEXT", "max_length": 120 },
+    // The Tasks project doing the work (shared `project`, by id; no foreign
+    // key: Tasks can archive a project). Progress and staleness come from its
+    // tasks.
+    { "name": "project_id", "type": "UUID" },
+    // On the outside page, and how it is said there. Only roadmap_publish
+    // copies these to roadmap_public.
+    { "name": "public", "type": "BOOLEAN", "default": false },
+    { "name": "public_title", "type": "TEXT", "max_length": 120 },
+    { "name": "public_blurb", "type": "TEXT", "max_length": 300 },
+    { "name": "shipped_on", "type": "DATE" }
+  ],
+  "config": {}
+}

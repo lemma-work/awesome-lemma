@@ -1,0 +1,26 @@
+{
+  "anchor": "2026-11-25T15:00:00Z",
+  "zone": ["Asia/Kolkata", "Asia/Calcutta"],
+  "apps": [
+    { "name": "roadmap", "label": "Roadmap", "start": "/" },
+    { "name": "roadmap-public", "label": "Outside page", "start": "/" }
+  ],
+  "user": {
+    "id": "user-sample",
+    "email": "lead@fernway.example",
+    "first_name": "Product",
+    "last_name": "lead",
+    "name": "Product lead",
+    "is_active": true,
+    "is_superuser": false,
+    "is_verified": true,
+    "created_at": "2026-01-01T00:00:00Z",
+    "updated_at": "2026-01-01T00:00:00Z"
+  },
+  "notes": {
+    "roadmap-spec": "In the demo the spec isn't drafted again: in a Lemma the writer drafts it from the quotes, checks every mark against them, and keeps the lines you edited.",
+    "roadmap_project": "In the demo no project is made: in a Lemma this makes a Tasks project named after the feature and links it, and its progress shows here.",
+    "roadmap_setup_save": "In the demo the set-up isn't saved.",
+    "roadmap_sample_data": "In the demo the sample stays."
+  }
+}

@@ -1,0 +1,19 @@
+{
+  // Every 15 minutes, as each person (their own booking-refresh-<user>
+  // schedule, made by the app when they turn their page on): the page's open
+  // times from the live calendars, and what needs them.
+  "name": "booking-refresh",
+  "description": "Work out one person's open times again from their live calendars, and what their booking page needs of them.",
+  "start": { "type": "SCHEDULED", "config": { "schedule_type": "CRON" } },
+  "nodes": [
+    { "id": "slots", "type": "FUNCTION", "label": "Open times",
+      "config": { "function_name": "booking_slots", "input_mapping": {} } },
+    { "id": "needs", "type": "FUNCTION", "label": "What needs you",
+      "config": { "function_name": "booking_needs_you", "input_mapping": {} } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [
+    { "id": "e1", "source": "slots", "target": "needs" },
+    { "id": "e2", "source": "needs", "target": "end" }
+  ]
+}

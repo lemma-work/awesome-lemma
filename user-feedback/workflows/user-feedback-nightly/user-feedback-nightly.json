@@ -1,0 +1,36 @@
+{
+  // Nightly, made at set-up as the person setting up: quotes that fit no
+  // feature grouped into suggested features (one agent call, no tools), the
+  // missing one-line points written in the same batch, likely duplicates
+  // checked with Decisions, quotes still unfiled filed, and Today's items for
+  // whoever this runs as.
+  "name": "user-feedback-nightly",
+  "description": "Nightly: suggest features from quotes that fit none, write missing points, spot likely duplicates, file what's waiting, and update Today.",
+  "start": { "type": "SCHEDULED", "config": { "schedule_type": "CRON" } },
+  "nodes": [
+    { "id": "file", "type": "FUNCTION", "label": "File what's waiting",
+      "config": { "function_name": "user_feedback_file", "input_mapping": { "limit": { "type": "literal", "value": 40 } } } },
+    { "id": "prepare", "type": "FUNCTION", "label": "Quotes that fit no feature",
+      "config": { "function_name": "user_feedback_suggest_prepare", "input_mapping": {} } },
+    { "id": "group", "type": "AGENT", "label": "Group them and write the points",
+      "config": { "agent_name": "user-feedback-grouper",
+        "input_mapping": {
+          "quotes": { "type": "expression", "value": "prepare.quotes" },
+          "features": { "type": "expression", "value": "prepare.features" },
+          "point_quotes": { "type": "expression", "value": "prepare.point_quotes" } } } },
+    { "id": "save", "type": "FUNCTION", "label": "Keep the suggestions",
+      "config": { "function_name": "user_feedback_suggest_save",
+        "input_mapping": { "found": { "type": "expression", "value": "group" } } } },
+    { "id": "today", "type": "FUNCTION", "label": "Today",
+      "config": { "function_name": "user_feedback_needs_you", "input_mapping": {} } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [
+    { "id": "e1", "source": "file", "target": "prepare" },
+    { "id": "e2", "source": "prepare", "target": "group" },
+    { "id": "e3", "source": "group", "target": "save" },
+    { "id": "e4", "source": "save", "target": "today" },
+    { "id": "e5", "source": "today", "target": "end" }
+  ],
+  "visibility": "POD"
+}

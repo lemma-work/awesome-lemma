@@ -1,0 +1,9 @@
+{
+  // Someone went quiet, or came back. bulk_writes each: the refresh writes in bulk.
+  "name": "people-needs-you-quiet",
+  "schedule_type": "DATASTORE",
+  "config": { "table_name": "people_person", "operations": ["UPDATE"],
+              "when": { "quiet": { "changed": true } }, "bulk_writes": "each" },
+  "workflow_name": "people-needs-you",
+  "is_active": true
+}

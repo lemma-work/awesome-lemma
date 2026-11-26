@@ -1,0 +1,14 @@
+{
+  // The chat beside a booking page. It answers visitors, who are not members
+  // of this Lemma, from what the Lemma made Public: booking_page (each
+  // person's name, one line about them, what their calls are for, the call's
+  // length and video, and the open times). It cannot book, move or cancel.
+  "name": "booking-host",
+  "description": "Answers questions beside a booking page: when someone is free, what a call with them is for, how booking works. Only from what the page shows.",
+  "instruction": { "$file": "instruction.md" },
+  "toolsets": [],
+  "permissions": { "grants": [
+    { "resource_type": "datastore_table", "resource_name": "booking_page",
+      "permission_ids": ["datastore.table.read", "datastore.record.read"] }
+  ]}
+}

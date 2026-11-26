@@ -1,0 +1,32 @@
+{
+  // The team view: one row per member per person they deal with. Team-wide
+  // (no RLS), so everyone in the Lemma sees who the team knows: the person,
+  // their company, the last contact and the warmth. Never what was said, never
+  // the relationship, never a subject line.
+  //
+  // Each member's own refresh writes only their own rows (id = uuid5 of
+  // LINK_NS eb4518c8-84e0-4a47-94f1-4b999aa61771 and "<member id>:<address>"),
+  // running as them: it reads their own mail and meetings under RLS and copies
+  // out only these columns. The team's last contact with someone is the newest
+  // of these rows, read at the time, so two members' jobs never write the same
+  // row and nobody's contact overwrites anybody else's. A row is there only
+  // while its member deals with the person: their refresh removes the rest.
+  "name": "people_link",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    // The member whose mail and meetings this came from (their user id).
+    { "name": "member_id", "type": "TEXT", "required": true, "max_length": 64 },
+    { "name": "member_name", "type": "TEXT", "max_length": 200 },
+    // The person's address, lowercased: the same human across members.
+    { "name": "handle", "type": "TEXT", "required": true, "max_length": 320 },
+    { "name": "name", "type": "TEXT", "max_length": 200 },
+    { "name": "title", "type": "TEXT", "max_length": 200 },
+    { "name": "company_id", "type": "UUID" },
+    { "name": "last_contact_at", "type": "DATETIME" },
+    { "name": "warmth", "type": "ENUM", "options": ["warm", "cooling", "cold", "new"] },
+    { "name": "refreshed_at", "type": "DATETIME" }
+  ],
+  "config": {}
+}

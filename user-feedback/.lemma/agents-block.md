@@ -1,0 +1,1 @@
+- User feedback is installed: what people say about the product, by feature. Guide: `/memory/plugins/user-feedback.md`.

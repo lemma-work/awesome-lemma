@@ -1,0 +1,23 @@
+{
+  // The Lemma's User interviews set-up: one row (id fixed by interviews_setup).
+  // The contact rules hold for the whole team. Team-wide.
+  "name": "interviews_settings",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    // The team's product findings file under (shared `product`, role ours).
+    { "name": "product_id", "type": "UUID" },
+    { "name": "product_label", "type": "TEXT", "max_length": 160 },
+    // Not invited again within this many days of the last invite.
+    { "name": "invite_gap_days", "type": "INTEGER", "default": 30 },
+    // Not invited for this many days after a no-show.
+    { "name": "no_show_days", "type": "INTEGER", "default": 90 },
+    // Working days with no booking before a nudge is drafted.
+    { "name": "nudge_days", "type": "INTEGER", "default": 4 },
+    { "name": "setup_done_at", "type": "DATETIME" },
+    { "name": "setup_by", "type": "USER" },
+    { "name": "sample", "type": "BOOLEAN", "default": false }
+  ],
+  "config": {}
+}

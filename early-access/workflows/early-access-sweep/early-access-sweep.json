@@ -1,0 +1,19 @@
+{
+  // Every hour, as each beta's owner (their own early-access-sweep-<user>
+  // schedule, made by the app at Turn on): usage from PostHog, the day-6
+  // check-ins and the one chase drafted, survey answers filed, and Today.
+  "name": "early-access-sweep",
+  "description": "Read who used your betas from PostHog, draft the day-6 check-ins and the one note to anyone gone quiet, file survey answers, and update Today. Nothing is sent and nobody is let in.",
+  "start": { "type": "SCHEDULED", "config": { "schedule_type": "CRON" } },
+  "nodes": [
+    { "id": "sweep", "type": "FUNCTION", "label": "Usage and notes",
+      "config": { "function_name": "early_access_sweep", "input_mapping": {} } },
+    { "id": "needs", "type": "FUNCTION", "label": "What needs you",
+      "config": { "function_name": "early_access_needs_you", "input_mapping": {} } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [
+    { "id": "e1", "source": "sweep", "target": "needs" },
+    { "id": "e2", "source": "needs", "target": "end" }
+  ]
+}

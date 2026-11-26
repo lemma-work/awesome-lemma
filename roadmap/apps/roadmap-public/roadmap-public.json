@@ -1,0 +1,6 @@
+{
+  "name": "roadmap-public",
+  "description": "The team's public roadmap: now, next, later and recently shipped, only the items the team marked public, under their public titles. Anyone can read it; nobody signs in.",
+  "public_slug": "${roadmap_public_slug}",
+  "visibility": "PUBLIC"
+}

@@ -1,0 +1,54 @@
+{
+  "name": "interviews_on_meeting",
+  "description": "One of the member's meetings (meeting_id), from their own trigger: an invited person of a running study among its attendees, after the invite, is booked; a booked call's transcript or notes start the read.",
+  "type": "API",
+  "visibility": "POD",
+  "code": {
+    "$file": "code.py"
+  },
+  "permissions": {
+    "grants": [
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "meeting",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "meetings_work",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "interviews_person",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read",
+          "datastore.record.write"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "interviews_study",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read"
+        ]
+      },
+      {
+        "resource_type": "workflow",
+        "resource_name": "interviews-read",
+        "permission_ids": [
+          "workflow.read",
+          "workflow.execute"
+        ]
+      }
+    ]
+  }
+}

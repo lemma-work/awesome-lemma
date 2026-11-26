@@ -1,0 +1,40 @@
+{
+  // Reads the first read's report once, at set-up, and proposes the person's
+  // voice, up to four more categories, a few rules and VIPs. Proposals only:
+  // the set-up form shows every one to keep, change or drop. No tools; the
+  // set-up functions do every write.
+  "name": "mail-setup",
+  "description": "From the first read of someone's mail, learns how they write and proposes categories, rules and VIPs for them to keep or change.",
+  "visibility": "POD",
+  "toolsets": [],
+  "instruction": { "$file": "instruction.md" },
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "voice_md": { "type": "string", "description": "How they write, markdown, under 450 words." },
+      "traits": { "type": "array", "items": { "type": "string" }, "description": "Three to five one-line traits." },
+      "categories": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "key": { "type": "string" }, "name": { "type": "string" }, "sentence": { "type": "string" },
+            "why": { "type": "string" }, "examples": { "type": "array", "items": { "type": "string" } },
+            "estimate": { "type": "integer" }
+          },
+          "required": ["name", "sentence", "why"]
+        }
+      },
+      "vips": {
+        "type": "array",
+        "items": { "type": "object", "properties": { "email": { "type": "string" }, "reason": { "type": "string" } }, "required": ["email", "reason"] }
+      },
+      "rules": {
+        "type": "array",
+        "items": { "type": "object", "properties": { "scope": { "type": "string", "enum": ["general", "sorting", "writing"] }, "text": { "type": "string" }, "why": { "type": "string" } }, "required": ["scope", "text", "why"] }
+      }
+    },
+    "required": ["voice_md", "traits", "categories", "vips", "rules"]
+  },
+  "permissions": { "grants": [] }
+}

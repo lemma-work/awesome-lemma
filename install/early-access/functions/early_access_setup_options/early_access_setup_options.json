@@ -1,0 +1,44 @@
+{
+  "name": "early_access_setup_options",
+  "description": "What the beta sheet offers: the team's features and products, the person's Mail mailboxes, and PostHog's flags and cohorts when PostHog is connected (its state in words when not).",
+  "type": "API",
+  "visibility": "POD",
+  "code": {
+    "$file": "code.py"
+  },
+  "permissions": {
+    "grants": [
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "product",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "feature",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "mail_mailbox",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read"
+        ]
+      },
+      {
+        "resource_type": "connector",
+        "resource_name": "posthog",
+        "permission_ids": [
+          "connector.use"
+        ]
+      }
+    ]
+  }
+}

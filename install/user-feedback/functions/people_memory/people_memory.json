@@ -1,0 +1,21 @@
+{
+  "name": "people_memory",
+  "description": "Tells this Lemma's agents that People map is installed: People map's own block in /memory/AGENTS.md and its guide at /memory/plugins/people.md, leaving the team's notes alone. Set-up runs it; safe to run again. remove takes them out.",
+  "type": "API",
+  "visibility": "POD",
+  "code": {
+    "$file": "code.py"
+  },
+  "permissions": {
+    "grants": [
+      {
+        "resource_type": "folder",
+        "resource_name": "/memory",
+        "permission_ids": [
+          "folder.read",
+          "folder.write"
+        ]
+      }
+    ]
+  }
+}

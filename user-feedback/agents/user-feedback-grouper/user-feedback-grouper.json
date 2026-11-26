@@ -1,0 +1,41 @@
+{
+  // Nightly, in one batch: groups quotes that fit none of the team's features
+  // into suggested features, and writes the one-line point of quotes that
+  // have none. No tools; it returns JSON and user_feedback_suggest_save
+  // checks every id against the rows before writing anything.
+  "name": "user-feedback-grouper",
+  "description": "Groups customer quotes that fit no feature into suggested features with a name, and writes a one-line point for quotes missing one. Returns JSON; writes nothing itself.",
+  "visibility": "POD",
+  "toolsets": [],
+  "instruction": { "$file": "instruction.md" },
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "groups": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "name": { "type": "string", "description": "The feature in the team's words: two to four words, a noun phrase, sentence case (\"Bulk edit\")." },
+            "description": { "type": "string", "description": "One line: what is in it and what isn't." },
+            "quote_ids": { "type": "array", "items": { "type": "string" }, "description": "Ids of the quotes that belong under it, from `quotes`." }
+          },
+          "required": ["name", "quote_ids"]
+        }
+      },
+      "points": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": { "type": "string" },
+            "point": { "type": "string", "description": "The point in plain words, under 90 characters, no names." }
+          },
+          "required": ["id", "point"]
+        }
+      }
+    },
+    "required": ["groups", "points"]
+  },
+  "permissions": { "grants": [] }
+}

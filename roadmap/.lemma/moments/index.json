@@ -1,0 +1,39 @@
+{
+  "sort": {
+    "kind": "loop",
+    "width": 1236,
+    "height": 507,
+    "alt": "The ranked features re-sorted by open deals: SSO with Okta and Audit log move to the top, ahead of the feature most people asked for",
+    "bleed": null,
+    "window": null
+  },
+  "who-asked": {
+    "kind": "still",
+    "width": 380,
+    "height": 760,
+    "alt": "Who asked for bulk edit, by company: three blockers first, each with a quote, where it was said, and the company's deal",
+    "bleed": null,
+    "window": null
+  },
+  "spec-quote": {
+    "kind": "loop",
+    "width": 1440,
+    "height": 640,
+    "alt": "Pointing at a line of the drafted spec lights the quote it came from, with who said it and where",
+    "bleed": null,
+    "window": null
+  },
+  "stale": {
+    "kind": "still",
+    "width": 277,
+    "height": 617,
+    "alt": "The board's Now column: a card flagged with no task moved in 16 days, beside cards with their progress from Tasks",
+    "bleed": null,
+    "window": null,
+    "phone": {
+      "width": 370,
+      "height": 526,
+      "bleed": null
+    }
+  }
+}

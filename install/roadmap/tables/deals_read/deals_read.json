@@ -1,0 +1,44 @@
+{
+  // One read of a conversation's newest words, or of a meeting's notes: the
+  // two Decisions questions and their answers, and what came of it. Per
+  // person (RLS): it was read from their own mail or meetings. Its id is made
+  // from what was read (the conversation and its newest message, or the
+  // meeting and when its notes were read), so the same words are read once.
+  "name": "deals_read",
+  "primary_key_column": "id",
+  "enable_rls": true,
+  "visibility": "POD",
+  "columns": [
+    // mail, meeting, ... (the conversation's own source, or meeting).
+    { "name": "source", "type": "TEXT", "required": true, "max_length": 32 },
+    { "name": "conversation_id", "type": "UUID" },
+    { "name": "meeting_id", "type": "UUID" },
+    // The newest message it read up to, for a conversation.
+    { "name": "message_id", "type": "UUID" },
+    { "name": "company_id", "type": "UUID" },
+    { "name": "company_domain", "type": "TEXT", "max_length": 253 },
+    // listen: a new message or new notes. find: set-up's last 30 days.
+    { "name": "trigger", "type": "ENUM", "required": true, "default": "listen",
+      "options": ["listen", "find", "again"] },
+    // 1. Does this change a deal? yes / no, and how sure (0-1).
+    { "name": "changes_deal", "type": "ENUM", "options": ["yes", "no"] },
+    { "name": "changes_confidence", "type": "FLOAT" },
+    // 2. Only on a yes: what kind (one or more).
+    { "name": "kinds", "type": "JSON" },
+    { "name": "kinds_confidence", "type": "FLOAT" },
+    // skipped: not read (no company, noise). no, unsure: nothing proposed.
+    // asked: a yes, waiting for the extractor. proposed: changes written.
+    // nothing: a yes, but no change with its sentence came back.
+    { "name": "outcome", "type": "ENUM", "required": true, "default": "asked",
+      "options": ["skipped", "no", "unsure", "asked", "proposed", "nothing", "failed"] },
+    { "name": "reason", "type": "TEXT", "max_length": 300 },
+    { "name": "proposals", "type": "INTEGER", "default": 0 },
+    { "name": "calls", "type": "INTEGER", "default": 0 },
+    { "name": "call_seconds", "type": "FLOAT", "default": 0 },
+    // What the questions saw, kept so a dismissal can be an example.
+    { "name": "evidence", "type": "TEXT", "max_length": 12000 },
+    // Read from the sample mailbox or calendar; the sample's clear removes it.
+    { "name": "sample", "type": "BOOLEAN", "default": false }
+  ],
+  "config": {}
+}

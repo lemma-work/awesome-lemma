@@ -1,0 +1,43 @@
+{
+  "format_version": 4,
+  "name": "User interviews",
+  "description": "The right users found and booked, and each call turned into findings: a study's question, who fits in a sentence read into filters over the people the team already knows, an invite in your voice for each (sent when you press Send), the call booked through your page, and findings proposed from the transcript or your notes, each a quote you keep or set aside, filed under its feature. Brings People map, Booking page, Mail and Meetings with it.",
+  "variables": {
+    "inbox_slug": {
+      "type": "app_slug",
+      "source_value": "mail-inbox",
+      "default": "mail-inbox",
+      "description": "Public URL slug for the Inbox app (unique platform-wide; a suffix is added on collision)"
+    },
+    "meetings_slug": {
+      "type": "app_slug",
+      "source_value": "meetings",
+      "default": "meetings",
+      "description": "Public URL slug for the Meetings app (unique platform-wide; a suffix is added on collision)"
+    },
+    "people_slug": {
+      "type": "app_slug",
+      "source_value": "people",
+      "default": "people",
+      "description": "Public URL slug for the People app (unique platform-wide; a suffix is added on collision)"
+    },
+    "companies_slug": {
+      "type": "app_slug",
+      "source_value": "companies",
+      "default": "companies",
+      "description": "Public URL slug for the Companies app (unique platform-wide; a suffix is added on collision)"
+    },
+    "booking_slug": {
+      "type": "app_slug",
+      "source_value": "booking",
+      "default": "booking",
+      "description": "Public URL slug for the booking page app (unique platform-wide; a suffix is added on collision)"
+    },
+    "interviews_slug": {
+      "type": "app_slug",
+      "source_value": "lemma-interviews",
+      "default": "lemma-interviews",
+      "description": "Public URL slug for the User interviews app (unique platform-wide; a suffix is added on collision)"
+    }
+  }
+}

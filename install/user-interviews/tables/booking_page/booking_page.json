@@ -1,0 +1,41 @@
+{
+  // One person's booking page: what a visitor sees, and nothing else. Public,
+  // so the page (and the chat beside it) can read it through the Lemma's web
+  // widget without anyone signing in. Shared, not per person: a Public table
+  // cannot be per member. Nothing private goes here; the person's calendars,
+  // hours and accounts stay in their own booking_settings row, whose page_id
+  // points here.
+  "name": "booking_page",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "PUBLIC",
+  "columns": [
+    // The page's address: <app address>/<handle>. Lowercase letters, digits
+    // and dashes.
+    { "name": "handle", "type": "TEXT", "required": true, "unique": true, "max_length": 40 },
+    // Shown as "Book time with <name>".
+    { "name": "name", "type": "TEXT", "required": true, "max_length": 120 },
+    // One line about the person, under their name.
+    { "name": "about", "type": "TEXT", "max_length": 200 },
+    // Optional: what a call with them is for. The chat answers from it.
+    { "name": "more", "type": "TEXT", "max_length": 1500 },
+    { "name": "minutes", "type": "INTEGER", "required": true, "default": 30 },
+    // The video link the invite carries.
+    { "name": "video", "type": "ENUM", "required": true, "default": "none",
+      "options": ["google_meet", "teams", "none"] },
+    // The person's own time zone, so a visitor can see whose day it is.
+    { "name": "timezone", "type": "TEXT", "max_length": 64 },
+    // Times sooner than this are hidden by the page between refreshes.
+    { "name": "notice_hours", "type": "INTEGER", "required": true, "default": 12 },
+    // off: the page says it is not taking bookings.
+    { "name": "state", "type": "ENUM", "required": true, "default": "off", "options": ["on", "off"] },
+    // Open start times, UTC, oldest first: ["2026-11-19T05:30:00Z", ...].
+    // Worked out from the live calendars every 15 minutes and after each
+    // booking (booking_slots).
+    { "name": "slots", "type": "JSON" },
+    { "name": "slots_at", "type": "DATETIME" },
+    // The chat beside the page.
+    { "name": "chat", "type": "BOOLEAN", "required": true, "default": true }
+  ],
+  "config": {}
+}

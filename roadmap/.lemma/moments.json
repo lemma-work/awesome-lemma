@@ -1,0 +1,144 @@
+{
+  "//": "The pictures on Roadmap's page on the website, taken from its Try it demo by `node _kit/bin/moments.mjs roadmap` into .lemma/moments/. listing.json names them by `name`.",
+  "captures": [
+    {
+      "name": "sort",
+      "alt": "The ranked features re-sorted by open deals: SSO with Okta and Audit log move to the top, ahead of the feature most people asked for",
+      "loop": true,
+      "cursor": true,
+      "route": "/",
+      "viewport": [
+        1640,
+        760
+      ],
+      "clip": {
+        "selector": ".rm-table-wrap",
+        "pad": 8,
+        "height": 560
+      },
+      "poster": 2.6,
+      "steps": [
+        {
+          "wait": 1200
+        },
+        {
+          "click": ".rm-table th button",
+          "text": "Open deals"
+        },
+        {
+          "wait": 1600
+        },
+        {
+          "click": ".rm-table th button",
+          "text": "People"
+        },
+        {
+          "wait": 1200
+        }
+      ]
+    },
+    {
+      "name": "who-asked",
+      "alt": "Who asked for bulk edit, by company: three blockers first, each with a quote, where it was said, and the company's deal",
+      "route": "/",
+      "viewport": [
+        1440,
+        1000
+      ],
+      "clip": {
+        "selector": ".rm-side",
+        "pad": 0,
+        "height": 760
+      },
+      "steps": [
+        {
+          "wait": 1200
+        },
+        {
+          "mouse": [
+            4,
+            4
+          ]
+        }
+      ]
+    },
+    {
+      "name": "spec-quote",
+      "alt": "Pointing at a line of the drafted spec lights the quote it came from, with who said it and where",
+      "loop": true,
+      "cursor": true,
+      "route": "/f/02b5d141-f944-5765-8ff4-5c47adb15ce4",
+      "viewport": [
+        1440,
+        900
+      ],
+      "clip": {
+        "x": 0,
+        "y": 240,
+        "width": 1440,
+        "height": 640
+      },
+      "poster": 2.4,
+      "steps": [
+        {
+          "wait": 1400
+        },
+        {
+          "hover": ".rm-ln",
+          "nth": 1
+        },
+        {
+          "wait": 1400
+        },
+        {
+          "hover": ".rm-ln",
+          "nth": 9
+        },
+        {
+          "wait": 1400
+        },
+        {
+          "mouse": [
+            4,
+            4
+          ]
+        }
+      ]
+    },
+    {
+      "name": "stale",
+      "alt": "The board's Now column: a card flagged with no task moved in 16 days, beside cards with their progress from Tasks",
+      "route": "/board",
+      "viewport": [
+        1184,
+        860
+      ],
+      "clip": {
+        "selector": ".rm-lane",
+        "pad": 8
+      },
+      "steps": [
+        {
+          "wait": 1200
+        },
+        {
+          "mouse": [
+            4,
+            4
+          ]
+        }
+      ],
+      "phone": {
+        "viewport": [
+          390,
+          900
+        ],
+        "clip": {
+          "selector": ".rm-lane",
+          "pad": 6,
+          "height": 820
+        }
+      }
+    }
+  ]
+}

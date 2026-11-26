@@ -1,0 +1,12 @@
+#!/bin/bash
+# Put this folder's code and grants for some functions into the bound Lemma, in
+# place: a server-side install never updates a function the Lemma already has.
+#   bin/push interviews_read interviews_keep
+here="$(cd "$(dirname "$0")/.." && pwd)"
+for name in "$@"; do
+  payload="$(uv run --no-project python -c "import json,sys
+spec=json.load(open(sys.argv[2]))
+print(json.dumps({'code': open(sys.argv[1]).read(), 'description': spec['description'], 'permissions': spec['permissions']}))" \
+    "$here/functions/$name/code.py" "$here/functions/$name/$name.json")"
+  "$here/bin/lemma" --json functions update "$name" -d "$payload" >/dev/null && echo "pushed $name" || echo "FAILED $name"
+done

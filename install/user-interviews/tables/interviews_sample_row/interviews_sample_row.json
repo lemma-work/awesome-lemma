@@ -1,0 +1,12 @@
+{
+  // Every row the sample made, so clearing it removes only those.
+  "name": "interviews_sample_row",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "table_name", "type": "TEXT", "required": true, "max_length": 64 },
+    { "name": "row_id", "type": "UUID", "required": true }
+  ],
+  "config": {}
+}

@@ -1,0 +1,15 @@
+{
+  // Sort whatever is waiting, one Decisions call per conversation. The app
+  // runs it after categories change (with mail_resort) and from "Sort now";
+  // the catch-up and push workflows run the same function after a read.
+  "name": "mail-sort",
+  "description": "Sort the conversations waiting: one Decisions call each for category, what it needs, priority and promises.",
+  "start": { "type": "MANUAL" },
+  "nodes": [
+    { "id": "sort", "type": "FUNCTION", "label": "Sort",
+      "config": { "function_name": "mail_sort", "input_mapping": {
+        "max_conversations": { "type": "literal", "value": 80 } } } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [ { "id": "e1", "source": "sort", "target": "end" } ]
+}

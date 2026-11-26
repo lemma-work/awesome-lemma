@@ -1,0 +1,62 @@
+{
+  // One meeting on the owner's calendar, from any calendar (Google Calendar,
+  // Outlook, later a booking page), and what was made of it: what kind of
+  // meeting it is, the brief before it, and what was said after.
+  //
+  // Shared definition (plugins/_contract), first written by Meetings. Carried
+  // unchanged by every plugin that uses it; _contract/lint.py fails on any
+  // difference. Nothing here belongs to one provider: a source's own working
+  // state (the calendar account, where a brief is) lives in that plugin's own
+  // table, whose row id is this meeting's id. A promise made in a meeting is a
+  // `promise` row with source "meeting" and this meeting's source_id.
+  "name": "meeting",
+  "primary_key_column": "id",
+  "enable_rls": true,
+  "visibility": "POD",
+  "columns": [
+    // Where it was booked: calendar, booking, ...
+    { "name": "source", "type": "TEXT", "required": true, "max_length": 32 },
+    // Which connected account it came through, as the source plugin names it
+    // (Meetings: its calendar row id).
+    { "name": "source_account", "type": "TEXT", "required": true, "max_length": 64 },
+    // The provider's own id for this occurrence (a Google or Outlook event id).
+    { "name": "source_id", "type": "TEXT", "required": true, "max_length": 400 },
+    // The provider's id for the series a repeating meeting belongs to.
+    { "name": "series_id", "type": "TEXT", "max_length": 400 },
+    { "name": "title", "type": "TEXT", "max_length": 500 },
+    { "name": "start_at", "type": "DATETIME", "required": true },
+    { "name": "end_at", "type": "DATETIME" },
+    // Everyone invited, the owner included, as
+    // [{handle, name, response, organizer, you, outside}]: handle as in
+    // person_handle (an email lowercased), response one of accepted,
+    // tentative, declined, needs_action.
+    { "name": "attendees", "type": "JSON" },
+    { "name": "organizer_handle", "type": "TEXT", "max_length": 320 },
+    // The invitation's own words, without joining instructions.
+    { "name": "agenda", "type": "TEXT", "max_length": 4000 },
+    { "name": "join_url", "type": "TEXT", "max_length": 800 },
+    { "name": "location", "type": "TEXT", "max_length": 400 },
+    { "name": "status", "type": "ENUM", "required": true, "default": "confirmed",
+      "options": ["confirmed", "tentative", "cancelled"] },
+    // Someone from outside the owner's own email domains is on it. Read from
+    // the domains, never by a model.
+    { "name": "outside", "type": "BOOLEAN", "default": false },
+    // What kind of meeting it is. Null until read, and null when the read
+    // could not tell: the owner settles it.
+    { "name": "kind", "type": "ENUM",
+      "options": ["customer", "investor", "candidate", "partner", "internal", "other"] },
+    // Whether it gets a brief before it. Null when not sure.
+    { "name": "wants_brief", "type": "BOOLEAN" },
+    // Before: the one line to know going in, and the brief (markdown).
+    { "name": "headline", "type": "TEXT", "max_length": 300 },
+    { "name": "brief", "type": "TEXT" },
+    { "name": "brief_at", "type": "DATETIME" },
+    // After: what was said as one markdown document (a transcript, or the
+    // owner's own notes), and what came of it in a few lines. Decisions and
+    // promises are their own rows, each with the sentence it came from.
+    { "name": "document_path", "type": "FILE_PATH", "max_length": 500 },
+    { "name": "summary", "type": "TEXT", "max_length": 2000 },
+    { "name": "summarized_at", "type": "DATETIME" }
+  ],
+  "config": {}
+}

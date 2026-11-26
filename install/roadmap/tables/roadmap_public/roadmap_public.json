@@ -1,0 +1,22 @@
+{
+  // One line on the outside roadmap page. Public: the roadmap-public app reads
+  // the whole table, every column, through the Lemma's web widget key with no
+  // sign-in, so it holds only what the team chose to show: no names, no
+  // numbers, no feature ids beyond the row's own. Id: the feature's id.
+  // Rewritten whole by roadmap_publish; empty while the page is off.
+  "name": "roadmap_public",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "PUBLIC",
+  "columns": [
+    // Which part of the page: now, next, later or shipped. (Not `column`:
+    // the platform refuses a reserved SQL word as a column name.)
+    { "name": "lane", "type": "ENUM", "required": true, "default": "later",
+      "options": ["now", "next", "later", "shipped"] },
+    { "name": "title", "type": "TEXT", "required": true, "max_length": 120 },
+    { "name": "blurb", "type": "TEXT", "max_length": 300 },
+    { "name": "shipped_on", "type": "DATE" },
+    { "name": "position", "type": "INTEGER", "default": 0 }
+  ],
+  "config": {}
+}

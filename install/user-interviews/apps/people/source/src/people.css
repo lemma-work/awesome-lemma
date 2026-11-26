@@ -1,0 +1,74 @@
+/* People map's own marks and layout on the kit: the set-up rail, settle rows,
+   the list's quiet line, a cited source lighting up. Only the kit's --c-*
+   roles, never a colour of its own; nothing heavier than 500. */
+
+.pm-strip { padding: 10px var(--gutter) 0; }
+.pm-strip .c-banner { margin-bottom: 0; padding: 8px 12px; }
+
+/* ---------- set-up ---------- */
+
+.pm-rail { display: flex; flex-wrap: wrap; gap: 6px 14px; list-style: none; padding: 0; margin: 0 0 22px; color: var(--c-faint); font-size: 12px; font-weight: 500; }
+.pm-rail li { display: inline-flex; align-items: center; gap: 6px; }
+.pm-rail__dot { width: 18px; height: 18px; border-radius: 50%; display: inline-grid; place-items: center; font-size: 10.5px; box-shadow: inset 0 0 0 1px var(--c-border-strong); }
+.pm-rail li.is-here { color: var(--c-text); }
+.pm-rail li.is-here .pm-rail__dot { background: var(--c-accent); color: var(--c-page); box-shadow: none; }
+.pm-rail li.is-done .pm-rail__dot { background: var(--c-subtle); color: var(--c-muted); }
+.c-setup .c-card { margin-top: 22px; }
+.pm-setup--wide .c-setup { max-width: 720px; }
+.pm-tile { width: 28px; height: 28px; border-radius: 8px; display: grid; place-items: center; background: var(--c-subtle); color: var(--c-muted); box-shadow: inset 0 0 0 1px var(--c-border); flex: none; }
+.pm-choice { align-items: flex-start; }
+.pm-choice input { margin-top: 2px; }
+.pm-choice__title { display: block; font-weight: 500; }
+.pm-choice__sub { display: block; color: var(--c-muted); font-size: 12.5px; margin-top: 2px; line-height: 1.45; }
+.pm-dim { opacity: 0.55; cursor: default; }
+.pm-review { max-height: 420px; overflow-y: auto; }
+.pm-disclose { width: 100%; border: 0; border-bottom: 1px solid var(--c-border); background: none; text-align: left; cursor: pointer; font: inherit; }
+.pm-disclose:hover { background: var(--c-hover); }
+.pm-sticky-row { position: sticky; bottom: 0; padding: 12px 0; background: var(--c-page); }
+.pm-settle { align-items: flex-start; }
+.pm-settle .c-li__sub { margin-top: 3px; color: var(--c-muted); }
+.pm-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+
+/* ---------- the list ---------- */
+
+.pm-kind-filter { width: auto; height: 32px; padding: 0 8px; }
+.pm-unsure-line {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; padding: 10px 14px;
+  border-radius: var(--c-radius-lg); background: var(--c-subtle); box-shadow: inset 0 0 0 1px var(--c-border); color: var(--c-muted);
+}
+.pm-unsure-line svg { color: var(--c-warning); flex: none; }
+.pm-name { font-weight: 500; }
+.pm-table td:first-child { max-width: 280px; }
+.pm-last { gap: 6px; color: var(--c-muted); }
+.pm-last svg { color: var(--c-faint); flex: none; }
+.pm-who { color: var(--c-muted); font-size: 12.5px; max-width: 200px; }
+.pm-more { padding: 10px 4px; }
+
+/* ---------- a person ---------- */
+
+.pm-owed-link { display: block; width: 100%; border: 0; background: none; padding: 0; text-align: left; color: var(--c-text); font: inherit; cursor: pointer; }
+.pm-owed-link:hover > div:first-child { text-decoration: underline; text-decoration-color: var(--c-border-strong); text-underline-offset: 2px; }
+.pm-meta { font-size: 12px; margin-top: 2px; }
+.pm-late { color: var(--c-danger); }
+.c-owed .c-evidence { margin-top: 6px; }
+.pm-tl-title { gap: 8px; font-weight: 500; min-width: 0; }
+.pm-tl-sub { font-size: 12.5px; margin-top: 2px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.c-timeline > li.pm-lit { background: var(--c-accent-soft); transition: background 0.4s; }
+.pm-link { border: 0; background: none; padding: 0; color: inherit; font: inherit; cursor: pointer; text-decoration: underline; text-decoration-color: var(--c-border-strong); text-underline-offset: 2px; }
+.pm-fact { align-items: flex-start; }
+
+/* ---------- settings ---------- */
+
+.pm-settings { display: grid; gap: 16px; max-width: 760px; }
+
+@media (max-width: 640px) {
+  .pm-hide-xs { display: none !important; }
+  .pm-table td:first-child { max-width: 200px; }
+  .pm-kind-filter { flex: 1; }
+  .c-toolbar .c-seg { max-width: 100%; overflow-x: auto; }
+}
+
+@media (max-width: 640px) {
+  .pm-tl-title { flex-wrap: wrap; row-gap: 4px; }
+  .pm-tl-title .c-ellipsis { white-space: normal; }
+}

@@ -1,0 +1,22 @@
+{
+  // One row of a list someone pasted (CSV or one person a line): who, and any
+  // other columns as they were (plan, seats, last login). The only place
+  // usage or plan can come from: no other table holds it. Id
+  // uuid5(INTERVIEWS_NS, "pasted:<study id or any>:<handle>"). Team-wide.
+  "name": "interviews_pasted",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    // The study it was pasted for; null: any study.
+    { "name": "study_id", "type": "UUID" },
+    { "name": "handle", "type": "TEXT", "required": true, "max_length": 320 },
+    { "name": "name", "type": "TEXT", "max_length": 200 },
+    { "name": "company_name", "type": "TEXT", "max_length": 200 },
+    { "name": "title", "type": "TEXT", "max_length": 200 },
+    // Every other column, by its header: {"plan": "Team", "seats": "12"}.
+    { "name": "fields", "type": "JSON" },
+    { "name": "pasted_by", "type": "USER" }
+  ],
+  "config": {}
+}

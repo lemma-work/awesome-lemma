@@ -1,0 +1,22 @@
+{
+  // One check-in answer, from the check-in page a tester's note links to
+  // (<app address>/<slug>/check-in?ref=<their ref>). Opened to anyone with
+  // the link, for these columns only; the ref is what ties it to a tester,
+  // and early_access_on_checkin drops a row whose ref names nobody let in.
+  "name": "early_access_checkin",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "beta_id", "type": "TEXT", "required": true, "max_length": 64, "description": "The beta" },
+    { "name": "ref", "type": "TEXT", "required": true, "max_length": 64, "description": "Reference" },
+    { "name": "used", "type": "ENUM", "required": true, "options": ["yes", "a_little", "not_yet"], "description": "Have you used it?" },
+    { "name": "worked", "type": "TEXT", "max_length": 2000, "description": "What worked?" },
+    { "name": "got_in_way", "type": "TEXT", "max_length": 2000, "description": "What got in the way?" },
+    { "name": "would_miss", "type": "ENUM", "options": ["very", "somewhat", "not_really"], "description": "Would you miss it if it went away?" },
+    { "name": "tester_id", "type": "UUID" },
+    { "name": "handled_at", "type": "DATETIME" },
+    { "name": "sample", "type": "BOOLEAN", "default": false }
+  ],
+  "config": {}
+}

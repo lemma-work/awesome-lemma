@@ -1,0 +1,24 @@
+{
+  // Writes one note to one beta tester in the member's own voice: the invite,
+  // the day-6 check-in, the one note to someone gone quiet, or why not this
+  // round. From the brief early_access_draft gathered. No tools. Never sends:
+  // the note is a Mail draft until a person presses Send.
+  "name": "early-access-writer",
+  "description": "Writes one short note to a beta tester in the member's own voice (invite, check-in, the one chase, or not this time), quoting what they said at sign-up. Never sends.",
+  "visibility": "POD",
+  "toolsets": [],
+  "instruction": { "$file": "instruction.md" },
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "skip": { "type": "boolean", "description": "True only when the brief gives nothing to write from." },
+      "skip_reason": { "type": "string" },
+      "subject": { "type": "string", "description": "A short subject line." },
+      "body": { "type": "string", "description": "Plain text. Paragraphs separated by one blank line." },
+      "rationale": { "type": "string", "description": "One sentence for the margin: what you used." },
+      "used": { "type": "array", "items": { "type": "string" }, "description": "Two to four short labels in plain words: 'sign-up: 12 exports every Monday', 'quiet 9 days'." }
+    },
+    "required": ["skip", "subject", "body", "rationale"]
+  },
+  "permissions": { "grants": [] }
+}

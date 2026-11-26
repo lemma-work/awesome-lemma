@@ -1,0 +1,27 @@
+{
+  // One listening run: one source for one product (ours or a rival's).
+  "name": "user_feedback_listen",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    // hn, youtube, x, reddit, tiktok, linkedin
+    { "name": "source", "type": "TEXT", "required": true, "max_length": 32 },
+    { "name": "product_id", "type": "UUID" },
+    { "name": "state", "type": "ENUM", "required": true, "default": "running",
+      "options": ["running", "done", "failed"] },
+    { "name": "started_at", "type": "DATETIME" },
+    { "name": "finished_at", "type": "DATETIME" },
+    // Posts and comments read, and how many held feedback.
+    { "name": "found", "type": "INTEGER", "default": 0 },
+    { "name": "kept", "type": "INTEGER", "default": 0 },
+    // Bright Data's billed records for the run, and its snapshot.
+    { "name": "records", "type": "INTEGER", "default": 0 },
+    { "name": "snapshot_id", "type": "TEXT", "max_length": 120 },
+    { "name": "keywords", "type": "JSON" },
+    { "name": "calls", "type": "INTEGER", "default": 0 },
+    { "name": "error", "type": "TEXT", "max_length": 500 },
+    { "name": "sample", "type": "BOOLEAN", "default": false }
+  ],
+  "config": {}
+}

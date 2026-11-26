@@ -1,0 +1,19 @@
+{
+  "format_version": 4,
+  "name": "Roadmap",
+  "description": "Features ranked by who asked, with the spec drafted from what they said: every feature with the people, companies, blockers and deals behind it (no score), now / next / later with progress from Tasks, a spec whose every line cites its quotes, and an outside page the team can turn on. Brings Deal tracker, People map, Mail and Meetings with it.",
+  "variables": {
+    "roadmap_slug": {
+      "type": "app_slug",
+      "source_value": "lemma-roadmap",
+      "default": "lemma-roadmap",
+      "description": "Public URL slug for the Roadmap app (unique platform-wide; a suffix is added on collision)"
+    },
+    "roadmap_public_slug": {
+      "type": "app_slug",
+      "source_value": "lemma-roadmap-page",
+      "default": "lemma-roadmap-page",
+      "description": "Public URL slug for the roadmap page anyone can read (unique platform-wide; a suffix is added on collision)"
+    }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  // Roadmap carries Deal tracker (and with it People map, Mail and Meetings),
+  // so the money behind each feature's askers is there from the first install.
+  // It should carry User feedback too, which files the quotes it ranks by;
+  // User feedback isn't built yet, so Roadmap carries the contract tables it
+  // reads directly (product, feature, feedback, ask, plus project and task
+  // for the work), and switches to "carries": ["user-feedback", "deals"] once
+  // that plugin exists. Read by _build/assemble.py.
+  "name": "roadmap",
+  "carries": ["deals"]
+}

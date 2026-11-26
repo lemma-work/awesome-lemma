@@ -1,0 +1,31 @@
+{
+  "people": {
+    "kind": "still",
+    "width": 1108,
+    "height": 1138,
+    "alt": "A study's people: each with why they fit (a won deal, what they said before, a pasted plan), where they stand, and at the bottom the ones resting under the contact rules, each with its rule and date",
+    "bleed": null,
+    "window": null,
+    "phone": {
+      "width": 378,
+      "height": 1100,
+      "bleed": null
+    }
+  },
+  "keep": {
+    "kind": "loop",
+    "width": 720,
+    "height": 620,
+    "alt": "A call's proposed findings: the filter one is kept with the A key and turns Kept, filed under its feature",
+    "bleed": null,
+    "window": null
+  },
+  "grid": {
+    "kind": "loop",
+    "width": 1440,
+    "height": 688,
+    "alt": "Features by people across a study's calls: keeping one more finding from a call moves Keep filters in exports from 3 to 4 of 4 people",
+    "bleed": null,
+    "window": null
+  }
+}

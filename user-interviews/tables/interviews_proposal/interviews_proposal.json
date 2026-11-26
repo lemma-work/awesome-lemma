@@ -1,0 +1,42 @@
+{
+  // One finding the Lemma proposes from a call, for the interviewer to keep or
+  // set aside. Per person (RLS): the words stay in the interviewer's own
+  // account until they keep one, and only then does it become a team-wide
+  // `feedback` row. Id uuid5(INTERVIEWS_NS, "proposal:<person id>:<quote key>").
+  "name": "interviews_proposal",
+  "primary_key_column": "id",
+  "enable_rls": true,
+  "visibility": "POD",
+  "columns": [
+    { "name": "person_id", "type": "UUID", "required": true },
+    { "name": "study_id", "type": "UUID", "required": true },
+    { "name": "meeting_id", "type": "UUID" },
+    // Its number on the page, in the order said.
+    { "name": "n", "type": "INTEGER" },
+    // The words, checked word for word against the document.
+    { "name": "quote", "type": "TEXT", "required": true, "max_length": 2000 },
+    // How far into the call (from the nearest [m:ss] above it); null without times.
+    { "name": "at_seconds", "type": "INTEGER" },
+    // The document's line it was found on (0-based), for the page.
+    { "name": "line", "type": "INTEGER" },
+    { "name": "point", "type": "TEXT", "max_length": 200 },
+    // The feature it files under (shared `feature`, by id), or a new one's
+    // name, which becomes a suggested feature when kept.
+    { "name": "feature_id", "type": "UUID" },
+    { "name": "feature_new", "type": "TEXT", "max_length": 120 },
+    // As in `feedback`.
+    { "name": "kind", "type": "ENUM", "required": true, "default": "other",
+      "options": ["request", "problem", "praise", "question", "comparison", "other"] },
+    { "name": "importance", "type": "ENUM", "required": true, "default": "unknown",
+      "options": ["unknown", "nice", "important", "blocker"] },
+    { "name": "reason", "type": "TEXT", "max_length": 300 },
+    // open, kept (a `feedback` row now, `feedback_id`), set_aside.
+    { "name": "state", "type": "ENUM", "required": true, "default": "open",
+      "options": ["open", "kept", "set_aside"] },
+    { "name": "edited", "type": "BOOLEAN", "default": false },
+    { "name": "feedback_id", "type": "UUID" },
+    { "name": "decided_at", "type": "DATETIME" },
+    { "name": "sample", "type": "BOOLEAN", "default": false }
+  ],
+  "config": {}
+}

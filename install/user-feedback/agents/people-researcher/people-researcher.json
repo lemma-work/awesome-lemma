@@ -1,0 +1,34 @@
+{
+  // Looks a company up on the web once, when someone on the team asks on the
+  // company's page. WEB_SEARCH is its only tool; it returns JSON and
+  // people_save_company writes it. It is given only what the whole team may
+  // see (the company's name, domains, who the team knows there), never mail.
+  "name": "people-researcher",
+  "description": "Looks up one company on the web: what they do, how big, where, and anything recent worth knowing before you talk to them. Returns JSON; writes nothing itself.",
+  "visibility": "POD",
+  "toolsets": ["WEB_SEARCH"],
+  "instruction": { "$file": "instruction.md" },
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "found": { "type": "boolean", "description": "True only when a page you read confirms this company at this domain. False for a made-up or reserved domain, a person's own site, or nothing reliable." },
+      "name": { "type": "string", "description": "The company's name as it writes it. Empty unless found." },
+      "description": { "type": "string", "description": "What they do, one line under 120 characters. Empty unless found." },
+      "industry": { "type": "string" },
+      "size": { "type": "string", "description": "Headcount band, e.g. 11-50, only if a source says." },
+      "location": { "type": "string", "description": "City and country of the head office." },
+      "website": { "type": "string" },
+      "research": { "type": "string", "description": "Markdown, under 150 words: what they do, who for, anything recent." },
+      "sources": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": { "title": { "type": "string" }, "url": { "type": "string" } },
+          "required": ["url"]
+        }
+      }
+    },
+    "required": ["found", "research", "sources"]
+  },
+  "permissions": { "grants": [] }
+}

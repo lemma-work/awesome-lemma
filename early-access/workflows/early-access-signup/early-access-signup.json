@@ -1,0 +1,54 @@
+{
+  // A sign-up from the public page. Started by the early-access-signup
+  // trigger the app makes at Turn on (INSERT on early_access_signup, taking
+  // rows from outside), so it runs as the person who turned it on.
+  //
+  //   signup  the tester, the Waiting status row, the form count
+  //   fit     one Decisions call: strong, maybe or not now
+  //   pick    early-access-picker writes the one-line reason, naming a fact
+  //   keep    the reason, checked against the facts
+  //   needs   Today: "Next 10 are ready" when there are
+  "name": "early-access-signup",
+  "description": "Someone signed up for a beta: add them to the waiting list, read how well they fit and why, and say on their page that they're waiting. Nobody is let in.",
+  "max_concurrent_runs": 4,
+  "start": { "type": "DATASTORE_EVENT", "config": { "table_name": "early_access_signup", "operations": ["INSERT"] } },
+  "nodes": [
+    { "id": "signup", "type": "FUNCTION", "label": "Add them to the list",
+      "config": { "function_name": "early_access_on_signup", "input_mapping": {
+        "record_id": { "type": "expression", "value": "start.metadata.record_id" },
+        "row_author": { "type": "expression", "value": "start.metadata.row_author", "optional": true } } } },
+    { "id": "new", "type": "DECISION", "label": "New on the list?",
+      "config": { "rules": [ { "condition": "signup.skip == `true`", "next_node_id": "end" } ] } },
+    { "id": "fit", "type": "FUNCTION", "label": "How well they fit",
+      "config": { "function_name": "early_access_fit", "input_mapping": {
+        "mode": { "type": "literal", "value": "brief" },
+        "tester_id": { "type": "expression", "value": "signup.tester_id" } } } },
+    { "id": "read", "type": "DECISION", "label": "Fit read?",
+      "config": { "rules": [ { "condition": "fit.skip == `true`", "next_node_id": "needs" } ] } },
+    { "id": "pick", "type": "AGENT", "label": "Say why",
+      "config": { "agent_name": "early-access-picker", "input_mapping": {
+        "person": { "type": "expression", "value": "fit.brief.person" },
+        "beta": { "type": "expression", "value": "fit.brief.beta" },
+        "fit": { "type": "expression", "value": "fit.brief.fit" },
+        "facts": { "type": "expression", "value": "fit.brief.facts" } } } },
+    { "id": "keep", "type": "FUNCTION", "label": "Keep the reason",
+      "config": { "function_name": "early_access_fit", "input_mapping": {
+        "mode": { "type": "literal", "value": "save" },
+        "tester_id": { "type": "expression", "value": "signup.tester_id" },
+        "written": { "type": "expression", "value": "pick" } } } },
+    { "id": "needs", "type": "FUNCTION", "label": "What needs you",
+      "config": { "function_name": "early_access_needs_you", "input_mapping": {} } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [
+    { "id": "e1", "source": "signup", "target": "new" },
+    { "id": "e2", "source": "new", "target": "fit", "label": "new on the list" },
+    { "id": "e3", "source": "new", "target": "end", "label": "nothing to read" },
+    { "id": "e4", "source": "fit", "target": "read" },
+    { "id": "e5", "source": "read", "target": "pick", "label": "fit read" },
+    { "id": "e6", "source": "read", "target": "needs", "label": "not read this time" },
+    { "id": "e7", "source": "pick", "target": "keep" },
+    { "id": "e8", "source": "keep", "target": "needs" },
+    { "id": "e9", "source": "needs", "target": "end" }
+  ]
+}

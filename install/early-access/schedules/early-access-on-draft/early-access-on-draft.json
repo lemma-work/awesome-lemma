@@ -1,0 +1,10 @@
+{
+  // A new mail draft became sent: early_access_on_draft acts when Early
+  // access wrote it. draft is per person, so it runs as the draft's owner.
+  "name": "early-access-on-draft",
+  "schedule_type": "DATASTORE",
+  "config": { "table_name": "draft", "operations": ["UPDATE"],
+              "when": { "source": "mail", "kind": "new", "state": { "to": "sent" } }, "bulk_writes": "each" },
+  "workflow_name": "early-access-on-draft",
+  "is_active": true
+}

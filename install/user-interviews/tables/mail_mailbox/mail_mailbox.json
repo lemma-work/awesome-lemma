@@ -1,0 +1,27 @@
+{
+  // One connected mailbox: Mail's own, outside the shared contract. A person
+  // can have several (Gmail and Outlook side by side), and every conversation
+  // Mail writes names its mailbox in conversation.source_account, so a reply
+  // always leaves from the address it arrived at.
+  //
+  // account_id is the connector account, written when the person connects;
+  // "sample" for the made-up mailbox a person can look around with.
+  "name": "mail_mailbox",
+  "primary_key_column": "id",
+  "enable_rls": true,
+  "visibility": "POD",
+  "columns": [
+    { "name": "provider", "type": "ENUM", "required": true, "options": ["gmail", "outlook"] },
+    { "name": "account_id", "type": "TEXT", "required": true, "max_length": 64 },
+    { "name": "email", "type": "TEXT", "required": true, "max_length": 320 },
+    { "name": "owner_name", "type": "TEXT", "max_length": 200 },
+    // backfilling: the first read is still going. live: new mail is read as it
+    // arrives. paused: the person stopped it. error: see last_error.
+    { "name": "state", "type": "ENUM", "required": true, "default": "backfilling",
+      "options": ["backfilling", "live", "paused", "error"] },
+    { "name": "connected_at", "type": "DATETIME" },
+    { "name": "last_synced_at", "type": "DATETIME" },
+    { "name": "last_error", "type": "TEXT", "max_length": 2000 }
+  ],
+  "config": {}
+}

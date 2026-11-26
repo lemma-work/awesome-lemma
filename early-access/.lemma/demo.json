@@ -1,0 +1,33 @@
+{
+  "anchor": "2026-11-26T10:30:00Z",
+  "zone": "UTC",
+  "apps": [
+    { "name": "early-access", "label": "Early access", "start": "/" },
+    { "name": "page", "source": "early-access", "label": "Sign-up page", "start": "/sample-csv-export", "query": "?k=pk_sample_demo" },
+    { "name": "status", "source": "early-access", "label": "Where they stand", "start": "/sample-csv-export/status", "query": "?k=pk_sample_demo&ref=336d9dc148d7506b84458965" }
+  ],
+  "labels": { "inbox": "Mail" },
+  "user": {
+    "id": "user-sample",
+    "email": "jordan@ledgerline.example",
+    "first_name": "Jordan",
+    "last_name": "Ellis",
+    "name": "Jordan Ellis",
+    "is_active": true,
+    "is_superuser": false,
+    "is_verified": true,
+    "created_at": "2026-01-01T00:00:00Z",
+    "updated_at": "2026-01-01T00:00:00Z"
+  },
+  "notes": {
+    "early_access_setup_save": "In the demo the beta isn't saved.",
+    "early_access_needs_you": "",
+    "early_access_memory": "",
+    "early_access_sample_data": "In the demo the sample stays.",
+    "mail_send_draft": "In the demo nothing is sent: in a Lemma, Mail sends it from your own mailbox."
+  },
+  "connections": {
+    "posthog": { "state": "ready", "as": "Ledgerline (PostHog)" },
+    "mcp": { "state": "ready", "as": "Ledgerline (PostHog)" }
+  }
+}

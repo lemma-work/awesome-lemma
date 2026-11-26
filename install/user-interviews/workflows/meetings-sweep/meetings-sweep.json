@@ -1,0 +1,30 @@
+{
+  // The regular pass, run as each person by their own schedule (the app makes
+  // it when they turn Meetings on: every fifteen minutes). Reads the calendar
+  // again, sorts what is new, asks for the briefs that are due, and finds
+  // what was said in meetings that are over.
+  "name": "meetings-sweep",
+  "description": "Read the calendar again, sort new meetings, ask for briefs that are due, and write up meetings that are over.",
+  "max_concurrent_runs": 4,
+  "start": { "type": "MANUAL" },
+  "nodes": [
+    { "id": "read", "type": "FUNCTION", "label": "Read the calendar",
+      "config": { "function_name": "meetings_calendar_read", "input_mapping": {
+        "past_days": { "type": "literal", "value": 7 },
+        "ahead_days": { "type": "literal", "value": 14 } } } },
+    { "id": "sort", "type": "FUNCTION", "label": "Sort what is new",
+      "config": { "function_name": "meetings_sort", "input_mapping": {
+        "max_meetings": { "type": "literal", "value": 40 } } } },
+    { "id": "due", "type": "FUNCTION", "label": "Briefs due, meetings over",
+      "config": { "function_name": "meetings_due", "input_mapping": {} } },
+    { "id": "needs", "type": "FUNCTION", "label": "What needs you on the calendar",
+      "config": { "function_name": "meetings_needs_you", "input_mapping": {} } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [
+    { "id": "e1", "source": "read", "target": "sort" },
+    { "id": "e2", "source": "sort", "target": "due" },
+    { "id": "e3", "source": "due", "target": "needs" },
+    { "id": "e3n", "source": "needs", "target": "end" }
+  ]
+}

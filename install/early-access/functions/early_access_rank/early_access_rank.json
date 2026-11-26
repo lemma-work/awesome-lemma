@@ -1,0 +1,29 @@
+{
+  "name": "early_access_rank",
+  "description": "Who to let in next for a beta (beta_id, or beta by name or slug): the people waiting ranked by fit, then how sure, then longest waiting, each with the reason and what they said. Read only; it never lets anyone in.",
+  "type": "API",
+  "visibility": "POD",
+  "code": {
+    "$file": "code.py"
+  },
+  "permissions": {
+    "grants": [
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "early_access_beta",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "early_access_tester",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read"
+        ]
+      }
+    ]
+  }
+}

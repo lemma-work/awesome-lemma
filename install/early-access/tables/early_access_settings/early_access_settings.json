@@ -1,0 +1,16 @@
+{
+  // Per person: the Mail mailbox their invites and notes go from, and the
+  // schedules the app made for them. Each member sees only their own row.
+  "name": "early_access_settings",
+  "primary_key_column": "id",
+  "enable_rls": true,
+  "visibility": "POD",
+  "columns": [
+    // Mail's mail_mailbox id.
+    { "name": "mailbox", "type": "TEXT", "max_length": 64 },
+    { "name": "voice_from_mail", "type": "BOOLEAN", "default": true },
+    // name -> id of the schedules made for this person (their hourly sweep).
+    { "name": "schedules", "type": "JSON" }
+  ],
+  "config": {}
+}

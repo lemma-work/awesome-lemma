@@ -1,0 +1,256 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Bright Data Web Scraper API (the calls User feedback makes)",
+    "version": "1.0.0",
+    "description": "Start a collection, check it, download it, and list collections (to check a key). Served from this repository so a Lemma's OpenAPI connector can read it."
+  },
+  "servers": [
+    {
+      "url": "https://api.brightdata.com"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "paths": {
+    "/datasets/v3/trigger": {
+      "post": {
+        "operationId": "trigger_collection",
+        "summary": "trigger_collection",
+        "parameters": [
+          {
+            "name": "dataset_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "discover_new"
+              ]
+            },
+            "description": "discover_new to find new items by keyword; omit to collect by URL."
+          },
+          {
+            "name": "discover_by",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "keyword, hashtag, profile_url, \u2026"
+          },
+          {
+            "name": "include_errors",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "limit_per_input",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "input": {
+                    "type": "array",
+                    "items": {
+                      "type": "object"
+                    }
+                  }
+                },
+                "required": [
+                  "input"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Started",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "snapshot_id": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Start an async collection on a scraper dataset. Returns a snapshot_id."
+      }
+    },
+    "/datasets/v3/progress/{snapshot_id}": {
+      "get": {
+        "operationId": "collection_progress",
+        "summary": "collection_progress",
+        "parameters": [
+          {
+            "name": "snapshot_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Progress",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "description": "Status of a collection: running, ready or failed."
+      }
+    },
+    "/datasets/v3/snapshot/{snapshot_id}": {
+      "get": {
+        "operationId": "download_collection",
+        "summary": "download_collection",
+        "parameters": [
+          {
+            "name": "snapshot_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "format",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "json"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Records",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Download a ready collection's records as JSON."
+      }
+    },
+    "/status": {
+      "get": {
+        "operationId": "account_status",
+        "summary": "account_status",
+        "responses": {
+          "200": {
+            "description": "Status",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "description": "Proxy-zone status of the account. Says zone_not_found for accounts that only use the Scraper API, so it is not a key check."
+      }
+    },
+    "/datasets/v3/snapshots": {
+      "get": {
+        "operationId": "list_collections",
+        "summary": "list_collections",
+        "description": "Recent collections on a scraper dataset. Answers 401 for a key Bright Data doesn't recognise, so it doubles as the key check.",
+        "parameters": [
+          {
+            "name": "dataset_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "ready",
+                "running",
+                "failed"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Collections",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

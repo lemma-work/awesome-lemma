@@ -1,0 +1,34 @@
+{
+  "file": {
+    "kind": "loop",
+    "width": 1440,
+    "height": 786,
+    "alt": "The inbox: J moves to the next quote, Enter keeps it under the feature the Lemma picked, X sets one aside",
+    "bleed": null,
+    "window": null
+  },
+  "why": {
+    "kind": "still",
+    "width": 440,
+    "height": 640,
+    "alt": "Three features to file a quote under, each with the words of the quote that match it or how sure the Lemma was",
+    "bleed": null,
+    "window": null
+  },
+  "private": {
+    "kind": "still",
+    "width": 1440,
+    "height": 726,
+    "alt": "From your mail and meetings: sentences only you can see, with Share with the team and Keep private",
+    "bleed": null,
+    "window": null
+  },
+  "suggested": {
+    "kind": "still",
+    "width": 356,
+    "height": 620,
+    "alt": "This week's cards: a feature nine quotes fit that isn't on the list, and two features that look like one",
+    "bleed": null,
+    "window": null
+  }
+}

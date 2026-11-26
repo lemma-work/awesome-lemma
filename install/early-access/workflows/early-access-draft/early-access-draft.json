@@ -1,0 +1,57 @@
+{
+  // One note to one tester, in the mailbox of whoever started it: the app's
+  // press (invites, a Not now note) or that person's own hourly sweep (the
+  // day-6 check-in, the one chase). early_access_draft submits the form at
+  // once, so the run never waits on a person. Nothing is sent.
+  "name": "early-access-draft",
+  "description": "Write one note to one beta tester in your voice (invite, check-in, the one chase, or not this time) and keep it as a draft in your mailbox. Nothing is sent.",
+  "run_title": ["ask.kind", "ask.tester_id"],
+  "max_concurrent_runs": 4,
+  "start": { "type": "MANUAL" },
+  "nodes": [
+    { "id": "ask", "type": "FORM", "label": "Who and what",
+      "config": { "input_schema": {
+        "type": "object",
+        "properties": {
+          "tester_id": { "type": "string", "title": "Tester" },
+          "kind": { "type": "string", "title": "Note", "enum": ["invite", "checkin", "chase", "not_now"] }
+        },
+        "required": ["tester_id", "kind"]
+      } } },
+    { "id": "brief", "type": "FUNCTION", "label": "Gather what to say",
+      "config": { "function_name": "early_access_draft", "input_mapping": {
+        "mode": { "type": "literal", "value": "brief" },
+        "tester_id": { "type": "expression", "value": "ask.tester_id" },
+        "kind": { "type": "expression", "value": "ask.kind" } } } },
+    { "id": "due", "type": "DECISION", "label": "Still to write?",
+      "config": { "rules": [ { "condition": "brief.skip == `true`", "next_node_id": "end" } ] } },
+    { "id": "write", "type": "AGENT", "label": "Write it",
+      "config": { "agent_name": "early-access-writer", "input_mapping": {
+        "kind": { "type": "expression", "value": "brief.brief.kind" },
+        "to": { "type": "expression", "value": "brief.brief.to" },
+        "beta": { "type": "expression", "value": "brief.brief.beta" },
+        "signed_up_said": { "type": "expression", "value": "brief.brief.signed_up_said" },
+        "said_since": { "type": "expression", "value": "brief.brief.said_since", "optional": true },
+        "days_in": { "type": "expression", "value": "brief.brief.days_in", "optional": true },
+        "checkin_link": { "type": "expression", "value": "brief.brief.checkin_link", "optional": true },
+        "fit_reason": { "type": "expression", "value": "brief.brief.fit_reason", "optional": true },
+        "voice": { "type": "expression", "value": "brief.brief.voice" },
+        "brand_voice": { "type": "expression", "value": "brief.brief.brand_voice", "optional": true } } } },
+    { "id": "save", "type": "FUNCTION", "label": "Keep it as a draft",
+      "config": { "function_name": "early_access_draft", "input_mapping": {
+        "mode": { "type": "literal", "value": "save" },
+        "tester_id": { "type": "expression", "value": "ask.tester_id" },
+        "kind": { "type": "expression", "value": "ask.kind" },
+        "written": { "type": "expression", "value": "write" } } } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [
+    { "id": "e1", "source": "ask", "target": "brief" },
+    { "id": "e2", "source": "brief", "target": "due" },
+    { "id": "e3", "source": "due", "target": "write", "label": "to write" },
+    { "id": "e4", "source": "due", "target": "end", "label": "already drafted" },
+    { "id": "e5", "source": "write", "target": "save" },
+    { "id": "e6", "source": "save", "target": "end" }
+  ],
+  "visibility": "POD"
+}

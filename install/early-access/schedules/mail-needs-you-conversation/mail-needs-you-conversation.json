@@ -1,0 +1,11 @@
+{
+  // A mail conversation's state changed (sorted, a new message, the person in
+  // the Inbox): its needs_you items. Runs as the conversation's owner.
+  // bulk_writes each: the sort and the sync write conversations in bulk.
+  "name": "mail-needs-you-conversation",
+  "schedule_type": "DATASTORE",
+  "config": { "table_name": "conversation", "operations": ["UPDATE"],
+              "when": { "source": "mail", "state": { "changed": true } }, "bulk_writes": "each" },
+  "workflow_name": "mail-needs-you-on-conversation",
+  "is_active": true
+}

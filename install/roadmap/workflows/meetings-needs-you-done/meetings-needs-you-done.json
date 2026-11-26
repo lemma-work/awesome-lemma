@@ -1,0 +1,16 @@
+{
+  // The person marked one of Meetings' promise items done outside Meetings
+  // (Today's Done): the promise is done here too. Started by
+  // meetings-needs-you-done, as the item's owner.
+  "name": "meetings-needs-you-done",
+  "description": "A promise from a meeting that the person marked done in another app: mark it done in Meetings too.",
+  "max_concurrent_runs": 4,
+  "start": { "type": "DATASTORE_EVENT", "config": { "table_name": "needs_you", "operations": ["UPDATE"] } },
+  "nodes": [
+    { "id": "settle", "type": "FUNCTION", "label": "Settle it in Meetings",
+      "config": { "function_name": "meetings_needs_you",
+        "input_mapping": { "settle_item_id": { "type": "expression", "value": "start.metadata.record_id" } } } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [ { "id": "e1", "source": "settle", "target": "end" } ]
+}

@@ -1,0 +1,32 @@
+{
+  "name": "User feedback",
+  "line": "product",
+  "position": 34,
+  "job": "What people say about your product and your rivals, filed under the feature it is about",
+  "intro": "User feedback finds the sentences about your product in each member's mail and meetings, and in public posts about you and your rivals, and files each one under a feature. Keep, move or set aside each quote with one key; a kept request is told where it was asked when the feature ships.",
+  "does": [
+    "Sentences from your own mail and meetings stay yours until you share them; only the sentence and who said it reach the team.",
+    "Every feature with its quotes by company and the deal behind each, and what rivals' users say about the same thing.",
+    "This week: what's rising against the usual, a suggested feature from quotes that fit none, and likely duplicates to merge."
+  ],
+  "jobs": ["PRODUCT", "FOUNDER"],
+  "accounts": [
+    { "any": ["Gmail", "Outlook"], "why": "Each member's own mail, through Mail: read for what customers say, kept private until they share." },
+    { "any": ["Bright Data"], "why": "Optional: YouTube, X, Reddit, TikTok and LinkedIn through your own key. Hacker News is free." }
+  ],
+  "setup": [
+    "Once for the whole Lemma: your product, its features (paste a list, or let the Lemma propose them), rivals, public listening and who files.",
+    "Each person chooses whether their mail and meetings are read, and whether what customers say is shared on its own.",
+    "Or look around with a sample: a made-up product, two made-up rivals and eight weeks of what people said."
+  ],
+  "today": [
+    { "verb": "decide", "line": "8 new quotes to file" },
+    { "verb": "decide", "line": "4 quotes from your mail and meetings to share" },
+    { "verb": "decide", "line": "A suggested feature: Bulk edit" }
+  ],
+  "pictures": [
+    { "shot": "user-feedback", "caption": "Each quote filed under a feature, kept with a key" },
+    { "shot": "user-feedback-features", "caption": "Every quote about a feature, by company and deal" },
+    { "shot": "user-feedback-week", "caption": "What's rising this week, and what to add or merge" }
+  ]
+}

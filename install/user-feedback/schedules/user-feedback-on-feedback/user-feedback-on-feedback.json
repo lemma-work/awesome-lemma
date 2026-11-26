@@ -1,0 +1,9 @@
+{
+  // A quote was kept, by any plugin: its ask.
+  "name": "user-feedback-on-feedback",
+  "schedule_type": "DATASTORE",
+  "config": { "table_name": "feedback", "operations": ["UPDATE"],
+              "when": { "state": { "to": "processed" } }, "bulk_writes": "each" },
+  "workflow_name": "user-feedback-on-feedback",
+  "is_active": true
+}

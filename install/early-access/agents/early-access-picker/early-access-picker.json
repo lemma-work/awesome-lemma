@@ -1,0 +1,20 @@
+{
+  // Writes the one-line reason a waiting person fits a beta (or doesn't),
+  // from the facts early_access_fit gathered. The fit itself is Decisions'
+  // closed choice; this only says why, naming a fact. No tools. It never
+  // lets anyone in.
+  "name": "early-access-picker",
+  "description": "Writes the one-line reason a person fits a beta, naming one fact from what they said or what the Lemma knows about them. Never lets anyone in.",
+  "visibility": "POD",
+  "toolsets": [],
+  "instruction": { "$file": "instruction.md" },
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "reason": { "type": "string", "description": "One sentence, at most 20 words, naming a fact from `facts`." },
+      "used": { "type": "array", "items": { "type": "string" }, "description": "The facts it rests on, as given." }
+    },
+    "required": ["reason"]
+  },
+  "permissions": { "grants": [] }
+}

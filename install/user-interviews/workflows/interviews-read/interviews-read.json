@@ -1,0 +1,41 @@
+{
+  // One call read for findings, as the member who had it (the document is in
+  // their own files): started by interviews_on_meeting when Meetings keeps a
+  // booked call's transcript or notes, by interviews_paste, and by the app's
+  // Read again.
+  "name": "interviews-read",
+  "description": "Read one call's transcript or notes for findings, each a quote checked word for word.",
+  "run_title": ["start.metadata.record_id"],
+  "max_concurrent_runs": 3,
+  "start": { "type": "MANUAL" },
+  "nodes": [
+    { "id": "brief", "type": "FUNCTION", "label": "The call's words",
+      "config": { "function_name": "interviews_read", "input_mapping": {
+        "mode": { "type": "literal", "value": "brief" },
+        "person_id": { "type": "expression", "value": "start.metadata.record_id" } } } },
+    { "id": "any", "type": "DECISION", "label": "Anything to read?",
+      "config": { "rules": [ { "condition": "brief.skip == `true`", "next_node_id": "end" } ] } },
+    { "id": "read", "type": "AGENT", "label": "Find what they said",
+      "config": { "agent_name": "interviews-reader", "input_mapping": {
+        "question": { "type": "expression", "value": "brief.brief.question" },
+        "features": { "type": "expression", "value": "brief.brief.features" },
+        "them": { "type": "expression", "value": "brief.brief.them" },
+        "me": { "type": "expression", "value": "brief.brief.me" },
+        "doc_kind": { "type": "expression", "value": "brief.brief.doc_kind" },
+        "text": { "type": "expression", "value": "brief.brief.text" } } } },
+    { "id": "save", "type": "FUNCTION", "label": "Keep what is in the text",
+      "config": { "function_name": "interviews_read", "input_mapping": {
+        "mode": { "type": "literal", "value": "save" },
+        "person_id": { "type": "expression", "value": "start.metadata.record_id" },
+        "written": { "type": "expression", "value": "read" } } } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [
+    { "id": "e1", "source": "brief", "target": "any" },
+    { "id": "e2", "source": "any", "target": "read", "label": "a document" },
+    { "id": "e3", "source": "any", "target": "end", "label": "nothing to read" },
+    { "id": "e4", "source": "read", "target": "save" },
+    { "id": "e5", "source": "save", "target": "end" }
+  ],
+  "visibility": "POD"
+}

@@ -1,0 +1,46 @@
+{
+  "name": "early_access_take_out",
+  "description": "One tester, by a person's press: take them out of the beta (out of the PostHog cohort, status left, Not this time on their page); or fit to set a member's own fit call; or flag_on to tick a by-hand flag.",
+  "type": "API",
+  "visibility": "POD",
+  "code": {
+    "$file": "code.py"
+  },
+  "permissions": {
+    "grants": [
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "early_access_tester",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read",
+          "datastore.record.write"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "early_access_beta",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read"
+        ]
+      },
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "early_access_status",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read",
+          "datastore.record.write"
+        ]
+      },
+      {
+        "resource_type": "connector",
+        "resource_name": "posthog",
+        "permission_ids": [
+          "connector.use"
+        ]
+      }
+    ]
+  }
+}

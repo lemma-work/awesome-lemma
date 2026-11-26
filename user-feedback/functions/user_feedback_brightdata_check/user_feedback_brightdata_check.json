@@ -1,0 +1,12 @@
+{
+  "name": "user_feedback_brightdata_check",
+  "description": "Check the team's Bright Data key server-side, so a bad key's answer never reaches the browser.",
+  "type": "API",
+  "visibility": "POD",
+  "code": {
+    "$file": "code.py"
+  },
+  "permissions": {
+    "grants": []
+  }
+}

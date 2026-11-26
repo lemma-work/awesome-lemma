@@ -1,0 +1,20 @@
+{
+  // Started by the bundled early-access-on-draft schedule when a new mail
+  // draft is sent. draft is per person, so the run is the draft's owner.
+  "name": "early-access-on-draft",
+  "description": "An Early access note was sent from your mailbox: the tester is invited, checked in, chased once, or told not this time.",
+  "max_concurrent_runs": 4,
+  "start": { "type": "DATASTORE_EVENT", "config": { "table_name": "draft", "operations": ["UPDATE"] } },
+  "nodes": [
+    { "id": "sent", "type": "FUNCTION", "label": "Mark it sent",
+      "config": { "function_name": "early_access_on_draft", "input_mapping": {
+        "record_id": { "type": "expression", "value": "start.metadata.record_id" } } } },
+    { "id": "needs", "type": "FUNCTION", "label": "What needs you",
+      "config": { "function_name": "early_access_needs_you", "input_mapping": {} } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [
+    { "id": "e1", "source": "sent", "target": "needs" },
+    { "id": "e2", "source": "needs", "target": "end" }
+  ]
+}

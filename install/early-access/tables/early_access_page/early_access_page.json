@@ -1,0 +1,21 @@
+{
+  // What a beta's public sign-up page draws, and nothing else. Public, so the
+  // page reads it through the Lemma's web widget without anyone signing in.
+  // Nothing private: no owner, no counts, no testers.
+  "name": "early_access_page",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "PUBLIC",
+  "columns": [
+    { "name": "beta_id", "type": "UUID", "required": true },
+    { "name": "slug", "type": "TEXT", "required": true, "unique": true, "max_length": 48 },
+    { "name": "name", "type": "TEXT", "required": true, "max_length": 120 },
+    { "name": "intro", "type": "TEXT", "max_length": 400 },
+    // [{key, label}] of the questions that are on, in order.
+    { "name": "questions", "type": "JSON" },
+    // "We let in about 10 a week, by fit."
+    { "name": "pace", "type": "TEXT", "max_length": 200 },
+    { "name": "state", "type": "ENUM", "required": true, "default": "closed", "options": ["open", "paused", "closed"] }
+  ],
+  "config": {}
+}

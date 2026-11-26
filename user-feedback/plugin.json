@@ -1,0 +1,9 @@
+{
+  // User feedback carries People map, and with it Mail and Meetings: it reads
+  // each member's sorted conversations and summarised meetings (as that
+  // member) for what people say about the product, and People map's
+  // companies say who they are with. Read by _build/assemble.py, which merges
+  // the carried plugins from their own folders into install/user-feedback/.
+  "name": "user-feedback",
+  "carries": ["people"]
+}

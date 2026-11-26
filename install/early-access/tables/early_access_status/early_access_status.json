@@ -1,0 +1,16 @@
+{
+  // Where one sign-up stands, for the page that sent it: one row per `ref`
+  // (the random token the page made), with a state and one general line.
+  // Public, so it holds nothing about anyone: no name, no email, no fit.
+  "name": "early_access_status",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "PUBLIC",
+  "columns": [
+    { "name": "ref", "type": "TEXT", "required": true, "unique": true, "max_length": 64 },
+    { "name": "beta_id", "type": "UUID" },
+    { "name": "state", "type": "ENUM", "required": true, "default": "waiting", "options": ["waiting", "in", "not_now"] },
+    { "name": "line", "type": "TEXT", "max_length": 300 }
+  ],
+  "config": {}
+}

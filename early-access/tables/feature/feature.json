@@ -1,0 +1,79 @@
+{
+  // One thing a product of the team's does or could do, in the team's words:
+  // what feedback is filed under. A complaint about something that exists and
+  // a wish for something that does not both file under a feature; `stage` says
+  // which. Themes are not a table of their own: quotes that fit no feature
+  // gather into a suggested feature, which a person accepts, merges or drops.
+  //
+  // A feature's product is always one of the team's own (`product.role` ours).
+  // Feedback about a rival files under this same list, so "their users
+  // complain about what we do well" is a join; something only a rival has is
+  // a feature of ours at stage `idea`. Filing never makes a rival's feature.
+  //
+  // An improvement to a live feature is a child feature (`parent_id`), so
+  // `stage` only moves forward: idea, planned, building, beta, live; or
+  // declined. Apps show one level of children; the column does not enforce it.
+  //
+  // Team-wide (no RLS). Shared definition (plugins/_contract), first written by
+  // User feedback. Who writes what: User feedback suggests and files; a person
+  // names, merges and archives; Roadmap sets planned, building and declined;
+  // Early access sets beta; Release notes sets live. A plugin's own state about
+  // a feature (a roadmap horizon, a spec, a beta's cohort) goes in its own
+  // table keyed by this id. Carried unchanged by every plugin that uses it;
+  // _contract/lint.py fails on any difference.
+  "name": "feature",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    // The team's product it belongs to (shared `product`, by id; no foreign key).
+    { "name": "product_id", "type": "UUID", "required": true },
+    // The team's name for it ("CSV export"), never a customer's phrasing.
+    { "name": "name", "type": "TEXT", "required": true, "max_length": 120 },
+    // One or two lines: what is in it and what is not. Filing reads it.
+    { "name": "description", "type": "TEXT", "max_length": 600 },
+    // The feature this one is part of: an area ("Reporting" > "CSV export") or
+    // an improvement to a live feature ("CSV export" > "Keep filters"). Filing
+    // a long list goes parent first (a Decisions choice holds 64 options).
+    { "name": "parent_id", "type": "UUID" },
+    // Other words people use for it. Filing reads them.
+    { "name": "aliases", "type": "JSON" },
+
+    // The list's own hygiene. suggested: the Lemma proposes it from quotes that
+    // fit nothing; nobody has said yes. active: on the team's list. merged:
+    // folded into `merged_into`, its feedback repointed and aliases carried
+    // over. archived: dropped, or no longer worth filing under; its feedback
+    // stays. Every option is here from the start.
+    { "name": "state", "type": "ENUM", "required": true, "default": "active",
+      "options": ["suggested", "active", "merged", "archived"] },
+    { "name": "merged_into", "type": "UUID" },
+    // Who named it: the team, the Lemma (a suggestion a person accepted), an import.
+    { "name": "origin", "type": "ENUM", "required": true, "default": "team",
+      "options": ["team", "lemma", "import"] },
+
+    // Where it stands for the people who use it. idea: nothing decided (the
+    // default). planned, building: the team has said so (Roadmap). beta: some
+    // people can use it (Early access). live: everyone can (Release notes; a
+    // feature that already exists is live). declined: the team won't do it.
+    { "name": "stage", "type": "ENUM", "required": true, "default": "idea",
+      "options": ["idea", "planned", "building", "beta", "live", "declined"] },
+    { "name": "stage_at", "type": "DATETIME" },
+    // The person responsible for it.
+    { "name": "owner_user_id", "type": "USER" },
+
+    // The work, as in `ask`: a GitHub issue ("<owner>/<repo>#<number>"), a
+    // Linear issue, a Triage item; and the team task once there is one (shared
+    // `task`, by id). An `ask` made from a request filed here points at this
+    // work, so whoever tells askers when it ships tells them.
+    { "name": "work_source", "type": "TEXT", "max_length": 32 },
+    { "name": "work_id", "type": "TEXT", "max_length": 400 },
+    { "name": "work_url", "type": "TEXT", "max_length": 500 },
+    { "name": "task_id", "type": "UUID" },
+
+    // Where the row came from (user-feedback, an import from another tool) and
+    // the provider's id there.
+    { "name": "source", "type": "TEXT", "max_length": 32 },
+    { "name": "source_id", "type": "TEXT", "max_length": 400 }
+  ],
+  "config": {}
+}

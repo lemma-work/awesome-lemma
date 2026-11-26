@@ -1,0 +1,26 @@
+{
+  // Writes one draft in the owner's voice from the brief mail_writing_context
+  // gathered. No tools: everything it may use is in its input, which is what
+  // lets the margin note say exactly what the draft was built from.
+  "name": "mail-writer",
+  "description": "Drafts one reply or nudge in the owner's own voice from a prepared brief, and says in one line what the other side wants. Never sends.",
+  "visibility": "POD",
+  "toolsets": [],
+  "instruction": { "$file": "instruction.md" },
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "ask": { "type": "string", "description": "What the other side wants from the owner, under 90 characters, starting with a verb. Empty for a nudge." },
+      "skip": { "type": "boolean", "description": "True when no message should be sent at all." },
+      "skip_reason": { "type": "string" },
+      "subject": { "type": "string" },
+      "body": { "type": "string", "description": "Plain text. Paragraphs separated by one blank line." },
+      "to": { "type": "array", "items": { "type": "string" } },
+      "cc": { "type": "array", "items": { "type": "string" } },
+      "rationale": { "type": "string", "description": "One or two sentences for the margin: what you used and what you assumed." },
+      "used": { "type": "array", "items": { "type": "string" }, "description": "Short labels of what shaped the draft: 'voice', 'rule: keep it short', 'promise: send v2'." }
+    },
+    "required": ["ask", "skip", "body", "to", "rationale"]
+  },
+  "permissions": { "grants": [] }
+}

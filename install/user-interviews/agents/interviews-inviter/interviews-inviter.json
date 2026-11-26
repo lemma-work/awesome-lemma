@@ -1,0 +1,23 @@
+{
+  // Writes one interview invite, in the member's own voice, from the brief
+  // interviews_invite gathered. No tools. Never sends: the invite is a Mail
+  // draft until the member presses Send in the app.
+  "name": "interviews-inviter",
+  "description": "Writes one short invite to a research call, in the member's own voice, with the study's line and their booking link. Never sends.",
+  "visibility": "POD",
+  "toolsets": [],
+  "instruction": { "$file": "instruction.md" },
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "skip": { "type": "boolean", "description": "True only when this person plainly should not get this invite." },
+      "skip_reason": { "type": "string" },
+      "subject": { "type": "string", "description": "Short, plain, sentence case." },
+      "body": { "type": "string", "description": "Plain text. Paragraphs separated by one blank line. The booking link on a line of its own." },
+      "rationale": { "type": "string", "description": "One sentence: what you used." },
+      "used": { "type": "array", "items": { "type": "string" }, "description": "Two to four short labels: 'their quote about exports, Oct 12', 'deal won'." }
+    },
+    "required": ["skip", "subject", "body", "rationale"]
+  },
+  "permissions": { "grants": [] }
+}

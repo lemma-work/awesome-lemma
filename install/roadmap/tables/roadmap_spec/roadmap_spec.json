@@ -1,0 +1,33 @@
+{
+  // One feature's spec, drafted by the roadmap-spec workflow from what people
+  // said, and edited by the team. The text is a Page too (`path`), which
+  // agents and file search read; this row keeps which quotes each line came
+  // from. Id: the feature's id. Team-wide, no RLS.
+  "name": "roadmap_spec",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    // /pages/roadmap/<slug>.md
+    { "name": "path", "type": "TEXT", "max_length": 400 },
+    { "name": "version", "type": "INTEGER", "default": 0 },
+    // drafting: the workflow is writing it. ready: written. failed: the last
+    // draft failed; the lines are the version before.
+    { "name": "state", "type": "ENUM", "required": true, "default": "drafting",
+      "options": ["drafting", "ready", "failed"] },
+    { "name": "drafted_at", "type": "DATETIME" },
+    { "name": "error", "type": "TEXT", "max_length": 600 },
+    // How many quotes the draft cited, out of how many filed under the feature.
+    { "name": "quotes_used", "type": "INTEGER", "default": 0 },
+    { "name": "quotes_total", "type": "INTEGER", "default": 0 },
+    // [{section (problem, who, need, not, open), key, text, quotes: [feedback
+    // ids], edited, unsourced}] in order.
+    { "name": "lines", "type": "JSON" },
+    // feedback id -> the mark it has on the page ("q3").
+    { "name": "labels", "type": "JSON" },
+    // Lines with no quote behind them (a "not doing" line never counts).
+    { "name": "unsourced", "type": "INTEGER", "default": 0 },
+    { "name": "edited", "type": "INTEGER", "default": 0 }
+  ],
+  "config": {}
+}

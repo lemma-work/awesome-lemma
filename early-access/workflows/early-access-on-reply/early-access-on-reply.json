@@ -1,0 +1,15 @@
+{
+  // Started by the bundled early-access-on-reply schedule on each new inbound
+  // message. message is per person, so the run is the member whose mail it is.
+  "name": "early-access-on-reply",
+  "description": "A tester replied to an Early access note: they're heard from, and their words go to feedback about the beta's feature.",
+  "max_concurrent_runs": 4,
+  "start": { "type": "DATASTORE_EVENT", "config": { "table_name": "message", "operations": ["INSERT"] } },
+  "nodes": [
+    { "id": "reply", "type": "FUNCTION", "label": "Hear the reply",
+      "config": { "function_name": "early_access_on_reply", "input_mapping": {
+        "record_id": { "type": "expression", "value": "start.metadata.record_id" } } } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [ { "id": "e1", "source": "reply", "target": "end" } ]
+}

@@ -1,0 +1,4 @@
+{
+  "description": "Pages: markdown documents the Lemma's page editor opens. Roadmap writes each feature's spec as /pages/roadmap/<feature>.md.",
+  "visibility": "POD"
+}

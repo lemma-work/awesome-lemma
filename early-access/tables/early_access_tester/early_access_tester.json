@@ -1,0 +1,65 @@
+{
+  // One person in one beta, from sign-up to the last thing they said.
+  // Team-wide. Id: uuid5(EA_NS, "<beta id>|<handle_kind>:<handle>"), so one
+  // person is in one beta once however often they sign up.
+  "name": "early_access_tester",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "beta_id", "type": "UUID", "required": true },
+    { "name": "handle_kind", "type": "TEXT", "required": true, "default": "email", "max_length": 20 },
+    { "name": "handle", "type": "TEXT", "required": true, "max_length": 320 },
+    { "name": "name", "type": "TEXT", "max_length": 200 },
+    { "name": "company_id", "type": "UUID" },
+    { "name": "company_name", "type": "TEXT", "max_length": 200 },
+    { "name": "role", "type": "TEXT", "max_length": 200 },
+    // Their sign-up row, its random ref (the status and check-in pages'
+    // key), the contact the platform stamped on it, and what they answered.
+    { "name": "signup_id", "type": "UUID" },
+    { "name": "ref", "type": "TEXT", "max_length": 64 },
+    { "name": "contact_id", "type": "UUID" },
+    { "name": "answers", "type": "JSON" },
+    // Whether the address they typed is the one they proved with the code.
+    // A function can't read a contact's proven addresses, so a member's app
+    // checks: code (it is), not_confirmed (it isn't, or couldn't be
+    // checked), member (a member added them), unchecked (not yet).
+    { "name": "email_proof", "type": "ENUM", "required": true, "default": "unchecked",
+      "options": ["unchecked", "code", "not_confirmed", "member"] },
+    { "name": "status", "type": "ENUM", "required": true, "default": "waiting",
+      "options": ["waiting", "picked", "invited", "active", "quiet", "left", "not_now"] },
+    { "name": "fit", "type": "ENUM", "options": ["strong", "maybe", "not_now"] },
+    // One line naming a fact from the sources, written by early-access-picker.
+    { "name": "fit_reason", "type": "TEXT", "max_length": 400 },
+    { "name": "fit_sure", "type": "FLOAT" },
+    { "name": "fit_at", "type": "DATETIME" },
+    // A member's own call on fit, kept as an example for the next read.
+    { "name": "fit_by", "type": "ENUM", "options": ["lemma", "person"] },
+    { "name": "batch_id", "type": "UUID" },
+    { "name": "invited_by", "type": "USER" },
+    { "name": "invited_at", "type": "DATETIME" },
+    { "name": "invite_draft_id", "type": "UUID" },
+    { "name": "flag_state", "type": "ENUM",
+      "options": ["on", "waiting_for_person", "failed", "by_hand", "none"] },
+    { "name": "flag_note", "type": "TEXT", "max_length": 400 },
+    { "name": "posthog_person_id", "type": "TEXT", "max_length": 64 },
+    { "name": "first_used_at", "type": "DATETIME" },
+    { "name": "last_used_at", "type": "DATETIME" },
+    { "name": "uses_7d", "type": "INTEGER" },
+    { "name": "last_heard_at", "type": "DATETIME" },
+    { "name": "last_said", "type": "TEXT", "max_length": 600 },
+    // sign-up, form (check-in), survey, mail, slack, call
+    { "name": "last_said_source", "type": "TEXT", "max_length": 20 },
+    { "name": "checkin_draft_id", "type": "UUID" },
+    { "name": "checkin_at", "type": "DATETIME" },
+    { "name": "chase_draft_id", "type": "UUID" },
+    { "name": "chased_at", "type": "DATETIME" },
+    { "name": "not_now_draft_id", "type": "UUID" },
+    { "name": "left_reason", "type": "TEXT", "max_length": 400 },
+    // What happened, newest last: [{at, what, quote?, source?, ai?}].
+    { "name": "timeline", "type": "JSON" },
+    { "name": "signed_up_at", "type": "DATETIME" },
+    { "name": "sample", "type": "BOOLEAN", "default": false }
+  ],
+  "config": {}
+}

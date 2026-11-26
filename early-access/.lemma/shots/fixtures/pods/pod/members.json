@@ -1,0 +1,14 @@
+{
+ "items": [
+  {
+   "pod_member_id": "member-user-sample",
+   "user_id": "user-sample",
+   "user_name": "Jordan Ellis",
+   "user_email": "jordan@ledgerline.example",
+   "email": "jordan@ledgerline.example",
+   "roles": [
+    "POD_ADMIN"
+   ]
+  }
+ ]
+}

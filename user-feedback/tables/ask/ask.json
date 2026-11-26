@@ -1,0 +1,91 @@
+{
+  // One person asking for one piece of work: a bug they hit, a feature they
+  // want, a change a question was really about. One row per person, per place
+  // they asked, per piece of work, so "six people asked for this" is six rows
+  // and each of them can be told, where they asked, when it ships.
+  //
+  // Team-wide (no RLS), and facts only, as `deal` is: who, where, which work
+  // and how far it has got. What they said stays in the conversation of the
+  // member who heard it (`conversation` and `message` are per person), and
+  // only that member's own run reads it, to write them back.
+  //
+  // Found by id: uuid5(ASK_NS, "<handle_kind>:<handle>|<source>:<source_id>|<work_source>:<work_id>")
+  // with ASK_NS = 9972cf8e-4f42-4b98-86fc-fa5697c1f089, from the values the
+  // row was first written with. Two writers meeting the same ask write one
+  // row; repointing it later (a duplicate merged) keeps its id.
+  //
+  // One teller, so nobody hears twice: with Release notes installed it tells
+  // askers when the work ships and sets `told`; without it Triage tells them
+  // when the task is done. Triage always tells a `declined` ask why.
+  //
+  // Shared definition (plugins/_contract), first written by Triage (at intake)
+  // and Release notes (a link a person confirms). Read by Release notes,
+  // Roadmap and User feedback. Carried unchanged by every plugin that uses it;
+  // _contract/lint.py fails on any difference.
+  "name": "ask",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    // The work, wherever it is tracked now, in the usual source/id pattern:
+    // a Triage item (triage, its id) before anyone accepts it, a GitHub issue
+    // or pull request (github, "<owner>/<repo>#<number>"), a Linear issue
+    // later. Merging a duplicate repoints these to the original.
+    { "name": "work_source", "type": "TEXT", "required": true, "max_length": 32 },
+    { "name": "work_id", "type": "TEXT", "required": true, "max_length": 400 },
+    { "name": "work_url", "type": "TEXT", "max_length": 500 },
+    // The team task, once there is one (shared `task`, by id; no foreign key,
+    // since Tasks can move a task). Triage sets it on accept; a declined
+    // item never gets one.
+    { "name": "task_id", "type": "UUID" },
+    // The work's title when it was linked, so the row reads on its own.
+    { "name": "work_title", "type": "TEXT", "max_length": 300 },
+
+    // Who asked, by handle rather than by person id (a `person` is each
+    // member's own), normalised as in person_handle: email (lowercased),
+    // slack ("<team id>:<user id>"), github (the login, lowercased), phone
+    // (E.164), ...; plus how they appear and who they are with. People only
+    // counted by an error tracker (reach) are not askers and get no row.
+    { "name": "handle_kind", "type": "TEXT", "required": true, "max_length": 32 },
+    { "name": "handle", "type": "TEXT", "required": true, "max_length": 320 },
+    { "name": "name", "type": "TEXT", "max_length": 200 },
+    // The shared `company`, by id (no foreign key: People map tidies
+    // companies away), and its name as it was.
+    { "name": "company_id", "type": "UUID" },
+    { "name": "company_name", "type": "TEXT", "max_length": 200 },
+
+    // Where they asked: mail, slack, teams, github, web, meeting, ...; the
+    // account it came through (for Slack, the team id; for mail, the
+    // mailbox as conversation.source_account); the provider's id of the thread (an email
+    // thread's id, a Slack "<channel>:<thread ts>", a GitHub issue's or
+    // comment's node id); a link to it where there is one.
+    { "name": "source", "type": "TEXT", "required": true, "max_length": 32 },
+    { "name": "source_account", "type": "TEXT", "max_length": 64 },
+    { "name": "source_id", "type": "TEXT", "required": true, "max_length": 400 },
+    { "name": "source_url", "type": "TEXT", "max_length": 500 },
+    // The member who heard it, and their conversation (no foreign key: only
+    // they can open it). Both empty for a place anyone can read, such as a
+    // public GitHub issue.
+    { "name": "heard_by", "type": "USER" },
+    { "name": "conversation_id", "type": "UUID" },
+    { "name": "asked_at", "type": "DATETIME", "required": true },
+
+    // How far it has got. Every option is here from the start: an import
+    // never changes an existing ENUM column.
+    // suggested: the Lemma thinks this ask is about this work; nobody has
+    // said so. open: linked, by a person or at intake (a duplicate stays open,
+    // repointed to the original). declined: the team won't do it (Triage
+    // tells them why; told_at says when). shipped: the work reached people;
+    // they have not been told. told: they were told, where they asked.
+    // dropped: the link was wrong, and nobody is told anything.
+    { "name": "state", "type": "ENUM", "required": true, "default": "open",
+      "options": ["suggested", "open", "declined", "shipped", "told", "dropped"] },
+    // What it shipped in (a release's name or tag) and when; when they were told.
+    { "name": "shipped_in", "type": "TEXT", "max_length": 120 },
+    { "name": "shipped_at", "type": "DATETIME" },
+    { "name": "told_at", "type": "DATETIME" },
+    // Which plugin wrote the row (triage, release-notes, mail, ...).
+    { "name": "plugin", "type": "TEXT", "required": true, "max_length": 32 }
+  ],
+  "config": {}
+}

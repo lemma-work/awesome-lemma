@@ -1,0 +1,6 @@
+.lemma.*.env
+node_modules/
+dist/
+*.zip
+.vite/
+__pycache__/

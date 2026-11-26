@@ -1,0 +1,19 @@
+{
+  // Writes the weekly review's one summary from numbers already counted:
+  // what moved, what went quiet, the pipeline by stage. No tools; every
+  // figure it may use is in the input, so it cannot invent one. Returns JSON;
+  // deals_review saves it.
+  "name": "deals-review-writer",
+  "description": "Writes the weekly pipeline review's summary in three to five sentences from the counts it is given: what moved, what went quiet, the pipeline by stage. Returns JSON; writes nothing.",
+  "visibility": "POD",
+  "toolsets": [],
+  "instruction": { "$file": "instruction.md" },
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "summary": { "type": "string", "description": "Three to five plain sentences, under 110 words, every figure from the counts." }
+    },
+    "required": ["summary"]
+  },
+  "permissions": { "grants": [] }
+}

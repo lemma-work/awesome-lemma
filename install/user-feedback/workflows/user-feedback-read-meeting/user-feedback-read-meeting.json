@@ -1,0 +1,15 @@
+{
+  // A member's meeting was summarised (Meetings): read its transcript, or
+  // their notes, for what was said about the product. Runs as the owner.
+  "name": "user-feedback-read-meeting",
+  "description": "Read one summarised meeting, as its owner, for sentences about the product; keep them private to the owner until they share.",
+  "max_concurrent_runs": 4,
+  "start": { "type": "DATASTORE_EVENT", "config": { "table_name": "meeting", "operations": ["UPDATE"] } },
+  "nodes": [
+    { "id": "read", "type": "FUNCTION", "label": "Find what was said about the product",
+      "config": { "function_name": "user_feedback_read",
+        "input_mapping": { "meeting_id": { "type": "expression", "value": "start.metadata.record_id" } } } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [ { "id": "e1", "source": "read", "target": "end" } ]
+}

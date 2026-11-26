@@ -1,0 +1,25 @@
+{
+  // The team's Deal tracker settings: one row (the id is fixed,
+  // 7d6c2f1e-5a40-4b8e-9c13-2f0e8a6b4d51). Team-wide. Written by the first
+  // person who sets it up; the stages are their own table.
+  "name": "deals_settings",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    // The team's currency, ISO 4217. A deal can be in another.
+    { "name": "currency", "type": "TEXT", "required": true, "default": "USD", "max_length": 3 },
+    // The weekly review: which day, what time, in which zone.
+    { "name": "review_day", "type": "ENUM", "required": true, "default": "monday",
+      "options": ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"] },
+    { "name": "review_time", "type": "TEXT", "required": true, "default": "08:00", "max_length": 5 },
+    { "name": "timezone", "type": "TEXT", "required": true, "default": "UTC", "max_length": 64 },
+    // The weekly review's schedule, made by the app as whoever picked the day.
+    { "name": "review_schedule_id", "type": "TEXT", "max_length": 64 },
+    { "name": "review_schedule_by", "type": "USER" },
+    { "name": "set_up_by", "type": "USER" },
+    { "name": "set_up_by_name", "type": "TEXT", "max_length": 200 },
+    { "name": "set_up_at", "type": "DATETIME" }
+  ],
+  "config": {}
+}

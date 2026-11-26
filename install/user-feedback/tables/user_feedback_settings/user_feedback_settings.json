@@ -1,0 +1,44 @@
+{
+  // The team's set-up, one row for the Lemma (id = uuid5(UF_NS, "settings")),
+  // done once by whoever opens the app first.
+  "name": "user_feedback_settings",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "products_done", "type": "BOOLEAN", "default": false },
+    { "name": "features_done", "type": "BOOLEAN", "default": false },
+    // Who files: [{user_id, name}]. They get "N new to file" in Today.
+    { "name": "filers", "type": "JSON" },
+    // Hacker News: on by default and free. Extra phrases to search for, on
+    // top of each product's own keywords.
+    { "name": "hn", "type": "BOOLEAN", "default": true },
+    { "name": "hn_keywords", "type": "JSON" },
+    { "name": "hn_read_through", "type": "INTEGER" },
+    // Bright Data, through the team's own key: the connector account the
+    // listening functions run with, and which sources are on
+    // (youtube, x, reddit, tiktok, linkedin). Off by default.
+    { "name": "brightdata_account_id", "type": "TEXT", "max_length": 64 },
+    { "name": "brightdata_sources", "type": "JSON" },
+    { "name": "brightdata_posts", "type": "INTEGER", "default": 10 },
+    // X and LinkedIn can't be searched by keyword: they follow a product's
+    // own account. {product id: {x: url, linkedin: url}}
+    { "name": "brightdata_accounts", "type": "JSON" },
+    // A Slack channel to read (needs a platform change not merged yet: off).
+    { "name": "slack_channel", "type": "TEXT", "max_length": 120 },
+    // The schedules set-up made, by name -> id, and who made them (they run
+    // as that person).
+    { "name": "schedules", "type": "JSON" },
+    { "name": "schedule_user_id", "type": "USER" },
+    // Likely duplicates the nightly pass found ([{a, b, confidence, at}]: a is a
+    // suggested or active feature, b the one it looks the same as), and the
+    // pairs a person said are not one ([[a, b]]).
+    { "name": "duplicates", "type": "JSON" },
+    { "name": "kept_apart", "type": "JSON" },
+    // The team's product name as set-up says it, for words on screen.
+    { "name": "team_name", "type": "TEXT", "max_length": 160 },
+    { "name": "setup_done_at", "type": "DATETIME" },
+    { "name": "sample", "type": "BOOLEAN", "default": false }
+  ],
+  "config": {}
+}

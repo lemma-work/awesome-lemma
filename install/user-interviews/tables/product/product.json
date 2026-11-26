@@ -1,0 +1,43 @@
+{
+  // A product people talk about: the team's own, or a rival's. One row per
+  // product. Feedback says which one a judgment is about (`feedback.product_id`);
+  // the team's features hang on its own products only (`feature.product_id`).
+  //
+  // Team-wide (no RLS). Written by User feedback at set-up (the team's own) and
+  // by Competitor watch (rivals, with the shared `company` that makes them). A
+  // rival's pages, prices and releases are Competitor watch's own tables, keyed
+  // by this id; listening runs are User feedback's own.
+  //
+  // Shared definition (plugins/_contract), first written by User feedback.
+  // Carried unchanged by every plugin that uses it (Roadmap, Competitor watch,
+  // User interviews, Early access); _contract/lint.py fails on any difference.
+  "name": "product",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "name", "type": "TEXT", "required": true, "max_length": 160 },
+    // ours: the team makes it. rival: someone else does, and the team competes
+    // with it. Every option is here from the start: an import never changes an
+    // existing ENUM column.
+    { "name": "role", "type": "ENUM", "required": true, "default": "ours",
+      "options": ["ours", "rival"] },
+    // The shared `company` that makes it, by id (no foreign key: People map
+    // tidies companies away). Competitor watch hangs a rival on it.
+    { "name": "company_id", "type": "UUID" },
+    // Its official page.
+    { "name": "url", "type": "TEXT", "max_length": 600 },
+    // Other names people use for it: nicknames, old names, model numbers.
+    { "name": "aliases", "type": "JSON" },
+    // Phrases that can only mean this product, for listening in public places
+    // ("dust.tt", "Dust AI agents"; never the bare word "dust").
+    { "name": "keywords", "type": "JSON" },
+    // Listened for. A product nobody follows any more stays, with its feedback.
+    { "name": "active", "type": "BOOLEAN", "default": true },
+    // Where the row came from (setup, competitor-watch, an import) and the
+    // provider's id there.
+    { "name": "source", "type": "TEXT", "max_length": 32 },
+    { "name": "source_id", "type": "TEXT", "max_length": 400 }
+  ],
+  "config": {}
+}

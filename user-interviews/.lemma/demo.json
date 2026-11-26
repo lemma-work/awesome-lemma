@@ -1,0 +1,33 @@
+{
+  "anchor": "2026-11-26T15:00:00Z",
+  "zone": ["Asia/Kolkata", "Asia/Calcutta"],
+  "apps": [
+    { "name": "interviews", "label": "User interviews", "start": "/s/f4364123-0992-5f38-afd8-846ed44d13e5" }
+  ],
+  "user": {
+    "id": "user-sample",
+    "email": "lead@fernway.example",
+    "first_name": "Product",
+    "last_name": "lead",
+    "name": "Product lead",
+    "is_active": true,
+    "is_superuser": false,
+    "is_verified": true,
+    "created_at": "2026-01-01T00:00:00Z",
+    "updated_at": "2026-01-01T00:00:00Z"
+  },
+  "connections": {
+    "gmail": { "state": "ready", "as": "lead@fernway.example" },
+    "google_calendar": { "state": "ready", "as": "lead@fernway.example" }
+  },
+  "notes": {
+    "interviews-fit": "In the demo who fits isn't read again: in a Lemma the sentence is read into filters, and the list is built from your team's deals, quotes, your own people and any list you paste.",
+    "interviews_fit": "In the demo who fits isn't read again: in a Lemma the sentence is read into filters, and the list is built from your team's deals, quotes, your own people and any list you paste.",
+    "interviews_pool": "In the demo the list isn't built again: in a Lemma it looks through your team's deals, quotes, your own people and any pasted list.",
+    "interviews-read": "In the demo the call isn't read again: in a Lemma the transcript or your notes are read for findings, each quote checked word for word.",
+    "interviews_paste": "In the demo nothing is kept: in a Lemma your notes or the transcript are kept in your own files and read for findings.",
+    "interviews_sample_data": "In the demo the sample stays.",
+    "interviews_daily": "",
+    "interviews_setup": "In the demo the set-up isn't saved."
+  }
+}

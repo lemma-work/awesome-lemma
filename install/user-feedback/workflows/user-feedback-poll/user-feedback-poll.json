@@ -1,0 +1,15 @@
+{
+  // Every ten minutes while Bright Data is on (set-up makes the schedule and
+  // turns it off with Bright Data): collections finish a few minutes after
+  // they start, so an hour is too long to wait.
+  "name": "user-feedback-poll",
+  "description": "Every ten minutes while Bright Data is on: read the collections that finished.",
+  "start": { "type": "SCHEDULED", "config": { "schedule_type": "CRON" } },
+  "nodes": [
+    { "id": "poll", "type": "FUNCTION", "label": "Bright Data: what finished",
+      "config": { "function_name": "user_feedback_listen_poll", "input_mapping": {} } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [ { "id": "e1", "source": "poll", "target": "end" } ],
+  "visibility": "POD"
+}

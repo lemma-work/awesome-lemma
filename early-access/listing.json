@@ -1,0 +1,82 @@
+{
+  "name": "Early access",
+  "line": "product",
+  "position": 38,
+  "job": "Everyone in your beta, what they tried and what they said",
+  "intro": "A public sign-up page for each beta, with the email confirmed by a code. The next batch is ranked by fit with a reason each, the invites are drafted in your own mailbox, and usage comes from PostHog. Nobody is let in and nothing is sent until you press.",
+  "does": [
+    "One roster per beta: who's waiting, let in, active or quiet, how much they used it this week, and the last thing each said.",
+    "The next batch ranked by fit, each with a one-line reason that names a fact, and one press that lets them in and sends the invites.",
+    "One check-in and at most one note to anyone gone quiet, drafted for you; their answers and replies filed as feedback."
+  ],
+  "jobs": ["PRODUCT", "FOUNDER", "ENGINEERING"],
+  "accounts": [
+    {
+      "any": ["Gmail", "Outlook"],
+      "why": "Through Mail: invites, check-ins and the one quiet note are drafted in your own mailbox and go when you press Send."
+    },
+    {
+      "any": ["PostHog"],
+      "why": "Who used the beta, read every hour, and adding the people you let in to the flag's cohort, through PostHog's MCP server. Without it, usage reads not connected and you turn the flag on by hand.",
+      "optional": true
+    }
+  ],
+  "setup": [
+    "Set up a beta in one sheet: the feature, its page's address, the flag and its cohort in PostHog (or by hand, or none), the sign-up questions and the batch size.",
+    "Press Turn on. Each step is read back: the sign-up page opens to people who confirm their email, and your hourly read starts.",
+    "Share the page's link. When the next batch is ready, Today says so; you pick and press Let in."
+  ],
+  "today": [
+    { "verb": "decide", "line": "The next batch is ready, ranked by fit" },
+    { "verb": "decide", "line": "Invites, check-ins and quiet notes drafted to send" },
+    { "verb": "decide", "line": "New blockers from testers, in their words" }
+  ],
+  "pictures": [
+    { "shot": "early-access", "caption": "Everyone in the beta, sorted by what needs you" },
+    { "shot": "early-access-next", "caption": "The next batch, ranked by fit, a reason each" },
+    { "shot": "early-access-drawer", "caption": "One tester, the note drafted, their beta" },
+    { "shot": "early-access-signup", "caption": "The public sign-up page, email by code" },
+    { "shot": "early-access-status", "caption": "Where a sign-up stands, for them alone" }
+  ],
+  "hero": {
+    "eyebrow": "Early access",
+    "headline": "Your beta, person by person",
+    "sub": "A sign-up page, the next batch ranked by fit, invites drafted in your mailbox, and usage from PostHog. You press; nothing else lets anyone in.",
+    "visual": "batch-reasons"
+  },
+  "headings": {
+    "how": "From a sign-up page to the first batch.",
+    "better": "What it works with.",
+    "trust": "Nobody is let in without a person.",
+    "faq": "Questions people ask first."
+  },
+  "steps": [
+    { "title": "Set up the beta and turn it on.", "body": "Name the feature, pick its PostHog flag and cohort, and press Turn on. Share the sign-up page's link.", "visual": "roster-row" },
+    { "title": "Pick the next batch.", "body": "Waiting people are ranked by fit, each with a reason that names a fact. Untick anyone, tick anyone below the line.", "visual": "batch-reasons" },
+    { "title": "Let them in and send the invites.", "body": "One press adds them to the flag's cohort and sends an invite each from your mailbox, quoting what they said.", "visual": "drafted-invite" }
+  ],
+  "moments": [
+    { "label": "Roster", "title": "Everyone, sorted by what needs you.", "body": "A quiet tester with a note drafted sits at the top, then the next batch. Uses this week and the last thing each said sit on their row.", "note": "One row per person", "visual": "roster-row" },
+    { "label": "Fit", "title": "A reason that names a fact.", "body": "Each waiting person is read once: strong, maybe or not now, with one line from what they said or what the Lemma knows, like an open deal.", "note": "Never just a score", "visual": "batch-reasons" },
+    { "label": "Invites", "title": "Invites in your voice, one each.", "body": "Each invite quotes what they said at sign-up and waits in your mailbox. Edit one, leave someone out, then press.", "note": "Drafted, not sent", "visual": "drafted-invite" },
+    { "label": "Quiet", "title": "One note to the quiet ones, ever.", "body": "Seven days with no use and nothing said, one note is drafted for you. After it they show as quiet until they use it or reply.", "note": "Never a second chase", "visual": "one-chase" }
+  ],
+  "betterWith": [
+    { "plugin": "Deal tracker", "line": "An open deal is a reason to let someone in first" },
+    { "plugin": "Forms", "line": "Each beta's sign-up counted with your other forms" },
+    { "plugin": "Roadmap", "line": "What testers said, counted on the feature" },
+    { "plugin": "Today", "line": "The next batch, drafts to send and new blockers" }
+  ],
+  "trust": [
+    { "title": "Nobody is let in on its own.", "body": "Only your press adds someone to the flag's cohort. The Lemma proposes the batch in Today; it never lets anyone in." },
+    { "title": "Nothing sends on its own.", "body": "Every invite, check-in and note is a draft in your mailbox until you press Send. Anyone quiet gets one note, never a second." },
+    { "title": "A sign-up sees only its own place.", "body": "The status page reads one row by a random reference: waiting, in or not this time. Nothing about anyone else is readable." }
+  ],
+  "faq": [
+    { "q": "Which flag tools does it turn on?", "a": "PostHog, by adding people to the static cohort the flag targets. With any other tool you turn it on by hand and tick each person, or skip the flag and let the invite be the access." },
+    { "q": "What if PostHog isn't connected?", "a": "Usage reads not connected, and nobody is called inactive or quiet for it. Everything else works." },
+    { "q": "How do sign-ups prove their email?", "a": "The page sends a six-digit code before the sign-up is added. A member who can see the Lemma's contacts checks that the address typed is the one proved, and the roster marks it when it isn't." },
+    { "q": "Where do their words go?", "a": "Check-in answers, PostHog survey answers and replies to your notes become feedback about the beta's feature, word for word." }
+  ],
+  "closing": "Let in the people who'll use it, and hear what they say."
+}

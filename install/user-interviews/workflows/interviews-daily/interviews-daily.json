@@ -1,0 +1,15 @@
+{
+  // Each member's own morning run, on their TIME schedule (09:00 in their
+  // zone) that the app makes as them: a schedule runs as whoever made it, and
+  // their Today items must be written as them.
+  "name": "interviews-daily",
+  "description": "Each morning: bookings and calls a trigger missed, nudges for unanswered invites, and what needs you in Today.",
+  "start": { "type": "SCHEDULED", "config": { "schedule_type": "CRON" } },
+  "nodes": [
+    { "id": "day", "type": "FUNCTION", "label": "The studies' day",
+      "config": { "function_name": "interviews_daily", "input_mapping": {} } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [ { "id": "e1", "source": "day", "target": "end" } ],
+  "visibility": "POD"
+}

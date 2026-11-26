@@ -1,0 +1,12 @@
+{
+  // A row the sample made, so clearing removes only those.
+  "name": "early_access_sample_row",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "table_name", "type": "TEXT", "required": true, "max_length": 64 },
+    { "name": "row_id", "type": "TEXT", "required": true, "max_length": 64 }
+  ],
+  "config": {}
+}

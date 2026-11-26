@@ -1,0 +1,28 @@
+{
+  // One public post or comment that was read: what it was, and what became
+  // of it (kept as feedback, or set aside with the reason). Its sentences
+  // that are feedback are `feedback` rows with is_public true.
+  // id = uuid5(UF_NS, "post:<source>:<source_id>"), so a post read twice is one row.
+  "name": "user_feedback_post",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "source", "type": "TEXT", "required": true, "max_length": 32 },
+    { "name": "source_id", "type": "TEXT", "required": true, "max_length": 400 },
+    { "name": "url", "type": "TEXT", "max_length": 1100 },
+    { "name": "product_id", "type": "UUID" },
+    { "name": "author", "type": "TEXT", "max_length": 200 },
+    { "name": "title", "type": "TEXT", "max_length": 400 },
+    { "name": "published_at", "type": "DATETIME" },
+    // found: read, nothing about a product yet. kept: its feedback is in
+    // `feedback`. set_aside: nothing about a product (`reason` says why).
+    { "name": "state", "type": "ENUM", "required": true, "default": "found",
+      "options": ["found", "kept", "set_aside"] },
+    { "name": "reason", "type": "TEXT", "max_length": 200 },
+    { "name": "feedback_count", "type": "INTEGER", "default": 0 },
+    { "name": "listen_id", "type": "UUID" },
+    { "name": "sample", "type": "BOOLEAN", "default": false }
+  ],
+  "config": {}
+}

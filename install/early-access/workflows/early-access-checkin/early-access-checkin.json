@@ -1,0 +1,22 @@
+{
+  // A check-in answer from the page a tester's note links to. Started by the
+  // early-access-checkin trigger the app makes at Turn on (INSERT on
+  // early_access_checkin, taking rows from outside).
+  "name": "early-access-checkin",
+  "description": "A tester answered the check-in: file what they said as feedback about the beta's feature, and mark them heard from.",
+  "max_concurrent_runs": 4,
+  "start": { "type": "DATASTORE_EVENT", "config": { "table_name": "early_access_checkin", "operations": ["INSERT"] } },
+  "nodes": [
+    { "id": "file", "type": "FUNCTION", "label": "File what they said",
+      "config": { "function_name": "early_access_on_checkin", "input_mapping": {
+        "record_id": { "type": "expression", "value": "start.metadata.record_id" },
+        "row_author": { "type": "expression", "value": "start.metadata.row_author", "optional": true } } } },
+    { "id": "needs", "type": "FUNCTION", "label": "What needs you",
+      "config": { "function_name": "early_access_needs_you", "input_mapping": {} } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [
+    { "id": "e1", "source": "file", "target": "needs" },
+    { "id": "e2", "source": "needs", "target": "end" }
+  ]
+}

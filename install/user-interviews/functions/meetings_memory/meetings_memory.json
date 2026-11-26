@@ -1,0 +1,21 @@
+{
+  "name": "meetings_memory",
+  "description": "Tells this Lemma's agents that Meetings is installed: Meetings's own block in /memory/AGENTS.md and its guide at /memory/plugins/meetings.md, leaving the team's notes alone. Set-up runs it; safe to run again. remove takes them out.",
+  "type": "API",
+  "visibility": "POD",
+  "code": {
+    "$file": "code.py"
+  },
+  "permissions": {
+    "grants": [
+      {
+        "resource_type": "folder",
+        "resource_name": "/memory",
+        "permission_ids": [
+          "folder.read",
+          "folder.write"
+        ]
+      }
+    ]
+  }
+}

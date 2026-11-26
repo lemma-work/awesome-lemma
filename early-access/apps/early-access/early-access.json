@@ -1,0 +1,6 @@
+{
+  "name": "early-access",
+  "description": "Early access: everyone in your beta, what they tried and what they said. Visitors sign up at <app address>/<beta>, confirm their email with a code and see where they stand; members see the roster, pick the next batch and send the invites.",
+  "public_slug": "${early_access_slug}",
+  "visibility": "PUBLIC"
+}

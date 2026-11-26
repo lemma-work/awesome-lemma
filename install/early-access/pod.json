@@ -1,0 +1,19 @@
+{
+  "format_version": 4,
+  "name": "Early access",
+  "description": "Everyone in your beta, what they tried and what they said: a public sign-up page with an email code, the next batch ranked by fit with a reason each, invites drafted in your own mailbox, usage from PostHog, one check-in and at most one chase per tester, and their words filed as feedback. Nobody is let in and nothing is sent until a person presses. Brings Mail with it.",
+  "variables": {
+    "inbox_slug": {
+      "type": "app_slug",
+      "source_value": "mail-inbox",
+      "default": "mail-inbox",
+      "description": "Public URL slug for the Inbox app (unique platform-wide; a suffix is added on collision)"
+    },
+    "early_access_slug": {
+      "type": "app_slug",
+      "source_value": "early-access",
+      "default": "early-access",
+      "description": "Public URL slug for the Early access app, whose sign-up pages are <app address>/<beta> (unique platform-wide; a suffix is added on collision)"
+    }
+  }
+}

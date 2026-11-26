@@ -1,0 +1,24 @@
+{
+  // How far one member's own run has read one of their conversations or
+  // meetings (RLS); id = the conversation's or meeting's id. Only messages
+  // after `read_through` are read again, and the calls say what it cost.
+  "name": "user_feedback_read",
+  "primary_key_column": "id",
+  "enable_rls": true,
+  "visibility": "POD",
+  "columns": [
+    // conversation or meeting
+    { "name": "kind", "type": "TEXT", "required": true, "max_length": 16 },
+    { "name": "read_through", "type": "DATETIME" },
+    { "name": "read_at", "type": "DATETIME" },
+    // The gate's answer, and how sure it was.
+    { "name": "gate", "type": "BOOLEAN" },
+    { "name": "gate_confidence", "type": "FLOAT" },
+    { "name": "sentences", "type": "INTEGER", "default": 0 },
+    { "name": "found", "type": "INTEGER", "default": 0 },
+    // Decisions calls, all reads of this one together.
+    { "name": "calls", "type": "INTEGER", "default": 0 },
+    { "name": "error", "type": "TEXT", "max_length": 300 }
+  ],
+  "config": {}
+}

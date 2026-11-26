@@ -1,0 +1,18 @@
+{
+  // One member's own set-up: the triggers on their meetings and their daily
+  // run, which the app makes as them (a schedule runs as whoever made it).
+  // Per person (RLS). Id uuid5(INTERVIEWS_NS, "member:<user id>").
+  "name": "interviews_member",
+  "primary_key_column": "id",
+  "enable_rls": true,
+  "visibility": "POD",
+  "columns": [
+    // {"<name>": "<schedule id>"} for the two meeting triggers.
+    { "name": "trigger", "type": "JSON" },
+    // The daily run's schedule id.
+    { "name": "schedule", "type": "TEXT", "max_length": 64 },
+    { "name": "timezone", "type": "TEXT", "max_length": 64, "default": "UTC" },
+    { "name": "ready_at", "type": "DATETIME" }
+  ],
+  "config": {}
+}

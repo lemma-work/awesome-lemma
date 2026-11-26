@@ -1,0 +1,15 @@
+{
+  // The roadmap lead's daily run, on their own TIME schedule (07:00 in the
+  // set-up's zone) that the app makes as them at set-up: a schedule runs as
+  // whoever made it, and the lead's "decide" items in Today must be written
+  // as the lead.
+  "name": "roadmap-daily",
+  "description": "Each morning: flag Now items whose tasks stopped moving, offer to mark finished ones shipped, and point at suggested features with many quotes, as the lead's items in Today.",
+  "start": { "type": "SCHEDULED", "config": { "schedule_type": "CRON" } },
+  "nodes": [
+    { "id": "tick", "type": "FUNCTION", "label": "The roadmap's day",
+      "config": { "function_name": "roadmap_tick", "input_mapping": {} } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [ { "id": "e1", "source": "tick", "target": "end" } ]
+}

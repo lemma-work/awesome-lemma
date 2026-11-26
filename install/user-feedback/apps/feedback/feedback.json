@@ -1,0 +1,6 @@
+{
+  "name": "feedback",
+  "description": "What people say about your product and your rivals, filed under the feature it is about: the inbox to keep, move or set aside each quote; every feature with its quotes by company; and what is rising this week.",
+  "public_slug": "${feedback_slug}",
+  "visibility": "POD"
+}

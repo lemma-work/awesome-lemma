@@ -1,0 +1,35 @@
+{
+  // A kind of mail, defined by one sentence the person can read and edit:
+  // "Mail from people investing in us or thinking about it". The sort asks
+  // which category each conversation belongs to and gives it these sentences
+  // as the options, so changing a sentence changes the sort.
+  "name": "mail_category",
+  "primary_key_column": "id",
+  "enable_rls": true,
+  "visibility": "POD",
+  "columns": [
+    // Stable key conversation.category points at: "vip", "investors".
+    { "name": "key", "type": "TEXT", "required": true, "max_length": 64 },
+    { "name": "name", "type": "TEXT", "required": true, "max_length": 80 },
+    { "name": "sentence", "type": "TEXT", "required": true, "max_length": 600 },
+    // system: People, VIP, Updates, Newsletters, Cold. custom: the person's own.
+    { "name": "kind", "type": "ENUM", "required": true, "default": "custom",
+      "options": ["system", "custom"] },
+    { "name": "state", "type": "ENUM", "required": true, "default": "active",
+      "options": ["proposed", "active", "retired"] },
+    { "name": "position", "type": "INTEGER", "default": 100 },
+    // Set aside: out of the main list, one press away.
+    { "name": "hidden", "type": "BOOLEAN", "default": false },
+    // Replies owed here are drafted without being asked.
+    { "name": "drafts", "type": "BOOLEAN", "default": false },
+    // Mail here goes out on the team's behalf: drafts take the team's brand
+    // voice (the shared `brand` table, from Brand kit) over the person's own,
+    // keeping the person's sign-off. Off: the person's own voice only.
+    { "name": "brand_voice", "type": "BOOLEAN", "default": false },
+    // Why it was suggested, and a few real subjects it would hold.
+    { "name": "provenance", "type": "TEXT", "max_length": 400 },
+    { "name": "examples", "type": "JSON" },
+    { "name": "estimate", "type": "INTEGER" }
+  ],
+  "config": {}
+}

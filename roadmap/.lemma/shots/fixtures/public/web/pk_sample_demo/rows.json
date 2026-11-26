@@ -1,0 +1,77 @@
+{
+ "table": "roadmap_public",
+ "columns": [],
+ "rows": [
+  {
+   "id": "a34581bb-d3ef-59e5-bc2d-f01b6c21a24f",
+   "lane": "later",
+   "title": "Offline on the phone",
+   "blurb": "Read and edit with no signal.",
+   "shipped_on": null,
+   "position": 0,
+   "created_at": "2026-11-25T15:02:38.402727+00:00",
+   "updated_at": "2026-11-25T15:02:38.402727+00:00"
+  },
+  {
+   "id": "b641c174-1c14-5301-8e70-c0b7ba521f7d",
+   "lane": "next",
+   "title": "Audit log",
+   "blurb": "Who changed what, and when.",
+   "shipped_on": null,
+   "position": 0,
+   "created_at": "2026-11-25T15:02:38.402727+00:00",
+   "updated_at": "2026-11-25T15:02:38.402727+00:00"
+  },
+  {
+   "id": "06d12f0d-9ca5-55f6-a59d-223ed89e317f",
+   "lane": "shipped",
+   "title": "Dark mode in reports",
+   "blurb": null,
+   "shipped_on": "2026-11-18",
+   "position": 0,
+   "created_at": "2026-11-25T15:02:38.402727+00:00",
+   "updated_at": "2026-11-25T15:02:38.402727+00:00"
+  },
+  {
+   "id": "cbdf8f4c-5821-5ec0-b7e7-6b5a571fc4da",
+   "lane": "now",
+   "title": "Custom fields on deals",
+   "blurb": "In beta with a few teams now.",
+   "shipped_on": null,
+   "position": 0,
+   "created_at": "2026-11-25T15:02:38.402727+00:00",
+   "updated_at": "2026-11-25T15:02:38.402727+00:00"
+  },
+  {
+   "id": "02b5d141-f944-5765-8ff4-5c47adb15ce4",
+   "lane": "next",
+   "title": "Edit many records at once",
+   "blurb": "Change one field across a filtered list, see it first, undo it.",
+   "shipped_on": null,
+   "position": 1,
+   "created_at": "2026-11-25T15:02:38.402727+00:00",
+   "updated_at": "2026-11-25T15:02:38.402727+00:00"
+  },
+  {
+   "id": "efa6e347-db08-5fb3-86bb-922635a7a7e4",
+   "lane": "now",
+   "title": "Sign in with Okta",
+   "blurb": "Single sign-on for teams on Okta.",
+   "shipped_on": null,
+   "position": 1,
+   "created_at": "2026-11-25T15:02:38.402727+00:00",
+   "updated_at": "2026-11-25T15:02:38.402727+00:00"
+  },
+  {
+   "id": "309e719a-12b3-5d9f-a4ad-18cced869657",
+   "lane": "later",
+   "title": "Slack alerts per project",
+   "blurb": "Pick which projects post where.",
+   "shipped_on": null,
+   "position": 1,
+   "created_at": "2026-11-25T15:02:38.402727+00:00",
+   "updated_at": "2026-11-25T15:02:38.402727+00:00"
+  }
+ ],
+ "truncated": false
+}

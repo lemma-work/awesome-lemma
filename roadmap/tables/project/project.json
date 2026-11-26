@@ -1,0 +1,32 @@
+{
+  // A team project: a body of work with its own tasks, which everyone in the
+  // Lemma sees. Customer onboarding, Launch, Goals, Status and Escalations
+  // hang their work on it; Tasks makes them by hand. From any source: a
+  // project made here and one later synced from Linear are the same row,
+  // told apart by `source` and the provider's id.
+  //
+  // Shared definition (plugins/_contract), first written by Tasks. Carried
+  // unchanged by every plugin that uses it; _contract/lint.py fails on any
+  // difference. Team-wide (no RLS): a person's own list is not a project.
+  "name": "project",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "name", "type": "TEXT", "required": true, "max_length": 200 },
+    { "name": "description", "type": "TEXT", "max_length": 4000 },
+    { "name": "state", "type": "ENUM", "required": true, "default": "active",
+      "options": ["active", "paused", "done", "canceled"] },
+    // Who leads it: a member of the Lemma.
+    { "name": "lead_user_id", "type": "USER" },
+    { "name": "lead_name", "type": "TEXT", "max_length": 200 },
+    // When it should be finished, a day.
+    { "name": "target_on", "type": "DATE" },
+    // Where it came from: tasks (made here), onboarding, launch, linear, ...
+    { "name": "source", "type": "TEXT", "required": true, "default": "tasks", "max_length": 32 },
+    // The provider's own id and address for it, when it came from somewhere.
+    { "name": "source_id", "type": "TEXT", "max_length": 400 },
+    { "name": "source_url", "type": "TEXT", "max_length": 1000 }
+  ],
+  "config": {}
+}

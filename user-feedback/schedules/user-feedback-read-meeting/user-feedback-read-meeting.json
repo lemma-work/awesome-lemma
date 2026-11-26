@@ -1,0 +1,9 @@
+{
+  // A meeting was summarised: read it as its owner.
+  "name": "user-feedback-read-meeting",
+  "schedule_type": "DATASTORE",
+  "config": { "table_name": "meeting", "operations": ["UPDATE"],
+              "when": { "summarized_at": { "changed": true } }, "bulk_writes": "each" },
+  "workflow_name": "user-feedback-read-meeting",
+  "is_active": true
+}

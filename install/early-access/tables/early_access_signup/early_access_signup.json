@@ -1,0 +1,34 @@
+{
+  // One sign-up from the public page, as the visitor sent it. Opened (by the
+  // app, at Turn on) to confirmed contacts only, for beta_id, email, name,
+  // company, role, use_for, today and ref: the visitor confirms their email
+  // with a code before the row can be added, and the platform stamps their
+  // contact on it. The page can't read it back; it reads its own `ref` in
+  // the Public early_access_status. A function still can't tell that the
+  // email typed here is the one proven (see email_proof on the tester).
+  "name": "early_access_signup",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "contact_owned": true,
+  // What a visitor may read of their own sign-up (through the chat, which is
+  // off on this page): only its ref.
+  "contact_columns": ["ref"],
+  "columns": [
+    // The beta's id, as text: a UUID column can't be offered to people outside.
+    { "name": "beta_id", "type": "TEXT", "required": true, "max_length": 64, "description": "The beta" },
+    { "name": "email", "type": "TEXT", "required": true, "max_length": 320, "description": "Your email" },
+    { "name": "name", "type": "TEXT", "required": true, "max_length": 120, "description": "Your name" },
+    { "name": "company", "type": "TEXT", "max_length": 200, "description": "Company" },
+    { "name": "role", "type": "TEXT", "max_length": 200, "description": "Your role" },
+    { "name": "use_for", "type": "TEXT", "max_length": 1500, "description": "What would you use it for?" },
+    { "name": "today", "type": "TEXT", "max_length": 1500, "description": "How do you do it today?" },
+    // A random token the page made, to read this sign-up's status later.
+    { "name": "ref", "type": "TEXT", "required": true, "max_length": 64, "description": "Reference" },
+    // Set by early_access_on_signup.
+    { "name": "tester_id", "type": "UUID" },
+    { "name": "handled_at", "type": "DATETIME" },
+    { "name": "sample", "type": "BOOLEAN", "default": false }
+  ],
+  "config": {}
+}

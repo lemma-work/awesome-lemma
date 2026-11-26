@@ -1,0 +1,69 @@
+{
+  // One door an answer can come through: a form on the team's website, a
+  // Google Form, a Meta lead form, a form tool's webhook, or another plugin's
+  // own form (Triage's report form). Added by Forms; another plugin whose
+  // form it is registers it here (`owner_plugin`) and keeps its count, so
+  // every door is counted in one place while its answers stay that plugin's.
+  //
+  // Team-wide (no RLS): which doors exist and who holds them open is the
+  // team's. Found by id: uuid5(FORMS_NS, "<source>:<source_id>") with
+  // FORMS_NS = ba341d0a-0b0a-4d01-9869-2c8791b9f203, so two members meeting
+  // the same door write one row.
+  //
+  // Shared definition (plugins/_contract), first written by Forms. Carried
+  // unchanged by every plugin that uses it; _contract/lint.py fails on any
+  // difference.
+  "name": "form",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "name", "type": "TEXT", "required": true, "max_length": 200 },
+    // web, google_forms, meta_ads, typeform, tally, webflow, fillout,
+    // google_ads, zapier, plugin. Text, like conversation.source, so a new
+    // door adds no option.
+    { "name": "source", "type": "TEXT", "required": true, "max_length": 32 },
+    // The connector account id; the web widget's id for a web form; empty
+    // for a hook.
+    { "name": "source_account", "type": "TEXT", "max_length": 64 },
+    // The table (web, plugin), the provider's form id, or the hook's name.
+    { "name": "source_id", "type": "TEXT", "required": true, "max_length": 400 },
+    // Where it lives, in words: "halvard.example/contact · link".
+    { "name": "place", "type": "TEXT", "max_length": 200 },
+    // A web form: which ways it is shared (link, page, product) and the
+    // hosted address.
+    { "name": "share", "type": "JSON" },
+    // forms, or the plugin whose form it is (triage; later hiring, early_access).
+    { "name": "owner_plugin", "type": "TEXT", "required": true, "default": "forms", "max_length": 32 },
+    // A hint to the read, never a skip; empty means "read each answer".
+    { "name": "purpose", "type": "ENUM",
+      "options": ["lead", "support", "bug", "feedback", "beta", "application"] },
+    // Who gets an answer no rule answers for.
+    { "name": "default_owner_user_id", "type": "USER" },
+    { "name": "reply_mode", "type": "ENUM", "required": true, "default": "draft",
+      "options": ["chat_only", "draft", "lemma_address"] },
+    // A web form: anyone with the link, or only people who confirm their email.
+    { "name": "audience", "type": "ENUM", "default": "anyone", "options": ["anyone", "contacts"] },
+    // on: taking answers. paused: a person paused it. off: not turned on.
+    // broken: it stopped (state_why says why). soon: waits on the platform.
+    { "name": "state", "type": "ENUM", "required": true, "default": "off",
+      "options": ["on", "paused", "off", "broken", "soon"] },
+    { "name": "state_why", "type": "TEXT", "max_length": 300 },
+    // Who holds it open: the member who opened the table, whose account is
+    // read, or who made the hook. It stops when they no longer can.
+    { "name": "held_by_user_id", "type": "USER" },
+    // [{label, key, type, order}]: the order "what they wrote" is shown in.
+    { "name": "fields", "type": "JSON" },
+    // A polled door: the last answer time or page token read, and when.
+    { "name": "cursor", "type": "TEXT", "max_length": 400 },
+    { "name": "last_read_at", "type": "DATETIME" },
+    // Kept by whoever files its answers (the owning plugin for its own form).
+    { "name": "last_answer_at", "type": "DATETIME" },
+    // Answers per day for the last 7 days: [{"day": "YYYY-MM-DD", "n": 3}].
+    { "name": "week", "type": "JSON" },
+    // Google Ads lead forms only: the SHA-256 of the key the team set there.
+    { "name": "key_hash", "type": "TEXT", "max_length": 64 },
+    { "name": "sample", "type": "BOOLEAN", "default": false }
+  ],
+  "config": {}
+}

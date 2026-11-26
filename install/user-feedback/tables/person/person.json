@@ -1,0 +1,38 @@
+{
+  // Someone the owner deals with, wherever they talk: mail, Slack, Teams,
+  // WhatsApp, meetings. One row per human per owner (the table is per person),
+  // never typed into a form. How to reach them, and how they show up in each
+  // place, is `person_handle`, so the same human from mail and from Slack is
+  // one row with two handles.
+  //
+  // Shared definition (plugins/_contract), first written by Mail. Every plugin
+  // that reads or writes it carries this file unchanged; _contract/lint.py
+  // fails on any difference. A plugin's own fields go in its own table, keyed
+  // by the person's id.
+  "name": "person",
+  "primary_key_column": "id",
+  "enable_rls": true,
+  "visibility": "POD",
+  "columns": [
+    { "name": "name", "type": "TEXT", "max_length": 200 },
+    // Company or organisation, as best known.
+    { "name": "org", "type": "TEXT", "max_length": 200 },
+    { "name": "title", "type": "TEXT", "max_length": 200 },
+    // The owner said this person matters most.
+    { "name": "is_vip", "type": "BOOLEAN", "default": false },
+    // Counted over every source's messages in conversations with people
+    // (broadcasts never count), by whichever plugin last refreshed them.
+    { "name": "first_seen_at", "type": "DATETIME" },
+    { "name": "last_inbound_at", "type": "DATETIME" },
+    { "name": "last_outbound_at", "type": "DATETIME" },
+    { "name": "conversation_count", "type": "INTEGER", "default": 0 },
+    { "name": "inbound_count", "type": "INTEGER", "default": 0 },
+    { "name": "outbound_count", "type": "INTEGER", "default": 0 },
+    // Their usual gap between conversations, in days.
+    { "name": "cadence_days", "type": "FLOAT" },
+    // Volume times reciprocity: someone the owner answers outranks someone
+    // who only writes to them.
+    { "name": "weight", "type": "FLOAT", "default": 0 }
+  ],
+  "config": {}
+}

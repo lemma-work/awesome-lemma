@@ -1,0 +1,15 @@
+{
+  // New feedback arrived (any writer): file it under one of the team's
+  // features, unless it already is.
+  "name": "user-feedback-file",
+  "description": "File one new quote under one of the team's features, with up to three choices and how sure.",
+  "max_concurrent_runs": 4,
+  "start": { "type": "DATASTORE_EVENT", "config": { "table_name": "feedback", "operations": ["INSERT"] } },
+  "nodes": [
+    { "id": "file", "type": "FUNCTION", "label": "File it",
+      "config": { "function_name": "user_feedback_file",
+        "input_mapping": { "feedback_id": { "type": "expression", "value": "start.metadata.record_id" } } } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [ { "id": "e1", "source": "file", "target": "end" } ]
+}

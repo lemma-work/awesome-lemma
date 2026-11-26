@@ -1,0 +1,6 @@
+{
+  "name": "booking",
+  "description": "Booking page: a page where people book your time, fitted around your calendars. Visitors pick a time in their own time zone and confirm their email; you see your upcoming bookings, each with Meetings' brief.",
+  "public_slug": "${booking_slug}",
+  "visibility": "PUBLIC"
+}

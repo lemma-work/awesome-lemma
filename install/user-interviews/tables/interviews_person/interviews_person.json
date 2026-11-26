@@ -1,0 +1,81 @@
+{
+  // One person in one study, from wherever they were found, and where they
+  // stand: fits, an invite drafted and sent, booked, the call done and read.
+  // Id uuid5(INTERVIEWS_NS, "<study id>:<handle_kind>:<handle>"), so building
+  // the pool again finds the same row. Team-wide (no RLS): the contact rules
+  // count every study's rows for a handle, whoever invited them. Holds facts
+  // only, never what was said in a call: findings are `feedback` rows the
+  // interviewer kept, proposals stay theirs (`interviews_proposal`).
+  "name": "interviews_person",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "study_id", "type": "UUID", "required": true },
+    // As in person_handle: an email lowercased.
+    { "name": "handle_kind", "type": "TEXT", "required": true, "max_length": 32 },
+    { "name": "handle", "type": "TEXT", "required": true, "max_length": 320 },
+    { "name": "name", "type": "TEXT", "max_length": 200 },
+    { "name": "title", "type": "TEXT", "max_length": 200 },
+    // The shared `company`, by id (no foreign key), and its name as it was.
+    { "name": "company_id", "type": "UUID" },
+    { "name": "company_name", "type": "TEXT", "max_length": 200 },
+    // Where they were found: {deal: [ids], feedback: [ids], ask: [ids],
+    // mine: [user ids], pasted: [ids]}.
+    { "name": "sources", "type": "JSON" },
+    // Why they fit, as short chips: ["Deal won", "Said 3 things"].
+    { "name": "why", "type": "JSON" },
+    // The best thing they said before (a `feedback` quote), and where.
+    { "name": "quote", "type": "TEXT", "max_length": 600 },
+    { "name": "quote_from", "type": "TEXT", "max_length": 200 },
+    // Their deal's status and stage, when there is one.
+    { "name": "deal_status", "type": "TEXT", "max_length": 16 },
+    { "name": "deal_stage", "type": "TEXT", "max_length": 80 },
+    // How well they fit: higher first.
+    { "name": "rank", "type": "FLOAT", "default": 0 },
+    // fits: in the pool, nothing sent. drafted: an invite waits for Send.
+    // invited: sent. booked: a call on the calendar. done: the call happened.
+    // no_show, declined, opted_out: as said. skipped: a person left them out.
+    { "name": "stage", "type": "ENUM", "required": true, "default": "fits",
+      "options": ["fits", "drafted", "invited", "booked", "done", "no_show", "declined", "opted_out", "skipped"] },
+    // Resting under the contact rules: until when, and the rule in words
+    // ("Invited 4 Nov to another study"). Null: free to invite.
+    { "name": "rests_until", "type": "DATETIME" },
+    { "name": "rest_rule", "type": "TEXT", "max_length": 200 },
+    // A person who invited them anyway, and when; kept.
+    { "name": "override_by", "type": "USER" },
+    { "name": "override_at", "type": "DATETIME" },
+    // The invite: who sends it, the Mail draft, when it went, why it didn't.
+    { "name": "inviter_user_id", "type": "USER" },
+    { "name": "inviter_name", "type": "TEXT", "max_length": 200 },
+    { "name": "draft_id", "type": "UUID" },
+    { "name": "invite_state", "type": "ENUM", "required": true, "default": "none",
+      "options": ["none", "writing", "drafted", "failed"] },
+    { "name": "invite_error", "type": "TEXT", "max_length": 400 },
+    { "name": "invited_at", "type": "DATETIME" },
+    { "name": "nudged_at", "type": "DATETIME" },
+    // The call: the interviewer's `meeting` (theirs only), when it starts and ends.
+    { "name": "meeting_id", "type": "UUID" },
+    { "name": "call_at", "type": "DATETIME" },
+    { "name": "call_end_at", "type": "DATETIME" },
+    { "name": "join_url", "type": "TEXT", "max_length": 800 },
+    // Reading the call: none, waiting (a document came), reading, ready, failed.
+    { "name": "read_state", "type": "ENUM", "required": true, "default": "none",
+      "options": ["none", "waiting", "reading", "ready", "failed"] },
+    { "name": "read_error", "type": "TEXT", "max_length": 400 },
+    // What was read: a transcript (Meet's), the interviewer's notes, or a
+    // pasted transcript; and the file, in the interviewer's own files.
+    { "name": "doc_kind", "type": "ENUM", "options": ["transcript", "notes", "pasted"] },
+    { "name": "doc_path", "type": "TEXT", "max_length": 500 },
+    { "name": "doc_lines", "type": "INTEGER" },
+    // Proposed, kept and set aside, counted.
+    { "name": "found", "type": "INTEGER", "default": 0 },
+    { "name": "kept", "type": "INTEGER", "default": 0 },
+    { "name": "set_aside", "type": "INTEGER", "default": 0 },
+    { "name": "no_show_at", "type": "DATETIME" },
+    { "name": "thanked_at", "type": "DATETIME" },
+    { "name": "marked_by", "type": "USER" },
+    { "name": "sample", "type": "BOOLEAN", "default": false }
+  ],
+  "config": {}
+}

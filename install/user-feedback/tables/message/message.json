@@ -1,0 +1,31 @@
+{
+  // One message in a conversation, from any source. Bodies do not live here:
+  // the conversation's text is one document at conversation.document_path.
+  //
+  // Shared definition (plugins/_contract), first written by Mail. Carried
+  // unchanged by every plugin that uses it; _contract/lint.py fails on any
+  // difference.
+  "name": "message",
+  "primary_key_column": "id",
+  "enable_rls": true,
+  "visibility": "POD",
+  "columns": [
+    { "name": "conversation_id", "type": "UUID", "required": true,
+      "foreign_key": { "references": "conversation.id" } },
+    // mail, slack, teams, whatsapp, ...
+    { "name": "source", "type": "TEXT", "required": true, "max_length": 32 },
+    // The provider's own id for the message.
+    { "name": "source_id", "type": "TEXT", "required": true, "max_length": 400 },
+    { "name": "direction", "type": "ENUM", "required": true, "options": ["inbound", "outbound"] },
+    // Handles, as in person_handle: an email address, a chat user, a phone.
+    { "name": "from_handle", "type": "TEXT", "max_length": 320 },
+    { "name": "from_name", "type": "TEXT", "max_length": 200 },
+    { "name": "to_handles", "type": "JSON" },
+    { "name": "cc_handles", "type": "JSON" },
+    { "name": "subject", "type": "TEXT", "max_length": 500 },
+    { "name": "sent_at", "type": "DATETIME" },
+    { "name": "snippet", "type": "TEXT", "max_length": 1000 },
+    { "name": "has_attachments", "type": "BOOLEAN", "default": false }
+  ],
+  "config": {}
+}

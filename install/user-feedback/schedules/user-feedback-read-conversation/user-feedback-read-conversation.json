@@ -1,0 +1,10 @@
+{
+  // A people conversation was sorted: read it as its owner. bulk_writes
+  // each: Mail sorts conversations in bulk.
+  "name": "user-feedback-read-conversation",
+  "schedule_type": "DATASTORE",
+  "config": { "table_name": "conversation", "operations": ["UPDATE"],
+              "when": { "kind": "people", "sorted_at": { "changed": true } }, "bulk_writes": "each" },
+  "workflow_name": "user-feedback-read-conversation",
+  "is_active": true
+}

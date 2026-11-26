@@ -1,0 +1,18 @@
+{
+  // Who was let in together, by whom, and whether the invites went.
+  "name": "early_access_batch",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "beta_id", "type": "UUID", "required": true },
+    { "name": "picked_by", "type": "USER" },
+    { "name": "picked_at", "type": "DATETIME" },
+    { "name": "size", "type": "INTEGER", "required": true, "default": 0 },
+    // false: "Let in, I'll write myself".
+    { "name": "sent", "type": "BOOLEAN", "default": false },
+    { "name": "tester_ids", "type": "JSON" },
+    { "name": "sample", "type": "BOOLEAN", "default": false }
+  ],
+  "config": {}
+}

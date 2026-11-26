@@ -1,0 +1,109 @@
+{
+  // One thing one person said about one feature, word for word: a quote from
+  // a customer's mail, a call, a form, a public post, an interview. A message
+  // with three points is three rows. The words are the point of this table, so
+  // it is team-wide and carries the quote, unlike `ask` and `deal`.
+  //
+  // Private words are shared on purpose, never by default. A sentence found in
+  // a member's own mail or meeting stays in User feedback's own per-person
+  // table (`user_feedback_heard`) until that member shares it, one by one or by
+  // a standing choice; only the sentence and who said it come here, never the
+  // thread. Public posts, form answers, notes a member types and interview
+  // findings the interviewer kept come here directly.
+  //
+  // What it is about: `product_id` is the product the judgment is about.
+  // Comparing a rival with ours ("we left them for you because of exports") is
+  // ours, kind `comparison`, the rival in `compared_with`. A judgment only
+  // about the rival is the rival's. `feature_id` is always a feature of the
+  // team's own list (see `feature`), whichever product the row is about.
+  //
+  // Found by id: uuid5(FEEDBACK_NS, "<source>:<source_id>|<quote key>"), with
+  // FEEDBACK_NS = 19126ba2-6613-4244-a0c9-bb395b202890 and the quote key the
+  // first 16 hex characters of sha1 of the quote lowercased with its
+  // whitespace collapsed. The same sentence read twice from one source is one
+  // row; the same sentence in a mail and in a call's transcript is two.
+  //
+  // Asks: a `request` from someone with a handle, filed under a feature, gets
+  // an `ask` row (written by User feedback for every writer), pointing at the
+  // feature's work when it has some, else work_source "feature" and the
+  // feature's id, repointed when work is linked.
+  //
+  // Team-wide (no RLS). Shared definition (plugins/_contract), first written by
+  // User feedback; written too by User interviews, Early access and Competitor
+  // watch; read by Roadmap. Carried unchanged by every plugin that uses it;
+  // _contract/lint.py fails on any difference. A plugin's own facts about a
+  // row (an interview's study, a beta's tester) go in its own table keyed by
+  // this id.
+  "name": "feedback",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    // The words, as said, never paraphrased. Rows with `source` note are the
+    // hearer's own words about what was said, not the speaker's.
+    { "name": "quote", "type": "TEXT", "required": true, "max_length": 2000 },
+    // The point in plain words, one line ("wants CSV export to keep filters").
+    { "name": "point", "type": "TEXT", "max_length": 200 },
+
+    // The product the judgment is about (shared `product`, by id).
+    { "name": "product_id", "type": "UUID" },
+    // The feature it is filed under (shared `feature`, by id; no foreign key:
+    // merging repoints). Null: not filed yet.
+    { "name": "feature_id", "type": "UUID" },
+    // What the speaker called it, before filing.
+    { "name": "feature_said", "type": "TEXT", "max_length": 160 },
+    // Who chose `feature_id`. A person's choice is an example for the next filing.
+    { "name": "filed_by", "type": "ENUM", "options": ["lemma", "person"] },
+    // What they are doing. Every option is here from the start.
+    { "name": "kind", "type": "ENUM", "required": true, "default": "other",
+      "options": ["request", "problem", "praise", "question", "comparison", "other"] },
+    // Rival products the quote names (product ids), for a comparison.
+    { "name": "compared_with", "type": "JSON" },
+    { "name": "sentiment", "type": "ENUM",
+      "options": ["positive", "negative", "mixed", "neutral"] },
+    // How much it matters to them, when they say so. blocker: they won't buy,
+    // will leave, or can't use it without this.
+    { "name": "importance", "type": "ENUM", "required": true, "default": "unknown",
+      "options": ["unknown", "nice", "important", "blocker"] },
+
+    // Who said it, by handle as in person_handle (email lowercased, slack
+    // "<team id>:<user id>", phone E.164) or a public place's own (reddit, x,
+    // youtube, hn: the username). Null handle: anonymous (a review).
+    { "name": "handle_kind", "type": "TEXT", "max_length": 32 },
+    { "name": "handle", "type": "TEXT", "max_length": 320 },
+    { "name": "name", "type": "TEXT", "max_length": 200 },
+    // The shared `company` they are with, by id (no foreign key), and its name
+    // as it was. Weighing by account joins `deal` from here.
+    { "name": "company_id", "type": "UUID" },
+    { "name": "company_name", "type": "TEXT", "max_length": 200 },
+
+    // Where it was said: mail, meeting, slack, teams, form, survey, interview,
+    // note, hn, reddit, x, youtube, linkedin, review, web, ...; the account it
+    // came through; the provider's id of the thread, message, post or answer (a
+    // call's is meeting.source_id); a link to it where there is one.
+    { "name": "source", "type": "TEXT", "required": true, "max_length": 32 },
+    { "name": "source_account", "type": "TEXT", "max_length": 64 },
+    { "name": "source_id", "type": "TEXT", "required": true, "max_length": 400 },
+    { "name": "source_url", "type": "TEXT", "max_length": 1100 },
+    // Where in a recording or video it was said.
+    { "name": "at_seconds", "type": "INTEGER" },
+    // The member who heard it, and their conversation (no foreign key: only
+    // they can open it). Both empty for a public place.
+    { "name": "heard_by", "type": "USER" },
+    { "name": "conversation_id", "type": "UUID" },
+    // Said in the open (a post, a review) rather than to the team.
+    { "name": "is_public", "type": "BOOLEAN", "default": false },
+    // For a public post: whether it reads as the speaker's own view.
+    { "name": "authenticity", "type": "ENUM", "required": true, "default": "unknown",
+      "options": ["unknown", "organic", "sponsored", "affiliate", "likely_ai", "brand"] },
+    { "name": "said_at", "type": "DATETIME", "required": true },
+
+    // new: no person has looked (the inbox). processed: a person kept it, filed
+    // or not. set_aside: not feedback, noise, or a quote already here.
+    { "name": "state", "type": "ENUM", "required": true, "default": "new",
+      "options": ["new", "processed", "set_aside"] },
+    // Which plugin wrote the row (user-feedback, user-interviews, early-access, ...).
+    { "name": "plugin", "type": "TEXT", "required": true, "max_length": 32 }
+  ],
+  "config": {}
+}

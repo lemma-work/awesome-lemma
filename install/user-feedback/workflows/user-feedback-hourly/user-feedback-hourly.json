@@ -1,0 +1,23 @@
+{
+  // Hourly, made at set-up as the person setting up: public listening.
+  // Hacker News (free), then Bright Data's finished collections, then new
+  // ones for the sources the team turned on (each at most once a day).
+  "name": "user-feedback-hourly",
+  "description": "Hourly: read Hacker News for the team's product and rivals, pick up Bright Data collections that finished, and start the next ones.",
+  "start": { "type": "SCHEDULED", "config": { "schedule_type": "CRON" } },
+  "nodes": [
+    { "id": "hn", "type": "FUNCTION", "label": "Hacker News",
+      "config": { "function_name": "user_feedback_listen_hn", "input_mapping": {} } },
+    { "id": "poll", "type": "FUNCTION", "label": "Bright Data: what finished",
+      "config": { "function_name": "user_feedback_listen_poll", "input_mapping": {} } },
+    { "id": "begin", "type": "FUNCTION", "label": "Bright Data: start what's due",
+      "config": { "function_name": "user_feedback_listen_start", "input_mapping": {} } },
+    { "id": "end", "type": "END", "label": "Done" }
+  ],
+  "edges": [
+    { "id": "e1", "source": "hn", "target": "poll" },
+    { "id": "e2", "source": "poll", "target": "begin" },
+    { "id": "e3", "source": "begin", "target": "end" }
+  ],
+  "visibility": "POD"
+}

@@ -1,0 +1,20 @@
+{
+  // Made-up earlier contact with a few made-up people, written only by
+  // people_sample_data and removed by its clear. Mail's and Meetings' samples
+  // cover the last month, when nobody has had time to go quiet; these give the
+  // refresh months of history to count warmth and "gone quiet" from. The
+  // refresh counts them like messages and meetings. Per person (RLS).
+  "name": "people_sample_contact",
+  "primary_key_column": "id",
+  "enable_rls": true,
+  "visibility": "POD",
+  "columns": [
+    { "name": "person_id", "type": "UUID", "required": true },
+    { "name": "handle", "type": "TEXT", "required": true, "max_length": 320 },
+    { "name": "at", "type": "DATETIME", "required": true },
+    { "name": "direction", "type": "ENUM", "required": true, "options": ["inbound", "outbound", "meeting"] },
+    // What it was, as the page lists it: "Pilot check-in".
+    { "name": "label", "type": "TEXT", "max_length": 200 }
+  ],
+  "config": {}
+}

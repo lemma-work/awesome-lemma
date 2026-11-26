@@ -1,0 +1,9 @@
+{
+  // Someone (Today) asked Mail for a nudge on one of Mail's items.
+  "name": "mail-needs-you-nudge",
+  "schedule_type": "DATASTORE",
+  "config": { "table_name": "needs_you", "operations": ["UPDATE"],
+              "when": { "source_plugin": "mail", "request": { "to": "nudge" } } },
+  "workflow_name": "mail-needs-you-on-nudge",
+  "is_active": true
+}

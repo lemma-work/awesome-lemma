@@ -1,0 +1,14 @@
+{
+  // Every row the sample made in a table User feedback shares with other
+  // plugins (product, feature, feedback, ask, company, deal), so clearing it
+  // removes only those. Team-wide: the sample is the team's.
+  "name": "user_feedback_sample_row",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    { "name": "table_name", "type": "TEXT", "required": true, "max_length": 64 },
+    { "name": "row_id", "type": "UUID", "required": true }
+  ],
+  "config": {}
+}

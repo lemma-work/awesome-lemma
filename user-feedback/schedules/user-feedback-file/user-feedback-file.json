@@ -1,0 +1,10 @@
+{
+  // New feedback waiting in the inbox: file it (the function skips a row
+  // already filed).
+  "name": "user-feedback-file",
+  "schedule_type": "DATASTORE",
+  "config": { "table_name": "feedback", "operations": ["INSERT"],
+              "when": { "state": "new" }, "bulk_writes": "each" },
+  "workflow_name": "user-feedback-file",
+  "is_active": true
+}

@@ -1,0 +1,18 @@
+{
+  // A standing instruction, one sentence: "Anything from our lawyers is
+  // priority 3", "Keep replies to investors under five sentences". Sorting
+  // rules go into every read's instruction; writing rules into every draft.
+  "name": "mail_rule",
+  "primary_key_column": "id",
+  "enable_rls": true,
+  "visibility": "POD",
+  "columns": [
+    { "name": "scope", "type": "ENUM", "required": true, "default": "general",
+      "options": ["general", "sorting", "writing"] },
+    { "name": "text", "type": "TEXT", "required": true, "max_length": 500 },
+    { "name": "state", "type": "ENUM", "required": true, "default": "active",
+      "options": ["proposed", "active", "retired"] },
+    { "name": "provenance", "type": "TEXT", "max_length": 400 }
+  ],
+  "config": {}
+}

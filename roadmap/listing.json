@@ -1,0 +1,29 @@
+{
+  "name": "Roadmap",
+  "line": "product",
+  "position": 35,
+  "job": "Features ranked by who asked, with the spec drafted from what they said",
+  "intro": "Roadmap lists every feature with the people who asked for it: how many, at which companies, who calls it a blocker and the deals behind them. Put features in Now, Next or Later, follow them in Tasks, and draft a spec whose every line cites what someone said.",
+  "does": [
+    "Features ranked by people, companies, blockers, open or won deals: sort by any column. There is no score to tune.",
+    "Now, Next and Later as a board, with progress from each item's Tasks project and a flag when work stops moving.",
+    "A one-page spec drafted from the quotes, every line marked with the quotes behind it; lines you edit are kept."
+  ],
+  "jobs": ["PRODUCT", "FOUNDER"],
+  "accounts": [],
+  "setup": [
+    "Once for the whole Lemma: your product's name, who leads the roadmap, the currency, and when a Now item counts as stale.",
+    "Or look around with sample features: a made-up product and what fourteen made-up companies asked for.",
+    "Turn on the outside page when you want one: only the items you mark public, under their public titles."
+  ],
+  "today": [
+    { "verb": "decide", "line": "No work on Faster search in 16 days: keep it in Now?" },
+    { "verb": "decide", "line": "Custom fields on deals: every task done. Mark it shipped?" },
+    { "verb": "decide", "line": "Recurring invoices: 9 quotes, not a feature yet" }
+  ],
+  "pictures": [
+    { "shot": "roadmap", "caption": "Features ranked by who asked, and who they are" },
+    { "shot": "roadmap-feature", "caption": "A spec whose every line cites a quote" },
+    { "shot": "roadmap-board", "caption": "Now, next and later, with progress from Tasks" }
+  ]
+}
